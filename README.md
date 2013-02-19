@@ -1,4 +1,4 @@
-# LPC11U37/LPC1347 Code Base #
+# LPC11U/LPC13U Code Base #
 
 This code base is an attempt at providing a reasonably well-organized, open-source starting point for projects based on the LPC11Uxx and LPC13Uxx family of MCUs.
 
@@ -6,13 +6,13 @@ This code base is an attempt at providing a reasonably well-organized, open-sour
 
 It includes the following key features, which can be easily enabled or disabled via a single board-specific config file:
 
-- [USB CDC, HID and MSC support](https://github.com/microbuilder/LPC1347_LPC11U37_LPCXpresso/tree/master/src/core/usb), including HID Keyboard and HID Mouse emulation, with any combination of devices possible up to the number of end points available on the MCU
-- Easy to extend [command-line interface](https://github.com/microbuilder/LPC1347_LPC11U37_LPCXpresso/tree/master/src/cli) (CLI) with USB CDC and UART support
-- [Sensor abstraction layer](https://github.com/microbuilder/LPC1347_LPC11U37_LPCXpresso/tree/master/src/drivers/sensors) where all sensors return a common descriptor and data type using standardized SI units
-- Basic [localisation support](https://github.com/microbuilder/LPC1347_LPC11U37_LPCXpresso/tree/master/src/localisation), allowing multiple languages to be used in the same application
+- [USB CDC, HID and MSC support](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/src/core/usb), including HID Keyboard and HID Mouse emulation, with any combination of devices possible up to the number of end points available on the MCU
+- Easy to extend [command-line interface](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/src/cli) (CLI) with USB CDC and UART support
+- [Sensor abstraction layer](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/src/drivers/sensors) where all sensors return a common descriptor and data type using standardized SI units
+- Basic [localisation support](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/src/localisation), allowing multiple languages to be used in the same application
 - Graphics sub-system including support for multiple font types (bitmap or anti-aliased), basic drawing functions, and a simple HW abstraction mechanism
 - FAT16/32 file system support for SD cards including the option to use long names (via FatFS)
-- A basic [unit testing framework](https://github.com/microbuilder/LPC1347_LPC11U37_LPCXpresso/tree/master/tests) suitable for embedded systems (Unity)
+- A basic [unit testing framework](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/tests) suitable for embedded systems (Unity)
 
 ## Supported MCUs ##
   
@@ -24,7 +24,7 @@ This code base is designed to work transparently with the following MCUs, allowi
 
 ## Multiple Board Support ##
 
-In an attempt to make the code base relevant in a variety of situations, there is a basic [board abstraction layer](https://github.com/microbuilder/LPC1347_LPC11U37_LPCXpresso/tree/master/src/boards), and all config settings are board-specific.
+In an attempt to make the code base relevant in a variety of situations, there is a basic [board abstraction layer](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/src/boards), and all config settings are board-specific.
 
 The target board in indicated in the shared **projectconfig.h** file, which in turn  references the board-specific config and initialization code in the **'boards/'** subfolder.
 
