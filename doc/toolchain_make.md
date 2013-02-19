@@ -10,9 +10,21 @@ A make-based build system gives you complete control over every build parameters
 
 Graphical IDEs definately have their place -- 95% of the development for this code base was done in an IDE -- but when it comes to building production code, a make file is a good decision since it's repeatable, and you have the finest degree of control over the output.
 
-# Running Make #
+## Which Toolchain? ##
 
-To build your firmware, you simply need to run the following command:
+This is a more complicate question to answer.  There are a lot of options out there for ARM cross-compilers, including [rolling your own toolchain](http://www.microbuilder.eu/Tutorials/SoftwareDevelopment/BuildingGCCToolchain.aspx).  Generally, the easiest option is going to be to go with a pre-compiled toolchain though.
+
+The most common pre-compiled cross-compiling toolchains for ARM are:
+
+- [GCC ARM Embedded](https://launchpad.net/gcc-arm-embedded) - Maintained by ARM, this new but popular toolchain includes a standard C library thats been optimised for small embedded ARM processors.  This is a good choice moving forward since development is active and it usually takes advantage of the latest changes to the underlying GCC code.  Installers are available for Windows, Mac and Linux.
+- [Yagarto](http://www.yagarto.de/) - A popular pre-compiled toolchain for ARM available in an easy to use installer for both Windows and the Mac.  It also includes a seperate installer (YAGARTO Tools) that will add support for the tools you'll need when building like 'make' and common Linux commands like 'mkdir'.  This is an easy to use option and works well out of the box since it includes everything you need in two installers.
+- [Sourcery CodeBench Lite](http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/) - Formerly CodeSourcery G++ Lite before being purchased by Mentor, the Lite edition of this toolchain is still available free of charge and includes installers for Windows and Linux.
+
+**Note: Even if you're using the GCC ARM Embedded toolchain, if you're using Windows you will still want to download and install [YAGARTO Tools](http://www.yagarto.de/) to have the tools you'll need to build using the ARM toolchain (make, mkdir, rm, etc.).
+
+# Getting Started #
+
+Assuming you have a toolchain installed and available in your PATH variable, you simply need to run the following command to build your firmware:
 ```
 make
 ```
