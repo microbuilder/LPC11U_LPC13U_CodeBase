@@ -1,0 +1,97 @@
+LOCALE_FR ( LOCALISATION_SYMBOL_MHZ,                                 "MHz" ),                                    // MHz
+LOCALE_FR ( LOCALISATION_SYMBOL_SECONDS,                             "s" ),                                      // s
+LOCALE_FR ( LOCALISATION_SYMBOL_KILOBYTES,                           "Ko" ),                                     // KB
+LOCALE_FR ( LOCALISATION_DATETIME_JANUARY_FULL,                      "janvier" ),
+LOCALE_FR ( LOCALISATION_DATETIME_FEBRUARY_FULL,                     "f�vrier" ),
+LOCALE_FR ( LOCALISATION_DATETIME_MARCH_FULL,                        "mars" ),
+LOCALE_FR ( LOCALISATION_DATETIME_APRIL_FULL,                        "avril" ),
+LOCALE_FR ( LOCALISATION_DATETIME_MAY_FULL,                          "mai" ),
+LOCALE_FR ( LOCALISATION_DATETIME_JUNE_FULL,                         "juin" ),
+LOCALE_FR ( LOCALISATION_DATETIME_JULY_FULL,                         "juillet" ),
+LOCALE_FR ( LOCALISATION_DATETIME_AUGUST_FULL,                       "ao�t" ),
+LOCALE_FR ( LOCALISATION_DATETIME_SEPTEMBER_FULL,                    "septembre" ),
+LOCALE_FR ( LOCALISATION_DATETIME_OCTOBER_FULL,                      "octobre" ),
+LOCALE_FR ( LOCALISATION_DATETIME_NOVEMBER_FULL,                     "novembre" ),
+LOCALE_FR ( LOCALISATION_DATETIME_DECEMBER_FULL,                     "d�cembre" ),
+LOCALE_FR ( LOCALISATION_DATETIME_JANUARY_SHORT,                     "jan" ),
+LOCALE_FR ( LOCALISATION_DATETIME_FEBRUARY_SHORT,                    "f�v" ),
+LOCALE_FR ( LOCALISATION_DATETIME_MARCH_SHORT,                       "mar" ),
+LOCALE_FR ( LOCALISATION_DATETIME_APRIL_SHORT,                       "avr" ),
+LOCALE_FR ( LOCALISATION_DATETIME_MAY_SHORT,                         "mai" ),
+LOCALE_FR ( LOCALISATION_DATETIME_JUNE_SHORT,                        "jun" ),
+LOCALE_FR ( LOCALISATION_DATETIME_JULY_SHORT,                        "jul" ),
+LOCALE_FR ( LOCALISATION_DATETIME_AUGUST_SHORT,                      "aou" ),
+LOCALE_FR ( LOCALISATION_DATETIME_SEPTEMBER_SHORT,                   "sep" ),
+LOCALE_FR ( LOCALISATION_DATETIME_OCTOBER_SHORT,                     "oct" ),
+LOCALE_FR ( LOCALISATION_DATETIME_NOVEMBER_SHORT,                    "nov" ),
+LOCALE_FR ( LOCALISATION_DATETIME_DECEMBER_SHORT,                    "d�c" ),
+LOCALE_FR ( LOCALISATION_TEXT_This_command_has_no_parameters,        "Cette commande n'a pas de param�tres" ),   // This command has no parameters
+LOCALE_FR ( LOCALISATION_TEXT_SD_init_failed,                        "Initialisation a �chou�" ),                // SD init failed
+LOCALE_FR ( LOCALISATION_TEXT_No_SD_card,                            "Carte SD non trouv�" ),                    // No SD card
+LOCALE_FR ( LOCALISATION_TEXT_Failed_to_mount_partition,             "Impossible de monter la partition" ),      // Failed to mount partition
+LOCALE_FR ( LOCALISATION_TEXT_Failed_to_open,                        "Impossible d'ouvrir" ),                    // Failed to open
+LOCALE_FR ( LOCALISATION_TEXT_Contents_of,                           "contenu de" ),                             // Contents of
+LOCALE_FR ( LOCALISATION_TEXT_Filename,                              "Nom du fichier" ),                         // Filename
+LOCALE_FR ( LOCALISATION_TEXT_Size,                                  "Taille" ),                                 // Size
+LOCALE_FR ( LOCALISATION_TEXT_Bytes,                                 "octets" ),                                 // Bytes
+LOCALE_FR ( LOCALISATION_TEXT_bytes,                                 "octets" ),                                 // bytes
+LOCALE_FR ( LOCALISATION_TEXT_Folder_Size_COLON_SPACE,               "Taille du dossier : " ),                   // Folder size:
+LOCALE_FR ( LOCALISATION_TEXT_Disk_Size_COLON_SPACE,                 "Taille du disque : " ),                    // Disk size:
+LOCALE_FR ( LOCALISATION_TEXT_Space_Available_COLON_SPACE,           "Espace disponible : " ),                   // Space available:
+LOCALE_FR ( LOCALISATION_TEXT_Firmware,                              "Firmware" ),                               // Firmware
+LOCALE_FR ( LOCALISATION_TEXT_MCU,                                   "MCU" ),                                    // MCU
+LOCALE_FR ( LOCALISATION_TEXT_Language,                              "Langue" ),                                 // Language
+LOCALE_FR ( LOCALISATION_TEXT_System_Clock,                          "Fr�quence du processeur" ),                // System Clock
+LOCALE_FR ( LOCALISATION_TEXT_System_Uptime,                         "Le temps de mise en route" ),              // System Uptime
+LOCALE_FR ( LOCALISATION_TEXT_RF_Transceiver,                        "Radio: Emetteur-r�cepteur" ),              // RF Transceiver
+LOCALE_FR ( LOCALISATION_TEXT_RF_Receive_Mode,                       "Radio: Mode de r�ception" ),               // RF Receive Mode
+LOCALE_FR ( LOCALISATION_TEXT_Normal,                                "Normal" ),                                 // Normal
+LOCALE_FR ( LOCALISATION_TEXT_Promiscuous,                           "Promiscuous" ),                            // Promiscuous
+LOCALE_FR ( LOCALISATION_TEST_802154_PAN_ID,                         "802.15.4: PAN ID" ),                       // 802.15.4 PAN ID
+LOCALE_FR ( LOCALISATION_TEXT_802154_Node_Address,                   "802.15.4: Adresse noeud" ),                // 802.15.4 Node Address
+LOCALE_FR ( LOCALISATION_TEXT_802154_Channel,                        "802.15.4: Canal" ),                        // 802.15.4 Channel
+LOCALE_FR ( LOCALISATION_TEXT_CLI_Max_Command_Size,                  "CLI: Commande maximum" ),                  // CLI Maximum Command Size
+LOCALE_FR ( LOCALISATION_TEXT_CLI_IRQ_Enabled,                       "CLI: IRQ activ�" ),                        // CLI IRQ Enabled
+LOCALE_FR ( LOCALISATION_TEXT_CLI_IRQ_Location,                      "CLI: Emplacement IRQ" ),                   // CLI IRQ Location
+LOCALE_FR ( LOCALISATION_TEXT_True,                                  "Vrai" ),                                   // True
+LOCALE_FR ( LOCALISATION_TEXT_False,                                 "Faux" ),                                   // False
+LOCALE_FR ( LOCALISATION_TEXT_UART_Baud_Rate,                        "Vitesse UART" ),                           // UART Baud Rate
+LOCALE_FR ( LOCALISATION_TEXT_SD_Card_Present,                       "Carte SD trouv�" ),                        // SD Card Present
+LOCALE_FR ( LOCALISATION_TEXT_FAT_File_System,                       "Syst�me de fichiers" ),                    // FAT File System
+LOCALE_FR ( LOCALISATION_TEXT_Read_Only,                             "Lecture seule" ),                          // Read Only
+LOCALE_FR ( LOCALISATION_TEXT_Read_FORWARDSLASH_Write,               "Lecture / Ecriture" ),                     // Read/Write
+LOCALE_FR ( LOCALISATION_TEXT_LCD_Width,                             "Largeur LCD" ),                            // LCD Width
+LOCALE_FR ( LOCALISATION_TEXT_LCD_Height,                            "Hauteur LCD" ),                            // LCD Height
+LOCALE_FR ( LOCALISATION_TEXT_LCD_Controller_ID,                     "ID Contr�leur LCD" ),                      // LCD Controller ID
+LOCALE_FR ( LOCALISATION_TEXT_LCD_Small_Fonts,                       "Polices petites" ),                        // LCD Small Fonts
+LOCALE_FR ( LOCALISATION_TEXT_LCD_AA_Fonts,                          "Polices anti-alias�es" ),                  // LCD AA Fonts
+LOCALE_FR ( LOCALISATION_TEXT_Touch_Screen,                          "Ecran tactile" ),                          // Touch Screen
+LOCALE_FR ( LOCALISATION_TEXT_Touch_Screen_Threshold,                "Seuil de l'�cran tactile" ),               // Touch Screen Threshold
+LOCALE_FR ( LOCALISATION_TEXT_LED_Location,                          "Emplacement LED" ),                        // LED Location
+LOCALE_FR ( LOCALISATION_TEXT_Too_few_arguments,                     "Pas assez de param�tres" ),                // Too few arguments
+LOCALE_FR ( LOCALISATION_TEXT_Expected,                              "Attendu" ),                                // Expected
+LOCALE_FR ( LOCALISATION_TEXT_for_more_information,                  "pour plus d'informations" ),               // for more information
+LOCALE_FR ( LOCALISATION_TEXT_Too_many_arguments,                    "Trop de param�tres" ),                     // Too many arguments
+LOCALE_FR ( LOCALISATION_TEXT_Maximum,                               "Maximum" ),                                // Maximum
+LOCALE_FR ( LOCALISATION_TEXT_Command_Not_Recognized,                "Commande non reconnue" ),                  // Command Not Recognised
+LOCALE_FR ( LOCALISATION_TEXT_Type_QUESTION_for_a_list_of,           "Tapez '?' pour une liste de toutes les commandes disponibles" ),         // Type '?' for a list of all available commands
+LOCALE_FR ( LOCALISATION_TEXT_Command,                               "Commande" ),                               // Command
+LOCALE_FR ( LOCALISATION_TEXT_Description,                           "Description" ),                            // Description
+LOCALE_FR ( LOCALISATION_TEXT_Command_parameters_can_be_seen,        "Les param�tres de commande peuvent �tre vu en entrant: <commande> ?" ),  // Command parameters can be seen by entering: <command-name> ?
+LOCALE_FR ( LOCALISATION_TEXT_Scanning_I2C_bus_for_devices,          "Recherche sur le bus I2C pour les appareils" ),                          // Scanning I2C bus for devices
+LOCALE_FR ( LOCALISATION_TEXT_All_addresses_are_in_7bit_L1,          "Toutes les adresses sont dans le format 7-bit et ne" ),                  // All addresses are in 7-bit format and are not
+LOCALE_FR ( LOCALISATION_TEXT_All_addresses_are_in_7bit_L2,          "sont pas d�cal� d'inclure le bit de lecture." ),                         // shifted to include the read bit.
+LOCALE_FR ( LOCALISATION_TEXT_No_response_on_the_I2C_bus,            "Aucune r�ponse sur le bus I2C. V�rifiez l'adresse / connexions" ),       // No response on the I2C bus. Check address/connections
+LOCALE_FR ( LOCALISATION_TEXT_Malformed_Number,                      "Num�ro malform�." ),                       // Malformed number. Must be decimal number or hex value preceeded by '0x'
+LOCALE_FR ( LOCALISATION_TEXT_Error,                                 "Erreur" ),                                 // Error
+LOCALE_FR ( LOCALISATION_TEXT_Invalid_I2C_Address,                   "ADDR must be between 0x03 and 0x78" ),
+LOCALE_FR ( LOCALISATION_TEXT_len_must_be_less_than_equal,           "'len' must be <=" ),
+LOCALE_FR ( LOCALISATION_TEXT_No_ACK_received,                       "No ACK received" ),
+LOCALE_FR ( LOCALISATION_TEXT_Timeout,                               "Timeout"  ),
+LOCALE_FR ( LOCALISATION_TEXT_Unknown_Error,                         "Unknown Error" ),
+LOCALE_FR ( LOCALISATION_TEXT_Too_large_for_I2C_buffer,              "Too large for I2C buffer" ),
+LOCALE_FR ( LOCALISATION_TEXT_Invalid_argument,                      "Invalid argument" ),
+LOCALE_FR ( LOCALISATION_TEXT_OK,                                    "OK" ),
+LOCALE_FR ( LOCALISATION_TEXT_EEPROM_Size_COLON_SPACE,               "Taille du EEPROM : " ),
+LOCALE_FR ( LOCALISATION_TEXT_Serial_Number,                         "Serial Number" ),
+LOCALE_FR ( LOCALISATION_FINAL,                                      NULL ),

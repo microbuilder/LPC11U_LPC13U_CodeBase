@@ -1,0 +1,1 @@
+Placeholder to make sure the output folder exists for doxygen

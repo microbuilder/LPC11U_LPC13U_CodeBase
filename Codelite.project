@@ -1,0 +1,464 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CodeLite_Project Name="LPC11U37_LPC1347_Codebase" InternalType="Console">
+  <Plugins>
+    <Plugin Name="qmake">
+      <![CDATA[00010001N0005Debug000000000000]]>
+    </Plugin>
+  </Plugins>
+  <VirtualDirectory Name="src">
+    <VirtualDirectory Name="drivers">
+      <VirtualDirectory Name="storage">
+        <VirtualDirectory Name="fatfs">
+          <File Name="src/drivers/storage/fatfs/ccsbcs.c"/>
+          <File Name="src/drivers/storage/fatfs/diskio.h"/>
+          <File Name="src/drivers/storage/fatfs/ff.c"/>
+          <File Name="src/drivers/storage/fatfs/ff.h"/>
+          <File Name="src/drivers/storage/fatfs/ffconf.h"/>
+          <File Name="src/drivers/storage/fatfs/integer.h"/>
+          <File Name="src/drivers/storage/fatfs/mmc.c"/>
+        </VirtualDirectory>
+      </VirtualDirectory>
+      <VirtualDirectory Name="sensors">
+        <VirtualDirectory Name="accelerometers">
+          <File Name="src/drivers/sensors/accelerometers/adxl345.c"/>
+          <File Name="src/drivers/sensors/accelerometers/adxl345.h"/>
+          <File Name="src/drivers/sensors/accelerometers/lis3dh.c"/>
+          <File Name="src/drivers/sensors/accelerometers/lis3dh.h"/>
+          <File Name="src/drivers/sensors/accelerometers/lsm303accel.c"/>
+          <File Name="src/drivers/sensors/accelerometers/lsm303accel.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="gyroscopes">
+          <File Name="src/drivers/sensors/gyroscopes/l3gd20.c"/>
+          <File Name="src/drivers/sensors/gyroscopes/l3gd20.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="light">
+          <File Name="src/drivers/sensors/light/tsl2561.c"/>
+          <File Name="src/drivers/sensors/light/tsl2561.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="magnetometers">
+          <File Name="src/drivers/sensors/magnetometers/lsm303mag.c"/>
+          <File Name="src/drivers/sensors/magnetometers/lsm303mag.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="pressure">
+          <File Name="src/drivers/sensors/pressure/bmp085.c"/>
+          <File Name="src/drivers/sensors/pressure/bmp085.h"/>
+          <File Name="src/drivers/sensors/pressure/mpl115a2.c"/>
+          <File Name="src/drivers/sensors/pressure/mpl115a2.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="temperature">
+          <File Name="src/drivers/sensors/temperature/lm75b.c"/>
+          <File Name="src/drivers/sensors/temperature/lm75b.h"/>
+        </VirtualDirectory>
+        <File Name="src/drivers/sensors/sensors.c"/>
+        <File Name="src/drivers/sensors/sensors.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="rtc">
+        <VirtualDirectory Name="pcf2129">
+          <File Name="src/drivers/rtc/pcf2129/pcf2129.c"/>
+          <File Name="src/drivers/rtc/pcf2129/pcf2129.h"/>
+        </VirtualDirectory>
+        <File Name="src/drivers/rtc/rtc.c"/>
+        <File Name="src/drivers/rtc/rtc.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="rf">
+        <VirtualDirectory Name="pn532">
+          <VirtualDirectory Name="helpers">
+            <File Name="src/drivers/rf/pn532/helpers/pn532_config.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_config.h"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_gpio.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_gpio.h"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare.h"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_classic.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_classic.h"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.h"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.h"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="mem_allocator">
+            <File Name="src/drivers/rf/pn532/helpers/bget.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/bget.h"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_mem.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_mem.h"/>
+          </VirtualDirectory>
+          <File Name="src/drivers/rf/pn532/pn532.c"/>
+          <File Name="src/drivers/rf/pn532/pn532.h"/>
+          <File Name="src/drivers/rf/pn532/pn532_bus.h"/>
+          <File Name="src/drivers/rf/pn532/pn532_bus_i2c.c"/>
+          <File Name="src/drivers/rf/pn532/pn532_bus_uart.c"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="chibi">
+          <File Name="src/drivers/rf/chibi/chb.c"/>
+          <File Name="src/drivers/rf/chibi/chb.h"/>
+          <File Name="src/drivers/rf/chibi/chb_buf.c"/>
+          <File Name="src/drivers/rf/chibi/chb_buf.h"/>
+          <File Name="src/drivers/rf/chibi/chb_drvr.c"/>
+          <File Name="src/drivers/rf/chibi/chb_drvr.h"/>
+          <File Name="src/drivers/rf/chibi/chb_eeprom.c"/>
+          <File Name="src/drivers/rf/chibi/chb_eeprom.h"/>
+          <File Name="src/drivers/rf/chibi/chb_spi.c"/>
+          <File Name="src/drivers/rf/chibi/chb_spi.h"/>
+          <File Name="src/drivers/rf/chibi/types.h"/>
+        </VirtualDirectory>
+      </VirtualDirectory>
+      <VirtualDirectory Name="pwm">
+        <VirtualDirectory Name="pca9685">
+          <File Name="src/drivers/pwm/pca9685/pca9685.c"/>
+          <File Name="src/drivers/pwm/pca9685/pca9685.h"/>
+        </VirtualDirectory>
+      </VirtualDirectory>
+      <VirtualDirectory Name="displays">
+        <VirtualDirectory Name="segment">
+          <VirtualDirectory Name="ht16k33">
+            <File Name="src/drivers/displays/segment/ht16k33/ht16k33.c"/>
+            <File Name="src/drivers/displays/segment/ht16k33/ht16k33.h"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <VirtualDirectory Name="graphic">
+          <VirtualDirectory Name="aafonts">
+            <VirtualDirectory Name="aa4">
+              <VirtualDirectory Name="source">
+                <File Name="src/drivers/displays/graphic/aafonts/aa4/source/Calibri18_AA4.c"/>
+              </VirtualDirectory>
+              <File Name="src/drivers/displays/graphic/aafonts/aa4/FontCalibri18_AA4.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa4/FontCalibri18_AA4.h"/>
+            </VirtualDirectory>
+            <VirtualDirectory Name="aa2">
+              <VirtualDirectory Name="source">
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/Calibri18_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/CalibriBold18_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/CalibriItalic18_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/DejaVuSansCondensed14_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/DejaVuSansCondensedBold14_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/DejaVuSansMono10_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/DejaVuSansMono13_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/DejaVuSansMono14_AA2.c"/>
+                <File Name="src/drivers/displays/graphic/aafonts/aa2/source/FranklinGothicBold99_Numbers_AA2.c"/>
+              </VirtualDirectory>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansCondensed14_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansCondensed14_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansCondensedBold14_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansCondensedBold14_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansMono10_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansMono10_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansMono13_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansMono13_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansMono14_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/DejaVuSansMono14_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontCalibri18_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontCalibri18_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontCalibriBold18_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontCalibriBold18_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontCalibriItalic18_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontCalibriItalic18_AA2.h"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontFranklinGothicBold99_Numbers_AA2.c"/>
+              <File Name="src/drivers/displays/graphic/aafonts/aa2/FontFranklinGothicBold99_Numbers_AA2.h"/>
+            </VirtualDirectory>
+          </VirtualDirectory>
+          <VirtualDirectory Name="fonts">
+            <File Name="src/drivers/displays/graphic/fonts/dejavusans9.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusans9.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusansbold9.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusansbold9.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusanscondensed9.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusanscondensed9.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusansmono8.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusansmono8.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusansmonobold8.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/dejavusansmonobold8.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramono11.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramono11.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramono9.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramono9.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramonobold11.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramonobold11.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramonobold9.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/veramonobold9.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/verdana14.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/verdana14.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/verdana9.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/verdana9.h"/>
+            <File Name="src/drivers/displays/graphic/fonts/verdanabold14.c"/>
+            <File Name="src/drivers/displays/graphic/fonts/verdanabold14.h"/>
+          </VirtualDirectory>
+          <VirtualDirectory Name="hw">
+            <File Name="src/drivers/displays/graphic/hw/hx8340b.c"/>
+            <File Name="src/drivers/displays/graphic/hw/hx8340b.h"/>
+            <File Name="src/drivers/displays/graphic/hw/hx8347g.c"/>
+            <File Name="src/drivers/displays/graphic/hw/hx8347g.h"/>
+          </VirtualDirectory>
+          <File Name="src/drivers/displays/graphic/aafonts.c"/>
+          <File Name="src/drivers/displays/graphic/aafonts.h"/>
+          <File Name="src/drivers/displays/graphic/colors.c"/>
+          <File Name="src/drivers/displays/graphic/colors.h"/>
+          <File Name="src/drivers/displays/graphic/drawing.c"/>
+          <File Name="src/drivers/displays/graphic/drawing.h"/>
+          <File Name="src/drivers/displays/graphic/fonts.c"/>
+          <File Name="src/drivers/displays/graphic/fonts.h"/>
+          <File Name="src/drivers/displays/graphic/lcd.h"/>
+          <File Name="src/drivers/displays/graphic/theme.c"/>
+          <File Name="src/drivers/displays/graphic/theme.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="bitmap">
+          <VirtualDirectory Name="ssd1306">
+            <File Name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c"/>
+            <File Name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.h"/>
+          </VirtualDirectory>
+        </VirtualDirectory>
+        <File Name="src/drivers/displays/icons16.h"/>
+        <File Name="src/drivers/displays/smallfonts.c"/>
+        <File Name="src/drivers/displays/smallfonts.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="bitbanging">
+        <VirtualDirectory Name="swspi">
+          <File Name="src/drivers/bitbanging/swspi/swspi.c"/>
+          <File Name="src/drivers/bitbanging/swspi/swspi.h"/>
+        </VirtualDirectory>
+      </VirtualDirectory>
+      <VirtualDirectory Name="statistics">
+        <File Name="src/drivers/statistics/statistics_d.c"/>
+        <File Name="src/drivers/statistics/statistics_d.h"/>
+        <File Name="src/drivers/statistics/statistics_f.c"/>
+        <File Name="src/drivers/statistics/statistics_f.h"/>
+        <File Name="src/drivers/statistics/statistics_i.c"/>
+        <File Name="src/drivers/statistics/statistics_i.h"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+    <VirtualDirectory Name="core">
+      <VirtualDirectory Name="usb">
+        <VirtualDirectory Name="romdriver">
+          <File Name="src/core/usb/romdriver/error.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_adcuser.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_audio.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_cdc.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_cdcuser.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_core.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_desc.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_dfu.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_dfuuser.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_hid.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_hiduser.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_hw.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_msc.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_mscuser.h"/>
+          <File Name="src/core/usb/romdriver/mw_usbd_rom_api.h"/>
+        </VirtualDirectory>
+        <File Name="src/core/usb/app_usbd_cfg.h"/>
+        <File Name="src/core/usb/descriptors.c"/>
+        <File Name="src/core/usb/descriptors.h"/>
+        <File Name="src/core/usb/usbd.c"/>
+        <File Name="src/core/usb/usbd.h"/>
+        <File Name="src/core/usb/usb_cdc.c"/>
+        <File Name="src/core/usb/usb_cdc.h"/>
+        <File Name="src/core/usb/usb_hid.c"/>
+        <File Name="src/core/usb/usb_hid.h"/>
+        <File Name="src/core/usb/usb_msc.c"/>
+        <File Name="src/core/usb/usb_msc.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="dwt">
+        <File Name="src/core/dwt/dwt.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="eeprom">
+        <File Name="src/core/eeprom/eeprom.c"/>
+        <File Name="src/core/eeprom/eeprom.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="fifo">
+        <File Name="src/core/fifo/fifo.c"/>
+        <File Name="src/core/fifo/fifo.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="gpio">
+        <File Name="src/core/gpio/gpio.c"/>
+        <File Name="src/core/gpio/gpio.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="i2c">
+        <File Name="src/core/i2c/i2c.c"/>
+        <File Name="src/core/i2c/i2c.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="libc">
+        <File Name="src/core/libc/stdio.c"/>
+        <File Name="src/core/libc/string.c"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="nmi">
+        <File Name="src/core/nmi/nmi.c"/>
+        <File Name="src/core/nmi/nmi.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="pmu">
+        <File Name="src/core/pmu/pmu.c"/>
+        <File Name="src/core/pmu/pmu.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="ssp0">
+        <File Name="src/core/ssp0/ssp0.c"/>
+        <File Name="src/core/ssp0/ssp0.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="ssp1">
+        <File Name="src/core/ssp1/ssp1.c"/>
+        <File Name="src/core/ssp1/ssp1.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="systick">
+        <File Name="src/core/systick/systick.c"/>
+        <File Name="src/core/systick/systick.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="uart">
+        <File Name="src/core/uart/uart.c"/>
+        <File Name="src/core/uart/uart.h"/>
+        <File Name="src/core/uart/uart_buf.c"/>
+      </VirtualDirectory>
+      <File Name="src/core/power_api.h"/>
+      <VirtualDirectory Name="iap">
+        <File Name="src/core/iap/iap.c"/>
+      </VirtualDirectory>
+    </VirtualDirectory>
+    <VirtualDirectory Name="cli">
+      <VirtualDirectory Name="commands">
+        <File Name="src/cli/commands/cmd_chibi_addr.c"/>
+        <File Name="src/cli/commands/cmd_chibi_tx.c"/>
+        <File Name="src/cli/commands/cmd_dbg_memrd.c"/>
+        <File Name="src/cli/commands/cmd_eeprom_read.c"/>
+        <File Name="src/cli/commands/cmd_eeprom_write.c"/>
+        <File Name="src/cli/commands/cmd_i2c_read.c"/>
+        <File Name="src/cli/commands/cmd_i2c_scan.c"/>
+        <File Name="src/cli/commands/cmd_i2c_write.c"/>
+        <File Name="src/cli/commands/cmd_nfc_mifareclassic_memdump.c"/>
+        <File Name="src/cli/commands/cmd_nfc_mifareclassic_valueblock.c"/>
+        <File Name="src/cli/commands/cmd_nfc_mifareultralight_memdump.c"/>
+        <File Name="src/cli/commands/cmd_rtc_read.c"/>
+        <File Name="src/cli/commands/cmd_rtc_write.c"/>
+        <File Name="src/cli/commands/cmd_sd_dir.c"/>
+        <File Name="src/cli/commands/cmd_sysinfo.c"/>
+      </VirtualDirectory>
+      <File Name="src/cli/ansi.h"/>
+      <File Name="src/cli/cli.c"/>
+      <File Name="src/cli/cli.h"/>
+      <File Name="src/cli/cli_tbl.h"/>
+      <File Name="src/cli/commands.c"/>
+      <File Name="src/cli/commands.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="boards">
+      <File Name="src/boards/board.h"/>
+      <File Name="src/boards/11u24debugger/board_11u24debugger.c"/>
+      <File Name="src/boards/11u24debugger/board_11u24debugger.h"/>
+      <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
+      <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
+      <File Name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
+      <File Name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
+      <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
+      <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
+    </VirtualDirectory>
+    <VirtualDirectory Name="localisation">
+      <File Name="src/localisation/localisation.c"/>
+      <File Name="src/localisation/localisation.h"/>
+    </VirtualDirectory>
+    <File Name="src/assert.h"/>
+    <File Name="src/cr_startup_lpc11u_lpc13u.c"/>
+    <File Name="src/errors.h"/>
+    <File Name="src/fixedptc.h"/>
+    <File Name="src/main.c"/>
+    <File Name="src/messages.c"/>
+    <File Name="src/messages.h"/>
+    <File Name="src/printf-retarget.c"/>
+    <File Name="src/projectconfig.h"/>
+    <File Name="src/sysdefs.h"/>
+  </VirtualDirectory>
+  <Description/>
+  <Dependencies/>
+  <VirtualDirectory Name="cmsis">
+    <File Name="cmsis/core_cm0.h"/>
+    <File Name="cmsis/core_cm3.h"/>
+    <File Name="cmsis/core_cmFunc.h"/>
+    <File Name="cmsis/core_cmInstr.h"/>
+    <File Name="cmsis/LPC11Uxx.h"/>
+    <File Name="cmsis/LPC13Uxx.h"/>
+    <File Name="cmsis/startup_lpc11u.c"/>
+    <File Name="cmsis/startup_lpc13u.c"/>
+    <File Name="cmsis/system_LPC11Uxx.c"/>
+    <File Name="cmsis/system_LPC11Uxx.h"/>
+    <File Name="cmsis/system_LPC13Uxx.c"/>
+    <File Name="cmsis/system_LPC13Uxx.h"/>
+  </VirtualDirectory>
+  <Settings Type="Executable">
+    <GlobalSettings>
+      <Compiler Options="" C_Options="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="">
+        <LibraryPath Value="."/>
+      </Linker>
+      <ResourceCompiler Options=""/>
+    </GlobalSettings>
+    <Configuration Name="Debug" CompilerType="gnu gcc" DebuggerType="GNU gdb debugger" Type="Executable" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-g;-O0;-Wall" C_Options="-g;-O0;-Wall" Required="no" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="" Required="no"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Debug" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="yes">
+        <RebuildCommand/>
+        <CleanCommand>make clean</CleanCommand>
+        <BuildCommand>make</BuildCommand>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory>C:\Users\Kevin\Documents\RedSuiteNXP_5.0.11_1037_beta\workspace\LPC1347_LPC11U37_CodeBase</WorkingDirectory>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+    <Configuration Name="Release" CompilerType="gnu gcc" DebuggerType="GNU gdb debugger" Type="" BuildCmpWithGlobalSettings="append" BuildLnkWithGlobalSettings="append" BuildResWithGlobalSettings="append">
+      <Compiler Options="-O2;-Wall" C_Options="-O2;-Wall" Required="yes" PreCompiledHeader="" PCHInCommandLine="no" UseDifferentPCHFlags="no" PCHFlags="">
+        <IncludePath Value="."/>
+      </Compiler>
+      <Linker Options="" Required="yes"/>
+      <ResourceCompiler Options="" Required="no"/>
+      <General OutputFile="$(IntermediateDirectory)/$(ProjectName)" IntermediateDirectory="./Release" Command="./$(ProjectName)" CommandArguments="" UseSeparateDebugArgs="no" DebugArguments="" WorkingDirectory="$(IntermediateDirectory)" PauseExecWhenProcTerminates="yes"/>
+      <Environment EnvVarSetName="&lt;Use Defaults&gt;" DbgSetName="&lt;Use Defaults&gt;">
+        <![CDATA[]]>
+      </Environment>
+      <Debugger IsRemote="no" RemoteHostName="" RemoteHostPort="" DebuggerPath="">
+        <PostConnectCommands/>
+        <StartupCommands/>
+      </Debugger>
+      <PreBuild/>
+      <PostBuild/>
+      <CustomBuild Enabled="no">
+        <RebuildCommand/>
+        <CleanCommand/>
+        <BuildCommand/>
+        <PreprocessFileCommand/>
+        <SingleFileCommand/>
+        <MakefileGenerationCommand/>
+        <ThirdPartyToolName>None</ThirdPartyToolName>
+        <WorkingDirectory/>
+      </CustomBuild>
+      <AdditionalRules>
+        <CustomPostBuild/>
+        <CustomPreBuild/>
+      </AdditionalRules>
+      <Completion EnableCpp11="no">
+        <ClangCmpFlagsC/>
+        <ClangCmpFlags/>
+        <ClangPP/>
+        <SearchPaths/>
+      </Completion>
+    </Configuration>
+  </Settings>
+</CodeLite_Project>
