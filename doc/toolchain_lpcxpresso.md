@@ -25,7 +25,7 @@ Right-click on your project name in the Project Explorer and select 'Properties'
 - LPC11Uxx > LPC11U37/401
 - LPC13xx (12bit ADC) > LPC1347
 
-![MCU Settings](images/CodeRed_SwitchMCU_MCUSelection.png)
+![MCU Settings](images/CodeRed_SwitchMCU_MCUSelection.PNG?raw=true)
 
 **Step Two: MCU C Settings**
 
@@ -33,25 +33,25 @@ Next you need to update the references to the external CMSIS library and the sel
 
 **NOTE: Be sure to make these changes for every Configuration in the 'Configuration' dropdown at the top of the dialogue box!**
 
-![C Symbols](images/CodeRed_SwitchMCU_C_Symbols.png)
+![C Symbols](images/CodeRed_SwitchMCU_C_Symbols.PNG?raw=true))
 
-![C Includes](images/CodeRed_SwitchMCU_C_Includes.png)
+![C Includes](images/CodeRed_SwitchMCU_C_Includes.PNG?raw=true))
 
-![C Target](images/CodeRed_SwitchMCU_C_Target.png)
+![C Target](images/CodeRed_SwitchMCU_C_Target.PNG?raw=true))
 
 **Step Three: MCU Assembler Settings**
 
 Next change the target architecture in the assembler settings exactly the same way you did for the C settings, making sure to repeat the steps for every configuration:
 
-![C Target](images/CodeRed_SwitchMCU_ASM_Target.png)
+![C Target](images/CodeRed_SwitchMCU_ASM_Target.PNG?raw=true))
 
 **Step Four: MCU Linker Settings**
 
 Finally, update the linker configuration to point to the correct libraries and to links files with the right target core:
 
-![C Target](images/CodeRed_SwitchMCU_Linker_Libs.png)
+![C Target](images/CodeRed_SwitchMCU_Linker_Libs.PNG?raw=true))
 
-![C Target](images/CodeRed_SwitchMCU_Linker_Target.png)
+![C Target](images/CodeRed_SwitchMCU_Linker_Target.PNG?raw=true))
 
 **Step Five: Clean and build your project**
 
