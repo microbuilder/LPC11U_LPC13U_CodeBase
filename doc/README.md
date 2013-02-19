@@ -1,10 +1,10 @@
-# LPC11U37/LPC1347 Code Base Documentation #
+# LPC11U/LPC13U Code Base Documentation #
 
 Documentation for this codebase is spread out between this folder (/doc) and some of the key folders in the codebase where README.md files are appropriately placed.
 
 ## Basic Structure ##
 
-While every attempt has been made to organize the LPC11U37/LPC1347 code base in a clear, coherent way, a basic explanation of the project structure will hopefully help you understand where to get started.
+While every attempt has been made to organize the LPC11U/LPC13U code base in a clear, coherent way, a basic explanation of the project structure will hopefully help you understand where to get started.
 
 The code base uses the following folder structure:
 
@@ -23,7 +23,7 @@ This codebase is targetted at GCC, and currently supports the following toolchai
 - [Crossworks for ARM](toolchain_crossworks.md)
 - CodeLite
 
-## Starting a New Project with the LPC11U37/LPC1347 Code Base ##
+## Starting a New Project with the LPC11U/LPC13U Code Base ##
 
 The code base is organised in a way that 'attempts' to keep the code and drivers relevant across a number of projects or boards.  The intention is to provide a common code base that only needs to be updated once, and every board supported by the code base will automatically benefit from the latest code updates.
 

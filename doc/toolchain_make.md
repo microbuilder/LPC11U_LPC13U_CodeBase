@@ -1,4 +1,4 @@
-# Using Make with the LPC11U37/LPC1347 Codebase #
+# Using Make with the LPC11U/LPC13U Code Base #
 
 The 'make' command-line build system gives you a great deal of control over how build your projects.  You can choose the toolchain you want to build with (including one you rolled yourself), the exact library versions you wish to include, perform useful manipulations on your source code and the assembled binaries, and a lot of other tasks all from one central location or makefile.
 

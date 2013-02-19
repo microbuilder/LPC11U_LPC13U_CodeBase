@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<CodeLite_Project Name="LPC11U37_LPC1347_Codebase" InternalType="Console">
+<CodeLite_Project Name="LPC11U_LPC13U_Codebase" InternalType="Console">
   <Plugins>
     <Plugin Name="qmake">
       <![CDATA[00010001N0005Debug000000000000]]>
