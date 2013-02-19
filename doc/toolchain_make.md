@@ -20,7 +20,7 @@ The most common pre-compiled cross-compiling toolchains for ARM are:
 - [Yagarto](http://www.yagarto.de/) - A popular pre-compiled toolchain for ARM available in an easy to use installer for both Windows and the Mac.  It also includes a seperate installer (YAGARTO Tools) that will add support for the tools you'll need when building like 'make' and common Linux commands like 'mkdir'.  This is an easy to use option and works well out of the box since it includes everything you need in two installers.
 - [Sourcery CodeBench Lite](http://www.mentor.com/embedded-software/sourcery-tools/sourcery-codebench/editions/lite-edition/) - Formerly CodeSourcery G++ Lite before being purchased by Mentor, the Lite edition of this toolchain is still available free of charge and includes installers for Windows and Linux.
 
-**Note: Even if you're using the GCC ARM Embedded toolchain, if you're using Windows you will still want to download and install [YAGARTO Tools](http://www.yagarto.de/) to have the tools you'll need to build using the ARM toolchain (make, mkdir, rm, etc.).
+**Note: Even if you're using the GCC ARM Embedded toolchain, on Windows you'll still want to download and install [YAGARTO Tools](http://www.yagarto.de/) to have the pre-compiled binaries you'll need to run the makefile (make, mkdir, rm, etc.).**
 
 # Getting Started #
 
