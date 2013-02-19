@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>LPC1347_LPC11U37_CodeBase</name>
+	<name>LPC11U_LPC13U_Codebase</name>
 	<comment></comment>
 	<projects>
 		<project>CMSISv2p00_LPC11Uxx</project>
@@ -33,7 +33,7 @@
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.buildLocation</key>
-					<value>${workspace_loc:/LPC1347_LPC11U37_CodeBase/Debug}</value>
+					<value>${workspace_loc:/LPC11U_LPC13U_Codebase/Debug}</value>
 				</dictionary>
 				<dictionary>
 					<key>org.eclipse.cdt.make.core.cleanBuildTarget</key>
