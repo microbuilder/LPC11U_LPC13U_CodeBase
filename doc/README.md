@@ -33,7 +33,7 @@ The projectconfig.h file in turn references a board-specific config file in the 
 
 If you wish to start a new project, the best thing to do is to copy the matching boardxxx.c and boardxxx.h files that best match your own HW or project, add a new reference to the projectconfig.h file for them, and then modify those files.
 
-For example, to create a new board config for something based on the LPC1347 LPCXpresso board, create a copy of [src/boards/board_lpcxpresso1347.c](../src/boards/board_lpcxpresso1347.c) and [src/boards/board_lpcxpresso1347.h](../src/boards/board_lpcxpresso1347.h) and rename them to something appropriate like board_myproject.c/h.
+For example, to create a new board config for something based on the LPC1347 LPCXpresso board, create a copy of [src/boards/lpcxpresso1347/board_lpcxpresso1347.c](../src/boards/lpcxpresso1347/board_lpcxpresso1347.c) and [src/boards/lpcxpresso1347/board_lpcxpresso1347.h](../src/boards/lpcxpresso1347/board_lpcxpresso1347.h) and rename them to something appropriate like board_myproject.c/h.
 
 Open the new files up and change the names in the ifdef check at the top of the header to something unique:
 
