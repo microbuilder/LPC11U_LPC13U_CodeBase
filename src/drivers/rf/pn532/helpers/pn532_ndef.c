@@ -145,10 +145,10 @@
 #define NDEF_HEADER_TNF_MASK            ((uint8_t)(0x07U<<0))
 
 #define NDEF_FLAG_MASK                  (0xF8)
-#define NDEF_TNF_MASK                    (0x07)
-#define NDEF_HEADER_INDEX                (0)
+#define NDEF_TNF_MASK                   (0x07)
+#define NDEF_HEADER_INDEX               (0)
 #define NDEF_TYPE_LENGTH_INDEX          (1)
-#define NDEF_PAYLOAD_LENGTH_INDEX        (2)
+#define NDEF_PAYLOAD_LENGTH_INDEX       (2)
 #define NDEF_EXTRACT_FLAGS(header)      ((header) & NDEF_FLAG_MASK)
 #define NDEF_EXTRACT_TNF(header)        ((header) & NDEF_TNF_MASK)
 #define NDEF_RECORD_HEADER(header, tnf) (((header) & NDEF_FLAG_MASK) | ((tnf) & NDEF_TNF_MASK))
@@ -160,16 +160,16 @@
 /**************************************************************************/
 typedef struct NDefRecord_st
 {
-  uint8_t *pData;           /** Raw data of entire NDEF record */
-  uint32_t length;          /** Length of entire NDEF record */
+  uint8_t *pData;                   /** Raw data of entire NDEF record */
+  uint32_t length;                  /** Length of entire NDEF record */
   uint32_t idLenIndex;
   uint32_t typeIndex;
   uint32_t idIndex;
   uint32_t payloadIndex;
   uint32_t payloadLen;
-  uint8_t bufferAllocated;  /** Indicates whether the buffer *pData
-                                is allocated (and managed) by NDEF
-                                or managed by upper layer */
+  uint8_t bufferAllocated;          /** Indicates whether the buffer *pData
+                                        is allocated (and managed) by NDEF
+                                        or managed by upper layer */
   struct NDefRecord_st *pNext;
 } NdefRecord_t;
 
@@ -351,11 +351,11 @@ pn532_error_t pn532_ndef_update(pn532_ndef_record_t ndefRecord, uint8_t tnf,
   }
   if (pRec->pData != NULL)
   {
-    // Keep the current MB and ME flag
+    /* Keep the current MB and ME flag */
     flags = pRec->pData[NDEF_HEADER_INDEX] & (NDEF_HEADER_MB_MASK
       | NDEF_HEADER_ME_MASK);
   }
-  // To keep memory peek low, we pn532_mem_free current data before allocating new
+  /* To keep memory peek low, we pn532_mem_free current data before allocating new data */
   if ((pRec->pData != NULL) && (pRec->bufferAllocated))
   {
     pn532_mem_free(pRec->pData);
@@ -372,12 +372,12 @@ pn532_error_t pn532_ndef_update(pn532_ndef_record_t ndefRecord, uint8_t tnf,
     payloadLength = 0;
   }
 
-  pRec->length = 1 /* FLAG + TNF */
-  + 1 /* TYPE LENGTH */
-  + (payloadLength > 0xFF ? 4 : 1) /* PAYLOAD LENGTH */
-  + (idLength > 0 ? 1 + idLength : 0) /* ID LENGHT + ID */
-  + typeLength /* TYPE */
-  + payloadLength; /* PAYLOAD */
+  pRec->length = 1                      /* FLAG + TNF */
+  + 1                                   /* TYPE LENGTH */
+  + (payloadLength > 0xFF ? 4 : 1)      /* PAYLOAD LENGTH */
+  + (idLength > 0 ? 1 + idLength : 0)   /* ID LENGTH + ID */
+  + typeLength                          /* TYPE */
+  + payloadLength;                      /* PAYLOAD */
   pRec->pData = (uint8_t*) pn532_mem_alloc(pRec->length);
   if (pRec->pData == NULL)
   {
@@ -467,14 +467,14 @@ pn532_error_t pn532_ndef_updateFromRawEx(pn532_ndef_record_t ndefRecord,
     return PN532_ERROR_INVALID_PARAM;
   }
   /************Parse input data ********************/
-  //Header + Type
+  /* Header + Type */
   totalLen = 2;
   if (length < totalLen)
   {
     return PN532_ERROR_INVALID_PARAM;
   }
 
-  // PayloadLen
+  /* Payload Len */
   if (pBuffer[NDEF_HEADER_INDEX] & NDEF_HEADER_SR_MASK)
   {
     if (totalLen + 1 > length)
@@ -498,7 +498,7 @@ pn532_error_t pn532_ndef_updateFromRawEx(pn532_ndef_record_t ndefRecord,
   }
   idLenIndex = totalLen;
 
-  // ID length
+  /* ID Len */
   if (pBuffer[NDEF_HEADER_INDEX] & NDEF_HEADER_IL_MASK)
   {
     if (totalLen + 1 > length)
@@ -509,7 +509,7 @@ pn532_error_t pn532_ndef_updateFromRawEx(pn532_ndef_record_t ndefRecord,
   }
   typeIndex = totalLen;
 
-  // Type
+  /* Type */
   if (totalLen + pBuffer[NDEF_TYPE_LENGTH_INDEX] > length)
   {
     return PN532_ERROR_INVALID_PARAM;
@@ -517,7 +517,7 @@ pn532_error_t pn532_ndef_updateFromRawEx(pn532_ndef_record_t ndefRecord,
   totalLen += pBuffer[NDEF_TYPE_LENGTH_INDEX];
   idIndex = totalLen;
 
-  // ID
+  /* ID */
   if (pBuffer[NDEF_HEADER_INDEX] & NDEF_HEADER_IL_MASK)
   {
     if (totalLen + pBuffer[idLenIndex] > length)
@@ -528,7 +528,7 @@ pn532_error_t pn532_ndef_updateFromRawEx(pn532_ndef_record_t ndefRecord,
   }
   payloadIndex = totalLen;
 
-  // Payload
+  /* Payload */
   if (totalLen + payloadLen > length)
   {
     return PN532_ERROR_INVALID_PARAM;
@@ -536,7 +536,7 @@ pn532_error_t pn532_ndef_updateFromRawEx(pn532_ndef_record_t ndefRecord,
   totalLen += payloadLen;
 
   /************Assign to target record ********************/
-  // To keep memory peek low, we pn532_mem_free current data before allocating new
+  /* To keep memory peek low, we pn532_mem_free current data before allocating new */
   if ((pRec->pData != NULL) && (pRec->bufferAllocated))
   {
     pn532_mem_free(pRec->pData);
@@ -688,7 +688,7 @@ pn532_error_t pn532_ndef_updateFromStream(pn532_ndef_record_t ndefRecord,
   payloadIndex = totalLen;
   totalLen += payloadLen;
 
-  // To keep memory peek low, we pn532_mem_free current data before allocating new
+  /* To keep memory peek low, we pn532_mem_free current data before allocating new data */
   if ((pRec->pData != NULL) && (pRec->bufferAllocated))
   {
     pn532_mem_free(pRec->pData);

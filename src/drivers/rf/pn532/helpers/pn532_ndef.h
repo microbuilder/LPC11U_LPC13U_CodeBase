@@ -83,7 +83,7 @@
     constants.
 */
 /**************************************************************************/
-#define NDEF_TNF_EXTERNAL_TYPE        (0x04)
+#define NDEF_TNF_EXTERNAL_TYPE         (0x04)
 
 /**************************************************************************/
 /*!
@@ -95,7 +95,7 @@
     The type field must be empty to be a valid NDEF_TNF_UNKNOWN record.
 */
 /**************************************************************************/
-#define NDEF_TNF_UNKNOWN              (0x05)
+#define NDEF_TNF_UNKNOWN               (0x05)
 
 /**************************************************************************/
 /*!
@@ -107,7 +107,7 @@
     NDEF_TNF_UNCHANGED must not be used in any other situation.
 */
 /**************************************************************************/
-#define NDEF_TNF_UNCHANGED            (0x06)
+#define NDEF_TNF_UNCHANGED             (0x06)
 
 /**************************************************************************/
 /*!
@@ -133,7 +133,7 @@
     RTD URI type. For use with NDEF_TNF_WELL_KNOWN.
 */
 /**************************************************************************/
-#define NDEF_RTD_URI                  ("U")
+#define NDEF_RTD_URI                   ("U")
 
 /**************************************************************************/
 /*!
@@ -147,7 +147,7 @@
     RTD Alternative Carrier type. For use with NDEF_TNF_WELL_KNOWN.
 */
 /**************************************************************************/
-#define NDEF_RTD_ALTERNATIVE_CARRIER  ("ac")
+#define NDEF_RTD_ALTERNATIVE_CARRIER   ("ac")
 
 /**************************************************************************/
 /*!
@@ -168,7 +168,7 @@
     RTD Handover Select type. For use with NDEF_TNF_WELL_KNOWN.
 */
 /**************************************************************************/
-#define NDEF_RTD_HANDOVER_SELECT      ("Hs")
+#define NDEF_RTD_HANDOVER_SELECT       ("Hs")
 
 /**************************************************************************/
 /*!
@@ -182,7 +182,7 @@
     NDEF_RTD_ANDROID_APP records.
 */
 /**************************************************************************/
-#define NDEF_RTD_ANDROID_APP          ("android.com:pkg")
+#define NDEF_RTD_ANDROID_APP           ("android.com:pkg")
 
 /**************************************************************************/
 /*!
