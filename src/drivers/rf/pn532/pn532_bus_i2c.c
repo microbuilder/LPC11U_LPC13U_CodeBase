@@ -1,13 +1,12 @@
 /**************************************************************************/
 /*!
-    @file     pn532_bus_i2c.c
-    @author   K. Townsend (microBuilder.eu)
+    @file pn532_bus_i2c.c
 
     @section LICENSE
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2012, microBuilder SARL
+    Copyright (c) 2013, K. Townsend (microBuilder.eu)
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
