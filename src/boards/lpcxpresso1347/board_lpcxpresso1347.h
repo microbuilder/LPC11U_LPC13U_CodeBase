@@ -88,22 +88,11 @@ extern "C" {
 
 
 /*=========================================================================
-    SUPPORTED PERIPHERALS
-    -----------------------------------------------------------------------
-    Because all ISRs are referenced in the startup code, GCC typically
-    won't optimise out the ISR functions during compilation even if the
-    ISRs will never be entered, resulting in larger binaries than required
-    (for example if no I2C sensors are used, be sure to disable I2C support
-    since the I2C ISR is quite large).
-
-    Use the defines below to include or exclude support for specific
-    peripherals.
-
-    NOTE: GPIO ISRs are handled separately in GPIO INTERRUPTS below
+    FIRMWARE VERSION SETTINGS
     -----------------------------------------------------------------------*/
-    #define CFG_ENABLE_I2C
-    #define CFG_ENABLE_UART
-    #define CFG_ENABLE_USB
+    #define CFG_FIRMWARE_VERSION_MAJOR      (0)
+    #define CFG_FIRMWARE_VERSION_MINOR      (1)
+    #define CFG_FIRMWARE_VERSION_REVISION   (0)
 /*=========================================================================*/
 
 
@@ -158,11 +147,45 @@ extern "C" {
 
 
 /*=========================================================================
-    FIRMWARE VERSION SETTINGS
+    GPIO INTERRUPTS
+    -----------------------------------------------------------------------
+    This table shows where GPIO interrupts are mapped in this project
+    (Note that the LPC11U and LPC13U use different names for the
+    IRQ Handlers in the standard headers)
+
+    Interrupt                                     Location
+    ------------------------------------------    -------------------------
+    PIN_INT0_IRQHandler - FLEX_INT0_IRQHandler    chb_drvr.c
+    PIN_INT1_IRQHandler - FLEX_INT1_IRQHandler    pcf2129.c
+    PIN_INT2_IRQHandler - FLEX_INT2_IRQHandler
+    PIN_INT3_IRQHandler - FLEX_INT3_IRQHandler
+    PIN_INT4_IRQHandler - FLEX_INT4_IRQHandler
+    PIN_INT5_IRQHandler - FLEX_INT5_IRQHandler
+    PIN_INT6_IRQHandler - FLEX_INT6_IRQHandler
+    PIN_INT7_IRQHandler - FLEX_INT7_IRQHandler
+    GINT0_IRQHandler
+    GINT0_IRQHandler
     -----------------------------------------------------------------------*/
-    #define CFG_FIRMWARE_VERSION_MAJOR      (0)
-    #define CFG_FIRMWARE_VERSION_MINOR      (1)
-    #define CFG_FIRMWARE_VERSION_REVISION   (0)
+/*=========================================================================*/
+
+
+/*=========================================================================
+    SUPPORTED PERIPHERALS
+    -----------------------------------------------------------------------
+    Because all ISRs are referenced in the startup code, GCC typically
+    won't optimise out the ISR functions during compilation even if the
+    ISRs will never be entered, resulting in larger binaries than required
+    (for example if no I2C sensors are used, be sure to disable I2C support
+    since the I2C ISR is quite large).
+
+    Use the defines below to include or exclude support for specific
+    peripherals.
+
+    NOTE: GPIO ISRs are handled separately in GPIO INTERRUPTS below
+    -----------------------------------------------------------------------*/
+    #define CFG_ENABLE_I2C
+    #define CFG_ENABLE_UART
+    #define CFG_ENABLE_USB
 /*=========================================================================*/
 
 
@@ -175,59 +198,6 @@ extern "C" {
 
     -----------------------------------------------------------------------*/
     #define CFG_SYSTICK_DELAY_IN_MS         (1)
-/*=========================================================================*/
-
-
-/*=========================================================================
-    GPIO INTERRUPTS
-    -----------------------------------------------------------------------
-
-    IF you wish to define the GPIO interrupt handlers elsewhere in your
-    code, you can define a seperate IRQHandler for the appropriate
-    GPIO bank rather than using the definitions in core/gpio/gpio.c (to
-    avoid causing problems in other projects, and to make updates easier,
-    etc.)  To disable the default IRQHandler, simply comment out the
-    define below for the appropriate GPIO bank and implement the handler
-    somewhere else.
-
-    If you do not require any specific interrupt handlers, commenting
-    them out here will also save some compiled code space since the
-    interrupt handlers are referenced in the startup code, and as such
-    the compiler things you always use them and doesn't optimize them
-    out.
-
-    CFG_GPIO_ENABLE_PINIRQ0  If defined, PIN_INT0_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_PINIRQ1  If defined, PIN_INT1_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_PINIRQ2  If defined, PIN_INT2_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_PINIRQ3  If defined, PIN_INT3_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_PINIRQ4  If defined, PIN_INT4_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_PINIRQ5  If defined, PIN_INT5_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_PINIRQ6  If defined, PIN_INT6_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_PINIRQ7  If defined, PIN_INT7_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_IRQ1      If defined, GINT0_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-    CFG_GPIO_ENABLE_IRQ1      If defined, GINT1_IRQHandler will be
-                              declared and handled in core/gpio/gpio.c
-
-    -----------------------------------------------------------------------*/
-    // #define CFG_GPIO_ENABLE_PINIRQ0    // Defined in chb_drvr.c
-    // #define CFG_GPIO_ENABLE_PINIRQ1    // Defined in pcf2129.c
-    // #define CFG_GPIO_ENABLE_PINIRQ2
-    // #define CFG_GPIO_ENABLE_PINIRQ3
-    // #define CFG_GPIO_ENABLE_PINIRQ4
-    // #define CFG_GPIO_ENABLE_PINIRQ5
-    // #define CFG_GPIO_ENABLE_PINIRQ6
-    // #define CFG_GPIO_ENABLE_PINIRQ7
-    // #define CFG_GPIO_ENABLE_IRQ0
-    // #define CFG_GPIO_ENABLE_IRQ1
 /*=========================================================================*/
 
 
@@ -686,6 +656,6 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
