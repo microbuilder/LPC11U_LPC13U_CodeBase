@@ -39,6 +39,8 @@
 extern "C" {
 #endif
 
+#include "projectconfig.h"
+
 #define CHANNEL0        (0)
 #define CHANNEL1        (1)
 #define CHANNEL2        (2)
