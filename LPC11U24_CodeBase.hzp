@@ -43,9 +43,6 @@
         <folder Name="pmu">
           <file file_name="src/core/pmu/pmu.c"/>
         </folder>
-        <folder Name="nmi">
-          <file file_name="src/core/nmi/nmi.c"/>
-        </folder>
         <folder Name="usb" file_name="">
           <file file_name="src/core/usb/descriptors.c"/>
           <file file_name="src/core/usb/usb_cdc.c"/>

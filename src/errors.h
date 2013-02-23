@@ -7,10 +7,10 @@
     @details
 
     In order to improve the stability of the system the code base uses a
-        global error type that any critical function returns upon completion.
-        
-        Functions that execute properly return ERROR_NONE, which equals '0' so
-        that we can perform a simple check like 'if(error) { ... }'.
+    global error type that any critical function returns upon completion.
+
+    Functions that execute properly return ERROR_NONE, which equals '0' so
+    that we can perform a simple check like 'if(error) { ... }'.
 */
 /**************************************************************************/
 
@@ -71,7 +71,7 @@ typedef enum
   ERROR_ADDRESSOUTOFRANGE       = 0x2,      /**< The supplied address is out of range */
   ERROR_BUFFEROVERFLOW          = 0x3,      /**< The proposed action will cause a buffer overflow */
   ERROR_INVALIDPARAMETER        = 0x4,      /**< An invalid parameter value was provided */
-  ERROR_DEVICENOTINITIALISED    = 0x5,      /**< Attemping to execute a function on an unitialised peripheral */
+  ERROR_DEVICENOTINITIALISED    = 0x5,      /**< Attempting to execute a function on an uninitialised peripheral */
   ERROR_UNEXPECTEDVALUE         = 0x6,      /**< An unexpected value was found inside a function */
   ERROR_I2C_DEVICENOTFOUND      = 0x100,    /**< Device didn't ACK after an I2C transfer */
   ERROR_I2C_NOACK               = 0x101,    /**< No ACK signal received during an I2C transfer */
@@ -84,6 +84,6 @@ typedef enum
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif

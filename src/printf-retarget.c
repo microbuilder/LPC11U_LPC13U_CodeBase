@@ -75,10 +75,10 @@ void __putchar(const char c)
     uartSendByte(c);
   #endif
 
-  // Handle PRINTF_DEBUG redirection for Crossworks for ARM
+  /* Handle PRINTF_DEBUG redirection for Crossworks for ARM */
   #ifdef __CROSSWORKS_ARM
     #ifdef CFG_PRINTF_DEBUG
-      // Warning: This will cause problems if a debugger is not connected!
+      /* Warning: This will cause problems if a debugger is not connected! */
       debug_putchar(c);
     #endif
   #endif

@@ -279,10 +279,6 @@
         <File Name="src/core/libc/stdio.c"/>
         <File Name="src/core/libc/string.c"/>
       </VirtualDirectory>
-      <VirtualDirectory Name="nmi">
-        <File Name="src/core/nmi/nmi.c"/>
-        <File Name="src/core/nmi/nmi.h"/>
-      </VirtualDirectory>
       <VirtualDirectory Name="pmu">
         <File Name="src/core/pmu/pmu.c"/>
         <File Name="src/core/pmu/pmu.h"/>
