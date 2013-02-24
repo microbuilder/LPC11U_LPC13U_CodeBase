@@ -73,6 +73,9 @@ OBJS  += $(OBJ_PATH)/cmd_rtc_write.o
 OBJS  += $(OBJ_PATH)/cmd_sd_dir.o
 OBJS  += $(OBJ_PATH)/cmd_sysinfo.o
 
+VPATH += src/core/adc
+OBJS  += $(OBJ_PATH)/adc.o
+
 VPATH += src/core/eeprom
 OBJS  += $(OBJ_PATH)/eeprom.o
 

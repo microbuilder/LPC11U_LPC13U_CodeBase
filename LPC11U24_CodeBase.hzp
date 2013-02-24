@@ -43,7 +43,10 @@
         <folder Name="pmu">
           <file file_name="src/core/pmu/pmu.c"/>
         </folder>
-        <folder Name="usb" file_name="">
+        <folder Name="adc" file_name="">
+          <file file_name="src/core/adc/adc.c"/>
+        </folder>
+       <folder Name="usb" file_name="">
           <file file_name="src/core/usb/descriptors.c"/>
           <file file_name="src/core/usb/usb_cdc.c"/>
           <file file_name="src/core/usb/usb_hid.c"/>

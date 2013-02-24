@@ -283,6 +283,10 @@
         <File Name="src/core/pmu/pmu.c"/>
         <File Name="src/core/pmu/pmu.h"/>
       </VirtualDirectory>
+      <VirtualDirectory Name="adc">
+        <File Name="src/core/adc/adc.c"/>
+        <File Name="src/core/adc/adc.h"/>
+      </VirtualDirectory>
       <VirtualDirectory Name="ssp0">
         <File Name="src/core/ssp0/ssp0.c"/>
         <File Name="src/core/ssp0/ssp0.h"/>
