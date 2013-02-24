@@ -81,9 +81,9 @@ extern "C" {
 
 
 /*=========================================================================
-    I2C Address - 011110+SA0+RW ... 0x78 for SA0 = 0, 0x7A for SA0 = 1
+    I2C Address - 011110+SA0 ... 0x3C for SA0 = 0, 0x3D for SA0 = 1
     ---------------------------------------------------------------------*/
-    #define SSD1306_I2C_ADDRESS           (0x7A)
+    #define SSD1306_I2C_ADDRESS           (0x3D << 1)
     #define SSD1306_I2C_READWRITE         (0x01)
 /*=========================================================================*/
 
@@ -128,6 +128,6 @@ void    ssd1306ShiftFrameBuffer( uint8_t height );
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
