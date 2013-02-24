@@ -173,7 +173,8 @@ error_t ssd1306Init(uint8_t vccstate)
   i2cInit(I2CMASTER);
 
   /* Ping the I2C device first to see if it exists! */
-  ASSERT(!(i2cCheckAddress(SSD1306_I2C_ADDRESS)), ERROR_I2C_DEVICENOTFOUND);
+  /* It seems we can't ping it */
+  // ASSERT(!(i2cCheckAddress(SSD1306_I2C_ADDRESS)), ERROR_I2C_DEVICENOTFOUND);
 
   /* I2C Initialisation */
   ssd1306SendCommand(SSD1306_DISPLAYOFF);
