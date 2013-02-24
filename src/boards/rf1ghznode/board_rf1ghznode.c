@@ -47,6 +47,7 @@
 #include "core/systick/systick.h"
 #include "core/eeprom/eeprom.h"
 #include "core/pmu/pmu.h"
+#include "core/adc/adc.h"
 
 #ifdef CFG_CHIBI
   #include "drivers/rf/chibi/chb.h"
@@ -82,9 +83,12 @@
 #define PINS_VINADC_EN_PORT     (0)
 #define PINS_VINADC_EN_PIN      (20)
 #define PINS_VINADC_INPUT_PORT  (0)
-#define PINS_VINADC_INPUT_PIN   (21)
+#define PINS_VINADC_INPUT_PIN   (11)
 #define PINS_I2C_PULLUPS_PORT   (0)
 #define PINS_I2C_PULLUPS_PIN    (23)
+
+/* VIN resistor divider multplier is 3.12766 */
+#define RF1GHZNODE_VINADC_MULTIPLIER_FIXED10K (31277)
 
 /**************************************************************************/
 /*!
@@ -317,7 +321,7 @@ void boardSleep(void)
     LPC_GPIO->CLR[1] = (1 << 22);
   #endif
 
-  /* Turn the battery voltage divider off */
+  /* Turn the VIN voltage divider off */
   LPC_GPIO->SET[PINS_VINADC_EN_PORT] = (1 << PINS_VINADC_EN_PIN);
   GPIOSetDir(PINS_VINADC_INPUT_PORT, PINS_VINADC_INPUT_PIN, 1);
   LPC_GPIO->CLR[PINS_VINADC_INPUT_PORT] = (1 << PINS_VINADC_INPUT_PIN);
@@ -393,6 +397,53 @@ void boardSetVREG3V3(void)
 void boardSetVREG2V2(void)
 {
   LPC_GPIO->SET[PINS_VREGVSEL_PORT] = (1 << PINS_VREGVSEL_PIN);
+}
+
+/**************************************************************************/
+/*!
+    @brief Reads the current VIN level using the on-chip ADC
+
+    @returns A fixed point voltage level where 3176 = 3.176V
+*/
+/**************************************************************************/
+uint32_t boardGetVIN(void)
+{
+  uint32_t vraw, vcomp, vref, i;
+
+  /* Indicate the ADC range */
+  #if ADC_MODE_10BIT
+  uint32_t adcRange = 1024;
+  #else
+  uint32_t adcRange = 4096;
+  #endif
+
+  /* Delay ADC init until now to save power */
+  adcInit();
+
+  /* Enable the VIN ADC resistor-divider and setup the ADC pin */
+  LPC_GPIO->CLR[PINS_VINADC_EN_PORT] = (1 << PINS_VINADC_EN_PIN);
+  LPC_IOCON->TDI_PIO0_11 = (2<<0) | (0<<7);
+
+  /* We need a small delay for everything to stabilise with the FET + R/D */
+  /* ToDo: Check this on a scope to see how long stabilisation takes */
+  for (i=0;i<1000;i++)
+  {
+    __NOP();
+  }
+
+  /* Get the raw ADC value taking into account range, adc ref, and r/d multiplier */
+  vref = GPIOGetPinValue(PINS_VREGVSEL_PORT, PINS_VREGVSEL_PIN) ? 2200 : 3300;
+  vraw = (((adcRead(0) * 1000) / adcRange) * vref) / 1000;
+  vcomp = (vraw * RF1GHZNODE_VINADC_MULTIPLIER_FIXED10K) / 10000;
+
+  /* Turn everything back off to save power */
+  LPC_GPIO->SET[PINS_VINADC_EN_PORT] = (1 << PINS_VINADC_EN_PIN);
+  GPIOSetDir(PINS_VINADC_INPUT_PORT, PINS_VINADC_INPUT_PIN, 1);
+  LPC_GPIO->CLR[PINS_VINADC_INPUT_PORT] = (1 << PINS_VINADC_INPUT_PIN);
+  LPC_IOCON->TDI_PIO0_11 = (1<<0) | (0<<3) | (1<<7);
+
+  /* Return fixed point value (3157 = 3.157V) */
+  return vcomp;
 }
 
 #endif

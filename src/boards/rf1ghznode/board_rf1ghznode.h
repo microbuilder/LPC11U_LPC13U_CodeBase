@@ -327,8 +327,8 @@ extern "C" {
     #define CFG_PRINTF_NEWLINE              "\n"
 
     // #define CFG_PRINTF_UART
-    #define CFG_PRINTF_USBCDC
-    // #define CFG_PRINTF_DEBUG
+    // #define CFG_PRINTF_USBCDC
+    #define CFG_PRINTF_DEBUG
 /*=========================================================================*/
 
 
@@ -631,8 +631,9 @@ extern "C" {
     #endif
 /*=========================================================================*/
 
-void    boardSetVREG3V3 ( void );
-void    boardSetVREG2V2 ( void );
+void     boardSetVREG3V3 ( void );
+void     boardSetVREG2V2 ( void );
+uint32_t boardGetVIN ( void );
 
 #ifdef __cplusplus
 }
