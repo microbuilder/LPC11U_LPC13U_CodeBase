@@ -95,9 +95,6 @@ VPATH += src/core/libc
 OBJS  += $(OBJ_PATH)/stdio.o 
 OBJS  += $(OBJ_PATH)/string.o
 
-VPATH += src/core/nmi
-OBJS  += $(OBJ_PATH)/nmi.o
-
 VPATH += src/core/pmu
 OBJS  += $(OBJ_PATH)/pmu.o
 

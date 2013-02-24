@@ -410,7 +410,7 @@
         <SingleFileCommand/>
         <MakefileGenerationCommand/>
         <ThirdPartyToolName>None</ThirdPartyToolName>
-        <WorkingDirectory>C:\Users\Kevin\Documents\RedSuiteNXP_5.0.11_1037_beta\workspace\LPC1347_LPC11U37_CodeBase</WorkingDirectory>
+        <WorkingDirectory>$(IntermediateDirectory)</WorkingDirectory>
       </CustomBuild>
       <AdditionalRules>
         <CustomPostBuild/>
@@ -461,4 +461,6 @@
       </Completion>
     </Configuration>
   </Settings>
+  <Dependencies Name="Debug"/>
+  <Dependencies Name="Release"/>
 </CodeLite_Project>
