@@ -177,7 +177,8 @@ error_t ht16k33WriteDisplay(void)
 /**************************************************************************/
 void ht16k33Clear(void)
 {
-  for (uint8_t i=0; i<8; i++)
+  uint8_t i;
+  for (i=0; i<8; i++)
   {
     _ht16k33_Buffer[i] = 0xFFFF;
   }
