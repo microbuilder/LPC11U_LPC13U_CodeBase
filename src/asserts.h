@@ -57,6 +57,35 @@ extern "C" {
 /*! Compiler specific macro returning a string containing the current function */
 #define ASSERT_FUNC __func__
 
+#define STRING_CONCAT(a, b) a##b                  // TODO: Move to another place
+#define XSTRING_CONCAT(a, b) STRING_CONCAT(a, b)  // Expand then concat ... TODO: Move to another place
+#define STATIC_ASSERT(const_expr) enum { XSTRING_CONCAT(static_assert_, __LINE__) = 1/(!!(const_expr)) }
+
+// #define LOG_ENABLE
+
+#ifdef LOG_ENABLE
+  #define LOG_PRINTF(...)      _PRINTF(__VA_ARGS__)
+#else
+  #define LOG_PRINTF(...)
+#endif
+
+#define LOG_MESSAGE "Log: %s: line %d: "
+#define LOG_TAB(n) \
+  do{\
+    for(uint32_t run=0; run<(n); run++)\
+      LOG_PRINTF("\t");\
+  }while(0)
+
+#define LOG(format, ...) LOG_PRINTF(LOG_MESSAGE format "%s", ASSERT_FUNC, ASSERT_LINE, __VA_ARGS__, CFG_PRINTF_NEWLINE);
+
+#define LOG_ARR(array, size, format) \
+  do{\
+    for(uint32_t run=0; run<(size); run++)\
+      LOG_PRINTF(format " ", (array)[run]);\
+    LOG_PRINTF(CFG_PRINTF_NEWLINE);\
+  }while(0)
+
+#define LOG_STR(str) LOG("%s", str)
 /**************************************************************************/
 /*!
     @brief  This macro will assert the test condition and return the
@@ -157,7 +186,6 @@ ASSERT( 1 / (sizeof(void *) & 4) );
 This version will trigger the “division by zero” warning from the compiler
 when the code is compiled on machines that do not have a 32-bit wordsize.
 */
-
 #ifdef __cplusplus
 }
 #endif

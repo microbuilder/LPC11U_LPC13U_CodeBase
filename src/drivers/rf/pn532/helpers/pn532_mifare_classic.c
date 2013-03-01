@@ -336,6 +336,82 @@ pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t
   return PN532_ERROR_NONE;
 }
 
+/**************************************************************************/
+/*!
+    Tries to detect MIFARE targets in passive mode.
+
+    @param  pSak [out]  Pointer SAK byte
+    @param  Atqa        Pointer to ATQA data
+
+    Response for a valid ISO14443A 106KBPS (Mifare Classic, etc.)
+    should be in the following format.  See UM0701-02 section
+    7.3.5 for more information
+
+    byte            Description
+    -------------   ------------------------------------------
+    b0..6           Frame header and preamble
+    b7              Tags Found
+    b8              Tag Number (only one used in this example)
+    b9..10          SENS_RES
+    b11             SEL_RES
+    b12             NFCID Length
+    b13..NFCIDLen   NFCID
+
+    SENS_RES   SEL_RES     Manufacturer/Card Type    NFCID Len
+    --------   -------     -----------------------   ---------
+    00 04      08          NXP Mifare Classic 1K     4 bytes
+    00 02      18          NXP Mifare Classic 4K     4 bytes
+
+    @note   Possible error messages are:
+
+            - PN532_ERROR_WRONGCARDTYPE
+            - PN532_ERROR_TIMEOUTWAITINGFORCARD
+*/
+/**************************************************************************/
+pn532_error_t pn532_mifareclassic_WaitForTypeATags (byte_t * pSak, uint16_t * pAtqa)
+{
+  byte_t abtResponse[PN532_RESPONSELEN_INLISTPASSIVETARGET];
+  pn532_error_t error;
+  size_t szLen;
+    uint8_t i;
+
+  #ifdef PN532_DEBUGMODE
+    PN532_DEBUG("Waiting for an ISO14443A Card%s", CFG_PRINTF_NEWLINE);
+  #endif
+
+  /* Try to initialise a single ISO14443A tag at 106KBPS                  */
+  /* Note:  To wait for a card with a known UID, append the four byte     */
+  /*        UID to the end of the command.                                */
+  byte_t abtCommand[] = { PN532_COMMAND_INLISTPASSIVETARGET, 0x01, PN532_MODULATION_ISO14443A_106KBPS};
+  error = pn532Write(abtCommand, sizeof(abtCommand));
+  if (error)
+    return error;
+
+  /* Wait until we get a valid response or a timeout                      */
+  do
+  {
+    systickDelay(25);
+    error = pn532Read(abtResponse, &szLen);
+  } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
+  if (error)
+    return error;
+
+  /* Check szLen ... if it's 10 we've probably timed out via MaxRetries */
+  /* ToDo: Properly parse and handle this error case! */
+  if (szLen == 10)
+  {
+    return PN532_ERROR_TIMEOUTWAITINGFORCARD;
+  }
+
+  *pAtqa = ((uint16_t)abtResponse[9]<<8) | (uint16_t)abtResponse[10];
+  *pSak = abtResponse[11];
+#ifdef PN532_DEBUGMODE
+  printf("SAK: %02x ",  *pSak);
+  printf("ATQA: %04x ", *pAtqa);
+#endif
+
+  return PN532_ERROR_NONE;
+}
 
 /**************************************************************************/
 /*!

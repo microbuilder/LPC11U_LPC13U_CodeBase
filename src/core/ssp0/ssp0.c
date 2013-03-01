@@ -110,7 +110,7 @@ void ssp0Init(void)
     LPC_IOCON->PIO1_29 = 0x01;
   #elif (CFG_SSP_SCK0_LOCATION == CFG_SSP_SCK0_0_10)
     /* Set 0.10 to SSP SCK0 (may be required for SWD!) */
-    LPC_IOCON->PIO0_10 = 0x02;
+    LPC_IOCON->SWCLK_PIO0_10 = 0x02;
   #elif (CFG_SSP_SCK0_LOCATION == CFG_SSP_SCK0_0_6)
     /* Set 0.6 to SSP SCK0 (may be required for USB!) */
     LPC_IOCON->PIO0_6 = 0x02;

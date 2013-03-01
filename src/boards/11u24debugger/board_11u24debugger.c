@@ -78,6 +78,14 @@ void boardInit(void)
   GPIOSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
   boardLED(CFG_LED_OFF);
 
+  /* Enable OE on the level shifter */
+  GPIOSetDir(1, 25, 1);
+  LPC_GPIO->SET[1] = (1 << 25);
+
+  /* Set reset high on the target MCU */
+  GPIOSetDir(1, 29, 1);
+  LPC_GPIO->SET[1] = (1 << 29);
+
   /* Initialise USB */
   #ifdef CFG_USB
     systickDelay(500);
@@ -102,14 +110,7 @@ void boardInit(void)
 void boardMain(void)
 {
   boardInit();
-
-  while (1)
-  {
-    /* Poll for CLI input if CFG_INTERFACE is enabled */
-    #ifdef CFG_INTERFACE
-      cliPoll();
-    #endif
-  }
+  swdbridgeInit();
 }
 
 /**************************************************************************/

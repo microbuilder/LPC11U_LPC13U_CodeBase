@@ -51,6 +51,7 @@ ErrorCode_t usb_hid_configured(USBD_HANDLE_T hUsb);
 
 ErrorCode_t usb_hid_keyboard_sendKeys(uint8_t modifier, uint8_t keycodes[], uint8_t numkey);
 ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel, int8_t pan);
+ErrorCode_t usb_hid_generic_send(USB_HID_GenericReportIn_t *report_in);
 
 /** \brief Standard HID Boot Protocol Mouse Report.
  *
@@ -75,14 +76,6 @@ typedef PRE_PACK struct
   uint8_t Reserved;    /**< Reserved for OEM use, always set to 0. */
   uint8_t KeyCode[6];  /**< Key codes of the currently pressed keys. */
 } POST_PACK USB_HID_KeyboardReport_t;
-
-/** \brief Custom HID Generic Report
- *  Type define for a Custom HID Generic report
- */
-typedef PRE_PACK struct
-{
-  uint8_t report[CFG_USB_HID_GENERIC_REPORT_SIZE];
-} POST_PACK USB_HID_GenericReport_t;
 
 /* Button codes for HID mouse */
 enum USB_HID_MOUSE_BUTTON_CODE

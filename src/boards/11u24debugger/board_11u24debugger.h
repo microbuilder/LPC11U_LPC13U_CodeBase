@@ -299,7 +299,7 @@ extern "C" {
     #define CFG_SSP_SCK1_1_20           (20)
 
     // Select the appropriate pin locations here
-    #define CFG_SSP_SCK0_LOCATION       (CFG_SSP_SCK0_1_29)
+    #define CFG_SSP_SCK0_LOCATION       (CFG_SSP_SCK0_0_10)
     #define CFG_SSP_MISO1_LOCATION      (CFG_SSP_MISO1_1_21)
     #define CFG_SSP_MOSI1_LOCATION      (CFG_SSP_MOSI1_1_22)
     #define CFG_SSP_SCK1_LOCATION       (CFG_SSP_SCK1_1_20)
@@ -324,8 +324,8 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_PRINTF_MAXSTRINGSIZE    (255)
     // #define CFG_PRINTF_UART
-    #define CFG_PRINTF_USBCDC
-    // #define CFG_PRINTF_DEBUG
+    // #define CFG_PRINTF_USBCDC
+    #define CFG_PRINTF_DEBUG
 
     #ifdef CFG_PRINTF_DEBUG
       #define CFG_PRINTF_NEWLINE          "\n"
@@ -388,7 +388,7 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-    #define CFG_INTERFACE
+    // #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE    (256)
     #define CFG_INTERFACE_PROMPT        "LPC1347 >> "
     #define CFG_INTERFACE_SILENTMODE    (0)
@@ -564,6 +564,9 @@ extern "C" {
     CFG_USB_STRING_PRODUCT      Product name that will appear in the
                                 device descriptor during USB enumeration
     CFG_USB_VENDORID            16-bit USB vendor ID
+    CFG_USB_PRODUCT_ID          Define this to set a custom product ID
+                                if you do not wish to use the 'auto'
+                                product ID feature
     CFG_CDC                     Enable USB CDC support
     CFG_USB_HID_KEYBOARD        Enable USB HID keyboard emulation
     CFG_USB_HID_MOUSE           Enable USB HID mouse emulation for a five
@@ -586,13 +589,13 @@ extern "C" {
       #define CFG_USB_STRING_MANUFACTURER       "microBuilder.eu"
       #define CFG_USB_STRING_PRODUCT            "LPC1347 CLI"
       #define CFG_USB_VENDORID                  (0x1FC9)
+      #define USB_PRODUCT_ID                    (0x0011)
 
-      #define CFG_USB_CDC
+      // #define CFG_USB_CDC
 
       // #define CFG_USB_HID_KEYBOARD
       // #define CFG_USB_HID_MOUSE
-      // #define CFG_USB_HID_GENERIC
-      #define CFG_USB_HID_GENERIC_REPORT_SIZE   (63)
+      #define CFG_USB_HID_GENERIC
 
       // #define CFG_USB_MSC
 

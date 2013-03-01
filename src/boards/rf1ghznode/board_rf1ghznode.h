@@ -588,7 +588,6 @@ extern "C" {
       // #define CFG_USB_HID_KEYBOARD
       // #define CFG_USB_HID_MOUSE
       // #define CFG_USB_HID_GENERIC
-      #define CFG_USB_HID_GENERIC_REPORT_SIZE   (64)
 
       // #define CFG_USB_MSC
 

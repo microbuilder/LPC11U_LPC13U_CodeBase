@@ -48,10 +48,10 @@ int main(void)
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
 
-  /* Run the project-specific 'main' loop */
+  /* Run project-specific 'main' loop (as defined in projectconfig.h) */
   boardMain();
 
-  /* If we ever come back from boardMain just do blinky */
+  /* If we ever come back from boardMain() just do blinky */
   while (1)
   {
     currentSecond = systickGetSecondsActive();

@@ -79,7 +79,11 @@ typedef enum pn532_error_e
   PN532_ERROR_INVALID_TAG             = 0x16,   /**< Invalid Tag is presented */
   PN532_ERROR_TOOMANYTARGETS          = 0x17,   /**< Unhandled number of targets during INLISTPASSIVETARGET */
   PN532_ERROR_UNEXPECTEDRESPONSE      = 0x18,   /**< Unexpected response from the PN532 */
-  PN532_ERROR_PAYLOADOVERFLOW         = 0x19    /**< Supplied payload is too large for the frame */
+  PN532_ERROR_PAYLOADOVERFLOW         = 0x19,   /**< Supplied payload is too large for the frame */
+  PN532_ERROR_TAG_UNWRITABLE          = 0x1A,   /**< Unable to write to tag since it is not ndef write enabled */
+  PN532_ERROR_TAG_WRITE_ERROR         = 0x1B,   /**< Error writing to the tag */
+  PN532_ERROR_INVALID_LENGTH          = 0x1C,   /**< Data can't be written to the tag because it's too large */
+  PN532_ERROR_NOT_FOUND_NDEF_TLV      = 0x1D    /**< Unable to locate the TVL block in the tag/ndef message */
 } pn532_error_t;
 
 typedef enum pn532_modulation_e

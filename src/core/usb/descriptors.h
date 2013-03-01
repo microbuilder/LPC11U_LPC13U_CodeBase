@@ -92,10 +92,12 @@ typedef PRE_PACK struct POST_PACK _USB_INTERFACE_ASSOCIATION_DESCRIPTOR
 // Interface Assosication Descriptor if device is CDC + other class
 #define IAD_DESC_REQUIRED ( defined(CFG_USB_CDC) && ( defined(CFG_USB_HID) || defined(CFG_USB_MSC) ) )
 
+#ifndef USB_PRODUCT_ID
 // Bitmap: MassStorage | Generic | Mouse | Key | CDC
 #define PRODUCTID_BITMAP(interface, n)  ( (INTERFACES_OF_##interface ? 1 : 0) << (n) )
 #define USB_PRODUCT_ID                  (0x2000 | ( PRODUCTID_BITMAP(CDC, 0) | PRODUCTID_BITMAP(HID_KEYBOARD, 1) | PRODUCTID_BITMAP(HID_MOUSE, 2) | \
                                                     PRODUCTID_BITMAP(HID_GENERIC, 3) | PRODUCTID_BITMAP(MSC, 4) ) )
+#endif
 
 ///////////////////////////////////////////////////////////////////////
 typedef struct

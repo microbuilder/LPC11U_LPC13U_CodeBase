@@ -552,7 +552,7 @@ extern "C" {
     CFG_PN532                   If defined, the PN532/NFC stack will be
                                 included during build.  Requires external HW.
     -----------------------------------------------------------------------*/
-    // #define CFG_PN532
+    #define CFG_PN532
     #define CFG_PN532_RSTPD_PORT                      (0)
     #define CFG_PN532_RSTPD_PIN                       (16)
     #define CFG_PN532_I2C_IRQPORT                     (0)
@@ -611,7 +611,6 @@ extern "C" {
       // #define CFG_USB_HID_KEYBOARD
       // #define CFG_USB_HID_MOUSE
       // #define CFG_USB_HID_GENERIC
-      #define CFG_USB_HID_GENERIC_REPORT_SIZE   (63)
 
       // #define CFG_USB_MSC
 

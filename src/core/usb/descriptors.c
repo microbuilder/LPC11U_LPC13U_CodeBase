@@ -152,14 +152,14 @@ ALIGNED(4) const uint8_t HID_GenericReportDescriptor[] = {
       HID_LogicalMin  (0x00                                   ),
       HID_LogicalMax  (0xff                                   ),
       HID_ReportSize  (8                                      ),
-      HID_ReportCount (CFG_USB_HID_GENERIC_REPORT_SIZE        ),
+      HID_ReportCount (sizeof(USB_HID_GenericReportIn_t)      ),
       HID_Input       (HID_Data | HID_Variable | HID_Absolute ),
 
       HID_Usage       (HID_GENERIC_USAGE_OUT                   ),
       HID_LogicalMin  (0x00                                    ),
       HID_LogicalMax  (0xff                                    ),
       HID_ReportSize  (8                                       ),
-      HID_ReportCount (CFG_USB_HID_GENERIC_REPORT_SIZE         ),
+      HID_ReportCount (sizeof(USB_HID_GenericReportOut_t)      ),
       HID_Output      ( HID_Data | HID_Variable | HID_Absolute ),
 
     HID_EndCollection,
@@ -214,7 +214,7 @@ ALIGNED(4) const USB_FS_CONFIGURATION_DESCRIPTOR USB_FsConfigDescriptor =
         .bConfigurationValue = 1,
         .iConfiguration      = 0x00,
         .bmAttributes        = USB_CONFIG_BUS_POWERED,
-        .bMaxPower           = USB_CONFIG_POWER_MA(100)
+        .bMaxPower           = USB_CONFIG_POWER_MA(500)
     },
 
     #if IAD_DESC_REQUIRED
