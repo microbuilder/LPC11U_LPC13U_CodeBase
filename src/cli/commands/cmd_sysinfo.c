@@ -71,6 +71,7 @@ void cmd_sysinfo(uint8_t argc, char **argv)
      flash space storing the text and code for them */
 
   /* Firmware Version */
+  printf("%-25s : %u.%u.%u %s", STRING(LOCALISATION_TEXT_Code_Base_COLON_SPACE), CFG_CODEBASE_VERSION_MAJOR, CFG_CODEBASE_VERSION_MINOR, CFG_CODEBASE_VERSION_REVISION, CFG_PRINTF_NEWLINE);
   printf("%-25s : %u.%u.%u %s", STRING(LOCALISATION_TEXT_Firmware), CFG_FIRMWARE_VERSION_MAJOR, CFG_FIRMWARE_VERSION_MINOR, CFG_FIRMWARE_VERSION_REVISION, CFG_PRINTF_NEWLINE);
 
   /* MCU */
