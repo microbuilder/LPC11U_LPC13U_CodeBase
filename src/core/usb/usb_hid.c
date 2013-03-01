@@ -63,7 +63,7 @@ volatile static bool bGenericChanged= false;
     @brief      Weak ISR handler for HID Generic out reports (PC to LPC).
 
     @param[in]  report
-                Pointer to the USB_HID_GenericReport_t that holds the
+                Pointer to the USB_HID_GenericReportOut_t that holds the
                 incoming report data
 
     @note       Since this is a 'weak' function, to override it you
@@ -72,7 +72,7 @@ volatile static bool bGenericChanged= false;
 
     @code
     // Buffer to hold incoming HID data
-    static USB_HID_GenericReport_t hid_out_report;
+    static USB_HID_GenericReportOut_t hid_out_report;
     static bool is_received_report = false;
 
     int main(void)
@@ -87,7 +87,7 @@ volatile static bool bGenericChanged= false;
             if(is_received_report)
             {
               uint32_t i;
-              for (i=0; i< sizeof(USB_HID_GenericReport_t); i++)
+              for (i=0; i<sizeof(USB_HID_GenericReportOut_t); i++)
               {
                 // Display incoming HID data with CDC using printf
                 printf("%02x ", hid_out_report.report[i]);
@@ -100,10 +100,10 @@ volatile static bool bGenericChanged= false;
       }
     }
 
-    void usb_hid_generic_recv_isr(USB_HID_GenericReport_t *out_report)
+    void usb_hid_generic_recv_isr(USB_HID_GenericReportOut_t *out_report)
     {
       // Copy out_report to a buffer in case new data comes in
-      memcpy(&hid_out_report, out_report, sizeof(USB_HID_GenericReport_t));
+      memcpy(&hid_out_report, out_report, sizeof(USB_HID_GenericReportOut_t));
       is_received_report = true;
     }
     @endcode
