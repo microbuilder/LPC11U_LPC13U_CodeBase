@@ -37,19 +37,6 @@
 #include "core/systick/systick.h"
 #include "boards/board.h"
 
-#ifdef CFG_INTERFACE
-  #include "cli/cli.h"
-#endif
-
-#ifdef CFG_USB
-  #include "core/usb/usbd.h"
-  #ifdef CFG_USB_HID_GENERIC
-    /* Buffer to hold incoming HID data */
-    static USB_HID_GenericReport_t hid_out_report;
-    static bool is_received_report = false;
-  #endif
-#endif
-
 #if defined(__CODE_RED)
   #include <cr_section_macros.h>
   #include <NXP/crp.h>
@@ -61,9 +48,10 @@ int main(void)
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
 
-  /* Configure common and board-level peripherals */
-  boardInit();
+  /* Run the project-specific 'main' loop */
+  boardMain();
 
+  /* If we ever come back from boardMain just do blinky */
   while (1)
   {
     currentSecond = systickGetSecondsActive();
@@ -73,39 +61,8 @@ int main(void)
 
       /* Toggle LED once per second */
       boardLED(lastSecond % 2);
-
-      /* Display any incoming HID data if HID GENERIC is enabled */
-      #ifdef CFG_USB_HID_GENERIC
-        if(usb_isConfigured())
-        {
-          if(is_received_report)
-          {
-            uint32_t i;
-            for (i=0; i< sizeof(USB_HID_GenericReport_t); i++)
-            {
-              printf("%02x ", hid_out_report.report[i]);
-            }
-            printf(CFG_PRINTF_NEWLINE);
-            is_received_report = false;
-          }
-        }
-      #endif
     }
-
-    /* Poll for CLI input if CFG_INTERFACE is enabled */
-    #ifdef CFG_INTERFACE
-      cliPoll();
-    #endif
   }
 
   return 0;
 }
-
-#ifdef CFG_USB_HID_GENERIC
-void usb_hid_generic_recv_isr(USB_HID_GenericReport_t *out_report)
-{
-  /* Copy out_report to a buffer in case new data comes in */
-  memcpy(&hid_out_report, out_report, sizeof(USB_HID_GenericReport_t));
-  is_received_report = true;
-}
-#endif
