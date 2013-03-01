@@ -46,7 +46,7 @@
         <folder Name="adc" file_name="">
           <file file_name="src/core/adc/adc.c"/>
         </folder>
-       <folder Name="usb" file_name="">
+        <folder Name="usb" file_name="">
           <file file_name="src/core/usb/descriptors.c"/>
           <file file_name="src/core/usb/usb_cdc.c"/>
           <file file_name="src/core/usb/usb_hid.c"/>
@@ -237,6 +237,8 @@
         <folder Name="11u24debugger" file_name="">
           <file file_name="src/boards/11u24debugger/board_11u24debugger.c"/>
           <file file_name="src/boards/11u24debugger/board_11u24debugger.h"/>
+          <file file_name="src/boards/11u24debugger/swd.c"/>
+          <file file_name="src/boards/11u24debugger/swdbridge.c"/>
         </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
