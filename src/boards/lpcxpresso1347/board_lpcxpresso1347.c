@@ -49,6 +49,7 @@
 #include "core/pmu/pmu.h"
 
 #ifdef CFG_CHIBI
+  #include "messages.h"
   #include "drivers/rf/chibi/chb.h"
   #include "drivers/rf/chibi/chb_drvr.h"
 #endif
@@ -57,6 +58,11 @@
   #include "core/usb/usbd.h"
   #ifdef CFG_USB_CDC
     #include "core/usb/usb_cdc.h"
+  #endif
+  #ifdef CFG_USB_HID_GENERIC
+    /* Buffer to hold incoming HID data */
+    static USB_HID_GenericReport_t hid_out_report;
+    static bool is_received_report = false;
   #endif
 #endif
 
@@ -78,11 +84,11 @@ void boardInit(void)
   SystemCoreClockUpdate();
   systickInit(CFG_SYSTICK_DELAY_IN_MS);
   GPIOInit();
-  
+
   #ifdef CFG_PRINTF_UART
     uartInit(CFG_UART_BAUDRATE);
   #endif
-  
+
   /* Set user LED pin to output and disable it */
   GPIOSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
   boardLED(CFG_LED_OFF);
@@ -119,6 +125,26 @@ void boardInit(void)
 
 /**************************************************************************/
 /*!
+    @brief Primary 'main' loop for this project.  This should be called
+           from the global main function in main.c.
+*/
+/**************************************************************************/
+void boardMain(void)
+{
+  /* Configure the HW */
+  boardInit();
+
+  while (1)
+  {
+    /* Poll for CLI input if CFG_INTERFACE is enabled */
+    #ifdef CFG_INTERFACE
+      cliPoll();
+    #endif
+  }
+}
+
+/**************************************************************************/
+/*!
     @brief Turns the LED(s) on or off
 */
 /**************************************************************************/
@@ -141,7 +167,7 @@ void boardLED(uint8_t state)
 /**************************************************************************/
 void boardSleep(void)
 {
-	// ToDo!
+  // ToDo!
 }
 
 /**************************************************************************/
@@ -152,7 +178,7 @@ void boardSleep(void)
 /**************************************************************************/
 void boardWakeup(void)
 {
-	// ToDo!
+  // ToDo!
 }
 
 #endif

@@ -117,6 +117,25 @@ void boardInit(void)
 
 /**************************************************************************/
 /*!
+    @brief Primary 'main' loop for this project.  This should be called
+           from the global main function in main.c.
+*/
+/**************************************************************************/
+void boardMain(void)
+{
+  boardInit();
+
+  while (1)
+  {
+    /* Poll for CLI input if CFG_INTERFACE is enabled */
+    #ifdef CFG_INTERFACE
+      cliPoll();
+    #endif
+  }
+}
+
+/**************************************************************************/
+/*!
     @brief Turns the LED(s) on or off
 */
 /**************************************************************************/

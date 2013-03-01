@@ -74,101 +74,6 @@ void boardInit(void)
     uartInit(CFG_UART_BAUDRATE);
   #endif
 
-  /* Power down unused blocks */
-  uint32_t pdrunconfig = ((0x1<<0)  |  // IRCOUT powered down
-                          (0x1<<1)  |  // IRC powered down
-                          (0x0<<2)  |  // FLASH powered up
-                          (0x1<<3)  |  // BOD powered down
-                          (0x1<<4)  |  // ADC powered down
-                          (0x0<<5)  |  // SYSOSC powered up
-                          (0x1<<6)  |  // WDTOSC powered down
-                          (0x0<<7)  |  // SYSPLL powered up
-                          (0x0<<8)  |  // USBPLL powered up
-                          (0x0<<9)  |  // RESERVED ... set as 0
-                          (0x0<<10) |  // USBPAD powered up
-                          (0x1<<11) |  // RESERVED ... set as 1
-                          (0x0<<12) |  // RESERVED ... set as 0
-                          (0x0<<13) |  // RESERVED ... set as 1
-                          (0x0<<14) |  // RESERVED ... set as 1
-                          (0x0<<15));  // RESERVED ... set as 1
-  LPC_SYSCON->PDRUNCFG = pdrunconfig;
-
-  /* Explicitly set all pin functions to a known state and disable any
-     unnecessary pull-ups to save some power.  It's important to setup
-     unbonded pins as well since they are still available on the die,
-     and can save some power setting them to output low, and disabling
-     their internal resistors (this cut ~350µA off the sleep current
-     in initial testing)
-
-  Pin                       Pin Config Bits               Selected Function     Notes
-  =======================   ==========================    ===================   ============== */
-  LPC_IOCON->RESET_PIO0_0   = (0<<0) | (0<<3);            // RESET              no pull-up/down
-  LPC_IOCON->PIO0_1         = (0<<0) | (2<<3);            // GPIO               pull-up (ISP)
-  LPC_IOCON->PIO0_2         = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO0_3         = (1<<0) | (0<<3);            // USBVBUS            no pull-up/down
-  LPC_IOCON->PIO0_4         = (1<<0);                     // I2C-SCL            I2C = standard mode
-  LPC_IOCON->PIO0_5         = (1<<0);                     // I2C-SDA            I2C = standard mode
-  LPC_IOCON->PIO0_6         = (1<<0) | (0<<3);            // USBConnect         no pull-up/down
-  LPC_IOCON->PIO0_7         = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO0_8         = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO0_9         = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->SWCLK_PIO0_10  = (0<<0) | (2<<3);            // SWCLK              pull-up (SWCLK)
-  LPC_IOCON->TDI_PIO0_11    = (1<<0) | (0<<3) | (1<<7);   // GPIO (not TDI)     no pull-up/down, ADMODE = digital
-  LPC_IOCON->TMS_PIO0_12    = (1<<0) | (0<<3) | (1<<7);   // GPIO (not TMS)     no pull-up/down, ADMODE = digital
-  LPC_IOCON->TDO_PIO0_13    = (1<<0) | (0<<3) | (1<<7);   // GPIO (not TDO)     no pull-up/down, ADMODE = digital
-  LPC_IOCON->TRST_PIO0_14   = (1<<0) | (0<<3) | (1<<7);   // GPIO (not TRST)    no pull-up/down, ADMODE = digital
-  LPC_IOCON->SWDIO_PIO0_15  = (0<<0) | (2<<3) | (1<<7);   // SWDIO              pull-up (SWDIO), ADMODE = digital
-  LPC_IOCON->PIO0_16        = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital
-  LPC_IOCON->PIO0_17        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  #if defined CFG_PRINTF_UART
-  LPC_IOCON->PIO0_18        = (1<<0) | (0<<3);            // RXD                no pull-up/down
-  LPC_IOCON->PIO0_19        = (1<<0) | (0<<3);            // TXD                no pull-up/down
-  #else
-  LPC_IOCON->PIO0_18        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO0_19        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  #endif
-  LPC_IOCON->PIO0_20        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO0_21        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO0_22        = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital
-  LPC_IOCON->PIO0_23        = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital
-
-  LPC_IOCON->PIO1_0         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_1         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_2         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_3         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_4         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_5         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_6         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_7         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_8         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_9         = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_10        = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_11        = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_12        = (0<<0) | (0<<3) | (1<<7);   // GPIO               no pull-up/down, ADMODE = digital (pin not present on QFP48)
-  LPC_IOCON->PIO1_13        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_14        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_15        = (0<<0) | (2<<3);            // GPIO               pull-up (SLP_TR)
-  LPC_IOCON->PIO1_16        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_17        = (0<<0) | (0<<3);            // GPIO               no pull-up/down (pin not present on QFP48)
-  LPC_IOCON->PIO1_18        = (0<<0) | (0<<3);            // GPIO               no pull-up/down (pin not present on QFP48)
-  LPC_IOCON->PIO1_19        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_20        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_21        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_22        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_23        = (0<<0) | (2<<3);            // GPIO               pull-up (SD_DETECT)
-  LPC_IOCON->PIO1_24        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_25        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_26        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_27        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_28        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_29        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-  LPC_IOCON->PIO1_30        = (0<<0) | (0<<3);            // GPIO               no pull-up/down (pin not present on QFP48)
-  LPC_IOCON->PIO1_31        = (0<<0) | (0<<3);            // GPIO               no pull-up/down
-
-  /* Set pins to output where possible */
-  LPC_GPIO->DIR[0] = ~( (1<<1) );         /* 0.1  = ISP (used as wakeup pin) */
-  LPC_GPIO->DIR[1] = 0xFFFFFFFF;
-
   /* Set user LED pin to output and disable it */
   GPIOSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
   boardLED(CFG_LED_OFF);
@@ -186,6 +91,25 @@ void boardInit(void)
 
   /* Turn the user LED on after init to indicate that everything is OK */
   boardLED(CFG_LED_ON);
+}
+
+/**************************************************************************/
+/*!
+    @brief Primary 'main' loop for this project.  This should be called
+           from the global main function in main.c.
+*/
+/**************************************************************************/
+void boardMain(void)
+{
+  boardInit();
+
+  while (1)
+  {
+    /* Poll for CLI input if CFG_INTERFACE is enabled */
+    #ifdef CFG_INTERFACE
+      cliPoll();
+    #endif
+  }
 }
 
 /**************************************************************************/

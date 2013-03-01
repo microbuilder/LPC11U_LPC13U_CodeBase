@@ -83,6 +83,14 @@ void boardInit(void);
 
 /**************************************************************************/
 /*!
+    @brief Primary 'main' loop for this project.  This should be called
+           from the global main function in main.c.
+*/
+/**************************************************************************/
+void boardMain(void);
+
+/**************************************************************************/
+/*!
     @brief Turns the LED(s) on or off
 */
 /**************************************************************************/
@@ -105,6 +113,6 @@ void boardWakeup(void);
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
