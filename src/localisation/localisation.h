@@ -163,6 +163,7 @@ typedef enum
   LOCALISATION_TEXT_OK,                                      // "OK"
   LOCALISATION_TEXT_EEPROM_Size_COLON_SPACE,                 // "EEPROM Size: "
   LOCALISATION_TEXT_Serial_Number,                           // "Serial Number: "
+  LOCALISATION_TEXT_Code_Base_COLON_SPACE,                   // "Code Base: "
   LOCALISATION_FINAL
 } localisedTextKeys_t;
 

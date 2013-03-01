@@ -94,4 +94,5 @@ LOCALE_EN ( LOCALISATION_TEXT_Invalid_argument,                      "Invalid ar
 LOCALE_EN ( LOCALISATION_TEXT_OK,                                    "OK" ),
 LOCALE_EN ( LOCALISATION_TEXT_EEPROM_Size_COLON_SPACE,               "EEPROM Size: " ),
 LOCALE_EN ( LOCALISATION_TEXT_Serial_Number,                         "Serial Number" ),
+LOCALE_EN ( LOCALISATION_TEXT_Code_Base_COLON_SPACE,                 "Code Base: " ),
 LOCALE_EN ( LOCALISATION_FINAL,                                      NULL ),
