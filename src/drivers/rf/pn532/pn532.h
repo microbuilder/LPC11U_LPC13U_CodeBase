@@ -76,14 +76,17 @@ typedef enum pn532_error_e
   PN532_ERROR_MEM_INVALID_PARAM       = 0x13,   /**< Parameter given to a function is invalid */
   PN532_ERROR_MEM_INSUFFICIENT        = 0x14,   /**< Not enough memory */
   PN532_ERROR_INVALID_PARAM           = 0x15,   /**< Invalid Parameter */
-  PN532_ERROR_INVALID_TAG             = 0x16,   /**< Invalid Tag is presented */
+  PN532_ERROR_INVALID_TAG             = 0x16,   /**< Invalid Tag is present */
   PN532_ERROR_TOOMANYTARGETS          = 0x17,   /**< Unhandled number of targets during INLISTPASSIVETARGET */
   PN532_ERROR_UNEXPECTEDRESPONSE      = 0x18,   /**< Unexpected response from the PN532 */
   PN532_ERROR_PAYLOADOVERFLOW         = 0x19,   /**< Supplied payload is too large for the frame */
-  PN532_ERROR_TAG_UNWRITABLE          = 0x1A,   /**< Unable to write to tag since it is not ndef write enabled */
-  PN532_ERROR_TAG_WRITE_ERROR         = 0x1B,   /**< Error writing to the tag */
-  PN532_ERROR_INVALID_LENGTH          = 0x1C,   /**< Data can't be written to the tag because it's too large */
-  PN532_ERROR_NOT_FOUND_NDEF_TLV      = 0x1D    /**< Unable to locate the TVL block in the tag/ndef message */
+  PN532_ERROR_TAG_UNWRITABLE          = 0x1A,   /**< Unable to write to the tag because write permissions have been disabled */
+  PN532_ERROR_TAG_WRITE_ERROR         = 0x1B,   /**< Write failed because this is not an NDEF writable tag */
+  PN532_ERROR_INVALID_LENGTH          = 0x1C,   /**< Invalid length for the supplied data */
+  PN532_ERROR_NOT_FOUND_NDEF_TLV      = 0x1D,   /**< Unable to locate the TLV block in the tag/NDEF message */
+  PN532_ERROR_AUTHENTICATE_FAIL       = 0x1E,   /**< Authentication error */
+  PN532_ERROR_NOT_NDEF_CARD           = 0x1F,   /**< Card does not contain a NDEF Message. */
+  PN532_ERROR_RFCONFIGURATION_FAIL    = 0x20    /**< RF configuration error */
 } pn532_error_t;
 
 typedef enum pn532_modulation_e

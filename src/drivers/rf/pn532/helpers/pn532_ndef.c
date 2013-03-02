@@ -628,7 +628,6 @@ pn532_error_t pn532_ndef_updateFromStream(pn532_ndef_record_t ndefRecord,
   uint8_t idLen = 0;
 
   uint32_t totalLen;
-  uint32_t idLenIndex;
   uint32_t typeIndex;
   uint32_t idIndex;
   uint32_t payloadIndex;
@@ -671,7 +670,6 @@ pn532_error_t pn532_ndef_updateFromStream(pn532_ndef_record_t ndefRecord,
     return err;
   }
 
-  idLenIndex = totalLen;
   if (header & NDEF_HEADER_IL_MASK)
   {
     err = fnFetch(pUserData, &idLen, sizeof(idLen));

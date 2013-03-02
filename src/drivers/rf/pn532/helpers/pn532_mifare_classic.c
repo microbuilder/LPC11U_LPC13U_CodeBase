@@ -191,8 +191,29 @@
 
 /**************************************************************************/
 /*!
-      Indicates whether the specified block number is the first block
-      in the sector (block 0 relative to the current sector)
+    Resets the magnetic field and waits for a new Type A tag
+*/
+/**************************************************************************/
+static pn532_error_t pn532_mifareclassic_reset()
+{
+  uint8_t sak;
+  uint16_t atqa;
+  uint8_t uid[8];
+  size_t leng;
+  pn532_error_t error;
+
+  pn532_mifareclassic_RFfield(FALSE);
+  systickDelay(50);
+  pn532_mifareclassic_RFfield(TRUE);
+  error = pn532_mifareclassic_WaitForTypeATags(&sak, &atqa, &uid[0], &leng);
+
+  return error;
+}
+
+/**************************************************************************/
+/*!
+    Indicates whether the specified block number is the first block
+    in the sector (block 0 relative to the current sector)
 */
 /**************************************************************************/
 bool pn532_mifareclassic_isFirstBlock (uint32_t uiBlock)
@@ -206,7 +227,7 @@ bool pn532_mifareclassic_isFirstBlock (uint32_t uiBlock)
 
 /**************************************************************************/
 /*!
-      Indicates whether the specified block number is the sector trailer
+    Indicates whether the specified block number is the sector trailer
 */
 /**************************************************************************/
 bool pn532_mifareclassic_isTrailerBlock (uint32_t uiBlock)
@@ -368,12 +389,12 @@ pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t
             - PN532_ERROR_TIMEOUTWAITINGFORCARD
 */
 /**************************************************************************/
-pn532_error_t pn532_mifareclassic_WaitForTypeATags (byte_t * pSak, uint16_t * pAtqa)
+pn532_error_t pn532_mifareclassic_WaitForTypeATags (byte_t * pSak, uint16_t * pAtqa, byte_t * pbtCUID, size_t * szCUIDLen)
 {
   byte_t abtResponse[PN532_RESPONSELEN_INLISTPASSIVETARGET];
   pn532_error_t error;
   size_t szLen;
-    uint8_t i;
+  uint8_t i;
 
   #ifdef PN532_DEBUGMODE
     PN532_DEBUG("Waiting for an ISO14443A Card%s", CFG_PRINTF_NEWLINE);
@@ -405,6 +426,11 @@ pn532_error_t pn532_mifareclassic_WaitForTypeATags (byte_t * pSak, uint16_t * pA
 
   *pAtqa = ((uint16_t)abtResponse[9]<<8) | (uint16_t)abtResponse[10];
   *pSak = abtResponse[11];
+  *szCUIDLen = abtResponse[12];
+  for (i=0; i < *szCUIDLen; i++)
+  {
+    pbtCUID[i] = abtResponse[13+i];
+  }
 #ifdef PN532_DEBUGMODE
   printf("SAK: %02x ",  *pSak);
   printf("ATQA: %04x ", *pAtqa);
@@ -446,7 +472,7 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
   /* Prepare the authentication command */
   abtCommand[0] = PN532_COMMAND_INDATAEXCHANGE;   /* Data Exchange Header */
   abtCommand[1] = 1;                              /* Max card numbers */
-  abtCommand[2] = (uiKeyType) ? PN532_MIFARE_CMD_AUTH_B : PN532_MIFARE_CMD_AUTH_A;
+  abtCommand[2] = (uiKeyType == PN532_MIFARE_CMD_AUTH_B) ? PN532_MIFARE_CMD_AUTH_B : PN532_MIFARE_CMD_AUTH_A;
   abtCommand[3] = uiBlockNumber;                  /* Block Number (1K = 0..63, 4K = 0..255 */
   memcpy (abtCommand+4, pbtKeys, 6);
   for (i = 0; i < szCUIDLen; i++)
@@ -462,6 +488,7 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
     #ifdef PN532_DEBUGMODE
       PN532_DEBUG("Authentification failed%s", CFG_PRINTF_NEWLINE);
     #endif
+    pn532_mifareclassic_reset();
     return error;
   }
 
@@ -478,9 +505,16 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
     #ifdef PN532_DEBUGMODE
       PN532_DEBUG("Authentification failed%s", CFG_PRINTF_NEWLINE);
     #endif
+    pn532_mifareclassic_reset();
+
     return error;
   }
 
+  if(abtResponse[7] != 0)
+  {
+          pn532_mifareclassic_reset();
+          return PN532_ERROR_AUTHENTICATE_FAIL;
+  }
   // ToDo: How to check if authentification really worked (bad key, etc.)?
 
   /* Output the authentification data */
@@ -848,6 +882,25 @@ pn532_error_t pn532_mifareclassic_DecrementValueBlock (uint8_t uiBlockNumber, in
 
   // Return OK signal
   return PN532_ERROR_NONE;
+}
+
+pn532_error_t pn532_mifareclassic_RFfield(BOOL fieldOn)
+{
+  pn532_error_t error;
+
+  byte_t RFcmdOff[] = {0xD4, 0x32, 0x01, 0x00};
+  byte_t RFcmdOn[]  = {0xD4, 0x32, 0x01, 0x03};
+
+  if(fieldOn == FALSE)
+  {
+    error = pn532Write(RFcmdOff, sizeof(RFcmdOff));
+  }
+  else
+  {
+    error = pn532Write(RFcmdOn, sizeof(RFcmdOn));
+  }
+
+  return error;
 }
 
 #endif  // #ifdef CFG_PN532

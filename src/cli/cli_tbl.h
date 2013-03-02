@@ -72,6 +72,11 @@ void cmd_nfc_mifareclassic_valueblock_create(uint8_t argc, char **argv);
 void cmd_nfc_mifareclassic_valueblock_increment(uint8_t argc, char **argv);
 void cmd_nfc_mifareclassic_valueblock_decrement(uint8_t argc, char **argv);
 void cmd_nfc_mifareclassic_valueblock_read(uint8_t argc, char **argv);
+void cmd_nfc_mfc_ndef_memdump(uint8_t argc, char **argv);
+void cmd_nfc_mfc_ndef_blankFormat(uint8_t argc, char **argv);
+void cmd_nfc_mfc_ndef_nfcFormat(uint8_t argc, char **argv);
+void cmd_nfc_mfc_ndef_write_ndef(uint8_t argc, char **argv);
+void cmd_nfc_mfc_ndef_prepare_ndefMessage(uint8_t argc, char **argv);
 #endif
 
 #ifdef CFG_SDCARD
@@ -116,10 +121,15 @@ cli_t cli_tbl[] =
   #ifdef CFG_PN532
   { "du",           0,  1,  0, cmd_nfc_mifareultralight_memdump           , "Dump Mifare Ultralight card"       , "'du [<timeout>]'" },
   { "dc",           0,  1,  0, cmd_nfc_mifareclassic_memdump              , "Dump Mifare Classic card"          , "'dc [<timeout>]'" },
-  { "vc",           2,  2,  0, cmd_nfc_mifareclassic_valueblock_create    , "Create value block"                , "'vc <block> <value>'" },
-  { "vi",           2,  2,  0, cmd_nfc_mifareclassic_valueblock_increment , "Increment value block"             , "'vi <block> <value>'" },
-  { "vd",           2,  2,  0, cmd_nfc_mifareclassic_valueblock_decrement , "Decrement value block"             , "'vd <block> <value>'" },
-  { "vr",           1,  1,  0, cmd_nfc_mifareclassic_valueblock_read      , "Read value block"                  , "'vr <block> <value>'" },
+  { "dn",           0,  0,  0, cmd_nfc_mfc_ndef_memdump                   , "Dump Mifare Classic NFC messages"  , CMD_NOPARAMS },
+  { "fn",           0,  0,  0, cmd_nfc_mfc_ndef_nfcFormat                 , "Format Mifare Classic as NFC Tag"  , CMD_NOPARAMS },
+  { "fb",           0,  0,  0, cmd_nfc_mfc_ndef_blankFormat               , "Format NFC Tag as Mifare Classic"  , CMD_NOPARAMS },
+  { "npn",          0,  0,  0, cmd_nfc_mfc_ndef_prepare_ndefMessage       , "Create NDEF msg in mem for 'nw'"   , CMD_NOPARAMS },
+  { "nw",           0,  0,  0, cmd_nfc_mfc_ndef_write_ndef                , "Write msg from 'npn' to MFC card"  , "'nw [<sector>]'"},
+  { "vc",           2,  2,  0, cmd_nfc_mifareclassic_valueblock_create    , "Create Mifare value block"         , "'vc <block> <value>'" },
+  { "vi",           2,  2,  0, cmd_nfc_mifareclassic_valueblock_increment , "Increment Mifare value block"      , "'vi <block> <value>'" },
+  { "vd",           2,  2,  0, cmd_nfc_mifareclassic_valueblock_decrement , "Decrement Mifare value block"      , "'vd <block> <value>'" },
+  { "vr",           1,  1,  0, cmd_nfc_mifareclassic_valueblock_read      , "Read Mifare value block"           , "'vr <block> <value>'" },
   #endif
   #ifdef CFG_SDCARD
   { "d",            0,  1,  0, cmd_sd_dir                                 , "Dir (SD Card)"                     , "'d [<path>]'" },
@@ -129,8 +139,8 @@ cli_t cli_tbl[] =
   { "cs",           2, 99,  0, cmd_chibi_tx                               , "Send msg to node"                  , "'cs <destaddr> <msg>'" },
   #endif
   #ifdef CFG_RTC
-  { "tr",           0, 0,  0, cmd_rtc_read                               , "RTC read"                           , CMD_NOPARAMS },
-  { "tw",           6, 7,  0, cmd_rtc_write                              , "RTC write"                          , "'tw <yr> <mon> <day> <hr> <min> <sec>'" },
+  { "tr",           0, 0,  0, cmd_rtc_read                                , "RTC read"                           , CMD_NOPARAMS },
+  { "tw",           6, 7,  0, cmd_rtc_write                               , "RTC write"                          , "'tw <yr> <mon> <day> <hr> <min> <sec>'" },
   #endif
 };
 

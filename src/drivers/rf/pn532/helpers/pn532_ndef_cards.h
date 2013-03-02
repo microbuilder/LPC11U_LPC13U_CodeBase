@@ -99,7 +99,7 @@ typedef struct tag_str
   TagType_t type;
   NdefTagType_t ndefType;
   MfcTag_t mfcTagInfo;
-  uint8_t uid[7];
+  uint8_t uid[8];
   uint8_t lenUid;
   /*First Sector Of Ndef data, include TLV wrapper*/
   uint16_t ndefStartSector;
@@ -197,6 +197,13 @@ pn532_error_t pn532_ndef_mfc_parseNtag(pTag_t pTag, pn532_ndef_record_t *rec);
 /**************************************************************************/
 pn532_error_t pn532_ndef_mfc_tagType_identify(uint8_t sak, uint16_t atqa,
   pTag_t pTag);
+/**************************************************************************/
+/**
+ * @brief  reset card when authenticate fail
+ * @return none
+ */
+/**************************************************************************/
+void pn532_mifareclassic_reset();
 
 #ifdef __cplusplus
 }

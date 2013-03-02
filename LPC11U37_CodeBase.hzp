@@ -219,6 +219,7 @@
           <file file_name="src/cli/commands/cmd_eeprom_write.c"/>
           <file file_name="src/cli/commands/cmd_rtc_read.c"/>
           <file file_name="src/cli/commands/cmd_rtc_write.c"/>
+          <file file_name="src/cli/commands/cmd_nfc_mfc_ndef.c"/>
         </folder>
         <file file_name="src/cli/cli_tbl.h"/>
         <file file_name="src/cli/commands.c"/>
@@ -238,6 +239,8 @@
         <folder Name="11u24debugger" file_name="">
           <file file_name="src/boards/11u24debugger/board_11u24debugger.c"/>
           <file file_name="src/boards/11u24debugger/board_11u24debugger.h"/>
+          <file file_name="src/boards/11u24debugger/swd.c"/>
+          <file file_name="src/boards/11u24debugger/swdbridge.c"/>
         </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>

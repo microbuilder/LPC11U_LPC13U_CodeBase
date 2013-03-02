@@ -46,11 +46,11 @@ extern "C" {
 bool          pn532_mifareclassic_isFirstBlock (uint32_t uiBlock);
 bool          pn532_mifareclassic_isTrailerBlock (uint32_t uiBlock);
 pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t * szCUIDLen);
-pn532_error_t pn532_mifareclassic_WaitForTypeATags (byte_t * pSak, uint16_t * pAtqa);
+pn532_error_t pn532_mifareclassic_WaitForTypeATags (byte_t * pSak, uint16_t * pAtqa, byte_t * pbtCUID, size_t * szCUIDLen);
 pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t szCUIDLen, uint32_t uiBlockNumber, uint8_t uiKeyType, byte_t * pbtKeys);
 pn532_error_t pn532_mifareclassic_ReadDataBlock (uint8_t uiBlockNumber, byte_t * pbtData);
 pn532_error_t pn532_mifareclassic_WriteDataBlock (uint8_t uiBlockNumber, byte_t * pbtData);
-
+pn532_error_t pn532_mifareclassic_RFfield(BOOL fieldOn);
 /* Help functions for Mifare Value Blocks */
 pn532_error_t pn532_mifareclassic_CreateValueBlock (uint8_t uiBlockNumber, int32_t value);
 pn532_error_t pn532_mifareclassic_ReadValueBlock (uint8_t uiBlockNumber, int32_t * value);

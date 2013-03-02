@@ -3,16 +3,14 @@
     @file     cmd_nfc_mifareclassic_memdump.c
     @author   K. Townsend (microBuilder.eu)
 
-    @brief    Tries to authenticate a Mifare Classic card using the default
-                  authentication keys, and displays the raw memory contents if
-                          possible.
+    @brief    Dumps the contents of a Mifare Classic card to the CLI
     @ingroup  CLI
 
     @section LICENSE
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2010, microBuilder SARL
+    Copyright (c) 2013, K. Townsend (microBuilder.eu)
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -101,9 +99,12 @@ void cmd_nfc_mifareclassic_memdump(uint8_t argc, char **argv)
       printf("Invalid timeout [0..255]%s", CFG_PRINTF_NEWLINE);
       return;
     }
-    // We can safely ignore errors here since there is a default value anyway
-    pn532_config_SetPassiveActivationRetries(timeout);
-    retriesChanged = true;
+    else if (timeout > 0 || timeout < 0xFF)
+    {
+      // We can safely ignore errors here since there is a default value anyway
+      pn532_config_SetPassiveActivationRetries(timeout);
+      retriesChanged = true;
+    }
   }
 
   // Use the MIFARE Classic Helper to read/write to the tag's EEPROM storage
@@ -124,7 +125,7 @@ void cmd_nfc_mifareclassic_memdump(uint8_t argc, char **argv)
       {
         // Start of a new sector ... try to to authenticate
         printf("-------------------------Sector %02d--------------------------%s", block / 4, CFG_PRINTF_NEWLINE);
-        error = pn532_mifareclassic_AuthenticateBlock (abtUID, szUIDLen, block, PN532_MIFARE_CMD_AUTH_A, (block / 4) ? abtAuthKey2 : abtAuthKey1);
+        error = pn532_mifareclassic_AuthenticateBlock (abtUID, szUIDLen, block, PN532_MIFARE_CMD_AUTH_A, block / 4 ? abtAuthKey2 : abtAuthKey1);
         if (error)
         {
           switch(error)
@@ -191,4 +192,4 @@ void cmd_nfc_mifareclassic_memdump(uint8_t argc, char **argv)
   }
 }
 
-#endif  // #ifdef CFG_PN532
+#endif

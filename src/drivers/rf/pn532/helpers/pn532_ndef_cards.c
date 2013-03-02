@@ -32,6 +32,10 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+#include "projectconfig.h"
+
+#ifdef CFG_PN532
+
 #include "pn532_ndef_cards.h"
 #include "pn532_mifare_classic.h"
 #include "pn532_ndef.h"
@@ -48,14 +52,6 @@
 
 /** last TLV block in the data area*/
 #define TLV_TAG_TERMINATOR      (uint8_t)0xFE
-
-/**
- * Key used with Mifare Classic Ndef tag
- * */
-#define KEY_DEFAULT_KEYAB       "\xFF\xFF\xFF\xFF\xFF\xFF"
-#define KEY_MAD_PUBLIC_KEYA     "\xA0\xA1\xA2\xA3\xA4\xA5"
-#define KEY_NFC_PUBLIC_KEYA     "\xD3\xF7\xD3\xF7\xD3\xF7"
-#define KEY_TEMP                "\x00\x00\x00\x00\x00\x00"
 
 /**Number of Short Sector of Mifare 1k/4k*/
 #define NR_SHORTSECTOR          (32)
@@ -111,10 +107,10 @@
 #define NFC_GPB_MINOR_VERSION                   (0x00)  // mapping version 1.0
 #define NFC_GPB_MAJOR_VERSION                   (0x01)
 
-#define CAPACITY_MF1K           (1*2*16 + 15*3*16)
-#define CAPACITY_MF1K_NDEF      (15*3*16)
-#define CAPACITY_MF4K           ((1*2*16 + 31*3*16)+(8*16*16))
-#define CAPACITY_MF4K_NDEF      ((31*3*16)+(8*15*16))
+#define CAPACITY_MF1K            (1*2*16 + 15*3*16)
+#define CAPACITY_MF1K_NDEF       (15*3*16)
+#define CAPACITY_MF4K            ((1*2*16 + 31*3*16)+(8*16*16))
+#define CAPACITY_MF4K_NDEF       ((31*3*16)+(8*15*16))
 
 #define REMAIN_SIZE_MF1K(sector) ((TOTAL_BLOCK_MF1K  - BLOCK_NUMBER_OF_SECTOR_1ST_BLOCK(sector))/4*3)*16
 #define REMAIN_SIZE_MF4K(sector) ((TOTAL_BLOCK_MF4K  - BLOCK_NUMBER_OF_SECTOR_1ST_BLOCK(sector))/4*3)*16
@@ -128,15 +124,16 @@
 
 #define MY_MIN(a,b) (a>b?b:a)
 
+/* Keys used with Mifare Classic Ndef tags */
+static const uint8_t KEY_DEFAULT_KEYAB[6]          = {0xFF, 0xFF, 0xFF, 0xFF, 0xFF, 0xFF};
+static const uint8_t KEY_MAD_PUBLIC_KEYA[6]        = {0xA0, 0xA1, 0xA2, 0xA3, 0xA4, 0xA5};
+static const uint8_t KEY_NFC_PUBLIC_KEYA[6]        = {0xD3, 0xF7, 0xD3, 0xF7, 0xD3, 0xF7};
+
 uint8_t gGPB;
 uint16_t lengOfNdef = 0;
 
-pn532_error_t pn532_try_authenticate(byte_t * pbtCUID, size_t szCUIDLen,
-  uint32_t uiBlockNumber, uint8_t uiKeyType, byte_t * pbtKeys);
-
 /**************************************************************************/
 /*!
-
     @note   Possible error messages are:
 
             - PN532_ERROR_INVALID_PARAM
@@ -590,7 +587,7 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
     /* 2. Authenticate MAD2 sector with Mad public key A */
     if (pTag->type == TAG_TYPE_MFC_4K)
     {
-      errCode = pn532_try_authenticate(pTag->uid, pTag->lenUid,
+      errCode = pn532_mifareclassic_AuthenticateBlock(pTag->uid, pTag->lenUid,
         BLOCK_NUMBER_MAD2, PN532_MIFARE_CMD_AUTH_A,
         (byte_t *) KEY_MAD_PUBLIC_KEYA);
 
@@ -687,19 +684,20 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
         }
 
         /* Check read access condition */
-        if ((gGPB >> 2) & 0x03
+        if (((gGPB >> 2) & 0x03)
           != NFC_GPB_RW_ACCESS_GRANTED_NOT_SECURITY) /* read access condition support */
         {
           continue;
         }
 
         /* Check write access condition */
-        if (((gGPB >> 0) & 0x03
-          != NFC_GPB_RW_ACCESS_GRANTED_NOT_SECURITY) || /* read access condition support */
-          ((gGPB >> 0) & 0x03 != NFC_GPB_RW_NO_ACCESS_GRANTED))
+        if (((gGPB >> 0) & 0x03 != NFC_GPB_RW_ACCESS_GRANTED_NOT_SECURITY) || //read access condition support
+           ((gGPB >> 0) & 0x03 != NFC_GPB_RW_NO_ACCESS_GRANTED))
         {
           continue;
         }
+
+
 
         /* Check Access condition Bits */
         if ((memcmp(&ACB(blockBuffer), "\x7f\x07\x88", 3) == 0)
@@ -756,13 +754,13 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
 
   /* Detect blank tag */
   /* Authenticate MAD1 sector with the default Mad public key to check blank card */
-  if ((pn532_try_authenticate(pTag->uid, pTag->lenUid, BLOCK_NUMBER_MAD1,
+  if ((pn532_mifareclassic_AuthenticateBlock(pTag->uid, pTag->lenUid, BLOCK_NUMBER_MAD1,
     PN532_MIFARE_CMD_AUTH_B, (byte_t *) KEY_DEFAULT_KEYAB))
     == PN532_ERROR_NONE)
   {
     errCode = pn532_mifareclassic_ReadDataBlock(BLOCK_NUMBER_MAD1,
       blockBuffer);
-    if (GPB(blockBuffer) & 0x01 == 0)
+    if ((GPB(blockBuffer) & 0x01) == 0)
     {
       pTag->ndefType = NDEF_TAG_UNKNOWN;
       return PN532_ERROR_NONE;
@@ -779,7 +777,7 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
     }
     for (idx = 1; idx < 16; idx++)
     {
-      if ((pn532_try_authenticate(pTag->uid, pTag->lenUid,
+      if ((pn532_mifareclassic_AuthenticateBlock(pTag->uid, pTag->lenUid,
         BLOCK_NUMBER_OF_SECTOR_TRAILER(idx), PN532_MIFARE_CMD_AUTH_A,
         (byte_t *) KEY_DEFAULT_KEYAB)) != PN532_ERROR_NONE)
       {
@@ -789,12 +787,12 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
     }
 
     /* Check if the tag has MAD2 */
-    if (((pn532_try_authenticate(pTag->uid, pTag->lenUid,
+    if (((pn532_mifareclassic_AuthenticateBlock(pTag->uid, pTag->lenUid,
       BLOCK_NUMBER_MAD2, PN532_MIFARE_CMD_AUTH_A,
       (byte_t *) KEY_DEFAULT_KEYAB)) == PN532_ERROR_NONE) && (pTag->type
       = TAG_TYPE_MFC_4K))
     {
-      if (GPB(blockBuffer) & 0x01 == 0)
+      if ( (GPB(blockBuffer) & 0x01) == 0)
       {
         pTag->ndefType = NDEF_TAG_UNKNOWN;
         return PN532_ERROR_NONE;
@@ -811,7 +809,7 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
       }
       for (idx = 16; idx < 40; idx++)
       {
-        if ((pn532_try_authenticate(pTag->uid, pTag->lenUid,
+        if ((pn532_mifareclassic_AuthenticateBlock(pTag->uid, pTag->lenUid,
           BLOCK_NUMBER_OF_SECTOR_TRAILER(idx),
           PN532_MIFARE_CMD_AUTH_A, (byte_t *) KEY_DEFAULT_KEYAB))
           != PN532_ERROR_NONE)
@@ -886,8 +884,14 @@ pn532_error_t pn532_ndef_mfc_parseNtag(pTag_t pTag, pn532_ndef_record_t *rec)
         miscDataLength = blockBufferIdx + 2;
       }
 
-      pBuff = (uint8_t*) pn532_mem_alloc(bufferLength);
-
+      if(bufferLength)
+      {
+          pBuff = (uint8_t*) pn532_mem_alloc(bufferLength);
+      }
+      else
+      {
+          return PN532_ERROR_NOT_NDEF_CARD;
+      }
       if (pBuff == NULL)
       {
         return PN532_ERROR_MEM_INSUFFICIENT;
@@ -956,14 +960,14 @@ pn532_error_t pn532_ndef_mfc_tagType_identify(uint8_t sak, uint16_t atqa,
         break;
       /* Classic 1K, Mifare Plus 2K cl2, ...*/
       case 0x08:
-        if (atqa == 0X0400)
+        if (atqa == (uint16_t)0x0004)
         {
           tagType = TAG_TYPE_MFC_1K;
         }
         break;
       /* Classic 4K,... */
       case 0x18:
-        if (atqa == 0x0200)
+        if (atqa == (uint16_t)0x0002)
         {
           tagType = TAG_TYPE_MFC_4K;
         }
@@ -984,33 +988,6 @@ pn532_error_t pn532_ndef_mfc_tagType_identify(uint8_t sak, uint16_t atqa,
   pTag->type = tagType;
 
   return PN532_ERROR_NONE;
-}
-
-// This private function exists due to the trial-and-error authentication
-// method in tag-type detection which can lead the card to reset and we
-// need to wait a while for the card to prepare itself
-
-/**************************************************************************/
-/*!
-
-*/
-/**************************************************************************/
-pn532_error_t pn532_try_authenticate(byte_t * pbtCUID, size_t szCUIDLen,
-  uint32_t uiBlockNumber, uint8_t uiKeyType, byte_t * pbtKeys)
-{
-  pn532_error_t errCode = PN532_ERROR_NONE;
-  uint8_t idx = 3;
-  /* Try to authenticate */
-  errCode = pn532_mifareclassic_AuthenticateBlock(pbtCUID, szCUIDLen,
-    uiBlockNumber, uiKeyType, pbtKeys);
-  while (idx && (errCode != PN532_ERROR_NONE))
-  {
-    /* ToDo: Add a delay? */
-    errCode = pn532_mifareclassic_AuthenticateBlock(pbtCUID, szCUIDLen,
-      uiBlockNumber, uiKeyType, pbtKeys);
-    idx--;
-  }
-  return errCode;
 }
 
 /**************************************************************************/
@@ -1078,4 +1055,4 @@ pn532_error_t pn532_ndef_mfc_scan_ndef_tlv(pTag_t pTag, uint16_t *ndefTlvAddrres
   return PN532_ERROR_NOT_FOUND_NDEF_TLV;
 }
 
-/*@}*/
+#endif

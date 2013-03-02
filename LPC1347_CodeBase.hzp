@@ -1,4 +1,4 @@
-  <!DOCTYPE CrossStudio_Project_File>
+<!DOCTYPE CrossStudio_Project_File>
 <solution Name="LPC1347_CodeBase" target="8" version="2">
   <project Name="LPC1347_CodeBase">
     <configuration Name="Common" Target="LPC1347" arm_architecture="v7M" arm_core_type="Cortex-M3" arm_gcc_target="arm-unknown-eabi" arm_interwork="No" arm_linker_heap_size="0" arm_linker_process_stack_size="0" arm_linker_stack_size="1024" arm_simulator_memory_simulation_filename="$(TargetsDir)/LPC1000/LPC1000SimulatorMemory.dll" arm_simulator_memory_simulation_parameter="LPC13Uxx;0x10000;0x2000;0x800" arm_target_debug_interface_type="ADIv5" arm_target_interface_type="SWD" arm_target_loader_parameter="12000000" c_only_additional_options="-fms-extensions" c_preprocessor_definitions="USE_PROCESS_STACK" c_user_include_directories="$(TargetsDir)/LPC1000/include/CMSIS;$(TargetsDir)/CMSIS_3/CMSIS/Include;$(TargetsDir)/LPC1000/include" link_include_startup_code="No" linker_additional_files="$(TargetsDir)/LPC1000/lib/liblpc1000$(LibExt)$(LIB)" linker_memory_map_file="$(TargetsDir)/LPC1000/LPC1347_MemoryMap.xml" linker_output_format="bin" linker_printf_fp_enabled="Yes" oscillator_frequency="12MHz" project_directory="" project_type="Executable" property_groups_file_path="$(TargetsDir)/LPC1000/propertyGroups13Uxx.xml"/>
@@ -222,6 +222,7 @@
           <file file_name="src/cli/commands/cmd_eeprom_write.c"/>
           <file file_name="src/cli/commands/cmd_rtc_read.c"/>
           <file file_name="src/cli/commands/cmd_rtc_write.c"/>
+          <file file_name="src/cli/commands/cmd_nfc_mfc_ndef.c"/>
         </folder>
         <file file_name="src/cli/cli_tbl.h"/>
         <file file_name="src/cli/commands.c"/>
@@ -236,6 +237,8 @@
         <folder Name="11u24debugger" file_name="">
           <file file_name="src/boards/11u24debugger/board_11u24debugger.c"/>
           <file file_name="src/boards/11u24debugger/board_11u24debugger.h"/>
+          <file file_name="src/boards/11u24debugger/swd.c"/>
+          <file file_name="src/boards/11u24debugger/swdbridge.c"/>
         </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
