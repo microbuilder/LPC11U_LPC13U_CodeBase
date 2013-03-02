@@ -694,8 +694,16 @@ int swdbridgeInit (void)
   LOG_STR("// SWD start");
   LOG_STR("//--------------------------//" CFG_PRINTF_NEWLINE);
 
-  // LPC_GPIO->CLR[0] = 1 << 7;
-  // LPC_GPIO->DIR[0] = 1 << 7;
+  /* Make sure the SWD pins are setup properly */
+  LPC_GPIO->DIR[SWD_PORT] |= SWD_SWDIO_BIT_MSK | SWD_SWCLK_BIT_MSK;
+
+  /* Enable OE on the level shifter */
+  LPC_GPIO->DIR[SWD_PORT] |= (1 << 25);
+  LPC_GPIO->SET[SWD_PORT] = (1 << 25);
+
+  /* Set reset high on the target MCU */
+  LPC_GPIO->DIR[SWD_PORT] |= (1 << 29);
+  LPC_GPIO->SET[SWD_PORT] = (1 << 29);
 
   while (1) /* Loop forever */
   {
@@ -706,7 +714,6 @@ int swdbridgeInit (void)
       or = OutReport_readidx;
       ir = InReport_writeidx;
 
-      // LPC_GPIO->CLR[0] = 1 << 7;
       LED_off_counter = 10;
 
       InReports[ir].Status = SWDBRIDGE_OR_STATUS_NOTHING;

@@ -87,7 +87,7 @@
 #define PINS_I2C_PULLUPS_PORT   (0)
 #define PINS_I2C_PULLUPS_PIN    (23)
 
-/* VIN resistor divider multplier is 3.12766 */
+/* VIN resistor divider multiplier is 3.12766 */
 #define RF1GHZNODE_VINADC_MULTIPLIER_FIXED10K (31277)
 
 /**************************************************************************/
