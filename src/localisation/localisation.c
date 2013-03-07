@@ -61,7 +61,7 @@ const char* localised_strings[CULTURE_COUNT][LOCALISATION_FINAL+1] =
 /**************************************************************************/
 char* localisation_GetString(localisedTextKeys_t key)
 {
-  return localised_strings[_localisation_currentCulture][key];
+  return (char*)localised_strings[_localisation_currentCulture][key];
 }
 
 /**************************************************************************/
