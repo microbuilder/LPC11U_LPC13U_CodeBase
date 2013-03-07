@@ -18,6 +18,9 @@
  * use without further testing or modification.
 ****************************************************************************/
 #include "projectconfig.h"
+
+#if defined CFG_BRD_LPC11U24_DEBUGGER
+
 #include "swd.h"
 
 /* Flag to indicate if the SWD bus is controlled by the host or target */
@@ -412,3 +415,5 @@ int swdRead(char APnDP, int A, volatile unsigned long *data)
 
   return SWD_ACK;
 }
+
+#endif

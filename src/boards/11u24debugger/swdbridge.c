@@ -17,8 +17,10 @@
  * warranty that such application will be suitable for the specified
  * use without further testing or modification.
 ****************************************************************************/
-
 #include "projectconfig.h"
+
+#if defined CFG_BRD_LPC11U24_DEBUGGER
+
 #include "boards/board.h"
 #include "core/usb/usbd.h"
 #include "swdbridge.h"
@@ -886,4 +888,6 @@ int swdbridgeInit (void)
     }
   }
 }
+
+#endif
 
