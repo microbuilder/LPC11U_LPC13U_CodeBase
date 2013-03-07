@@ -53,10 +53,6 @@
 #include "drivers/rf/pn532/helpers/pn532_ndef.h"
 #include "drivers/rf/pn532/helpers/pn532_ndef_cards.h"
 
-#define  KEY_CODE_ESC        (27)
-#define  KEY_CODE_ENTER      (13)
-
-void readTerminal(uint8_t *str, uint16_t *strLen);
 void message_dump(pn532_ndef_message_t mess);
 void print_tag_tech(Tag_t  *pTag);
 void print_tag_type(Tag_t *pTag);
@@ -576,7 +572,7 @@ void cmd_nfc_mfc_ndef_prepare_ndefMessage(uint8_t argc, char **argv)
                 printf("\r\nPress a number to select type of Ndef Message:");
                 // get type of ndef message
                 length = sizeof(terminalBuff);
-                readTerminal(&terminalBuff[0], &length);
+                cliReadLine(&terminalBuff[0], &length);
                 if ((length == 1) && (terminalBuff[0] >= '1') && (terminalBuff[0] <= '3'))
                 {
                         ndefType = terminalBuff[0];
@@ -598,7 +594,7 @@ void cmd_nfc_mfc_ndef_prepare_ndefMessage(uint8_t argc, char **argv)
                                 printf("\r\nPress a number to select type of Bookmark:");
                                 // get the bookmark type
                                 length = sizeof(terminalBuff);
-                                readTerminal(&terminalBuff[0], &length);
+                                cliReadLine(&terminalBuff[0], &length);
                                 if ((length == 1) && (terminalBuff[0] >= '0')
                                         && (terminalBuff[0] <= '4'))
                                 {
@@ -610,7 +606,7 @@ void cmd_nfc_mfc_ndef_prepare_ndefMessage(uint8_t argc, char **argv)
 
                         printf("\n\rEnter the content of NdefMessage:\n\r");
                         length = sizeof(ndefPayloadBuff) - 1;
-                        readTerminal(&ndefPayloadBuff[1], &length);
+                        cliReadLine(&ndefPayloadBuff[1], &length);
                         payloadLength = 1 + length;
 
                         break;
@@ -621,14 +617,14 @@ void cmd_nfc_mfc_ndef_prepare_ndefMessage(uint8_t argc, char **argv)
                         ndefPayloadBuff[1] = 'e';
                         ndefPayloadBuff[2] = 'n';
                         printf("\r\nEnter a text:\n\r");
-                        readTerminal(&ndefPayloadBuff[3], &length);
+                        cliReadLine(&ndefPayloadBuff[3], &length);
                         payloadLength = length + 3;
                         break;
                 case '3':
                         ndefPayloadBuff[0] = 0x00; //NA
                         length = sizeof(ndefPayloadBuff) - 1;
                         printf("\r\nEnter a SMS:\n\r");
-                        readTerminal(&ndefPayloadBuff[1], &length);
+                        cliReadLine(&ndefPayloadBuff[1], &length);
                         payloadLength = 1 + length;
                         break;
                 default:
@@ -654,38 +650,6 @@ void cmd_nfc_mfc_ndef_prepare_ndefMessage(uint8_t argc, char **argv)
 
         return;
 
-}
-/*
- * Read the string that user enter to screen
- * */
-void readTerminal(uint8_t *str, uint16_t *strLen)
-{
-        uint8_t ch;
-        uint16_t idx = 0;
-
-        while (1)
-        {
-                if (usb_isConfigured())
-                {
-                        while (!usb_cdc_getc(&ch));
-
-                        if ((ch >= 32) && (ch <= 126) && (idx < *strLen))
-                        {
-                                str[idx++] = ch;
-                                cliRx(ch);
-                        }
-                        if (((ch == 8) || (ch == 127)) && idx)
-                        {
-                                str[idx--] = 0;
-                                cliRx(ch);
-                        }
-                        if (ch == KEY_CODE_ENTER)
-                        {
-                                *strLen = idx;
-                                break;
-                        }
-                }
-        }
 }
 
 #endif  // #ifdef CFG_PN532

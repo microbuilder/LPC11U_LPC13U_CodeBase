@@ -624,7 +624,7 @@ pn532_error_t pn532_ndef_updateFromStream(pn532_ndef_record_t ndefRecord,
   NdefRecord_t *pRec = (NdefRecord_t*) ndefRecord;
   uint8_t header;
   uint8_t typeLen = 0;
-  uint32_t payloadLen = 0;
+  uint8_t payloadLen = 0;
   uint8_t idLen = 0;
 
   uint32_t totalLen;
@@ -657,6 +657,8 @@ pn532_error_t pn532_ndef_updateFromStream(pn532_ndef_record_t ndefRecord,
   }
   if (header & NDEF_HEADER_SR_MASK)
   {
+    //	typedef pn532_error_t (*pn532_ndef_fetch_data_fn)(void* pUserData,
+    //	    uint8_t *out_buff, uint32_t length);
     err = fnFetch(pUserData, &payloadLen, 1);
     totalLen = 3;
   }
@@ -705,7 +707,7 @@ pn532_error_t pn532_ndef_updateFromStream(pn532_ndef_record_t ndefRecord,
 
     if (header & NDEF_HEADER_SR_MASK)
     {
-      pRec->pData[NDEF_PAYLOAD_LENGTH_INDEX] = (uint8_t) payloadLen;
+      pRec->pData[NDEF_PAYLOAD_LENGTH_INDEX] = payloadLen;
       pRec->idLenIndex = NDEF_PAYLOAD_LENGTH_INDEX + 1;
     }
     else

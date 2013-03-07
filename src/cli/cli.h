@@ -71,6 +71,7 @@ void cliPoll(void);
 void cliRx(uint8_t c);
 void cliParse(char *cmd);
 void cliInit(void);
+void cliReadLine(uint8_t *str, uint16_t *strLen);
 
 #ifdef __cplusplus
 }

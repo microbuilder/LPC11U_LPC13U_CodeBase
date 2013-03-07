@@ -102,8 +102,8 @@
 #define NFC_AID                 ((uint16_t)NFC_AID_CLUSTER_CODE<<8 | (uint16_t)NFC_AID_APP_CODE)
 
 /** MIFARE Classic and MIFARE Plus NFC Read/ Write Access Condition */
-#define NFC_GPB_RW_ACCESS_GRANTED_NOT_SECURITY  (0x00)
-#define NFC_GPB_RW_NO_ACCESS_GRANTED            (0x03)
+#define NFC_GPB_RW_ACCESS_RIGHT_GRANTED  		    (0x00)
+#define NFC_GPB_RW_ACCESS_RIGHT_PROHIBIT        (0x03)
 #define NFC_GPB_MINOR_VERSION                   (0x00)  // mapping version 1.0
 #define NFC_GPB_MAJOR_VERSION                   (0x01)
 
@@ -684,15 +684,14 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
         }
 
         /* Check read access condition */
-        if (((gGPB >> 2) & 0x03)
-          != NFC_GPB_RW_ACCESS_GRANTED_NOT_SECURITY) /* read access condition support */
+        if (((gGPB >> 2) & 0x03) != NFC_GPB_RW_ACCESS_RIGHT_GRANTED) /* read access condition support */
         {
           continue;
         }
-
-        /* Check write access condition */
-        if (((gGPB >> 0) & 0x03 != NFC_GPB_RW_ACCESS_GRANTED_NOT_SECURITY) || //read access condition support
-           ((gGPB >> 0) & 0x03 != NFC_GPB_RW_NO_ACCESS_GRANTED))
+        
+        /* Check write access condition; R/W condition must be valid: either 00b or 11b */
+        if ((((gGPB >> 0) & 0x03) != NFC_GPB_RW_ACCESS_RIGHT_GRANTED) &&
+        		(((gGPB >> 0) & 0x03) != NFC_GPB_RW_ACCESS_RIGHT_PROHIBIT))
         {
           continue;
         }

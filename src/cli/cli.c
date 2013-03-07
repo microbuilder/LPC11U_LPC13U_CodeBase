@@ -38,7 +38,7 @@
               Modified by: K. Townsend (microBuilder.eu)
 
     @ingroup  CLI
-			  
+
     Original code taken from the FreakUSB Open Source USB Device Stack
     http://freaklabs.org/index.php/FreakUSB-Open-Source-USB-Device-Stack.html
 
@@ -72,6 +72,9 @@
   #include "core/gpio/gpio.h"
 #endif
 
+#define KEY_CODE_ESC        (27)    /* Escape key code */
+#define KEY_CODE_ENTER      (13)    /* Enter key code  */
+
 static uint8_t msg[CFG_INTERFACE_MAXMSGSIZE];
 static uint8_t *msg_ptr;
 
@@ -101,6 +104,44 @@ void cliPoll()
     }
   }
   #endif
+}
+
+/**************************************************************************/
+/*!
+    @brief  Reads the CLI input until the 'Enter' key is detected, or
+            until we reach the end of the input buffer (use with care!)
+*/
+/**************************************************************************/
+void cliReadLine(uint8_t *str, uint16_t *strLen)
+{
+  uint8_t ch;
+  uint16_t idx = 0;
+
+  /* ToDo: Update this to handle UART, etc., with proper #ifdef blocks! */
+
+  while (1)
+  {
+    if (usb_isConfigured())
+    {
+      while (!usb_cdc_getc(&ch));
+
+      if ((ch >= 32) && (ch <= 126) && (idx < *strLen))
+      {
+        str[idx++] = ch;
+        cliRx(ch);
+      }
+      if (((ch == 8) || (ch == 127)) && idx)
+      {
+        str[idx--] = 0;
+        cliRx(ch);
+      }
+      if (ch == KEY_CODE_ENTER)
+      {
+        *strLen = idx;
+        break;
+      }
+    }
+  }
 }
 
 /**************************************************************************/

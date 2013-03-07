@@ -517,7 +517,7 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
   }
   // ToDo: How to check if authentification really worked (bad key, etc.)?
 
-  /* Output the authentification data */
+  /* Output the authentication data */
   #ifdef PN532_DEBUGMODE
     PN532_DEBUG("Authenticated block %d %s", uiBlockNumber, CFG_PRINTF_NEWLINE);
   #endif
