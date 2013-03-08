@@ -605,9 +605,6 @@ extern "C" {
         #define CFG_USB
         #if defined(CFG_USB_HID_KEYBOARD) || defined(CFG_USB_HID_MOUSE) || defined(CFG_USB_HID_GENERIC)
           #define CFG_USB_HID
-          #if defined(CFG_USB_HID_GENERIC) && (CFG_USB_HID_GENERIC_REPORT_SIZE > 64)
-            #error "CFG_USB_HID_GENERIC_REPORT_SIZE exceed the maximum value of 64 bytes (based on USB specs 2.0 for FullSpeed Interrupt Endpoint Size)"
-          #endif
         #endif
       #endif
     #endif
