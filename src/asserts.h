@@ -143,7 +143,7 @@ extern "C" {
 /**************************************************************************/
 /*!
     @brief  Checks the supplied condition using a static assert
-            
+
     @details
     The ASSERT_xxx macros are for dynamic assertions that can provide
     protection against unexpected conditions encountered at runtime. An
@@ -153,16 +153,15 @@ extern "C" {
     standalone (i.e., not in a conditional), for instance as follows:
 
     @code
-    // This assertion will trigger a “division by zero” warning from the
-    // compiler when the code is compiled on 32-bit machines. 
-    STATIC_ASSERT( 1 / ( 4 – sizeof(void *));
-    
+    // This assertion will trigger an error when the code is compiled
+    // on 32-bit machines.
+    STATIC_ASSERT(sizeof(void *) != 4);
+
     // To check the opposite requirement, i.e., to make sure that we are
     // executing on a 32-bit machine only, the following static assertion
-    // can be used, which will trigger a 'division by zero' warning from
-    // the compilter when the code is compiled on machines that do not
-    // have a 32-bit wordsize:
-    STATIC_ASSERT( 1 / (sizeof(void *) & 4) );
+    // can be used, which will trigger an error when the code is compiled
+    // on machines that do not have a 32-bit wordsize:
+    STATIC_ASSERT(sizeof(void *) == 4);
     @endcode
 */
 /**************************************************************************/

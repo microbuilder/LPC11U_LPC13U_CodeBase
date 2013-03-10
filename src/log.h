@@ -56,20 +56,58 @@
 
 #define LOG_MESSAGE "Log: %s: line %d: "
 
+/**************************************************************************/
+/*!
+    @brief  Inserts the specified number of tabs in the data log
+*/
+/**************************************************************************/
 #define LOG_TAB(n) \
   do{\
     for(uint32_t run=0; run<(n); run++)\
       LOG_PRINTF("\t");\
   } while(0)
 
+/**************************************************************************/
+/*!
+    @brief  Logs the specified message, including the function name an
+            the line where the function is present
+
+    @param  format  The entire 'printf' parameter set, including optional
+                    parameters if values like %s, %d are used.
+
+    @code
+    LOG("HID In report" CFG_PRINTF_NEWLINE
+        "\tStatus   = %d - %s" CFG_PRINTF_NEWLINE
+        "\tCount    = %d" CFG_PRINTF_NEWLINE
+        "\tSequence = %d",
+        in_report->Status, REPORT_STATUS_STR(in_report->Status), in_report->Count, in_report->Sequence);
+    LOG_TAB(1);
+    LOG_ARR(in_report->ReadData, 15, "%08X");
+    @endcode
+*/
+/**************************************************************************/
 #define LOG(format, ...) LOG_PRINTF(LOG_MESSAGE format "%s", LOG_FUNC, LOG_LINE, __VA_ARGS__, CFG_PRINTF_NEWLINE);
 
+/**************************************************************************/
+/*!
+    @brief  Sends the array contents to the data log
+
+    @param  array   Pointer the the array in memory
+    @param  size    Length of the array
+    @param  format  Format to use when displaying each array item via printf
+                    (ex. "%02X ", "%d", "0x%08X", etc.)
+
+    @code
+    LOG_ARR(in_report->ReadData, 15, "%08X");
+    @endcode
+*/
+/**************************************************************************/
 #define LOG_ARR(array, size, format) \
   do{\
     for(uint32_t run=0; run<(size); run++)\
       LOG_PRINTF(format " ", (array)[run]);\
     LOG_PRINTF(CFG_PRINTF_NEWLINE);\
-  }while(0)
+  } while(0)
 
 #define LOG_STR(str) LOG("%s", str)
 
