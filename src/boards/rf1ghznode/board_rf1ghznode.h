@@ -526,14 +526,19 @@ extern "C" {
     PN532/NFC STACK
     -----------------------------------------------------------------------
 
-    CFG_PN532                   If defined, the PN532/NFC stack will be
-                                included during build.  Requires external HW.
+    CFG_PN532                      If defined, the PN532/NFC stack will be
+                                   included during build.  Requires
+                                   external HW
+    CFG_PN532_MEM_POOL_SIZE_BYTES  Size of the dynamic memory pool in bytes
+                                   (used by pn532/mem_allocator/ when
+                                   working with NDEF messages)
     -----------------------------------------------------------------------*/
     // #define CFG_PN532
-    #define CFG_PN532_RSTPD_PORT            (0)
-    #define CFG_PN532_RSTPD_PIN             (16)
-    #define CFG_PN532_I2C_IRQPORT           (0)
-    #define CFG_PN532_I2C_IRQPIN            (17)
+    #define CFG_PN532_RSTPD_PORT                      (0)
+    #define CFG_PN532_RSTPD_PIN                       (16)
+    #define CFG_PN532_I2C_IRQPORT                     (0)
+    #define CFG_PN532_I2C_IRQPIN                      (17)
+    #define CFG_PN532_MEM_POOL_SIZE_BYTES             (512)    
 /*=========================================================================*/
 
 

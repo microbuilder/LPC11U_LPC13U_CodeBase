@@ -44,11 +44,8 @@
 #include "../pn532.h"
 #include "pn532_mem.h"
 
-/* Memory pool size in bytes */
-#define PN532_MEM_POOL_BYTES_SIZE     (512)
-
 /* Memory pool for dynamic memory allocator */
-static uint32_t _pn532_mem_pool[PN532_MEM_POOL_BYTES_SIZE/4];
+static uint32_t _pn532_mem_pool[CFG_PN532_MEM_POOL_SIZE_BYTES/4];
 static BOOL     _pn532_mem_initialised = FALSE;
 
 /**************************************************************************/
