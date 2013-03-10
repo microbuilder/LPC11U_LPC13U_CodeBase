@@ -3,8 +3,8 @@
     @file     asserts.h
     @author   K. Townsend (microBuilder.eu)
 
-    @brief    Various ASSERT macros to simplify error checking, and
-              centralise error logging when debugging.
+    @brief    Various static and dynamic ASSERT macros to simplify error
+              checking, and centralise error logging when debugging.
     @ingroup  Errors
 
     @section LICENSE
@@ -59,33 +59,7 @@ extern "C" {
 
 #define STRING_CONCAT(a, b) a##b                  // TODO: Move to another place
 #define XSTRING_CONCAT(a, b) STRING_CONCAT(a, b)  // Expand then concat ... TODO: Move to another place
-#define STATIC_ASSERT(const_expr) enum { XSTRING_CONCAT(static_assert_, __LINE__) = 1/(!!(const_expr)) }
 
-// #define LOG_ENABLE
-
-#ifdef LOG_ENABLE
-  #define LOG_PRINTF(...)      _PRINTF(__VA_ARGS__)
-#else
-  #define LOG_PRINTF(...)
-#endif
-
-#define LOG_MESSAGE "Log: %s: line %d: "
-#define LOG_TAB(n) \
-  do{\
-    for(uint32_t run=0; run<(n); run++)\
-      LOG_PRINTF("\t");\
-  }while(0)
-
-#define LOG(format, ...) LOG_PRINTF(LOG_MESSAGE format "%s", ASSERT_FUNC, ASSERT_LINE, __VA_ARGS__, CFG_PRINTF_NEWLINE);
-
-#define LOG_ARR(array, size, format) \
-  do{\
-    for(uint32_t run=0; run<(size); run++)\
-      LOG_PRINTF(format " ", (array)[run]);\
-    LOG_PRINTF(CFG_PRINTF_NEWLINE);\
-  }while(0)
-
-#define LOG_STR(str) LOG("%s", str)
 /**************************************************************************/
 /*!
     @brief  This macro will assert the test condition and return the
@@ -166,26 +140,34 @@ extern "C" {
 /**************************************************************************/
 #define ASSERT_STATUS(sts)                ASSERT_STATUS_MESSAGE(sts, NULL)
 
-/*
-The examples above are for dynamic assertions that can provide protection
-against unexpected conditions encountered at runtime. An even stronger check
-can be provided by static assertions that can be evaluated by the compiler at
-the time code is compiled. A static assertion can be defined like the asserts
-above, but can be used standalone (i.e., not in a conditional), for instance
-as follows:
+/**************************************************************************/
+/*!
+    @brief  Checks the supplied condition using a static assert
+            
+    @details
+    The ASSERT_xxx macros are for dynamic assertions that can provide
+    protection against unexpected conditions encountered at runtime. An
+    even stronger check can be provided by static assertions that can be
+    evaluated by the compiler at the time code is compiled. A static
+    assertion can be defined like the ASSERT_xxx macros, but can be used
+    standalone (i.e., not in a conditional), for instance as follows:
 
-ASSERT( 1 / ( 4 – sizeof(void *));
-
-This assertion will trigger a “division by zero” warning from the compiler
-when the code is compiled on 32-bit machines (thus triggering Rule 2). To
-check the opposite requirement, i.e., to make sure that we are executing on a
-32-bit machine only, the following static assertion can be used:
-
-ASSERT( 1 / (sizeof(void *) & 4) );
-
-This version will trigger the “division by zero” warning from the compiler
-when the code is compiled on machines that do not have a 32-bit wordsize.
+    @code
+    // This assertion will trigger a “division by zero” warning from the
+    // compiler when the code is compiled on 32-bit machines. 
+    STATIC_ASSERT( 1 / ( 4 – sizeof(void *));
+    
+    // To check the opposite requirement, i.e., to make sure that we are
+    // executing on a 32-bit machine only, the following static assertion
+    // can be used, which will trigger a 'division by zero' warning from
+    // the compilter when the code is compiled on machines that do not
+    // have a 32-bit wordsize:
+    STATIC_ASSERT( 1 / (sizeof(void *) & 4) );
+    @endcode
 */
+/**************************************************************************/
+#define STATIC_ASSERT(const_expr) enum { XSTRING_CONCAT(static_assert_, __LINE__) = 1/(!!(const_expr)) }
+
 #ifdef __cplusplus
 }
 #endif
