@@ -68,10 +68,7 @@
           <file file_name="src/drivers/displays/smallfonts.c"/>
           <folder Name="bitmap">
             <folder Name="ssd1306">
-              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c">
-                <configuration Name="THUMB Flash Release" build_exclude_from_build="No"/>
-                <configuration Name="THUMB Flash Debug" build_exclude_from_build="No"/>
-              </file>
+              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c" />
             </folder>
           </folder>
           <folder Name="graphic">
@@ -146,6 +143,7 @@
               <file file_name="src/drivers/rf/pn532/helpers/pn532_gpio.c"/>
               <file file_name="src/drivers/rf/pn532/helpers/pn532_config.c"/>
               <file file_name="src/drivers/rf/pn532/helpers/pn532_ndef.c"/>
+              <file file_name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.c"/>
             </folder>
             <file file_name="src/drivers/rf/pn532/pn532.c"/>
             <file file_name="src/drivers/rf/pn532/pn532_bus_i2c.c"/>
@@ -233,13 +231,12 @@
       <file file_name="src/messages.c"/>
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
+      <folder Name="localisation" file_name="">
+        <file file_name="src/localisation/localisation.c"/>
+        <file file_name="src/localisation/locale_en.dat"/>
+        <file file_name="src/localisation/locale_fr.dat"/>
+      </folder>
       <folder Name="boards" file_name="">
-        <folder Name="11u24debugger" file_name="">
-          <file file_name="src/boards/11u24debugger/board_11u24debugger.c"/>
-          <file file_name="src/boards/11u24debugger/board_11u24debugger.h"/>
-          <file file_name="src/boards/11u24debugger/swd.c"/>
-          <file file_name="src/boards/11u24debugger/swdbridge.c"/>
-        </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
@@ -252,11 +249,6 @@
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
         </folder>
-      </folder>
-      <folder Name="localisation" file_name="">
-        <file file_name="src/localisation/locale_en.dat"/>
-        <file file_name="src/localisation/locale_fr.dat"/>
-        <file file_name="src/localisation/localisation.c"/>
       </folder>
       <file file_name="src/printf-retarget.c"/>
       <file file_name="src/asserts.h"/>

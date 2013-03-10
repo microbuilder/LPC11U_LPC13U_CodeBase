@@ -101,7 +101,7 @@ void cmd_nfc_mifareclassic_valueblock_create(uint8_t argc, char **argv)
         return;
   }
 
-  printf("Creating a value block at address %d%s%s", block, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+  printf("Creating a value block at address %d%s%s", (int)block, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
 
   // Set a timeout waiting for passive targets (default = 0xFF, wait forever)
   pn532_config_SetPassiveActivationRetries(0xFE);
@@ -119,10 +119,10 @@ void cmd_nfc_mifareclassic_valueblock_create(uint8_t argc, char **argv)
     // We should be able to create the value block now
     if (pn532_mifareclassic_CreateValueBlock (block, value))
     {
-      printf("Unable to write to block %d%s", block, CFG_PRINTF_NEWLINE);
+      printf("Unable to write to block %d%s", (int)block, CFG_PRINTF_NEWLINE);
     }
     // Write successful
-    printf("Updated block %02d with value '%d'%s", block, value, CFG_PRINTF_NEWLINE);
+    printf("Updated block %02d with value '%d'%s", (int)block, (int)value, CFG_PRINTF_NEWLINE);
   }
   else
   {
@@ -157,7 +157,7 @@ void cmd_nfc_mifareclassic_valueblock_increment(uint8_t argc, char **argv)
         return;
   }
 
-  printf("Trying to increment value block %d%s%s", block, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+  printf("Trying to increment value block %d%s%s", (int)block, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
 
   // Set a timeout waiting for passive targets (default = 0xFF, wait forever)
   pn532_config_SetPassiveActivationRetries(0xFE);
@@ -179,15 +179,15 @@ void cmd_nfc_mifareclassic_valueblock_increment(uint8_t argc, char **argv)
       switch (error)
       {
         case PN532_ERROR_INCORRECTBLOCKFORMAT:
-          printf("Block %d is not a Mifare value block%s", block, CFG_PRINTF_NEWLINE);
+          printf("Block %d is not a Mifare value block%s", (int)block, CFG_PRINTF_NEWLINE);
           break;
         default:
-          printf("Unable to increment to block %d%s", block, CFG_PRINTF_NEWLINE);
+          printf("Unable to increment to block %d%s", (int)block, CFG_PRINTF_NEWLINE);
           break;
       }
     }
     // Increment successful
-    printf("Incremented block %02d by '%d'%s", block, value, CFG_PRINTF_NEWLINE);
+    printf("Incremented block %02d by '%d'%s", (int)block, (int)value, CFG_PRINTF_NEWLINE);
   }
   else
   {
@@ -222,7 +222,7 @@ void cmd_nfc_mifareclassic_valueblock_decrement(uint8_t argc, char **argv)
         return;
   }
 
-  printf("Trying to decrement value block %d%s%s", block, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+  printf("Trying to decrement value block %d%s%s", (int)block, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
 
   // Set a timeout waiting for passive targets (default = 0xFF, wait forever)
   pn532_config_SetPassiveActivationRetries(0xFE);
@@ -244,15 +244,15 @@ void cmd_nfc_mifareclassic_valueblock_decrement(uint8_t argc, char **argv)
       switch (error)
       {
         case PN532_ERROR_INCORRECTBLOCKFORMAT:
-          printf("Block %d is not a Mifare balue block%s", block, CFG_PRINTF_NEWLINE);
+          printf("Block %d is not a Mifare balue block%s", (int)block, CFG_PRINTF_NEWLINE);
           break;
         default:
-          printf("Unable to decrement to block %d%s", block, CFG_PRINTF_NEWLINE);
+          printf("Unable to decrement to block %d%s", (int)block, CFG_PRINTF_NEWLINE);
           break;
       }
     }
     // Decrement successful
-    printf("Decremented block %02d by '%d'%s", block, value, CFG_PRINTF_NEWLINE);
+    printf("Decremented block %02d by '%d'%s", (int)block, (int)value, CFG_PRINTF_NEWLINE);
   }
   else
   {
@@ -302,15 +302,15 @@ void cmd_nfc_mifareclassic_valueblock_read(uint8_t argc, char **argv)
           printf("Invalid block number%s", CFG_PRINTF_NEWLINE);
           break;
         case PN532_ERROR_INCORRECTBLOCKFORMAT:
-          printf("Block %d is not a Mifare value block%s", block, CFG_PRINTF_NEWLINE);
+          printf("Block %d is not a Mifare value block%s", (int)block, CFG_PRINTF_NEWLINE);
           break;
         default:
-          printf("Unable to read block %d%s", block, CFG_PRINTF_NEWLINE);
+          printf("Unable to read block %d%s", (int)block, CFG_PRINTF_NEWLINE);
           break;
       }
     }
     // Read successful
-    printf("Block %02d = %d (0x%08X)%s", block, value, value, CFG_PRINTF_NEWLINE);
+    printf("Block %02d = %d (0x%08X)%s", (int)block, (int)value, (int)value, CFG_PRINTF_NEWLINE);
   }
   else
   {

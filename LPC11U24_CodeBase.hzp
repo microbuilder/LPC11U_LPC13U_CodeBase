@@ -65,9 +65,7 @@
           <file file_name="src/drivers/displays/smallfonts.c"/>
           <folder Name="bitmap">
             <folder Name="ssd1306">
-              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c">
-                <configuration Name="THUMB Flash Release" build_exclude_from_build="No"/>
-              </file>
+              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c" />
             </folder>
           </folder>
           <folder Name="graphic">
@@ -142,6 +140,7 @@
               <file file_name="src/drivers/rf/pn532/helpers/pn532_gpio.c"/>
               <file file_name="src/drivers/rf/pn532/helpers/pn532_config.c"/>
               <file file_name="src/drivers/rf/pn532/helpers/pn532_ndef.c"/>
+              <file file_name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.c"/>
             </folder>
             <file file_name="src/drivers/rf/pn532/pn532.c"/>
             <file file_name="src/drivers/rf/pn532/pn532_bus_i2c.c"/>
@@ -166,13 +165,13 @@
           </folder>
         </folder>
         <folder Name="sensors" file_name="">
-          <folder Name="gyroscopes" file_name="">
-            <file file_name="src/drivers/sensors/gyroscopes/l3gd20.c"/>
-          </folder>
           <folder Name="accelerometers" file_name="">
             <file file_name="src/drivers/sensors/accelerometers/lis3dh.c"/>
             <file file_name="src/drivers/sensors/accelerometers/adxl345.c"/>
             <file file_name="src/drivers/sensors/accelerometers/lsm303accel.c"/>
+          </folder>
+          <folder Name="gyroscopes" file_name="">
+            <file file_name="src/drivers/sensors/gyroscopes/l3gd20.c"/>
           </folder>
           <folder Name="light" file_name="">
             <file file_name="src/drivers/sensors/light/tsl2561.c"/>
@@ -230,17 +229,11 @@
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
       <folder Name="localisation" file_name="">
-        <file file_name="src/locales/locale_en.dat"/>
-        <file file_name="src/locales/locale_fr.dat"/>
         <file file_name="src/localisation/localisation.c"/>
+        <file file_name="src/localisation/locale_en.dat"/>
+        <file file_name="src/localisation/locale_fr.dat"/>
       </folder>
       <folder Name="boards" file_name="">
-        <folder Name="11u24debugger" file_name="">
-          <file file_name="src/boards/11u24debugger/board_11u24debugger.c"/>
-          <file file_name="src/boards/11u24debugger/board_11u24debugger.h"/>
-          <file file_name="src/boards/11u24debugger/swd.c"/>
-          <file file_name="src/boards/11u24debugger/swdbridge.c"/>
-        </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>

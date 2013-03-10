@@ -40,9 +40,6 @@ OBJS  += $(OBJ_PATH)/main.o
 OBJS  += $(OBJ_PATH)/messages.o
 OBJS  += $(OBJ_PATH)/printf-retarget.o
 
-VPATH += src/boards/11u24debugger
-OBJS  += $(OBJ_PATH)/board_11u24debugger.o 
-
 VPATH += src/boards/lpcxpresso1347
 OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
 
@@ -65,6 +62,7 @@ OBJS  += $(OBJ_PATH)/cmd_eeprom_write.o
 OBJS  += $(OBJ_PATH)/cmd_i2c_read.o
 OBJS  += $(OBJ_PATH)/cmd_i2c_scan.o 
 OBJS  += $(OBJ_PATH)/cmd_i2c_write.o 
+OBJS  += $(OBJ_PATH)/cmd_nfc_mfc_ndef.o
 OBJS  += $(OBJ_PATH)/cmd_nfc_mifareclassic_memdump.o
 OBJS  += $(OBJ_PATH)/cmd_nfc_mifareclassic_valueblock.o 
 OBJS  += $(OBJ_PATH)/cmd_nfc_mifareultralight_memdump.o 
@@ -187,6 +185,7 @@ OBJS  += $(OBJ_PATH)/pn532_gpio.o
 OBJS  += $(OBJ_PATH)/pn532_mifare_classic.o 
 OBJS  += $(OBJ_PATH)/pn532_mifare_ultralight.o 
 OBJS  += $(OBJ_PATH)/pn532_ndef.o 
+OBJS  += $(OBJ_PATH)/pn532_ndef_cards.o 
 
 VPATH += src/drivers/rf/pn532/mem_allocator
 OBJS  += $(OBJ_PATH)/bget.o 

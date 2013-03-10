@@ -11,7 +11,7 @@
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2013, K. Townsend (microBuilder.eu)
+    Copyright (c) 2013 Adafruit Industries (www.adafruit.com)
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without

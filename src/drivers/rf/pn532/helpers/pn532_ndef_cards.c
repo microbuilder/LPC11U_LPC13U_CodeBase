@@ -6,7 +6,7 @@
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2013, K. Townsend (microBuilder.eu)
+    Copyright (c) 2013 Adafruit Industries (www.adafruit.com)
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -102,7 +102,7 @@
 #define NFC_AID                 ((uint16_t)NFC_AID_CLUSTER_CODE<<8 | (uint16_t)NFC_AID_APP_CODE)
 
 /** MIFARE Classic and MIFARE Plus NFC Read/ Write Access Condition */
-#define NFC_GPB_RW_ACCESS_RIGHT_GRANTED  		    (0x00)
+#define NFC_GPB_RW_ACCESS_RIGHT_GRANTED                    (0x00)
 #define NFC_GPB_RW_ACCESS_RIGHT_PROHIBIT        (0x03)
 #define NFC_GPB_MINOR_VERSION                   (0x00)  // mapping version 1.0
 #define NFC_GPB_MAJOR_VERSION                   (0x01)
@@ -440,7 +440,8 @@ pn532_error_t pn532_ndef_mfc_blank_format(pTag_t pTag)
   pn532_error_t errCode = PN532_ERROR_NONE;
   uint8_t blockBuffer[16];
   uint8_t blankAccessBits[3] = { 0xff, 0x07, 0x80 };
-  uint8_t idx, numOfSector;
+  uint8_t idx;
+  uint8_t numOfSector = 0;
 
   CHECK_INVALID_POINTER(pTag);
 
@@ -531,7 +532,6 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
   uint8_t blockBuffer[16];
   uint8_t blockBufferIdx;
   uint16_t idx, blockIdx;
-  uint16_t tlvLength;
 
   CHECK_INVALID_POINTER(pTag)
 
@@ -688,10 +688,10 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
         {
           continue;
         }
-        
+
         /* Check write access condition; R/W condition must be valid: either 00b or 11b */
         if ((((gGPB >> 0) & 0x03) != NFC_GPB_RW_ACCESS_RIGHT_GRANTED) &&
-        		(((gGPB >> 0) & 0x03) != NFC_GPB_RW_ACCESS_RIGHT_PROHIBIT))
+                        (((gGPB >> 0) & 0x03) != NFC_GPB_RW_ACCESS_RIGHT_PROHIBIT))
         {
           continue;
         }
@@ -734,15 +734,15 @@ pn532_error_t pn532_ndef_mfc_get_tagType(pTag_t pTag)
 
             pTag->ndefStartSector = idx;
             /* Check NDEF TLV Length 1 byte or 3 bytes format */
-            if (blockBuffer[3] == 0xff) /* 3 bytes format */
-            {
-              tlvLength = (((uint16_t) blockBuffer[4] << 8) & 0xff00)
-                | ((uint16_t) blockBuffer[5] & 0x00ff);
-            }
-            else /* 1 byte format */
-            {
-              tlvLength = blockBuffer[4];
-            }
+            // if (blockBuffer[3] == 0xff) /* 3 bytes format */
+            // {
+            //   tlvLength = (((uint16_t) blockBuffer[4] << 8) & 0xff00)
+            //     | ((uint16_t) blockBuffer[5] & 0x00ff);
+            // }
+            // else /* 1 byte format */
+            // {
+            //   tlvLength = blockBuffer[4];
+            // }
 
             return PN532_ERROR_NONE;
           }
@@ -837,7 +837,7 @@ pn532_error_t pn532_ndef_mfc_parseNtag(pTag_t pTag, pn532_ndef_record_t *rec)
   uint8_t processBlockNr;
   uint8_t processDataLength;
   uint16_t bufferIdx = 0, blockBufferIdx;
-  uint16_t bufferLength;
+  uint16_t bufferLength = 0;
   uint16_t nfcTlvAddress;
   uint8_t blockBuffer[16];
 
@@ -1001,7 +1001,8 @@ pn532_error_t pn532_ndef_mfc_tagType_identify(uint8_t sak, uint16_t atqa,
 pn532_error_t pn532_ndef_mfc_scan_ndef_tlv(pTag_t pTag, uint16_t *ndefTlvAddrress)
 {
   pn532_error_t errCode = PN532_ERROR_NONE;
-  uint8_t sectorSearchRange, blockSearchRange = 4;
+  uint8_t sectorSearchRange = 0;
+  uint8_t blockSearchRange = 4;
   uint8_t blockBuffer[16];
   uint16_t sectorIdx, blockIdx, blockBufferIdx;
   /* Make sure pTag is an NDEF tag: NDEF tag and read/rw */

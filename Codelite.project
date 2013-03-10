@@ -74,6 +74,8 @@
             <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.h"/>
             <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.c"/>
             <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.h"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.c"/>
+            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.h"/>
           </VirtualDirectory>
           <VirtualDirectory Name="mem_allocator">
             <File Name="src/drivers/rf/pn532/helpers/bget.c"/>
@@ -336,8 +338,6 @@
     </VirtualDirectory>
     <VirtualDirectory Name="boards">
       <File Name="src/boards/board.h"/>
-      <File Name="src/boards/11u24debugger/board_11u24debugger.c"/>
-      <File Name="src/boards/11u24debugger/board_11u24debugger.h"/>
       <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
       <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
       <File Name="src/boards/rf1ghznode/board_rf1ghznode.c"/>

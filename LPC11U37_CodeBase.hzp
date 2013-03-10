@@ -40,6 +40,12 @@
         <folder Name="eeprom">
           <file file_name="src/core/eeprom/eeprom.c"/>
         </folder>
+        <folder Name="pmu">
+          <file file_name="src/core/pmu/pmu.c"/>
+        </folder>
+        <folder Name="adc" file_name="">
+          <file file_name="src/core/adc/adc.c"/>
+        </folder>
         <folder Name="usb" file_name="">
           <file file_name="src/core/usb/descriptors.c"/>
           <file file_name="src/core/usb/usb_cdc.c"/>
@@ -53,21 +59,13 @@
         <folder Name="iap" file_name="">
           <file file_name="src/core/iap/iap.c"/>
         </folder>
-        <folder Name="pmu" file_name="">
-          <file file_name="src/core/pmu/pmu.c"/>
-        </folder>
-        <folder Name="adc" file_name="">
-          <file file_name="src/core/adc/adc.c"/>
-        </folder>
       </folder>
       <folder Name="drivers">
         <folder Name="displays">
           <file file_name="src/drivers/displays/smallfonts.c"/>
           <folder Name="bitmap">
             <folder Name="ssd1306">
-              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c">
-                <configuration Name="THUMB Flash Release" build_exclude_from_build="No"/>
-              </file>
+              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c" />
             </folder>
           </folder>
           <folder Name="graphic">
@@ -167,13 +165,13 @@
           </folder>
         </folder>
         <folder Name="sensors" file_name="">
-          <folder Name="gyroscopes" file_name="">
-            <file file_name="src/drivers/sensors/gyroscopes/l3gd20.c"/>
-          </folder>
           <folder Name="accelerometers" file_name="">
             <file file_name="src/drivers/sensors/accelerometers/lis3dh.c"/>
             <file file_name="src/drivers/sensors/accelerometers/adxl345.c"/>
             <file file_name="src/drivers/sensors/accelerometers/lsm303accel.c"/>
+          </folder>
+          <folder Name="gyroscopes" file_name="">
+            <file file_name="src/drivers/sensors/gyroscopes/l3gd20.c"/>
           </folder>
           <folder Name="light" file_name="">
             <file file_name="src/drivers/sensors/light/tsl2561.c"/>
@@ -236,12 +234,6 @@
         <file file_name="src/localisation/locale_fr.dat"/>
       </folder>
       <folder Name="boards" file_name="">
-        <folder Name="11u24debugger" file_name="">
-          <file file_name="src/boards/11u24debugger/board_11u24debugger.c"/>
-          <file file_name="src/boards/11u24debugger/board_11u24debugger.h"/>
-          <file file_name="src/boards/11u24debugger/swd.c"/>
-          <file file_name="src/boards/11u24debugger/swdbridge.c"/>
-        </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>

@@ -6,7 +6,7 @@
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2013, K. Townsend (microBuilder.eu)
+    Copyright (c) 2013 Adafruit Industries (www.adafruit.com)
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -343,7 +343,7 @@ pn532_error_t pn532_ndef_update(pn532_ndef_record_t ndefRecord, uint8_t tnf,
   uint8_t *pPayload, uint32_t payloadLength)
 {
   NdefRecord_t *pRec = (NdefRecord_t*) ndefRecord;
-  uint8_t flags;
+  uint8_t flags = 0;
 
   if ((pRec == NULL) || (pType == NULL) || (typeLength == 0))
   {

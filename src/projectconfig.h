@@ -80,14 +80,10 @@ extern "C" {
     will then try to configure itself accordingly for that board.
 
     -----------------------------------------------------------------------*/
-     #define CFG_BRD_LPC11U24_DEBUGGER
-    // #define CFG_BRD_LPCXPRESSO_LPC1347
-//    #define CFG_BRD_RF1GHZNODE
+    #define CFG_BRD_LPCXPRESSO_LPC1347
+    // #define CFG_BRD_RF1GHZNODE
     // #define CFG_BRD_RF1GHZUSB
 
-    #ifdef CFG_BRD_LPC11U24_DEBUGGER
-      #include "boards/11u24debugger/board_11u24debugger.h"
-    #endif
     #ifdef CFG_BRD_LPCXPRESSO_LPC1347
       #include "boards/lpcxpresso1347/board_lpcxpresso1347.h"
     #endif
@@ -103,8 +99,7 @@ extern "C" {
 /*=========================================================================
     CONFIG FILE VALIDATION
     -----------------------------------------------------------------------*/
-    #if !defined CFG_BRD_LPC11U24_DEBUGGER && \
-        !defined CFG_BRD_LPCXPRESSO_LPC1347 && \
+    #if !defined CFG_BRD_LPCXPRESSO_LPC1347 && \
         !defined CFG_BRD_RF1GHZNODE && \
         !defined CFG_BRD_RF1GHZUSB
       #error "You must define a target board in projectconfig.h"
