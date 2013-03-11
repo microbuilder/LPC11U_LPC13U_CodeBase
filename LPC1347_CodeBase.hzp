@@ -68,7 +68,7 @@
           <file file_name="src/drivers/displays/smallfonts.c"/>
           <folder Name="bitmap">
             <folder Name="ssd1306">
-              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c" />
+              <file file_name="src/drivers/displays/bitmap/ssd1306/ssd1306_i2c.c"/>
             </folder>
           </folder>
           <folder Name="graphic">
@@ -202,6 +202,11 @@
             <file file_name="src/drivers/pwm/pca9685/pca9685.c"/>
           </folder>
         </folder>
+        <folder Name="statistics" file_name="">
+          <file file_name="src/drivers/statistics/statistics_d.c"/>
+          <file file_name="src/drivers/statistics/statistics_f.c"/>
+          <file file_name="src/drivers/statistics/statistics_i.c"/>
+        </folder>
       </folder>
       <folder Name="cli">
         <folder Name="commands" file_name="">
@@ -252,6 +257,7 @@
       </folder>
       <file file_name="src/printf-retarget.c"/>
       <file file_name="src/asserts.h"/>
+      <file file_name="src/log.h"/>
     </folder>
     <folder Name="System Files">
       <file file_name="$(StudioDir)/source/thumb_crt0.s"/>
