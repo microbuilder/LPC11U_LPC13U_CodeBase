@@ -36,5 +36,27 @@ Once you have added the desired number of records, you can get the basic statist
   printf("STVARIANCE     : %f\n", statistics_f_stdvar(&fs));
   printf("\n");
 ```
+## Results ##
+Reading a data from an gyroscope, accelerometer, magnetometer, etc., we can get a sense of the sensor's 'noise level' by keeping a running average over a number of samples, and then try to filter this out.  
+
+Alternatively, we can use these helper functions to sample 10 or 100 readings each time, and only return the running average if we are trying to determine average rotational velocity, for example.
+
+There is a tradeoff, of course, in that the more samples we have the more the standard variance will drop, and the more reliable our data becomes ... but it's at the expense of frequency or our 'update rate'.
+
+Taking the X axis of an immobile gyroscope for example, these are the results we get over 100 samples, which takes about 100ms to collect in this case for a 10Hz update rate (compared to the 1000Hz we could get just reading raw but noisy data):
+```
+  SAMPLES        : 100
+  MEAN (Average) : -0.006787 rad/s
+  STDEV          : 0.005671 rad/s
+  STVARIANCE     : 0.000032 rad/s
+```
+And after 300 samples you can see the Standard Variances drops further, but we're limited to about 3Hz for a refresh rate:
+```
+  SAMPLES        : 300
+  MEAN (Average) : -0.006304 rad/s
+  STDEV          : 0.003722 rad/s
+  STVARIANCE     : 0.000014 rad/s
+```
+
 ## Source ##
 This code is based on **"Calculating standard deviation in one pass"** by Peter Kankowski, available at: http://www.strchr.com/standard_deviation_in_one_pass
