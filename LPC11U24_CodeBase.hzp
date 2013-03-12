@@ -200,9 +200,10 @@
           </folder>
         </folder>
         <folder Name="statistics" file_name="">
-          <file file_name="src/drivers/statistics/statistics_d.c"/>
-          <file file_name="src/drivers/statistics/statistics_f.c"/>
-          <file file_name="src/drivers/statistics/statistics_i.c"/>
+          <file file_name="src/drivers/statistics/avg_d.c"/>
+          <file file_name="src/drivers/statistics/avg_f.c"/>
+          <file file_name="src/drivers/statistics/avg_i.c"/>
+          <file file_name="src/drivers/statistics/iir_f.c"/>
         </folder>
       </folder>
       <folder Name="cli">

@@ -1,55 +1,55 @@
 /**************************************************************************/
 /*!
-    @file     statistics_i.c
+    @file     avg_d.c
 
     @code
-    statistics_i_t is;
+    avg_d_t ds;
 
-    statistics_i_init(&is);
-    statistics_i_record(&is, 10);
-    statistics_i_record(&is, 20);
-    statistics_i_record(&is, 30);
-    statistics_i_record(&is, 35);
+    avg_d_init(&ds);
+    avg_d_record(&ds, 10);
+    avg_d_record(&ds, 20);
+    avg_d_record(&ds, 30);
+    avg_d_record(&ds, 35);
 
     while(1)
     {
-      printf("SAMPLES        : %d\n", is.k);
-      printf("MEAN (Average) : %i\n", is.Mk);
-      printf("STDEV          : %i\n", statistics_i_stdev(&is));
-      printf("STVARIANCE     : %i\n", statistics_i_stdvar(&is));
+      printf("SAMPLES        : %d\n", ds.k);
+      printf("MEAN (Average) : %f\n", ds.Mk);
+      printf("STDEV          : %f\n", avg_d_stdev(&ds));
+      printf("STVARIANCE     : %f\n", avg_d_stdvar(&ds));
       printf("\n");
     }
     @endcode
  */
 /**************************************************************************/
-#include "statistics_i.h"
+#include "avg_d.h"
 
 #include <math.h>
 
 /**************************************************************************/
 /*!
-     @brief Initialises the statistics_i_t instance
+     @brief Initialises the avg_d_t instance
 
      @param[in]  stats
-                 Pointer to the statistics_i_t instances
+                 Pointer to the avg_d_t instances
 */
 /**************************************************************************/
-void statistics_i_init(statistics_i_t *stats)
+void avg_d_init(avg_d_t *stats)
 {
   stats->k = 0;
 }
 
 /**************************************************************************/
 /*!
-     @brief Adds a new record to the statistics_i_t instances
+     @brief Adds a new record to the avg_d_t instances
 
      @param[in]  stats
-                 Pointer to the statistics_i_t instances
+                 Pointer to the avg_d_t instances
      @param[in]  x
                  Value to insert
 */
 /**************************************************************************/
-void statistics_i_record(statistics_i_t *stats, int32_t x)
+void avg_d_record(avg_d_t *stats, double x)
 {
   stats->k++;
   if (1 == stats->k)
@@ -59,7 +59,7 @@ void statistics_i_record(statistics_i_t *stats, int32_t x)
   }
   else
   {
-    int32_t d = x - stats->Mk; // Actually xk - M_{k-1},
+    double d = x - stats->Mk;  // Actually xk - M_{k-1},
                                // as Mk was not yet updated
     stats->Qk += (stats->k - 1) * d * d / stats->k;
     stats->Mk += d / stats->k;
@@ -71,12 +71,12 @@ void statistics_i_record(statistics_i_t *stats, int32_t x)
      @brief Calculates the population standard deviation
 
      @param[in]  stats
-                 Pointer to the statistics_i_t instances
+                 Pointer to the avg_d_t instances
 */
 /**************************************************************************/
-int32_t statistics_i_stdev(statistics_i_t *stats)
+double avg_d_stdev(avg_d_t *stats)
 {
-  return((int32_t)sqrt((double)(stats->Qk / stats->k)));
+  return(sqrt(stats->Qk / stats->k));
 }
 
 /**************************************************************************/
@@ -84,10 +84,10 @@ int32_t statistics_i_stdev(statistics_i_t *stats)
      @brief Calculates the standard deviation variance
 
      @param[in]  stats
-                 Pointer to the statistics_i_t instances
+                 Pointer to the avg_d_t instances
 */
 /**************************************************************************/
-int32_t statistics_i_variance(statistics_i_t *stats)
+double avg_d_variance(avg_d_t *stats)
 {
   return stats->Qk / (stats->k - 1);
 }
@@ -97,10 +97,10 @@ int32_t statistics_i_variance(statistics_i_t *stats)
      @brief Calculates the population standard deviation variance
 
      @param[in]  stats
-                 Pointer to the statistics_i_t instances
+                 Pointer to the avg_d_t instances
 */
 /**************************************************************************/
-int32_t statistics_i_stdvar(statistics_i_t *stats)
+double avg_d_stdvar(avg_d_t *stats)
 {
   return stats->Qk / stats->k;
 }

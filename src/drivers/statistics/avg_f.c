@@ -1,55 +1,55 @@
 /**************************************************************************/
 /*!
-    @file     statistics_f.c
+    @file     avg_f.c
 
     @code
-    statistics_f_t fs;
+    avg_f_t fs;
 
-    statistics_f_init(&fs);
-    statistics_f_record(&fs, 10);
-    statistics_f_record(&fs, 20);
-    statistics_f_record(&fs, 30);
-    statistics_f_record(&fs, 35);
+    avg_f_init(&fs);
+    avg_f_record(&fs, 10);
+    avg_f_record(&fs, 20);
+    avg_f_record(&fs, 30);
+    avg_f_record(&fs, 35);
 
     while(1)
     {
       printf("SAMPLES        : %d\n", fs.k);
       printf("MEAN (Average) : %f\n", fs.Mk);
-      printf("STDEV          : %f\n", statistics_f_stdev(&fs));
-      printf("STVARIANCE     : %f\n", statistics_f_stdvar(&fs));
+      printf("STDEV          : %f\n", avg_f_stdev(&fs));
+      printf("STVARIANCE     : %f\n", avg_f_stdvar(&fs));
       printf("\n");
     }
     @endcode
  */
 /**************************************************************************/
-#include "statistics_f.h"
+#include "avg_f.h"
 
 #include <math.h>
 
 /**************************************************************************/
 /*!
-     @brief Initialises the statistics_f_t instance
+     @brief Initialises the avg_f_t instance
 
      @param[in]  stats
-                 Pointer to the statistics_f_t instances
+                 Pointer to the avg_f_t instances
 */
 /**************************************************************************/
-void statistics_f_init(statistics_f_t *stats)
+void avg_f_init(avg_f_t *stats)
 {
   stats->k = 0;
 }
 
 /**************************************************************************/
 /*!
-     @brief Adds a new record to the statistics_f_t instances
+     @brief Adds a new record to the avg_f_t instances
 
      @param[in]  stats
-                 Pointer to the statistics_f_t instances
+                 Pointer to the avg_f_t instances
      @param[in]  x
                  Value to insert
 */
 /**************************************************************************/
-void statistics_f_record(statistics_f_t *stats, float x)
+void avg_f_record(avg_f_t *stats, float x)
 {
   stats->k++;
   if (1 == stats->k)
@@ -71,10 +71,10 @@ void statistics_f_record(statistics_f_t *stats, float x)
      @brief Calculates the population standard deviation
 
      @param[in]  stats
-                 Pointer to the statistics_f_t instances
+                 Pointer to the avg_f_t instances
 */
 /**************************************************************************/
-float statistics_f_stdev(statistics_f_t *stats)
+float avg_f_stdev(avg_f_t *stats)
 {
   return((float)sqrt((double)(stats->Qk / stats->k)));
 }
@@ -84,10 +84,10 @@ float statistics_f_stdev(statistics_f_t *stats)
      @brief Calculates the standard deviation variance
 
      @param[in]  stats
-                 Pointer to the statistics_f_t instances
+                 Pointer to the avg_f_t instances
 */
 /**************************************************************************/
-float statistics_f_variance(statistics_f_t *stats)
+float avg_f_variance(avg_f_t *stats)
 {
   return stats->Qk / (stats->k - 1);
 }
@@ -97,10 +97,10 @@ float statistics_f_variance(statistics_f_t *stats)
      @brief Calculates the population standard deviation variance
 
      @param[in]  stats
-                 Pointer to the statistics_f_t instances
+                 Pointer to the avg_f_t instances
 */
 /**************************************************************************/
-float statistics_f_stdvar(statistics_f_t *stats)
+float avg_f_stdvar(avg_f_t *stats)
 {
   return stats->Qk / stats->k;
 }

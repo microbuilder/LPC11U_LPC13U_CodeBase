@@ -222,9 +222,10 @@ VPATH += src/drivers/sensors/temperature
 OBJS  += $(OBJ_PATH)/lm75b.o
 
 VPATH += src/drivers/statistics
-OBJS  += $(OBJ_PATH)/statistics_d.o 
-OBJS  += $(OBJ_PATH)/statistics_f.o 
-OBJS  += $(OBJ_PATH)/statistics_i.o
+OBJS  += $(OBJ_PATH)/avg_d.o 
+OBJS  += $(OBJ_PATH)/avg_f.o 
+OBJS  += $(OBJ_PATH)/avg_i.o
+OBJS  += $(OBJ_PATH)/iir_f.o
 
 VPATH += src/drivers/storage/fatfs
 OBJS  += $(OBJ_PATH)/ff.o 

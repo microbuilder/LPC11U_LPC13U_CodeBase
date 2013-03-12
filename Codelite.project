@@ -218,12 +218,12 @@
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="statistics">
-        <File Name="src/drivers/statistics/statistics_d.c"/>
-        <File Name="src/drivers/statistics/statistics_d.h"/>
-        <File Name="src/drivers/statistics/statistics_f.c"/>
-        <File Name="src/drivers/statistics/statistics_f.h"/>
-        <File Name="src/drivers/statistics/statistics_i.c"/>
-        <File Name="src/drivers/statistics/statistics_i.h"/>
+        <File Name="src/drivers/statistics/avg_d.c"/>
+        <File Name="src/drivers/statistics/avg_d.h"/>
+        <File Name="src/drivers/statistics/avg_f.c"/>
+        <File Name="src/drivers/statistics/avg_f.h"/>
+        <File Name="src/drivers/statistics/avg_i.c"/>
+        <File Name="src/drivers/statistics/avg_i.h"/>
       </VirtualDirectory>
     </VirtualDirectory>
     <VirtualDirectory Name="core">
@@ -353,6 +353,7 @@
     <File Name="src/cr_startup_lpc11u_lpc13u.c"/>
     <File Name="src/errors.h"/>
     <File Name="src/fixedptc.h"/>
+    <File Name="src/log.h"/>
     <File Name="src/main.c"/>
     <File Name="src/messages.c"/>
     <File Name="src/messages.h"/>
