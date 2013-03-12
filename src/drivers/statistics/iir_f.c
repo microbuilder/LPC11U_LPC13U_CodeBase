@@ -6,17 +6,16 @@
     iir_f_t iir;
 
     iir_f_init(&iir);
+    
     iir_f_add(&iir, 10);
     iir_f_add(&iir, 20);
     iir_f_add(&iir, 30);
     iir_f_add(&iir, 35);
 
-    while(1)
-    {
-      printf("SAMPLES  : %d       \n", iir.k);
-      printf("AVG      : %f       \n", iir.avg);
-      printf("\n");
-    }
+    printf("SAMPLES  : %d       \n", iir.k);
+    printf("AVG      : %f       \n", iir.avg);
+    printf("\n");
+      
     @endcode
  */
 /**************************************************************************/
