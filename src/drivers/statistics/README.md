@@ -3,7 +3,7 @@
 The helper functions in 'drivers/statistics/' can be used to provide basic statistical modelling and DSP filtering functions for sensor data, including:
 
 * Running average, including standard deviation and standard variance
-* Basic IIR filter (smoothes out noisy sensor data similar to an RC filter in HW)
+* IIR filter (A basic low pass filter that can be used to smooth out noisy sensor data)
 
 # Running Average (avg\_i.c, avg\_f.c, avg\_d.c) #
 
@@ -70,4 +70,24 @@ This code is based on **"Calculating standard deviation in one pass"** by Peter 
 
 # IIR (Infinite Impulse Response) Filter - (iir\_f.c) #
 
-ToDo
+A basic lowpass filter that can be used to 'smooth out' noisy sensor data, similar to the way an RC filter works with HW.
+
+The IIR filter is essentially a 'moving average', where the center point of the average moves over time.  The number of samples around the 'center' is based on the alpha value supplied in iir_f_init: a small alpha will result in a slower response from the filter (more samples are required to change the current average), whereas a larger alpha will cause the average to respond more quickly to changes in the signal.
+
+## How Does it Work? ##
+
+After declaring a placeholder iir\_f\_t object, we need to call the init function and supply an alpha value between 0 and 1.0F.  0.01F is a good starting point, but this should be tweeked higher or lower depending on how quickly/slowly you want the average value to change):
+```
+  iir_f_t iir;
+  iir_f_init(&iir, 0.01);
+```
+After initialising the filter above, you continually add in your samples via the iir_f_add function, and read the current 'iir.avg' value whenever you need it:
+```
+  iir_f_add(&iir, 10.5F);
+  iir_f_add(&iir, 10.76F);
+  iir_f_add(&iir, 10.69F);
+
+  printf("SAMPLES  : %d \n", iir.k);
+  printf("AVG      : %f \n", iir.avg);
+  printf("\n");
+```
