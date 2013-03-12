@@ -46,6 +46,8 @@ extern "C" {
 
 #include "projectconfig.h"
 
+#define ANSI_GOTOXY(x, y) do { printf("%c[%d;%df",0x1B,y,x); } while(0)
+
 // See: http://www.inwap.com/pdp10/ansicode.txt
 
 /* Ex: printf(ANSICODES_GRAPHICS_STYLE_BOLD
@@ -87,6 +89,6 @@ extern "C" {
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
