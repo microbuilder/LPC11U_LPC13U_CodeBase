@@ -11,14 +11,11 @@
     avg_i_record(&is, 30);
     avg_i_record(&is, 35);
 
-    while(1)
-    {
-      printf("SAMPLES        : %d\n", is.k);
-      printf("MEAN (Average) : %i\n", is.Mk);
-      printf("STDEV          : %i\n", avg_i_stdev(&is));
-      printf("STVARIANCE     : %i\n", avg_i_stdvar(&is));
-      printf("\n");
-    }
+    printf("SAMPLES        : %d\n", is.k);
+    printf("MEAN (Average) : %i\n", is.Mk);
+    printf("STDEV          : %i\n", avg_i_stdev(&is));
+    printf("STVARIANCE     : %i\n", avg_i_stdvar(&is));
+    printf("\n");
     @endcode
  */
 /**************************************************************************/
