@@ -110,3 +110,7 @@ By adjusting the alpha up to 0.05, we can see that the signal drops off more qui
 With an alpha of 0.1, it takes ~50 samples for the signal to drop from 10.0 to 0.
 
 ![MCU Settings](IIR_Alpha_0_1.png?raw=true)
+
+## Source ##
+
+Thanks to [Robert Davidson](http://www.ambientsensors.com/about/) for suggesting this filter.
