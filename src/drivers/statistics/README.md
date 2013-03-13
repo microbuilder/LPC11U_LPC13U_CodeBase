@@ -91,3 +91,22 @@ After initialising the filter above, you continually add in your samples via the
   printf("AVG      : %f \n", iir.avg);
   printf("\n");
 ```
+You can see the effect of adjusting the alpha value in the following images.  All three examples start with a first sample of 10.0F to set the initial average, followed by calling 'iir\_f\_add(&iir, 0);' 99 times for a total of 100 samples, 99 of which are zero:
+
+**Alpha = 0.01**
+
+With the alpha set to 0.01 we have a very slow response adding 99 '0.0' samples.  This is appropriate for very fast sensors where we aren't expecting major or rapid changes in the sensor values.
+
+![MCU Settings](IIR_Alpha_0_01.png?raw=true)
+
+**Alpha = 0.05**
+
+By adjusting the alpha up to 0.05, we can see that the signal drops off more quickly:
+
+![MCU Settings](IIR_Alpha_0_05.png?raw=true)
+
+**Alpha = 0.1**
+
+With an alpha of 0.1, it takes ~50 samples for the signal to drop from 10.0 to 0.
+
+![MCU Settings](IIR_Alpha_0_1.png?raw=true)
