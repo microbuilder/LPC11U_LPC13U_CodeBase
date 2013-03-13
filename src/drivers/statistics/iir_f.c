@@ -5,8 +5,8 @@
     @code
     iir_f_t iir;
 
-    iir_f_init(&iir);
-    
+    iir_f_init(&iir, 0.01);
+
     iir_f_add(&iir, 10);
     iir_f_add(&iir, 20);
     iir_f_add(&iir, 30);
@@ -15,7 +15,7 @@
     printf("SAMPLES  : %d       \n", iir.k);
     printf("AVG      : %f       \n", iir.avg);
     printf("\n");
-      
+
     @endcode
  */
 /**************************************************************************/
