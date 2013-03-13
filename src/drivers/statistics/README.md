@@ -91,6 +91,8 @@ After initialising the filter above, you continually add in your samples via the
   printf("AVG      : %f \n", iir.avg);
   printf("\n");
 ```
+## Results ##
+
 You can see the effect of adjusting the alpha value in the following images.  All three examples start with a first sample of 10.0F to set the initial average, followed by calling 'iir\_f\_add(&iir, 0);' 99 times for a total of 100 samples, 99 of which are zero:
 
 **Alpha = 0.01**
