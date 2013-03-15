@@ -1,0 +1,281 @@
+/**************************************************************************/
+/*!
+    @file     test_timespan.c
+    @ingroup  Unit Tests
+
+    @section LICENSE
+
+    Software License Agreement (BSD License)
+
+    Copyright (c) 2013, K. Townsend (microBuilder.eu)
+    All rights reserved.
+
+    Redistribution and use in source and binary forms, with or without
+    modification, are permitted provided that the following conditions are met:
+    1. Redistributions of source code must retain the above copyright
+    notice, this list of conditions and the following disclaimer.
+    2. Redistributions in binary form must reproduce the above copyright
+    notice, this list of conditions and the following disclaimer in the
+    documentation and/or other materials provided with the distribution.
+    3. Neither the name of the copyright holders nor the
+    names of its contributors may be used to endorse or promote products
+    derived from this software without specific prior written permission.
+
+    THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS ''AS IS'' AND ANY
+    EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
+    WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
+    DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER BE LIABLE FOR ANY
+    DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
+    (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
+    LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
+    ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
+    (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+    SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
+*/
+/**************************************************************************/
+#include <string.h>
+#include "unity_fixture.h"
+#include "drivers/timespan.h"
+
+static timespan_t timespan;
+
+TEST_GROUP(timespan);
+
+TEST_SETUP(timespan)
+{
+  /* Clear the temporary timespan */
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+TEST_TEAR_DOWN(timespan)
+{
+}
+
+/**************************************************************************/
+/*
+    Tests timespanCreate
+ */
+/**************************************************************************/
+TEST(timespan, createTicks)
+{
+  // 90087581005024 ns = 1 day, 1 hour, 1 minute and 27.58100524 seconds
+  TEST_ASSERT_TRUE(ERROR_NONE == timespanCreate(90087581005024, &timespan));
+  TEST_ASSERT_EQUAL_INT(1, timespan.days);
+  TEST_ASSERT_EQUAL_INT(1, timespan.hours);
+  TEST_ASSERT_EQUAL_INT(1, timespan.minutes);
+  TEST_ASSERT_EQUAL_INT(27, timespan.seconds);
+  TEST_ASSERT_EQUAL_INT(581, timespan.milliseconds);
+  TEST_ASSERT_EQUAL_INT(5, timespan.microseconds);
+  TEST_ASSERT_EQUAL_INT(24, timespan.nanoseconds);
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Test upper limit */
+  TEST_ASSERT_TRUE(ERROR_NONE == timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan));
+  TEST_ASSERT_EQUAL_INT(106751, timespan.days);
+  TEST_ASSERT_EQUAL_INT(23, timespan.hours);
+  TEST_ASSERT_EQUAL_INT(47, timespan.minutes);
+  TEST_ASSERT_EQUAL_INT(16, timespan.seconds);
+  TEST_ASSERT_EQUAL_INT(854, timespan.milliseconds);
+  TEST_ASSERT_EQUAL_INT(775, timespan.microseconds);
+  TEST_ASSERT_EQUAL_INT(807, timespan.nanoseconds);
+  TEST_ASSERT_TRUE(TIMESPAN_MAXNANOSECONDS == timespan.__ticks);
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Test lower limit (negative values) */
+  TEST_ASSERT_TRUE(ERROR_NONE == timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan));
+  TEST_ASSERT_EQUAL_INT(-106751, timespan.days);
+  TEST_ASSERT_EQUAL_INT(-23, timespan.hours);
+  TEST_ASSERT_EQUAL_INT(-47, timespan.minutes);
+  TEST_ASSERT_EQUAL_INT(-16, timespan.seconds);
+  TEST_ASSERT_EQUAL_INT(-854, timespan.milliseconds);
+  TEST_ASSERT_EQUAL_INT(-775, timespan.microseconds);
+  TEST_ASSERT_EQUAL_INT(-807, timespan.nanoseconds);
+  TEST_ASSERT_TRUE(TIMESPAN_MINNANOSECONDS == timespan.__ticks);
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanCreateExplicit
+ */
+/**************************************************************************/
+TEST(timespan, createExplicit)
+{
+  /* Calculate ticks for this timespan ... should be 90087581005024 */
+  TEST_ASSERT_TRUE(ERROR_NONE ==
+    timespanCreateExplicit(1, 1, 1, 27, 581, 5, 24, &timespan));
+  TEST_ASSERT_TRUE(timespan.__ticks == 90087581005024);
+
+  /* Check negative values ... this should equal -1 minute */
+  TEST_ASSERT_TRUE(ERROR_NONE ==
+    timespanCreateExplicit(0, -1, 59, 0, 0, 0, 0, &timespan));
+  TEST_ASSERT_EQUAL_INT(-1, timespan.minutes);
+  TEST_ASSERT_TRUE(timespan.__ticks == -60000000000);
+
+  /* Check for days overflow */
+  TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE ==
+    timespanCreateExplicit((int32_t)TIMESPAN_MAXDAYS + 1, 0, 0, 0, 0, 0, 0, &timespan));
+
+  /* Check for days underflow */
+  TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE ==
+    timespanCreateExplicit((int32_t)TIMESPAN_MINDAYS - 1, 0, 0, 0, 0, 0, 0, &timespan));
+
+  /* Min/max timespan is +/-106751 days, 23 hours, 47 minutes and 16.854775807 seconds */
+  TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE ==
+    timespanCreateExplicit((int32_t)TIMESPAN_MAXDAYS, 23, 47, 16, 854, 775, 808, &timespan));
+
+  /* Check negative values (microseconds exceeds limit but negative nanoseconds compensates) */
+  TEST_ASSERT_TRUE(ERROR_NONE ==
+    timespanCreateExplicit((int32_t)TIMESPAN_MAXDAYS, 23, 47, 16, 854, 776, -808, &timespan));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanToHours
+ */
+/**************************************************************************/
+TEST(timespan, timespanToHours)
+{
+  /* Check upper limit */
+  timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT((int32_t)TIMESPAN_MAXHOURS, timespanToHours(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Check lower limit */
+  timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT((int32_t)TIMESPAN_MINHOURS, timespanToHours(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* One hour */
+  timespanCreateExplicit(0, 1, 0, 0, 0, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(1, timespanToHours(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* 25 hours */
+  timespanCreateExplicit(1, 1, 0, 0, 0, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(25, timespanToHours(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanToMinutes
+ */
+/**************************************************************************/
+TEST(timespan, timespanToMinutes)
+{
+  /* Check upper limit */
+  timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT((int32_t)TIMESPAN_MAXMINUTES, timespanToMinutes(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Check lower limit */
+  timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT(TIMESPAN_MINMINUTES, timespanToMinutes(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* One minute */
+  timespanCreateExplicit(0, 0, 1, 0, 0, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(1, timespanToMinutes(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* 61 minutes */
+  timespanCreateExplicit(0, 1, 1, 0, 0, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(61, timespanToMinutes(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanToSeconds
+ */
+/**************************************************************************/
+TEST(timespan, timespanToSeconds)
+{
+  /* Check upper limit */
+  timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT((int32_t)TIMESPAN_MAXSECONDS, timespanToSeconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Check lower limit */
+  timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT(TIMESPAN_MINSECONDS, timespanToSeconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* One second */
+  timespanCreateExplicit(0, 0, 0, 1, 0, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(1, timespanToSeconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* 61 seconds */
+  timespanCreateExplicit(0, 0, 1, 1, 0, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(61, timespanToSeconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanToMilliseconds
+ */
+/**************************************************************************/
+TEST(timespan, timespanToMilliseconds)
+{
+  /* Check upper limit */
+  timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT((int32_t)TIMESPAN_MAXMILLISECONDS, timespanToMilliseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Check lower limit */
+  timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT(TIMESPAN_MINMILLISECONDS, timespanToMilliseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* One millisecond */
+  timespanCreateExplicit(0, 0, 0, 0, 1, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(1, timespanToMilliseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* 1001 milliseconds */
+  timespanCreateExplicit(0, 0, 0, 1, 1, 0, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(1001, timespanToMilliseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanToMicroseconds
+ */
+/**************************************************************************/
+TEST(timespan, timespanToMicroseconds)
+{
+  /* Check upper limit */
+  timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT((int32_t)TIMESPAN_MAXMICROSECONDS, timespanToMicroseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Check lower limit */
+  timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan);
+  TEST_ASSERT_EQUAL_INT(TIMESPAN_MINMICROSECONDS, timespanToMicroseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* One microsecond */
+  timespanCreateExplicit(0, 0, 0, 0, 0, 1, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(1, timespanToMicroseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* 1001 microseconds */
+  timespanCreateExplicit(0, 0, 0, 0, 1, 1, 0, &timespan);
+  TEST_ASSERT_EQUAL_INT(1001, timespanToMicroseconds(&timespan));
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+TEST_GROUP_RUNNER(timespan)
+{
+  RUN_TEST_CASE(timespan, createTicks);
+  RUN_TEST_CASE(timespan, createExplicit);
+  RUN_TEST_CASE(timespan, timespanToHours);
+  RUN_TEST_CASE(timespan, timespanToMinutes);
+  RUN_TEST_CASE(timespan, timespanToSeconds);
+  RUN_TEST_CASE(timespan, timespanToMilliseconds);
+  RUN_TEST_CASE(timespan, timespanToMicroseconds);
+}
