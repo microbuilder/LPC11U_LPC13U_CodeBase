@@ -205,6 +205,7 @@
           <file file_name="src/drivers/statistics/avg_i.c"/>
           <file file_name="src/drivers/statistics/iir_f.c"/>
         </folder>
+        <file file_name="src/drivers/timespan.c"/>
       </folder>
       <folder Name="cli">
         <folder Name="commands" file_name="">
@@ -282,6 +283,7 @@
       <configuration Name="THUMB Flash Debug" build_exclude_from_build="Yes"/>
       <file file_name="tests/test_rtc.c"/>
       <file file_name="tests/test_ndef.c"/>
+      <file file_name="tests/test_timespan.c"/>
     </folder>
   </project>
   <configuration Name="THUMB Flash Debug" inherited_configurations="THUMB;Flash;Debug"/>

@@ -46,8 +46,9 @@
 
 void runAllTests(void)
 {
-  RUN_TEST_GROUP(fifo);
-  RUN_TEST_GROUP(rtc);
+  // RUN_TEST_GROUP(fifo);
+  // RUN_TEST_GROUP(rtc);
+  RUN_TEST_GROUP(timespan);
   #ifdef CFG_PN532
   RUN_TEST_GROUP(ndef);
   #endif
@@ -55,15 +56,15 @@ void runAllTests(void)
 
 int main(void)
 {
-  /* Configure common and board-level peripherals */
-  boardInit();
-
-  /* Wait for 't' to start the test if we're using USB CDC */
-  #if defined(CFG_USB) && defined(CFG_PRINTF_USBCDC)
-    while (! usb_isConfigured()) {}
-    uint8_t c = 0;
-    while ( ! (usb_cdc_getc(&c) && c == 't' ) ){}
-  #endif
+//  /* Configure common and board-level peripherals */
+//  boardInit();
+//
+//  /* Wait for 't' to start the test if we're using USB CDC */
+//  #if defined(CFG_USB) && defined(CFG_PRINTF_USBCDC)
+//    while (! usb_isConfigured()) {}
+//    uint8_t c = 0;
+//    while ( ! (usb_cdc_getc(&c) && c == 't' ) ){}
+//  #endif
 
   /* Run all test groups in verbose mode */
   char* argv[]= {"unity" , "-v" };

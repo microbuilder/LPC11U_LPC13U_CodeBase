@@ -116,6 +116,9 @@ OBJS  += $(OBJ_PATH)/usb_hid.o
 OBJS  += $(OBJ_PATH)/usb_msc.o 
 OBJS  += $(OBJ_PATH)/usbd.o
 
+VPATH += src/drivers
+OBJS  += $(OBJ_PATH)/timespan.o
+
 VPATH += src/drivers/displays
 OBJS  += $(OBJ_PATH)/smallfonts.o
 
