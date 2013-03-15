@@ -94,8 +94,8 @@ extern "C" {
   Fast Mode       (400KHz) = SystemCoreClock / 800000
   Fast- Mode Plus (1MHz)   = SystemCoreClock / 2000000       */
 
-#define I2SCLH_SCLH       SystemCoreClock / 200000  /* Standard Mode I2C SCL Duty Cycle High (400KHz) */
-#define I2SCLL_SCLL       SystemCoreClock / 200000  /* Fast Mode I2C SCL Duty Cycle Low (400KHz) */
+#define I2SCLH_SCLH       SystemCoreClock / 800000  /* Standard Mode I2C SCL Duty Cycle High (400KHz) */
+#define I2SCLL_SCLL       SystemCoreClock / 800000  /* Fast Mode I2C SCL Duty Cycle Low (400KHz) */
 #define I2SCLH_HS_SCLH    SystemCoreClock / 2000000  /* Fast Plus I2C SCL Duty Cycle High Reg */
 #define I2SCLL_HS_SCLL    SystemCoreClock / 2000000  /* Fast Plus I2C SCL Duty Cycle Low Reg */
 
