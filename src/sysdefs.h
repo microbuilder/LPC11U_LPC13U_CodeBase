@@ -70,6 +70,12 @@ typedef unsigned char byte_t;
   #endif
 #endif
 
+/* GCC does not inline any functions when not optimizing unless you specify
+   the 'always_inline' attribute for the function */
+#ifndef INLINE_POST
+  #define INLINE_POST __attribute__((always_inline))
+#endif
+
 /* NULL placeholder */
 #ifndef NULL
   #define NULL ((void *) 0)
@@ -125,6 +131,6 @@ typedef int32_t fx_t;
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
