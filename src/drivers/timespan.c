@@ -130,7 +130,7 @@ error_t timespanCreateExplicit(int32_t days, int32_t hours, int32_t minutes,
 
 /**************************************************************************/
 /*!
-    @brief   Subtracts t2 from t1 and assigns the difference (positive or
+    @brief   Subtracts t1 from t2 and assigns the difference (positive or
              negative) to timespan
 
     @param   t1 [in]     Pointer to timestamp_t 1
@@ -149,7 +149,7 @@ error_t timespanDifference(timespan_t *t1, timespan_t *t2, timespan_t *timespan)
     return ERROR_INVALIDPARAMETER;
   }
 
-  return timespanCreate(t1->__ticks - t2->__ticks, timespan);
+  return timespanCreate(t2->__ticks - t1->__ticks, timespan);
 }
 
 /**************************************************************************/

@@ -278,18 +278,18 @@ TEST(timespan, timespanDifference)
 {
   timespan_t t1, t2;
 
-  /* 2 days - 2 hours = +46 hours */
-  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &t1);
-  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &t2);
+  /* 2 hours and 2 days = +46 hours difference */
+  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &t1);
+  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &t2);
   TEST_ASSERT_TRUE(ERROR_NONE == timespanDifference(&t1, &t2, &timespan));
   TEST_ASSERT_EQUAL_INT(1, timespan.days);
   TEST_ASSERT_EQUAL_INT(22, timespan.hours);
   TEST_ASSERT_TRUE(timespan.__ticks == TIMESPAN_NANOSPERHOUR * 46);
   memset(&timespan, 0, sizeof(timespan_t));
 
-  /* Check for negative values: 2 hours - 2 days = -46 hours */
-  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &t1);
-  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &t2);
+  /* Check for negative values: 2 days and 2 hours = -46 hours */
+  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &t1);
+  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &t2);
   TEST_ASSERT_TRUE(ERROR_NONE == timespanDifference(&t1, &t2, &timespan));
   TEST_ASSERT_EQUAL_INT(-1, timespan.days);
   TEST_ASSERT_EQUAL_INT(-22, timespan.hours);
