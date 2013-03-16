@@ -46,8 +46,8 @@
 
 void runAllTests(void)
 {
-  // RUN_TEST_GROUP(fifo);
-  // RUN_TEST_GROUP(rtc);
+  RUN_TEST_GROUP(fifo);
+  RUN_TEST_GROUP(rtc);
   RUN_TEST_GROUP(timespan);
   #ifdef CFG_PN532
   RUN_TEST_GROUP(ndef);
@@ -56,27 +56,27 @@ void runAllTests(void)
 
 int main(void)
 {
-//  /* Configure common and board-level peripherals */
-//  boardInit();
-//
-//  /* Wait for 't' to start the test if we're using USB CDC */
-//  #if defined(CFG_USB) && defined(CFG_PRINTF_USBCDC)
-//    while (! usb_isConfigured()) {}
-//    uint8_t c = 0;
-//    while ( ! (usb_cdc_getc(&c) && c == 't' ) ){}
-//  #endif
+  /* Configure common and board-level peripherals.
+   * If you're using a simulator and doing SW only tests
+   * disable this line since it will likely cause the
+   * simulator to hang initialising a non-existant
+   * peripheral or waiting for a systick event.            */
+  boardInit();
+
+  /* Wait for 't' to start the test if we're using USB CDC */
+  #if defined(CFG_USB) && defined(CFG_PRINTF_USBCDC)
+    while (! usb_isConfigured()) {}
+    uint8_t c = 0;
+    while ( ! (usb_cdc_getc(&c) && c == 't' ) ){}
+  #endif
 
   /* Run all test groups in verbose mode */
   char* argv[]= {"unity" , "-v" };
   UnityMain(2, argv, runAllTests);
 
-  /* Blinky when test run is complete */
+  /* Wait around forever when test run is complete */
   while (1)
   {
-    boardLED(CFG_LED_ON);
-    systickDelay(500);
-    boardLED(CFG_LED_OFF);
-    systickDelay(500);
   }
 
   return 0;

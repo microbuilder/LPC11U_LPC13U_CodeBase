@@ -56,7 +56,7 @@ TEST_TEAR_DOWN(timespan)
     Tests timespanCreate
  */
 /**************************************************************************/
-TEST(timespan, createTicks)
+TEST(timespan, create)
 {
   // 90087581005024 ns = 1 day, 1 hour, 1 minute and 27.58100524 seconds
   TEST_ASSERT_TRUE(ERROR_NONE == timespanCreate(90087581005024, &timespan));
@@ -134,7 +134,7 @@ TEST(timespan, createExplicit)
     Tests timespanToHours
  */
 /**************************************************************************/
-TEST(timespan, timespanToHours)
+TEST(timespan, toHours)
 {
   /* Check upper limit */
   timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
@@ -162,7 +162,7 @@ TEST(timespan, timespanToHours)
     Tests timespanToMinutes
  */
 /**************************************************************************/
-TEST(timespan, timespanToMinutes)
+TEST(timespan, toMinutes)
 {
   /* Check upper limit */
   timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
@@ -190,7 +190,7 @@ TEST(timespan, timespanToMinutes)
     Tests timespanToSeconds
  */
 /**************************************************************************/
-TEST(timespan, timespanToSeconds)
+TEST(timespan, toSeconds)
 {
   /* Check upper limit */
   timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
@@ -218,7 +218,7 @@ TEST(timespan, timespanToSeconds)
     Tests timespanToMilliseconds
  */
 /**************************************************************************/
-TEST(timespan, timespanToMilliseconds)
+TEST(timespan, toMilliseconds)
 {
   /* Check upper limit */
   timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
@@ -246,7 +246,7 @@ TEST(timespan, timespanToMilliseconds)
     Tests timespanToMicroseconds
  */
 /**************************************************************************/
-TEST(timespan, timespanToMicroseconds)
+TEST(timespan, toMicroseconds)
 {
   /* Check upper limit */
   timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
@@ -274,7 +274,7 @@ TEST(timespan, timespanToMicroseconds)
     Tests timespanDifference
  */
 /**************************************************************************/
-TEST(timespan, timespanDifference)
+TEST(timespan, difference)
 {
   timespan_t t1, t2;
 
@@ -302,7 +302,7 @@ TEST(timespan, timespanDifference)
     Tests timespanAdd
  */
 /**************************************************************************/
-TEST(timespan, timespanAdd)
+TEST(timespan, add)
 {
   timespan_t tadd;
 
@@ -330,7 +330,7 @@ TEST(timespan, timespanAdd)
     Tests timespanSubtract
  */
 /**************************************************************************/
-TEST(timespan, timespanSubtract)
+TEST(timespan, subtract)
 {
   timespan_t tsub;
 
@@ -353,16 +353,35 @@ TEST(timespan, timespanSubtract)
   TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE == timespanSubtract(&tsub, &timespan));
 }
 
+/**************************************************************************/
+/*
+    Tests timespanSystemClockToTicks
+ */
+/**************************************************************************/
+TEST(timespan, systemClockToTicks)
+{
+  #if defined( CFG_MCU_FAMILY_LPC13UXX)
+    /* 1000 ticks @ 72MHz should equal 13888 ns */
+    TEST_ASSERT_TRUE(13888 == timespanSystemClockToTicks(1000));
+  #elif defined(CFG_MCU_FAMILY_LPC11UXX)
+    /* 1000 ticks @ 48MHz should equal 20833 ns */
+    TEST_ASSERT_TRUE(20833 == timespanSystemClockToTicks(1000));
+  #else
+    #error "No MCU family defined in the board config file!"
+  #endif
+}
+
 TEST_GROUP_RUNNER(timespan)
 {
-  RUN_TEST_CASE(timespan, createTicks);
+  RUN_TEST_CASE(timespan, create);
   RUN_TEST_CASE(timespan, createExplicit);
-  RUN_TEST_CASE(timespan, timespanToHours);
-  RUN_TEST_CASE(timespan, timespanToMinutes);
-  RUN_TEST_CASE(timespan, timespanToSeconds);
-  RUN_TEST_CASE(timespan, timespanToMilliseconds);
-  RUN_TEST_CASE(timespan, timespanToMicroseconds);
-  RUN_TEST_CASE(timespan, timespanDifference);
-  RUN_TEST_CASE(timespan, timespanAdd);
-  RUN_TEST_CASE(timespan, timespanSubtract);
+  RUN_TEST_CASE(timespan, toHours);
+  RUN_TEST_CASE(timespan, toMinutes);
+  RUN_TEST_CASE(timespan, toSeconds);
+  RUN_TEST_CASE(timespan, toMilliseconds);
+  RUN_TEST_CASE(timespan, toMicroseconds);
+  RUN_TEST_CASE(timespan, difference);
+  RUN_TEST_CASE(timespan, add);
+  RUN_TEST_CASE(timespan, subtract);
+  RUN_TEST_CASE(timespan, systemClockToTicks);
 }
