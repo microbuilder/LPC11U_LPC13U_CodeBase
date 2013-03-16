@@ -58,6 +58,9 @@ typedef struct
 
 error_t timespanCreate(int64_t ticks, timespan_t *timespan);
 error_t timespanCreateExplicit(int32_t days, int32_t hours, int32_t minutes, int32_t seconds, int32_t milliseconds, int32_t microseconds, int32_t nanoseconds, timespan_t *timespan);
+error_t timespanDifference(timespan_t *t1, timespan_t *t2, timespan_t *timespan);
+error_t timespanAdd(timespan_t *val, timespan_t *timespan);
+error_t timespanSubtract(timespan_t *val, timespan_t *timespan);
 int32_t timespanToHours(timespan_t *timespan);
 int32_t timespanToMinutes(timespan_t *timespan);
 int64_t timespanToSeconds(timespan_t *timespan);

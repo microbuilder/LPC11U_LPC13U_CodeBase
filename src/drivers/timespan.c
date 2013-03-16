@@ -130,6 +130,118 @@ error_t timespanCreateExplicit(int32_t days, int32_t hours, int32_t minutes,
 
 /**************************************************************************/
 /*!
+    @brief   Subtracts t2 from t1 and assigns the difference (positive or
+             negative) to timespan
+
+    @param   t1 [in]     Pointer to timestamp_t 1
+    @param   t2 [in]     Pointer to timestamp_t 2
+    @param   timespan    Pointer to the timespan_t object to store the
+                         resulting difference in
+
+    @return  An error_t if an error occurred, or ERROR_NONE if everything
+             executed properly and the timespan was created
+ */
+/**************************************************************************/
+error_t timespanDifference(timespan_t *t1, timespan_t *t2, timespan_t *timespan)
+{
+  if ((t1 == NULL) || (t2 == NULL) || (timespan == NULL))
+  {
+    return ERROR_INVALIDPARAMETER;
+  }
+
+  return timespanCreate(t1->__ticks - t2->__ticks, timespan);
+}
+
+/**************************************************************************/
+/*!
+    @brief   Adds the 'val' timespan_t to 'timespan'
+
+    @param   val [in]    Pointer to timestamp_t to add to timespan
+    @param   timespan    Pointer to the timespan_t object that 'val' will
+                         be added to
+
+    @return  An error_t if an error occurred, or ERROR_NONE if everything
+             executed properly and the timespan was updated
+ */
+/**************************************************************************/
+error_t timespanAdd(timespan_t *val, timespan_t *timespan)
+{
+  int64_t ticks;
+
+  if ((val == NULL) || (timespan == NULL))
+  {
+    return ERROR_INVALIDPARAMETER;
+  }
+
+  if (val->__ticks < 0)
+  {
+    /* Val is negative ... will we underflow in the negative dir? */
+    if (timespan->__ticks < 0)
+    {
+      /* We can only underflow if timespan is also negative */
+      if (val->__ticks < (TIMESPAN_MINNANOSECONDS - timespan->__ticks))
+      {
+        /* ToDo: We could also just set an underflow flag and add the
+           digit together anyway?  Knowing that we've underflowed it's
+           easy to determine the number of nanoseconds anyway since the
+           underflow effects are predictable. */
+        return ERROR_TIMESPAN_OUTOFRANGE;
+      }
+    }
+  }
+  else
+  {
+    /* Val is positive ... will we overflow in the positive dir? */
+    if (val->__ticks > (TIMESPAN_MAXNANOSECONDS - timespan->__ticks))
+    {
+      /* ToDo: We could also just set an overflow flag and add the
+         digit together anyway?  Knowing that we've overflowed it's
+         easy to determine the number of nanoseconds anyway since the
+         overflow effects are predictable. */
+      return ERROR_TIMESPAN_OUTOFRANGE;
+    }
+  }
+
+  /* Add the two timespans together */
+  ticks = val->__ticks + timespan->__ticks;
+
+  return timespanCreate(ticks, timespan);
+}
+
+/**************************************************************************/
+/*!
+    @brief   Subtracts the 'val' timespan_t from 'timespan'
+
+    @param   val [in]    Pointer to timestamp_t to subtract from timespan
+    @param   timespan    Pointer to the timespan_t object that 'val' will
+                         be subtracted from
+
+    @return  An error_t if an error occurred, or ERROR_NONE if everything
+             executed properly and the timespan was updated
+ */
+/**************************************************************************/
+error_t timespanSubtract(timespan_t *val, timespan_t *timespan)
+{
+  timespan_t inv;
+  error_t error;
+
+  /* Create a new timespan with an inverted val->__ticks */
+  error = timespanCreate(val->__ticks * -1, &inv);
+  if (error)
+  {
+    return error;
+  }
+
+  /* Reuse the add function */
+  return timespanAdd(&inv, timespan);
+}
+
+/* ToDo: All of the functions calling each other below is going to
+   seriously bloat the stack with all of those pushes and pops ...
+   redo the ToXXX functions to avoid a half-dozen branches */
+
+/**************************************************************************/
+/*!
     Returns the total number of whole hours in the specified timespan
  */
 /**************************************************************************/

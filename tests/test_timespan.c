@@ -269,6 +269,90 @@ TEST(timespan, timespanToMicroseconds)
   memset(&timespan, 0, sizeof(timespan_t));
 }
 
+/**************************************************************************/
+/*
+    Tests timespanDifference
+ */
+/**************************************************************************/
+TEST(timespan, timespanDifference)
+{
+  timespan_t t1, t2;
+
+  /* 2 days - 2 hours = +46 hours */
+  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &t1);
+  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &t2);
+  TEST_ASSERT_TRUE(ERROR_NONE == timespanDifference(&t1, &t2, &timespan));
+  TEST_ASSERT_EQUAL_INT(1, timespan.days);
+  TEST_ASSERT_EQUAL_INT(22, timespan.hours);
+  TEST_ASSERT_TRUE(timespan.__ticks == TIMESPAN_NANOSPERHOUR * 46);
+  memset(&timespan, 0, sizeof(timespan_t));
+
+  /* Check for negative values: 2 hours - 2 days = -46 hours */
+  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &t1);
+  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &t2);
+  TEST_ASSERT_TRUE(ERROR_NONE == timespanDifference(&t1, &t2, &timespan));
+  TEST_ASSERT_EQUAL_INT(-1, timespan.days);
+  TEST_ASSERT_EQUAL_INT(-22, timespan.hours);
+  TEST_ASSERT_TRUE(timespan.__ticks == TIMESPAN_NANOSPERHOUR * -46);
+  memset(&timespan, 0, sizeof(timespan_t));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanAdd
+ */
+/**************************************************************************/
+TEST(timespan, timespanAdd)
+{
+  timespan_t tadd;
+
+  /* 2 days + 2 hours */
+  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &timespan);
+  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &tadd);
+  TEST_ASSERT_TRUE(ERROR_NONE == timespanAdd(&tadd, &timespan));
+  TEST_ASSERT_EQUAL_INT(2, timespan.days);
+  TEST_ASSERT_EQUAL_INT(2, timespan.hours);
+  TEST_ASSERT_TRUE(timespan.__ticks == TIMESPAN_NANOSPERHOUR * 50);
+
+  /* Overflow check */
+  timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
+  timespanCreate(1, &tadd);
+  TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE == timespanAdd(&tadd, &timespan));
+
+  /* Underflow check */
+  timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan);
+  timespanCreate(-1, &tadd);
+  TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE == timespanAdd(&tadd, &timespan));
+}
+
+/**************************************************************************/
+/*
+    Tests timespanSubtract
+ */
+/**************************************************************************/
+TEST(timespan, timespanSubtract)
+{
+  timespan_t tsub;
+
+  /* 2 days - 2 hours */
+  timespanCreate(TIMESPAN_NANOSPERDAY * 2, &timespan);
+  timespanCreate(TIMESPAN_NANOSPERHOUR * 2, &tsub);
+  TEST_ASSERT_TRUE(ERROR_NONE == timespanSubtract(&tsub, &timespan));
+  TEST_ASSERT_EQUAL_INT(1, timespan.days);
+  TEST_ASSERT_EQUAL_INT(22, timespan.hours);
+  TEST_ASSERT_TRUE(timespan.__ticks == TIMESPAN_NANOSPERHOUR * 46);
+
+  /* Overflow check */
+  timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
+  timespanCreate(-1, &tsub);
+  TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE == timespanSubtract(&tsub, &timespan));
+
+  /* Underflow check */
+  timespanCreate(TIMESPAN_MINNANOSECONDS, &timespan);
+  timespanCreate(1, &tsub);
+  TEST_ASSERT_TRUE(ERROR_TIMESPAN_OUTOFRANGE == timespanSubtract(&tsub, &timespan));
+}
+
 TEST_GROUP_RUNNER(timespan)
 {
   RUN_TEST_CASE(timespan, createTicks);
@@ -278,4 +362,7 @@ TEST_GROUP_RUNNER(timespan)
   RUN_TEST_CASE(timespan, timespanToSeconds);
   RUN_TEST_CASE(timespan, timespanToMilliseconds);
   RUN_TEST_CASE(timespan, timespanToMicroseconds);
+  RUN_TEST_CASE(timespan, timespanDifference);
+  RUN_TEST_CASE(timespan, timespanAdd);
+  RUN_TEST_CASE(timespan, timespanSubtract);
 }
