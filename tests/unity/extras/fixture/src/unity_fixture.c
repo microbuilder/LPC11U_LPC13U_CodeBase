@@ -8,7 +8,6 @@
 #include "unity_fixture.h"
 #include "unity_internals.h"
 #include <string.h>
-#include "cli/ansi.h"
 
 UNITY_FIXTURE_T UnityFixture;
 
@@ -379,10 +378,7 @@ void UnityConcludeFixtureTest()
     {
         if (UnityFixture.Verbose)
         {
-            UnityPrint(ANSICODES_GRAPHICS_BACKCOLOR_GREEN);
-            UnityPrint(ANSICODES_GRAPHICS_FORECOLOR_BLACK);
-            UnityPrint(" PASS ");
-            UnityPrint(ANSICODES_GRAPHICS_CLEARALL);
+            UnityPrint("PASS");
             UNITY_OUTPUT_CHAR('\n');
         }
     }

@@ -7,7 +7,6 @@
 #include "unity.h"
 #include <stdio.h>
 #include <string.h>
-#include "cli/ansi.h"
 
 #define UNITY_FAIL_AND_BAIL   { Unity.CurrentTestFailed  = 1; UNITY_OUTPUT_CHAR('\n'); longjmp(Unity.AbortFrame, 1); }
 #define UNITY_IGNORE_AND_BAIL { Unity.CurrentTestIgnored = 1; UNITY_OUTPUT_CHAR('\n'); longjmp(Unity.AbortFrame, 1); }
@@ -241,17 +240,12 @@ void UnityPrintFloat(_UF number)
 
 void UnityPrintFail(void)
 {
-    UnityPrint(ANSICODES_GRAPHICS_BACKCOLOR_RED);
-    UnityPrint(" FAIL ");
-    UnityPrint(ANSICODES_GRAPHICS_CLEARALL);
+    UnityPrint("FAIL");
 }
 
 void UnityPrintOk(void)
 {
-    UnityPrint(ANSICODES_GRAPHICS_BACKCOLOR_GREEN);
-    UnityPrint(ANSICODES_GRAPHICS_FORECOLOR_BLACK);
-    UnityPrint(" OK ");
-    UnityPrint(ANSICODES_GRAPHICS_CLEARALL);
+    UnityPrint("OK");
 }
 
 //-----------------------------------------------
@@ -269,9 +263,7 @@ void UnityTestResultsBegin(const char* file, const UNITY_LINE_TYPE line)
 void UnityTestResultsFailBegin(const UNITY_LINE_TYPE line)
 {
     UnityTestResultsBegin(Unity.TestFile, line);
-    UnityPrint(ANSICODES_GRAPHICS_BACKCOLOR_RED);
     UnityPrint("FAIL:");
-    UnityPrint(ANSICODES_GRAPHICS_CLEARALL);
 }
 
 //-----------------------------------------------
@@ -284,10 +276,7 @@ void UnityConcludeTest(void)
     else if (!Unity.CurrentTestFailed)
     {
         UnityTestResultsBegin(Unity.TestFile, Unity.CurrentTestLineNumber);
-        UnityPrint(ANSICODES_GRAPHICS_BACKCOLOR_GREEN);
-        UnityPrint(ANSICODES_GRAPHICS_FORECOLOR_BLACK);
-        UnityPrint(" PASS ");
-        UnityPrint(ANSICODES_GRAPHICS_CLEARALL);
+        UnityPrint("PASS");
         UNITY_PRINT_EOL;
     }
     else
