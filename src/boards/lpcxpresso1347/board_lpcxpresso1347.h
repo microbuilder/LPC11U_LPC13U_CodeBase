@@ -387,7 +387,7 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-    // #define CFG_INTERFACE
+    #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE    (256)
     #define CFG_INTERFACE_PROMPT        "LPC1347 >> "
     #define CFG_INTERFACE_SILENTMODE    (0)
