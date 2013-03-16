@@ -498,7 +498,7 @@ extern "C" {
                                 to an appropriately large value (ex. 1024)
     CFG_CHIBI_BUFFERSIZE        The size of the message buffer in bytes
     -----------------------------------------------------------------------*/
-    // #define CFG_CHIBI
+    #define CFG_CHIBI
     #define CFG_CHIBI_MODE              (0)                 // OQPSK_868MHZ
     #define CFG_CHIBI_POWER             (0xE9)              // CHB_PWR_EU2_3DBM
     #define CFG_CHIBI_CHANNEL           (0)                 // 0 = 868-868.6 MHz, 1 = 906MHz
@@ -543,7 +543,7 @@ extern "C" {
     #define CFG_PN532_RSTPD_PIN                       (16)
     #define CFG_PN532_I2C_IRQPORT                     (0)
     #define CFG_PN532_I2C_IRQPIN                      (17)
-    #define CFG_PN532_MEM_POOL_SIZE_BYTES             (512)    
+    #define CFG_PN532_MEM_POOL_SIZE_BYTES             (512)
 /*=========================================================================*/
 
 
