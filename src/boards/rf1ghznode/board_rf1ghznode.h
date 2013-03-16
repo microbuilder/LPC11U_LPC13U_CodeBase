@@ -538,7 +538,7 @@ extern "C" {
     #define CFG_PN532_RSTPD_PIN                       (16)
     #define CFG_PN532_I2C_IRQPORT                     (0)
     #define CFG_PN532_I2C_IRQPIN                      (17)
-    #define CFG_PN532_MEM_POOL_SIZE_BYTES             (512)    
+    #define CFG_PN532_MEM_POOL_SIZE_BYTES             (512)
 /*=========================================================================*/
 
 

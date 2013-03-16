@@ -282,26 +282,6 @@ extern "C" {
     -----------------------------------------------------------------------
 
     CFG_SSP_SCK0_LOCATION     The location of the SCK pin for SSP0
-    CFG_SSP_SCK1_LOCATION     The location of the SCK pin for SSP1
-
-    -----------------------------------------------------------------------*/
-    #define CFG_SSP_SCK0_0_6            (6)     // Used by USBConnect
-    #define CFG_SSP_SCK0_0_10           (10)    // Used by SWD
-    #define CFG_SSP_SCK0_1_29           (29)
-
-    #define CFG_SSP_SCK1_1_15           (15)
-    #define CFG_SSP_SCK1_1_20           (20)
-
-    #define CFG_SSP_SCK0_LOCATION       (CFG_SSP_SCK0_1_29)
-    #define CFG_SSP_SCK1_LOCATION       (CFG_SSP_SCK1_1_20)
-/*=========================================================================*/
-
-
-/*=========================================================================
-    SPI
-    -----------------------------------------------------------------------
-
-    CFG_SSP_SCK0_LOCATION     The location of the SCK pin for SSP0
     CFG_SSP_MISO1_LOCATION    The location of the MISO1 pin for SSP1
     CFG_SSP_MOSI1_LOCATION    The location of the MOSI1 pin for SSP1
     CFG_SSP_SCK1_LOCATION     The location of the SCK pin for SSP1
@@ -407,7 +387,7 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-    #define CFG_INTERFACE
+    // #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE    (256)
     #define CFG_INTERFACE_PROMPT        "LPC1347 >> "
     #define CFG_INTERFACE_SILENTMODE    (0)
@@ -561,8 +541,7 @@ extern "C" {
     #define CFG_PN532_RSTPD_PIN                       (16)
     #define CFG_PN532_I2C_IRQPORT                     (0)
     #define CFG_PN532_I2C_IRQPIN                      (17)
-    #define CFG_PN532_MEM_POOL_SIZE_BYTES             (512)    
-/*=========================================================================*/
+    #define CFG_PN532_MEM_POOL_SIZE_BYTES             (512)
 /*=========================================================================*/
 
 

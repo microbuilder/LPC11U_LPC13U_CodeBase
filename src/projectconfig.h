@@ -80,8 +80,8 @@ extern "C" {
     will then try to configure itself accordingly for that board.
 
     -----------------------------------------------------------------------*/
-    #define CFG_BRD_LPCXPRESSO_LPC1347
-    // #define CFG_BRD_RF1GHZNODE
+    // #define CFG_BRD_LPCXPRESSO_LPC1347
+    #define CFG_BRD_RF1GHZNODE
     // #define CFG_BRD_RF1GHZUSB
 
     #ifdef CFG_BRD_LPCXPRESSO_LPC1347
