@@ -294,3 +294,22 @@ int64_t timespanToMicroseconds(timespan_t *timespan)
 {
   return ((int64_t)timespanToMilliseconds(timespan) * 1000) + timespan->microseconds;
 }
+
+/**************************************************************************/
+/*!
+    Converts the specified number of core clock ticks to timespan
+    ticks (nanosecods)
+
+    @param   clockTicks [in] The number of system clock ticks to convert
+                             to timespan ticks (nanoseconds)
+ */
+/**************************************************************************/
+int64_t timespanSystemClockToTicks(int32_t clockTicks)
+{
+  uint32_t nsPerTick;
+
+  /* Get fixed point value for ns per core clock tick */
+  nsPerTick = 1000000 / (SystemCoreClock / 1000000);
+
+  return ((int64_t)clockTicks * (int64_t)nsPerTick) / 1000LL;
+}

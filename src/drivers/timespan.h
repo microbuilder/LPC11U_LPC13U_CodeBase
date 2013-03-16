@@ -66,6 +66,7 @@ int32_t timespanToMinutes(timespan_t *timespan);
 int64_t timespanToSeconds(timespan_t *timespan);
 int64_t timespanToMilliseconds(timespan_t *timespan);
 int64_t timespanToMicroseconds(timespan_t *timespan);
+int64_t timespanSystemClockToTicks(int32_t clockTicks);
 
 #ifdef __cplusplus
 }
