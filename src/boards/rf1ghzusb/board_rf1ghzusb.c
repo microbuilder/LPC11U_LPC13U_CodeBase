@@ -99,7 +99,7 @@ void boardInit(void)
     // writeEEPROM((uint8_t*)CFG_EEPROM_CHIBI_IEEEADDR, (uint8_t*)&ieeeaddr, sizeof(ieeeaddr));
     if (chb_init())
     {
-      printf("Chibi init failed%s", CFG_PRINTF_NEWLINE);
+      // printf("Chibi init failed%s", CFG_PRINTF_NEWLINE);
     }
   #endif
 
