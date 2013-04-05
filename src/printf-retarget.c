@@ -78,8 +78,17 @@ void __putchar(const char c)
   /* Handle PRINTF_DEBUG redirection for Crossworks for ARM */
   #ifdef __CROSSWORKS_ARM
     #ifdef CFG_PRINTF_DEBUG
-      /* Warning: This will cause problems if a debugger is not connected! */
-      debug_putchar(c);
+      #if defined CFG_MCU_FAMILY_LPC13UXX
+        /* On the M3 we can check if a debugger is connected */
+        if ((CoreDebug->DHCSR & CoreDebug_DHCSR_C_DEBUGEN_Msk)==CoreDebug_DHCSR_C_DEBUGEN_Msk)
+        {
+          debug_putchar(c);
+        }
+      #else
+        /* On the M0 the processor doesn't have access to CoreDebug, so this
+         * will cause problems if no debugger is connected! */
+        debug_putchar(c);
+      #endif
     #endif
   #endif
 }

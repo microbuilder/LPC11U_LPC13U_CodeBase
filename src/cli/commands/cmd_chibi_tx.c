@@ -56,7 +56,7 @@
 /**************************************************************************/
 void cmd_chibi_tx(uint8_t argc, char **argv)
 {
-  uint8_t i, len, *data_ptr, data[50];
+  uint8_t i, len, *data_ptr, data[50], result;
   uint16_t addr;
 
   // Try to convert supplied address to an integer
@@ -86,7 +86,21 @@ void cmd_chibi_tx(uint8_t argc, char **argv)
 
   // Send message
   boardLED(CFG_LED_ON);
-  chb_write(addr, data, data_ptr - data);
+  result = chb_write(addr, data, data_ptr - data);
+  if (result != CHB_SUCCESS)
+  {
+    switch (result)
+    {
+      case CHB_NO_ACK:
+        printf("ERROR: No ACK received%s", CFG_PRINTF_NEWLINE);
+        break;
+      case CHB_CHANNEL_ACCESS_FAILURE:
+        printf("ERROR: Channel access failure%s", CFG_PRINTF_NEWLINE);
+        break;
+      default:
+        break;
+    }
+  }
   boardLED(CFG_LED_OFF);
 }
 

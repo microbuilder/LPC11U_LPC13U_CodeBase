@@ -67,7 +67,7 @@ extern "C" {
     config file.
     -----------------------------------------------------------------------*/
     #define CFG_CODEBASE_VERSION_MAJOR      (0)
-    #define CFG_CODEBASE_VERSION_MINOR      (0)
+    #define CFG_CODEBASE_VERSION_MINOR      (8)
     #define CFG_CODEBASE_VERSION_REVISION   (0)
 /*=========================================================================*/
 
@@ -82,14 +82,10 @@ extern "C" {
 
     -----------------------------------------------------------------------*/
     #define CFG_BRD_LPCXPRESSO_LPC1347
-    // #define CFG_BRD_RF1GHZNODE
     // #define CFG_BRD_RF1GHZUSB
 
     #ifdef CFG_BRD_LPCXPRESSO_LPC1347
       #include "boards/lpcxpresso1347/board_lpcxpresso1347.h"
-    #endif
-    #ifdef CFG_BRD_RF1GHZNODE
-      #include "boards/rf1ghznode/board_rf1ghznode.h"
     #endif
     #ifdef CFG_BRD_RF1GHZUSB
       #include "boards/rf1ghzusb/board_rf1ghzusb.h"
@@ -101,7 +97,6 @@ extern "C" {
     CONFIG FILE VALIDATION
     -----------------------------------------------------------------------*/
     #if !defined CFG_BRD_LPCXPRESSO_LPC1347 && \
-        !defined CFG_BRD_RF1GHZNODE && \
         !defined CFG_BRD_RF1GHZUSB
       #error "You must define a target board in projectconfig.h"
     #endif

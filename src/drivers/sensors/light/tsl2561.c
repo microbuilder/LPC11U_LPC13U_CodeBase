@@ -510,6 +510,11 @@ void tsl2561GetSensor(sensor_t *sensor)
   /* Clear the sensor_t object */
   memset(sensor, 0, sizeof(sensor_t));
 
+  /* Note: Max lux can't be provided accurately because the max */
+  /* value changes depending on the light source.  Fluorescent  */
+  /* lights will have a higher max lux that can be calculated   */
+  /* by the visible + IR sensors than incandescent lights, etc. */
+
   /* Insert the sensor name in the fixed length char array */
   strncpy (sensor->name, "TSL2561", sizeof(sensor->name) - 1);
   sensor->name[sizeof(sensor->name)- 1] = 0;
