@@ -1,0 +1,817 @@
+Turn on debug, level: 5.
+lpc21isp version 1.83
+Attempt to read File /home/brad/Dropbox/Dev/lpc1114_blink_led-1.2.1-120108/out/lpc1114_blink_led.hex
+File /home/brad/Dropbox/Dev/lpc1114_blink_led-1.2.1-120108/out/lpc1114_blink_led.hex:
+	loaded...
+Converting file /home/brad/Dropbox/Dev/lpc1114_blink_led-1.2.1-120108/out/lpc1114_blink_led.hex to binary format...
+RecordLength = 10
+RecordAddress = 0000
+RealAddress = 00000000
+RecordType = 00
+Image size now: 16
+RecordLength = 10
+RecordAddress = 0010
+RealAddress = 00000010
+RecordType = 00
+Image size now: 32
+RecordLength = 10
+RecordAddress = 0020
+RealAddress = 00000020
+RecordType = 00
+Image size now: 48
+RecordLength = 10
+RecordAddress = 0030
+RealAddress = 00000030
+RecordType = 00
+Image size now: 64
+RecordLength = 10
+RecordAddress = 0040
+RealAddress = 00000040
+RecordType = 00
+Image size now: 80
+RecordLength = 10
+RecordAddress = 0050
+RealAddress = 00000050
+RecordType = 00
+Image size now: 96
+RecordLength = 10
+RecordAddress = 0060
+RealAddress = 00000060
+RecordType = 00
+Image size now: 112
+RecordLength = 10
+RecordAddress = 0070
+RealAddress = 00000070
+RecordType = 00
+Image size now: 128
+RecordLength = 10
+RecordAddress = 0080
+RealAddress = 00000080
+RecordType = 00
+Image size now: 144
+RecordLength = 10
+RecordAddress = 0090
+RealAddress = 00000090
+RecordType = 00
+Image size now: 160
+RecordLength = 10
+RecordAddress = 00A0
+RealAddress = 000000A0
+RecordType = 00
+Image size now: 176
+RecordLength = 10
+RecordAddress = 00B0
+RealAddress = 000000B0
+RecordType = 00
+Image size now: 192
+RecordLength = 10
+RecordAddress = 00C0
+RealAddress = 000000C0
+RecordType = 00
+Image size now: 208
+RecordLength = 10
+RecordAddress = 00D0
+RealAddress = 000000D0
+RecordType = 00
+Image size now: 224
+RecordLength = 10
+RecordAddress = 00E0
+RealAddress = 000000E0
+RecordType = 00
+Image size now: 240
+RecordLength = 10
+RecordAddress = 00F0
+RealAddress = 000000F0
+RecordType = 00
+Image size now: 256
+RecordLength = 10
+RecordAddress = 0100
+RealAddress = 00000100
+RecordType = 00
+Image size now: 272
+RecordLength = 10
+RecordAddress = 0110
+RealAddress = 00000110
+RecordType = 00
+Image size now: 288
+RecordLength = 10
+RecordAddress = 0120
+RealAddress = 00000120
+RecordType = 00
+Image size now: 304
+RecordLength = 10
+RecordAddress = 0130
+RealAddress = 00000130
+RecordType = 00
+Image size now: 320
+RecordLength = 10
+RecordAddress = 0140
+RealAddress = 00000140
+RecordType = 00
+Image size now: 336
+RecordLength = 10
+RecordAddress = 0150
+RealAddress = 00000150
+RecordType = 00
+Image size now: 352
+RecordLength = 10
+RecordAddress = 0160
+RealAddress = 00000160
+RecordType = 00
+Image size now: 368
+RecordLength = 10
+RecordAddress = 0170
+RealAddress = 00000170
+RecordType = 00
+Image size now: 384
+RecordLength = 10
+RecordAddress = 0180
+RealAddress = 00000180
+RecordType = 00
+Image size now: 400
+RecordLength = 10
+RecordAddress = 0190
+RealAddress = 00000190
+RecordType = 00
+Image size now: 416
+RecordLength = 10
+RecordAddress = 01A0
+RealAddress = 000001A0
+RecordType = 00
+Image size now: 432
+RecordLength = 10
+RecordAddress = 01B0
+RealAddress = 000001B0
+RecordType = 00
+Image size now: 448
+RecordLength = 10
+RecordAddress = 01C0
+RealAddress = 000001C0
+RecordType = 00
+Image size now: 464
+RecordLength = 10
+RecordAddress = 01D0
+RealAddress = 000001D0
+RecordType = 00
+Image size now: 480
+RecordLength = 10
+RecordAddress = 01E0
+RealAddress = 000001E0
+RecordType = 00
+Image size now: 496
+RecordLength = 10
+RecordAddress = 01F0
+RealAddress = 000001F0
+RecordType = 00
+Image size now: 512
+RecordLength = 10
+RecordAddress = 0200
+RealAddress = 00000200
+RecordType = 00
+Image size now: 528
+RecordLength = 10
+RecordAddress = 0210
+RealAddress = 00000210
+RecordType = 00
+Image size now: 544
+RecordLength = 10
+RecordAddress = 0220
+RealAddress = 00000220
+RecordType = 00
+Image size now: 560
+RecordLength = 10
+RecordAddress = 0230
+RealAddress = 00000230
+RecordType = 00
+Image size now: 576
+RecordLength = 10
+RecordAddress = 0240
+RealAddress = 00000240
+RecordType = 00
+Image size now: 592
+RecordLength = 10
+RecordAddress = 0250
+RealAddress = 00000250
+RecordType = 00
+Image size now: 608
+RecordLength = 10
+RecordAddress = 0260
+RealAddress = 00000260
+RecordType = 00
+Image size now: 624
+RecordLength = 10
+RecordAddress = 0270
+RealAddress = 00000270
+RecordType = 00
+Image size now: 640
+RecordLength = 10
+RecordAddress = 0280
+RealAddress = 00000280
+RecordType = 00
+Image size now: 656
+RecordLength = 10
+RecordAddress = 0290
+RealAddress = 00000290
+RecordType = 00
+Image size now: 672
+RecordLength = 10
+RecordAddress = 02A0
+RealAddress = 000002A0
+RecordType = 00
+Image size now: 688
+RecordLength = 10
+RecordAddress = 02B0
+RealAddress = 000002B0
+RecordType = 00
+Image size now: 704
+RecordLength = 10
+RecordAddress = 02C0
+RealAddress = 000002C0
+RecordType = 00
+Image size now: 720
+RecordLength = 10
+RecordAddress = 02D0
+RealAddress = 000002D0
+RecordType = 00
+Image size now: 736
+RecordLength = 10
+RecordAddress = 02E0
+RealAddress = 000002E0
+RecordType = 00
+Image size now: 752
+RecordLength = 10
+RecordAddress = 02F0
+RealAddress = 000002F0
+RecordType = 00
+Image size now: 768
+RecordLength = 10
+RecordAddress = 0300
+RealAddress = 00000300
+RecordType = 00
+Image size now: 784
+RecordLength = 10
+RecordAddress = 0310
+RealAddress = 00000310
+RecordType = 00
+Image size now: 800
+RecordLength = 10
+RecordAddress = 0320
+RealAddress = 00000320
+RecordType = 00
+Image size now: 816
+RecordLength = 10
+RecordAddress = 0330
+RealAddress = 00000330
+RecordType = 00
+Image size now: 832
+RecordLength = 10
+RecordAddress = 0340
+RealAddress = 00000340
+RecordType = 00
+Image size now: 848
+RecordLength = 10
+RecordAddress = 0350
+RealAddress = 00000350
+RecordType = 00
+Image size now: 864
+RecordLength = 10
+RecordAddress = 0360
+RealAddress = 00000360
+RecordType = 00
+Image size now: 880
+RecordLength = 10
+RecordAddress = 0370
+RealAddress = 00000370
+RecordType = 00
+Image size now: 896
+RecordLength = 10
+RecordAddress = 0380
+RealAddress = 00000380
+RecordType = 00
+Image size now: 912
+RecordLength = 10
+RecordAddress = 0390
+RealAddress = 00000390
+RecordType = 00
+Image size now: 928
+RecordLength = 0C
+RecordAddress = 03A0
+RealAddress = 000003A0
+RecordType = 00
+Image size now: 940
+RecordLength = 04
+RecordAddress = 0000
+RealAddress = 00000000
+RecordType = 03
+Start Address = 0x000000C1
+RecordLength = 00
+RecordAddress = 0000
+RealAddress = 00000000
+RecordType = 01
+	converted to binary format...
+	image size : 940
+Image size : 940
+Dumping image file.
+COM-Port /dev/ttyUSB0 opened...
+Synchronizing (ESC to abort).Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=1): '1'
+Read(Length=1): '(0D)'
+Answer(Length=3): '?1(0D)'
+StrippedAnswer(Length=2): ''1(0D)'
+.Sending '?'
+Read(Length=1): '(0A)'
+Answer(Length=1): '(0A)'
+StrippedAnswer(Length=1): ''(0A)'
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=2): '??'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+.Sending '?'
+Read(Length=1): '?'
+Read(Length=0): ''
+Answer(Length=1): '?'
+StrippedAnswer(Length=0): '''
+ no answer on '?'
