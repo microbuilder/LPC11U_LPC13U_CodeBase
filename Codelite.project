@@ -302,6 +302,10 @@
         <File Name="src/core/systick/systick.c"/>
         <File Name="src/core/systick/systick.h"/>
       </VirtualDirectory>
+      <VirtualDirectory Name="timer32">
+        <File Name="src/core/timer32/timer32.c"/>
+        <File Name="src/core/timer32/timer32.h"/>
+      </VirtualDirectory>
       <VirtualDirectory Name="uart">
         <File Name="src/core/uart/uart.c"/>
         <File Name="src/core/uart/uart.h"/>

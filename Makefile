@@ -105,6 +105,9 @@ OBJS  += $(OBJ_PATH)/ssp1.o
 VPATH += src/core/systick
 OBJS  += $(OBJ_PATH)/systick.o
 
+VPATH += src/core/timer32
+OBJS  += $(OBJ_PATH)/timer32.o
+
 VPATH += src/core/uart
 OBJS  += $(OBJ_PATH)/uart.o 
 OBJS  += $(OBJ_PATH)/uart_buf.o
