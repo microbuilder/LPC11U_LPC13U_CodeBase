@@ -42,11 +42,6 @@ extern "C" {
 
 #include "projectconfig.h"
 
-#define TIMER32_MATCH0        (1 << 0)
-#define TIMER32_MATCH1        (1 << 1)
-#define TIMER32_MATCH2        (1 << 2)
-#define TIMER32_MATCH3        (1 << 3)
-
 void timer32Init     ( uint8_t timer );
 void timer32Enable   ( uint8_t timer );
 void timer32Disable  ( uint8_t timer );

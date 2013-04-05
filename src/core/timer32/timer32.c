@@ -381,14 +381,22 @@ void timer32SetMatch(uint8_t timer, uint8_t matchNum, uint32_t value)
             the period, and MR1, MR2 and MR3 for duty cycle.  Duty cycle
             can be adjusted via timer32SetMatch.
 
-    @note   This function is provided for example purposes only, and
-            should not be used in production code without verifying pin
-            availability!
-
     @param[in]  period
                 The period in timer clock ticks
 
     @code
+    // Set 1.25 to T320_MAT1
+    LPC_IOCON->PIO1_25 &= ~0x07;
+    LPC_IOCON->PIO1_25 |= 0x01;
+
+    // Set 1.26 to T320_MAT2
+    LPC_IOCON->PIO1_26 &= ~0x07;
+    LPC_IOCON->PIO1_26 |= 0x01;
+
+    // Set 1.27 to T320_MAT3
+    LPC_IOCON->PIO1_27 &= ~0x07;
+    LPC_IOCON->PIO1_27 |= 0x01;
+
     // Setup PWM with 12,000 cycle period (MAT0 used for period)
     timer32SetPWM0(12000);
 
@@ -409,33 +417,14 @@ void timer32SetPWM0(uint32_t period)
   /* Make sure 32-bit timer 0 is enabled */
   LPC_SYSCON->SYSAHBCLKCTRL |= (1<<9);
 
-  /* Setup the external match register                            */
-  LPC_CT32B0->EMR =  (1 << 10)       | /* EMC3 - clear on match   */
-                     (1 << 8)        | /* EMC2 - clear on match   */
-                     (1 << 6)        | /* EMC1 - clear on match   */
-                     (1 << 4)        | /* EMC0 - clear on match   */
-                     TIMER32_MATCH0  | /* Enable Match 0          */
-                     TIMER32_MATCH1  | /* Enable Match 1          */
-                     TIMER32_MATCH2  | /* Enable Match 2          */
-                     TIMER32_MATCH3;   /* Enable Match 3          */
+  /* Setup the external match register (clear on match) */
+  LPC_CT32B0->EMR =  (1<<10) | (1<<8) | (1<<6) | (1<<4) |
+                     (1<<0)  | (1<<1) | (1<<2) | (1<<3);
 
-  /* Set the IOCON register to make MAT1, MAT2 and MAT3 available */
-  /* WARNING: Make sure these pins are available on your board!   */
-  LPC_IOCON->PIO1_25 &= ~0x07;
-  LPC_IOCON->PIO1_25 |= 0x01;          /* Timer0_32 MAT1          */
-  LPC_IOCON->PIO1_26 &= ~0x07;
-  LPC_IOCON->PIO1_26 |= 0x01;          /* Timer0_32 MAT2          */
-  LPC_IOCON->PIO1_27 &= ~0x07;
-  LPC_IOCON->PIO1_27 |= 0x01;          /* Timer0_32 MAT3          */
+  /* Set MAT0..3 to PWM mode via the PWM Control register */
+  LPC_CT32B0->PWMC = (1<<0)  | (1<<1) | (1<<2) | (1<<3);
 
-  /* Set the PWM Control register                                 */
-  LPC_CT32B0->PWMC = TIMER32_MATCH0  | /* Set MAT0 to PWM Mode    */
-                     TIMER32_MATCH1  | /* Set MAT1 to PWM Mode    */
-                     TIMER32_MATCH2  | /* Set MAT2 to PWM Mode    */
-                     TIMER32_MATCH3;   /* Set MAT3 to PWM Mode    */
-
-  /* MAT0 is used to control period so set the full value         */
-  /* Set MAT1, MAT2, MAT3 to 50% duty cycle to start              */
+  /* MAT0 controls period, set MAT1..3 to 50% duty cycle to start */
   timer32SetMatch(0, 0, period);
   timer32SetMatch(0, 1, period / 2);
   timer32SetMatch(0, 2, period / 2);
