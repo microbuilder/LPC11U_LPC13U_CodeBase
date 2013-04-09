@@ -170,6 +170,9 @@ OBJS  += $(OBJ_PATH)/hx8340b.o
 VPATH += src/drivers/displays/segment/ht16k33
 OBJS  += $(OBJ_PATH)/ht16k33.o
 
+VPATH += src/drivers/motor/stepper
+OBJS  += $(OBJ_PATH)/stepper.o
+
 VPATH += src/drivers/pwm/pca9685
 OBJS  += $(OBJ_PATH)/pca9685.o
 

@@ -225,7 +225,13 @@
         <File Name="src/drivers/statistics/avg_i.c"/>
         <File Name="src/drivers/statistics/avg_i.h"/>
       </VirtualDirectory>
-      <File Name="src/drivers/timespan.c"/>      
+      <File Name="src/drivers/timespan.c"/>
+      <VirtualDirectory Name="motor">
+        <VirtualDirectory Name="stepper">
+          <File Name="src/drivers/motor/stepper/stepper.c"/>
+          <File Name="src/drivers/motor/stepper/stepper.h"/>
+        </VirtualDirectory>
+      </VirtualDirectory>
     </VirtualDirectory>
     <VirtualDirectory Name="core">
       <VirtualDirectory Name="usb">

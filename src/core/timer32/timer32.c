@@ -316,6 +316,47 @@ void timer32DelayMs(uint8_t timer, uint32_t delayInMs)
 
 /**************************************************************************/
 /*!
+    @brief Causes a blocking delay on the specified 32-bit timer
+
+    @param[in]  timer
+                The 32-bit timer to use (must be 0 or 1)
+    @param[in]  delayInTicks
+                The number of clock cycles ('ticks') to wait
+*/
+/**************************************************************************/
+void timer32DelayTicks(uint8_t timer, uint32_t delayInTicks)
+{
+  if (timer == 0)
+  {
+    LPC_CT32B0->TCR  = 0x02;            /* Reset the timer */
+    LPC_CT32B0->PR   = 0x00;            /* Set prescaler to zero */
+    LPC_CT32B0->PWMC = 0x00;            /* Disable PWM mode */
+    LPC_CT32B0->MR0  = delayInTicks;
+    LPC_CT32B0->IR   = 0xff;            /* Reset all interrrupts */
+    LPC_CT32B0->MCR  = 0x04;            /* Stop the timer on match */
+    LPC_CT32B0->TCR  = 0x01;            /* Start timer */
+
+    /* Wait until delay time has elapsed */
+    while (LPC_CT32B0->TCR & 0x01);
+  }
+  else if (timer == 1)
+  {
+    LPC_CT32B1->TCR  = 0x02;            /* Reset the timer */
+    LPC_CT32B1->PR   = 0x00;            /* Set prescaler to zero */
+    LPC_CT32B1->PWMC = 0x00;            /* Disable PWM mode */
+    LPC_CT32B1->MR0  = delayInTicks;
+    LPC_CT32B1->IR   = 0xff;            /* Reset all interrrupts */
+    LPC_CT32B1->MCR  = 0x04;            /* Stop the timer on match */
+    LPC_CT32B1->TCR  = 0x01;            /* Start timer */
+
+    /* Wait until delay time has elapsed */
+    while (LPC_CT32B1->TCR & 0x01);
+  }
+  return;
+}
+
+/**************************************************************************/
+/*!
     @brief Configures the match register for the specified 32-bit timer
 
     @param[in]  timer

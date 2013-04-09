@@ -1,13 +1,13 @@
 /**************************************************************************/
 /*!
-    @file     timer32.h
+    @file     stepper.h
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2013, K. Townsend (microBuilder.eu)
+    Copyright (c) 2010, microBuilder SARL
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -33,26 +33,30 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef _TIMER32_H_
-#define _TIMER32_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#ifndef _STEPPER_H_
+#define _STEPPER_H_
 
 #include "projectconfig.h"
 
-void timer32Init       ( uint8_t timer );
-void timer32Enable     ( uint8_t timer );
-void timer32Disable    ( uint8_t timer );
-void timer32Reset      ( uint8_t timer );
-void timer32DelayMs    ( uint8_t timer, uint32_t delayInMs );
-void timer32DelayTicks ( uint8_t timer, uint32_t delayInTicks );
-void timer32SetMatch   ( uint8_t timer, uint8_t matchNum, uint32_t value );
-void timer32SetPWM0    ( uint32_t period );
+#define STEPPER_TIMER32     (0)
+#define STEPPER_IN1_PORT    (1)
+#define STEPPER_IN1_PIN     (25)
+#define STEPPER_IN2_PORT    (1)
+#define STEPPER_IN2_PIN     (26)
+#define STEPPER_IN3_PORT    (1)
+#define STEPPER_IN3_PIN     (27)
+#define STEPPER_IN4_PORT    (1)
+#define STEPPER_IN4_PIN     (28)
 
-#ifdef __cplusplus
-}
-#endif
+void     stepperInit( uint32_t steps );
+void     stepperSetSpeed( uint32_t rpm );
+int64_t  stepperGetPosition();
+uint32_t stepperGetRotation();
+void     stepperMoveHome();
+void     stepperSetHome();
+void     stepperMoveZero();
+void     stepperSetZero();
+void     stepperStep( int32_t steps );
 
 #endif

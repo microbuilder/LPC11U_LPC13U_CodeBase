@@ -212,6 +212,11 @@
           <file file_name="src/drivers/statistics/iir_f.c"/>
         </folder>
         <file file_name="src/drivers/timespan.c"/>
+        <folder Name="motor">
+          <folder Name="stepper" file_name="">
+            <file file_name="src/drivers/motor/stepper/stepper.c"/>
+          </folder>
+        </folder>
       </folder>
       <folder Name="cli">
         <folder Name="commands" file_name="">
