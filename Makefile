@@ -43,8 +43,8 @@ OBJS  += $(OBJ_PATH)/printf-retarget.o
 VPATH += src/boards/lpcxpresso1347
 OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
 
-VPATH += src/boards/rf1ghznode
-OBJS  += $(OBJ_PATH)/board_rf1ghznode.o 
+# VPATH += src/boards/rf1ghznode
+# OBJS  += $(OBJ_PATH)/board_rf1ghznode.o
 
 VPATH += src/boards/rf1ghzusb
 OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
