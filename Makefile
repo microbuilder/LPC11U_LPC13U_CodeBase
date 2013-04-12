@@ -43,8 +43,8 @@ OBJS  += $(OBJ_PATH)/printf-retarget.o
 VPATH += src/boards/lpcxpresso1347
 OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
 
-VPATH += src/boards/rf1ghznode
-OBJS  += $(OBJ_PATH)/board_rf1ghznode.o 
+# VPATH += src/boards/rf1ghznode
+# OBJS  += $(OBJ_PATH)/board_rf1ghznode.o
 
 VPATH += src/boards/rf1ghzusb
 OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
@@ -255,7 +255,7 @@ INCLUDE_PATHS = -I$(ROOT_PATH) -Icmsis
 ##########################################################################
 
 # Use the default toolchain (based on the PATH variable, etc.)
-CROSS_COMPILE = arm-none-eabi-
+CROSS_COMPILE ?= arm-none-eabi-
 
 # Use a toolchain at a specific location
 # CROSS_COMPILE = C:/code_red/RedSuiteNXP_5.0.12_1048/redsuite/tools/bin/arm-none-eabi-
@@ -268,8 +268,9 @@ SIZE    = $(CROSS_COMPILE)size
 OBJCOPY = $(CROSS_COMPILE)objcopy
 OBJDUMP = $(CROSS_COMPILE)objdump
 OUTFILE = $(BIN_PATH)/$(PROJECT)
-LPCRC   = ./lpcrc
+LPCRC   ?= tools/lpcrc/lpcrc
 REMOVE  = rm -f
+MOUNT_POINT ?= /media/CRP DISABLD
 
 ##########################################################################
 # Compiler settings, parameters and flags
@@ -339,7 +340,7 @@ $(OBJ_PATH)/%.o : %.s
 	-@echo "ASSEMBLING $(@F)"
 	@$(AS) $(ASFLAGS) -o $@ $<
 
-firmware: $(OBJS) $(SYS_OBJS)
+firmware: $(OBJS) $(SYS_OBJS) tools/lpcrc/lpcrc
 	@mkdir -p $(BIN_PATH)
 	-@echo ""
 	-@echo "LINKING $(OUTFILE).elf ($(CORE) -O$(OPTIMIZATION))"
@@ -353,6 +354,13 @@ firmware: $(OBJS) $(SYS_OBJS)
 	@$(OBJCOPY) $(OCFLAGS) -O binary $(OUTFILE).elf $(OUTFILE).bin
 	-@echo ""
 	@$(LPCRC) $(OUTFILE).bin
+
+tools/lpcrc/lpcrc:
+	-@make -C tools/lpcrc
+
+flash: firmware
+	-@echo -n "Flashing..."
+	-@[ -e "$(MOUNT_POINT)/firmware.bin" ] && dd if=bin/firmware.bin of="$(MOUNT_POINT)/firmware.bin" conv=nocreat,notrunc && umount "$(MOUNT_POINT)" || echo "Error, no device?!"
 
 clean:
 	@$(REMOVE) $(OBJS) $(OUTFILE).elf $(OUTFILE).bin $(OUTFILE).hex

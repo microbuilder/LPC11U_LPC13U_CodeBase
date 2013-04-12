@@ -191,7 +191,11 @@ ALIGNED(4) const USB_DEVICE_DESCRIPTOR USB_DeviceDescriptor =
   .bMaxPacketSize0    = USB_MAX_PACKET0,
 
   .idVendor           = CFG_USB_VENDORID,
+  #if CFG_USB_PRODUCTID
+  .idProduct          = CFG_USB_PRODUCTID,
+  #else
   .idProduct          = USB_PRODUCT_ID,
+  #endif
   .bcdDevice          = 0x0100,
 
   .iManufacturer      = 0x01,

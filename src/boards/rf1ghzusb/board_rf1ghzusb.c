@@ -65,6 +65,10 @@
   #include "cli/cli.h"
 #endif
 
+#ifdef CFG_ENABLE_UART
+  #include "core/uart/uart.h"
+#endif
+
 /**************************************************************************/
 /*!
     @brief Board-specific initialisation function
