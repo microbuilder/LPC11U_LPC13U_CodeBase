@@ -255,7 +255,7 @@ INCLUDE_PATHS = -I$(ROOT_PATH) -Icmsis
 ##########################################################################
 
 # Use the default toolchain (based on the PATH variable, etc.)
-CROSS_COMPILE = arm-none-eabi-
+CROSS_COMPILE ?= arm-none-eabi-
 
 # Use a toolchain at a specific location
 # CROSS_COMPILE = C:/code_red/RedSuiteNXP_5.0.12_1048/redsuite/tools/bin/arm-none-eabi-
@@ -268,7 +268,7 @@ SIZE    = $(CROSS_COMPILE)size
 OBJCOPY = $(CROSS_COMPILE)objcopy
 OBJDUMP = $(CROSS_COMPILE)objdump
 OUTFILE = $(BIN_PATH)/$(PROJECT)
-LPCRC   = ./lpcrc
+LPCRC   ?= ./lpcrc
 REMOVE  = rm -f
 MOUNT_POINT ?= /media/CRP DISABLD
 
