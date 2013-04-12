@@ -268,7 +268,7 @@ SIZE    = $(CROSS_COMPILE)size
 OBJCOPY = $(CROSS_COMPILE)objcopy
 OBJDUMP = $(CROSS_COMPILE)objdump
 OUTFILE = $(BIN_PATH)/$(PROJECT)
-LPCRC   ?= ./lpcrc
+LPCRC   ?= tools/lpcrc/lpcrc
 REMOVE  = rm -f
 MOUNT_POINT ?= /media/CRP DISABLD
 
@@ -340,7 +340,7 @@ $(OBJ_PATH)/%.o : %.s
 	-@echo "ASSEMBLING $(@F)"
 	@$(AS) $(ASFLAGS) -o $@ $<
 
-firmware: $(OBJS) $(SYS_OBJS)
+firmware: $(OBJS) $(SYS_OBJS) tools/lpcrc/lpcrc
 	@mkdir -p $(BIN_PATH)
 	-@echo ""
 	-@echo "LINKING $(OUTFILE).elf ($(CORE) -O$(OPTIMIZATION))"
@@ -354,6 +354,9 @@ firmware: $(OBJS) $(SYS_OBJS)
 	@$(OBJCOPY) $(OCFLAGS) -O binary $(OUTFILE).elf $(OUTFILE).bin
 	-@echo ""
 	@$(LPCRC) $(OUTFILE).bin
+
+tools/lpcrc/lpcrc:
+	-@make -C tools/lpcrc
 
 flash: firmware
 	-@echo -n "Flashing..."
