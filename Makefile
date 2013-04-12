@@ -270,6 +270,7 @@ OBJDUMP = $(CROSS_COMPILE)objdump
 OUTFILE = $(BIN_PATH)/$(PROJECT)
 LPCRC   = ./lpcrc
 REMOVE  = rm -f
+MOUNT_POINT ?= /media/CRP DISABLD
 
 ##########################################################################
 # Compiler settings, parameters and flags
@@ -353,6 +354,10 @@ firmware: $(OBJS) $(SYS_OBJS)
 	@$(OBJCOPY) $(OCFLAGS) -O binary $(OUTFILE).elf $(OUTFILE).bin
 	-@echo ""
 	@$(LPCRC) $(OUTFILE).bin
+
+flash: firmware
+	-@echo -n "Flashing..."
+	-@[ -e "$(MOUNT_POINT)/firmware.bin" ] && dd if=bin/firmware.bin of="$(MOUNT_POINT)/firmware.bin" conv=nocreat,notrunc && umount "$(MOUNT_POINT)" || echo "Error, no device?!"
 
 clean:
 	@$(REMOVE) $(OBJS) $(OUTFILE).elf $(OUTFILE).bin $(OUTFILE).hex
