@@ -556,7 +556,7 @@ extern "C" {
     -----------------------------------------------------------------------*/
     // #define CFG_RTC
 
-    #if !defined(CFG_ENABLE_I2C)
+    #if defined(CFG_RTC) && !defined(CFG_ENABLE_I2C)
       #error "CFG_ENABLE_I2C must be defined with CFG_RTC"
     #endif
 /*=========================================================================*/
