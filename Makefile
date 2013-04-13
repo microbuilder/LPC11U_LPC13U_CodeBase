@@ -43,9 +43,6 @@ OBJS  += $(OBJ_PATH)/printf-retarget.o
 VPATH += src/boards/lpcxpresso1347
 OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
 
-VPATH += src/boards/rf1ghznode
-OBJS  += $(OBJ_PATH)/board_rf1ghznode.o 
-
 VPATH += src/boards/rf1ghzusb
 OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
 
@@ -255,21 +252,21 @@ INCLUDE_PATHS = -I$(ROOT_PATH) -Icmsis
 ##########################################################################
 
 # Use the default toolchain (based on the PATH variable, etc.)
-CROSS_COMPILE = arm-none-eabi-
+CROSS_COMPILE ?= arm-none-eabi-
 
 # Use a toolchain at a specific location
 # CROSS_COMPILE = C:/code_red/RedSuiteNXP_5.0.12_1048/redsuite/tools/bin/arm-none-eabi-
 # CROSS_COMPILE = C:/arm/gnu4.7.2012.q4/bin/arm-none-eabi-
 
-AS      = $(CROSS_COMPILE)gcc
-CC      = $(CROSS_COMPILE)gcc
-LD      = $(CROSS_COMPILE)gcc
-SIZE    = $(CROSS_COMPILE)size
-OBJCOPY = $(CROSS_COMPILE)objcopy
-OBJDUMP = $(CROSS_COMPILE)objdump
-OUTFILE = $(BIN_PATH)/$(PROJECT)
-LPCRC   = ./lpcrc
-REMOVE  = rm -f
+AS           = $(CROSS_COMPILE)gcc
+CC           = $(CROSS_COMPILE)gcc
+LD           = $(CROSS_COMPILE)gcc
+SIZE         = $(CROSS_COMPILE)size
+OBJCOPY      = $(CROSS_COMPILE)objcopy
+OBJDUMP      = $(CROSS_COMPILE)objdump
+OUTFILE      = $(BIN_PATH)/$(PROJECT)
+LPCRC       ?= ./lpcrc
+REMOVE       = rm -f
 
 ##########################################################################
 # Compiler settings, parameters and flags

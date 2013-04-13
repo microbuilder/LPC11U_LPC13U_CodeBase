@@ -554,7 +554,7 @@ extern "C" {
     -----------------------------------------------------------------------*/
     // #define CFG_RTC
 
-    #if !defined(CFG_ENABLE_I2C)
+    #if defined(CFG_RTC) && !defined(CFG_ENABLE_I2C)
       #error "CFG_ENABLE_I2C must be defined with CFG_RTC"
     #endif
 /*=========================================================================*/
@@ -568,6 +568,9 @@ extern "C" {
     CFG_USB_STRING_PRODUCT      Product name that will appear in the
                                 device descriptor during USB enumeration
     CFG_USB_VENDORID            16-bit USB vendor ID
+    USB_PRODUCT_ID              Define this to set a custom product ID
+                                if you do not wish to use the 'auto'
+                                product ID feature
     CFG_CDC                     Enable USB CDC support
     CFG_USB_HID_KEYBOARD        Enable USB HID keyboard emulation
     CFG_USB_HID_MOUSE           Enable USB HID mouse emulation for a five
@@ -578,6 +581,7 @@ extern "C" {
     CFG_USB_MSC                 Enable USB Mass Storage support, pointing
                                 to the SD card reader (requires mmc.c from
                                 the FATFS drivers, but doesn't use FATFS)
+
 
     You can combine more than one USB class below and they will be
     automatically combined in a USB composite device within the limit of

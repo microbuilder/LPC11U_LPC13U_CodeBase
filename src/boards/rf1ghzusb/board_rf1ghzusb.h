@@ -570,6 +570,9 @@ extern "C" {
     CFG_USB_STRING_PRODUCT      Product name that will appear in the
                                 device descriptor during USB enumeration
     CFG_USB_VENDORID            16-bit USB vendor ID
+    USB_PRODUCT_ID              Define this to set a custom product ID
+                                if you do not wish to use the 'auto'
+                                product ID feature
     CFG_CDC                     Enable USB CDC support
     CFG_USB_HID_KEYBOARD        Enable USB HID keyboard emulation
     CFG_USB_HID_MOUSE           Enable USB HID mouse emulation for a five
