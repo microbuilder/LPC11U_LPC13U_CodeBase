@@ -265,7 +265,7 @@ SIZE         = $(CROSS_COMPILE)size
 OBJCOPY      = $(CROSS_COMPILE)objcopy
 OBJDUMP      = $(CROSS_COMPILE)objdump
 OUTFILE      = $(BIN_PATH)/$(PROJECT)
-LPCRC       ?= ./lpcrc
+LPCRC       ?= tools/lpcrc/lpcrc
 REMOVE       = rm -f
 MOUNT_POINT ?= /media/CRP DISABLD
 
@@ -355,8 +355,13 @@ firmware: $(OBJS) $(SYS_OBJS)
 flash: firmware
 	-@echo ""
 	-@echo "Flashing device ..."
-  -@[ -e "$(MOUNT_POINT)/firmware.bin" ] && dd if=bin/firmware.bin of="$(MOUNT_POINT)/firmware.bin" conv=nocreat,notrunc && umount "$(MOUNT_POINT)" || echo "Error, no device?!"
+	-@[ -e "$(MOUNT_POINT)/firmware.bin" ] && dd if=bin/firmware.bin of="$(MOUNT_POINT)/firmware.bin" conv=nocreat,notrunc && umount "$(MOUNT_POINT)" || echo "Error, no device?!"
 
+lpcrc:
+	-@echo ""
+	-@echo "Building lpcrc (checksum tool) ..."
+	@make -C tools/lpcrc
+  
 clean:
 	@$(REMOVE) $(OBJS) $(OUTFILE).elf $(OUTFILE).bin $(OUTFILE).hex
 
