@@ -37,6 +37,10 @@
 #include "core/systick/systick.h"
 #include "boards/board.h"
 
+#ifdef CFG_INTERFACE
+  #include "cli/cli.h"
+#endif
+
 #if defined(__CODE_RED)
   #include <cr_section_macros.h>
   #include <NXP/crp.h>
@@ -48,13 +52,31 @@ int main(void)
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
 
-  /* Run project-specific 'main' loop (as defined in projectconfig.h) */
-  boardMain();
+  /* Board Initialisation                                                 *
+   * ==================================================================== *
+   * The target HW is set in projectconfig.h                              *
+   *                                                                      *
+   * Each board has a dedicated config and initialisation file in the     *
+   * boards/ folder, and you can run one of two mandatory functions here: *
+   *                                                                      *
+   * boardInit() - Initialises all HW peripherals on the target HW, and   *
+   *               then continues execution in this main.c file.  This    *
+   *               will configure the pins, setup the clock, initialise   *
+   *               USB appropriately, etc.                                *
+   *                                                                      *
+   * boardMain() - This function normally calls boardInit above, but then *
+   *               continues to execute code inside the boardMain() file, *
+   *               performing the dedicated task(s) the HW was designed   *
+   *               for.  Normally, you will never return from this call   *
+   *               unless there is an error condition.                    *
+   * ==================================================================== */
+   boardInit();
 
-  /* If we ever come back from boardMain() just do blinky */
+  /* Do blinky and scan for input on the CLI */
   while (1)
   {
     currentSecond = systickGetSecondsActive();
+    
     if (currentSecond != lastSecond)
     {
       lastSecond = currentSecond;
@@ -62,6 +84,11 @@ int main(void)
       /* Toggle LED once per second */
       boardLED(lastSecond % 2);
     }
+    
+    /* Poll for CLI input */
+    #ifdef CFG_INTERFACE
+      cliPoll();
+    #endif
   }
 
   return 0;
