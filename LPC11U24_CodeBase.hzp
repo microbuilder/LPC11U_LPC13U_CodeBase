@@ -261,6 +261,9 @@
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
         </folder>
+        <folder Name="lpcnfc" file_name="">
+          <file file_name="src/boards/lpcnfc/board_lpcnfc.c"/>
+        </folder>
       </folder>
       <file file_name="src/printf-retarget.c"/>
       <file file_name="src/asserts.h"/>

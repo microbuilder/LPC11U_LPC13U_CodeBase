@@ -81,14 +81,18 @@ extern "C" {
     will then try to configure itself accordingly for that board.
 
     -----------------------------------------------------------------------*/
-    #define CFG_BRD_LPCXPRESSO_LPC1347
-    // #define CFG_BRD_RF1GHZUSB
+    // #define CFG_BRD_LPCXPRESSO_LPC1347
+    #define CFG_BRD_RF1GHZUSB
+    // #define CFG_BRD_LPCNFC
 
     #ifdef CFG_BRD_LPCXPRESSO_LPC1347
       #include "boards/lpcxpresso1347/board_lpcxpresso1347.h"
     #endif
     #ifdef CFG_BRD_RF1GHZUSB
       #include "boards/rf1ghzusb/board_rf1ghzusb.h"
+    #endif
+    #ifdef CFG_BRD_LPCNFC
+      #include "boards/lpcnfc/board_lpcnfc.h"
     #endif
 /*=========================================================================*/
 
@@ -97,7 +101,8 @@ extern "C" {
     CONFIG FILE VALIDATION
     -----------------------------------------------------------------------*/
     #if !defined CFG_BRD_LPCXPRESSO_LPC1347 && \
-        !defined CFG_BRD_RF1GHZUSB
+        !defined CFG_BRD_RF1GHZUSB          && \
+        !defined CFG_BRD_LPCNFC
       #error "You must define a target board in projectconfig.h"
     #endif
 /*=========================================================================*/
