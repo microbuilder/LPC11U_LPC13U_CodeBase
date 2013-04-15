@@ -52,6 +52,8 @@
 #ifdef CFG_CHIBI
   #include "drivers/rf/chibi/chb.h"
   #include "drivers/rf/chibi/chb_drvr.h"
+  #include "messages.h"
+  static chb_rx_data_t rx_data;
 #endif
 
 #ifdef CFG_USB
@@ -67,6 +69,74 @@
 
 #ifdef CFG_ENABLE_UART
   #include "core/uart/uart.h"
+#endif
+
+#ifdef CFG_CHIBI
+/**************************************************************************/
+/*!
+    Converts the ED (Energy Detection) value to dBm using the following
+    formula: dBm = RSSI_BASE_VAL + 1.03 * ED
+
+    For more information see section 6.5 of the AT86RF212 datasheet
+*/
+/**************************************************************************/
+int edToDBM(uint32_t ed)
+{
+  #if CFG_CHIBI_MODE == 0 || CFG_CHIBI_MODE == 1 || CFG_CHIBI_MODE == 2
+    // Calculate for OQPSK (RSSI Base Value = -100)
+    int dbm = (103 * ed - 10000);
+  #else
+    // Calculate for BPSK (RSSI Base Value = -98)
+    int dbm = (103 * ed - 9800);
+  #endif
+
+  return dbm / 100;
+}
+
+void sendMessage(void)
+{
+  uint8_t msgbuf[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
+  if(msgSend(0xFFFF, MSG_MESSAGETYPE_NONE, msgbuf, 10))
+  {
+    printf("Message TX failure%s", CFG_PRINTF_NEWLINE);
+  }
+}
+
+void checkForMessages(void)
+{
+  chb_pcb_t *pcb = chb_get_pcb();
+
+  while (pcb->data_rcv)
+  {
+    // Enable LED to indicate message reception
+    boardLED(CFG_LED_ON);
+    // get the length of the data
+    rx_data.len = chb_read(&rx_data);
+    // make sure the length is nonzero
+    if (rx_data.len)
+    {
+      int dbm = edToDBM(pcb->ed);
+      // printf("Message received from node %02X: %s, len=%d, dBm=%d.%s", rx_data.src_addr, rx_data.data, rx_data.len, dbm, CFG_PRINTF_NEWLINE);
+      printf("Message received from node 0x%04X (len=%d, dBm=%d):%s", rx_data.src_addr, rx_data.len, dbm, CFG_PRINTF_NEWLINE);
+      printf("  Message ID:   0x%04X%s", *(uint16_t*)&rx_data.data[0], CFG_PRINTF_NEWLINE);
+      printf("  Message Type: 0x%02X%s", *(uint8_t*)&rx_data.data[2], CFG_PRINTF_NEWLINE);
+      printf("  Timestamp:    %d%s", *(uint32_t*)&rx_data.data[3], CFG_PRINTF_NEWLINE);
+      printf("  Payload:      %d bytes%s", *(uint8_t*)&rx_data.data[8], CFG_PRINTF_NEWLINE);
+      if (rx_data.data[8])
+      {
+        uint8_t i;
+        printf("%s", CFG_PRINTF_NEWLINE);
+        for (i = 0; i < rx_data.data[8]; i++)
+        {
+          printf("0x%02X ", *(uint8_t*)&rx_data.data[9+i]);
+        }
+      }
+      printf("%s", CFG_PRINTF_NEWLINE);
+    }
+    // Disable LED
+    boardLED(CFG_LED_OFF);
+  }
+}
 #endif
 
 /**************************************************************************/
@@ -127,13 +197,32 @@ void boardInit(void)
 /**************************************************************************/
 void boardMain(void)
 {
+  uint32_t currentSecond, lastSecond;
+  currentSecond = lastSecond = 0;
+
   boardInit();
 
   while (1)
   {
+    currentSecond = systickGetSecondsActive();
+    if (currentSecond != lastSecond)
+    {
+      lastSecond = currentSecond;
+
+      /* Send a message over the air */
+      #ifdef CFG_CHIBI
+        // sendMessage();
+      #endif
+    }
+
     /* Poll for CLI input if CFG_INTERFACE is enabled */
     #ifdef CFG_INTERFACE
       cliPoll();
+    #endif
+
+    /* Check for incoming wireless messages */
+    #ifdef CFG_CHIBI
+      checkForMessages();
     #endif
   }
 }
