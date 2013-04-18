@@ -191,11 +191,10 @@ void boardInit(void)
 
 /**************************************************************************/
 /*!
-    @brief Primary 'main' loop for this project.  This should be called
-           from the global main function in main.c.
+    @brief Primary entry point for this project.
 */
 /**************************************************************************/
-void boardMain(void)
+int main(void)
 {
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;

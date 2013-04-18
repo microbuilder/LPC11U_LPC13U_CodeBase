@@ -349,10 +349,10 @@
     </VirtualDirectory>
     <VirtualDirectory Name="boards">
       <File Name="src/boards/board.h"/>
+      <File Name="src/boards/lpcnfc/board_lpcnfc.c"/>
+      <File Name="src/boards/lpcnfc/board_lpcnfc.h"/>
       <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
       <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
-      <File Name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
-      <File Name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
       <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
       <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
     </VirtualDirectory>
@@ -365,7 +365,6 @@
     <File Name="src/errors.h"/>
     <File Name="src/fixedptc.h"/>
     <File Name="src/log.h"/>
-    <File Name="src/main.c"/>
     <File Name="src/messages.c"/>
     <File Name="src/messages.h"/>
     <File Name="src/printf-retarget.c"/>

@@ -6,9 +6,6 @@
     <configuration Name="RAM" Placement="RAM" linker_section_placement_file="$(StudioDir)/targets/Cortex_M/ram_placement.xml" target_reset_script="SRAMReset()"/>
     <folder Name="Source Files" file_name="">
       <configuration Name="Common" filter="c;cpp;cxx;cc;h;s;asm;inc"/>
-      <file file_name="src/main.c">
-        <configuration Name="Test" build_exclude_from_build="Yes"/>
-      </file>
       <folder Name="core" file_name="">
         <folder Name="gpio">
           <file file_name="src/core/gpio/gpio.c"/>
@@ -249,20 +246,17 @@
         <file file_name="src/localisation/locale_fr.dat"/>
       </folder>
       <folder Name="boards" file_name="">
+        <folder Name="lpcnfc" file_name="">
+          <file file_name="src/boards/lpcnfc/board_lpcnfc.c"/>
+          <file file_name="src/boards/lpcnfc/board_lpcnfc.h"/>
+        </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
         </folder>
-        <folder Name="rf1ghznode" file_name="">
-          <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
-          <file file_name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
-        </folder>
         <folder Name="rf1ghzusb" file_name="">
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
-        </folder>
-        <folder Name="lpcnfc" file_name="">
-          <file file_name="src/boards/lpcnfc/board_lpcnfc.c"/>
         </folder>
       </folder>
       <file file_name="src/printf-retarget.c"/>
