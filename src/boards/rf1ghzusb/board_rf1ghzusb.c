@@ -210,7 +210,7 @@ int main(void)
 
       /* Send a message over the air */
       #ifdef CFG_CHIBI
-        // sendMessage();
+        sendMessage();
       #endif
     }
 
@@ -223,6 +223,9 @@ int main(void)
     #ifdef CFG_CHIBI
       checkForMessages();
     #endif
+
+        sendMessage();
+
   }
 }
 
