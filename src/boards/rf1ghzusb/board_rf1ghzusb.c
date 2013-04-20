@@ -52,7 +52,7 @@
 #ifdef CFG_CHIBI
   #include "drivers/rf/chibi/chb.h"
   #include "drivers/rf/chibi/chb_drvr.h"
-  #include "messages.h"
+  #include "drivers/rf/chibi/messages.h"
   static chb_rx_data_t rx_data;
 #endif
 

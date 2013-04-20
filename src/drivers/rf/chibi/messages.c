@@ -38,6 +38,9 @@
 */
 /**************************************************************************/
 #include "projectconfig.h"
+
+#ifdef CFG_CHIBI
+
 #include <string.h>
 #include "messages.h"
 #include "core/systick/systick.h"
@@ -172,3 +175,5 @@ void msgCreateCommand(msg_Command_t *msg)
   memset(msg, 0, sizeof(msg_Command_t));
   msg->uniqueID = _msg_command_uniqueID++;
 }
+
+#endif

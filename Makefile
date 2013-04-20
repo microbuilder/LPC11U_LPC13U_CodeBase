@@ -36,7 +36,6 @@ else
 endif
 
 VPATH += src
-OBJS  += $(OBJ_PATH)/messages.o
 OBJS  += $(OBJ_PATH)/printf-retarget.o
 
 VPATH += src/boards/lpcnfc
@@ -181,6 +180,7 @@ OBJS  += $(OBJ_PATH)/chb_buf.o
 OBJS  += $(OBJ_PATH)/chb_drvr.o 
 OBJS  += $(OBJ_PATH)/chb_eeprom.o 
 OBJS  += $(OBJ_PATH)/chb_spi.o
+OBJS  += $(OBJ_PATH)/messages.o
 
 VPATH += src/drivers/rf/pn532
 OBJS  += $(OBJ_PATH)/pn532.o 

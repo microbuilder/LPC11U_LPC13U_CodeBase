@@ -132,6 +132,7 @@
             <file file_name="src/drivers/rf/chibi/chb_drvr.c"/>
             <file file_name="src/drivers/rf/chibi/chb_eeprom.c"/>
             <file file_name="src/drivers/rf/chibi/chb_spi.c"/>
+            <file file_name="src/drivers/rf/chibi/messages.c"/>
           </folder>
           <folder Name="pn532">
             <folder Name="helpers" file_name="">

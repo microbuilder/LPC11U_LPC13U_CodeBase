@@ -129,12 +129,13 @@
           </folder>
         </folder>
         <folder Name="rf">
-          <folder Name="chibi">
+          <folder Name="chibi" file_name="">
             <file file_name="src/drivers/rf/chibi/chb.c"/>
             <file file_name="src/drivers/rf/chibi/chb_buf.c"/>
             <file file_name="src/drivers/rf/chibi/chb_drvr.c"/>
             <file file_name="src/drivers/rf/chibi/chb_eeprom.c"/>
             <file file_name="src/drivers/rf/chibi/chb_spi.c"/>
+            <file file_name="src/drivers/rf/chibi/messages.c"/>
           </folder>
           <folder Name="pn532">
             <folder Name="helpers" file_name="">
@@ -240,7 +241,6 @@
         <file file_name="src/cli/cli.c"/>
       </folder>
       <file file_name="src/projectconfig.h"/>
-      <file file_name="src/messages.c"/>
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
       <folder Name="localisation" file_name="">

@@ -101,6 +101,8 @@
           <File Name="src/drivers/rf/chibi/chb_spi.c"/>
           <File Name="src/drivers/rf/chibi/chb_spi.h"/>
           <File Name="src/drivers/rf/chibi/types.h"/>
+          <File Name="src/drivers/rf/chibi/messages.c"/>
+          <File Name="src/drivers/rf/chibi/messages.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="pwm">
