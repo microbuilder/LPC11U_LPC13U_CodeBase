@@ -1,0 +1,136 @@
+Protocol Description
+--------------------
+
+The basic messaging protocol can be used to send and receive binary messages
+using any binary serial bus (USB HID, SPI, I2C).
+
+The protocol is designed to be flexible and extensible, with the only
+requirement being that individual messages are 64 bytes or smaller,
+and that the first byte of every message is a one byte (U8) identifier that
+indicates the format for the rest of the payload (if there is one).
+
+Implementation Notes
+--------------------
+
+The protocol implementation must be serial bus agnostic, and should be able
+to function with any binary serial bus.  The original design goal is a
+protocol that can function via USB HID, SPI Slave, and I2C Slave modes, but
+any similar protocol should be able to be added to the implementation.
+
+Message Types
+-------------
+
+Each message is preceded by an 8-bit message identifier that indicates
+the format and content of the rest of the message:
+
+|-----------------------+---------+-------------------------------------------|
+| Message Type          | ID (U8) | Meaning                                   |
+|-----------------------+---------+-------------------------------------------|
+| Command               | 0x01    |                                           |
+| Response              | 0x02    |                                           |
+| Error                 | 0x80    |                                           |
+|-----------------------+---------+-------------------------------------------|
+
+Command Messages
+----------------
+
+Command messages (Message Type = 0x01) have the following structure:
+
+|-------------------+----------+----------------------------------------------|
+| Name              | Type     | Meaning                                      |
+|-------------------+----------+----------------------------------------------|
+| Command ID        | U16      | Unique command identifier                    |
+| Payload Length    | U8       | Payload length (0..60)                       |
+| Payload           | ...      | Optional command payload (params, etc.)      |
+|-------------------+----------+----------------------------------------------|
+
+'Command ID' (bytes 1-2) and 'Payload Length' (byte 3) are mandatory in any
+command message.  The message payload is optional, and will be ignored if
+Payload Length is set to '0' bytes.  When a message payload is present, it's
+length can be anywhere from 1..60 bytes, to stay within the 64 byte maximum
+message length.
+
+The contents if the payload is user defined, and can change for each command.
+Any payload error checking should be handled by the command interpretter.
+
+A sample command message would be:
+
+Byte   0    1 2    3    4
+      [01] [1234] [01] [FF]
+ 
+- The first byte is the Message Type (0x01), which identifies this as a
+  command message.
+- The second and third bytes are 0x1234, which is the unique command ID that
+  will be parsed to the command lookup function, and redirected to an 
+  appropriate command handler function.
+- The fourth byte indicates that we have a message payload of 1 byte
+- The fifth bytes is the 1 byte payload: 0xFF
+
+Response Messages
+-----------------
+
+Responses messages (Message Type = 0x02) are generated in response to an
+incoming command, and have the following structure:
+
+|-------------------+----------+----------------------------------------------|
+| Name              | Type     | Meaning                                      |
+|-------------------+----------+----------------------------------------------|
+| Command ID        | U16      | Command ID of the command this message is    |
+|                   |          | a response to, to correlate Responses and    |
+|                   |          | commands                                     |
+| Payload Length    | U8       | Payload length (0..60)                       |
+| Payload           | ...      | Optional response payload                    |
+|-------------------+----------+----------------------------------------------|
+
+By including the 'Command ID' that this response message is related to, the
+recipient can more easily correlate responses and commands.  This is useful in
+situations where multiple commands are sent, and some commands may take a
+longer period of time to execute than subsequent commands with a different
+command ID.  
+
+Response message can only be generates in response to a command message, so
+the Command ID should always be present.
+
+If more precise command/response correlation is required, a custom protocol
+can be developped, where a unique message identifier is included in the
+payload of each command/response, but this is beyond the scope of this
+high-level protocol.
+
+A sample response message would be:
+
+Byte   0    1 2    3    4
+      [02] [1234] [01] [FF]
+ 
+- The first byte is the Message Type (0x02), which identifies this as a
+  response message.
+- The second and third bytes are 0x1234, which is the unique command ID that
+  this response is related to.
+- The fourth byte indicates that we have a message payload of 1 byte
+- The fifth bytes is the 1 byte payload: 0xFF
+
+Error Messages
+--------------
+
+Error messages (Message Type = 0x80) are returned whenever an error condition
+is present on the system, and have the following structure:
+
+|-------------------+----------+----------------------------------------------|
+| Name              | Type     | Meaning                                      |
+|-------------------+----------+----------------------------------------------|
+| Error ID          | U16      | Unique ID for the error condition            |
+| Payload Length    | U8       | Payload length (0..60)                       |
+| Payload           | ...      | Optional error payload                       |
+|-------------------+----------+----------------------------------------------|
+
+Whenever an error condition is present and the system needs to be alerted (such
+as a failed request, an attempt to access a non-existing resource, etc.) the
+system can return a specific error message with an appropriate Error ID.
+
+While the 16-bit Error ID is often sufficient, if required an optional payload
+can be included with further information on the error.  Due to this optional
+payload, all error messages much indicate the payload length, which can be
+set to 0x00 when no payload is present.
+
+The contents of the error payload is user-defined, with the only limitation
+being that it can bot exceed 60 bytes to stay within the 64 byte message
+length limit.
