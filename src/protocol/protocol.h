@@ -42,42 +42,6 @@
 extern "C" {
 #endif
 
-/* This is an attempt to have a generic messaging protocol to send and
-   receive commands via USB HID, SPI Slave (MCU = SPI device), I2C Slave
-   (MCU = I2C device) using binary data, similar to the way cli handles
-   byte data.
-
-   As commands come in via USB HID, SPI or I2C interrupt handlers, they
-   should be placed in a queue, and if they are commands, should be sent
-   to the command lookup table, which redirects them to the appropriate
-   function.
-
-   If required, these functions can generate response or error messages
-   and send them back out on whatever endpoint is select in the config
-   file (HID, SPI or I2C).
-
-   This should all be peripherals neutral, and should work with USB HID,
-   SPI or I2C transparently.  See the way the 'CLI' code works with both
-   USB CDC and UART for an example, since this is what we are trying
-   to emulation but with different protocols and binary data.            */
-
-/* Command messages have the following structure:
-   U8   Message Type (PROT_MSGTYPE_COMMAND)
-   U16  Command ID (used to lookup function in protocol_cmd_tbl)
-   ..   Optional args (61 bytes max!)                                    */
-
-/* Response message have the following structure:
-   U8   Message Type (PROT_MSGTYPE_RESPONSE)
-   U16  Command ID (CMD ID that this msg is a response to)
-   ..   Response content (61 bytes max!)                                 */
-
-/* ACK messages are a single byte, and contain PROT_MSGTYPE_ACK          */
-
-/* Error messages have the following structure:
-   U8   Message Type (PROT_MSGTYPE_ERROR)
-   U16  Error Code
-   ..   Optional error arguments (if any, max 61 bytes)                  */
-
 /* Max message length is 64 bytes to align with USB HID, though this may
    be a bit large for I2C or SPI ... maybe adjust down, but in no case
    should this be more than 64 bytes                                     */
@@ -94,8 +58,6 @@ typedef enum
   PROT_MSGTYPE_COMMAND          = 0x01,
   /**< Response to a command message */
   PROT_MSGTYPE_RESPONSE         = 0x02,
-  /**< 1-byte ACK */
-  PROT_MSGTYPE_ACK              = 0x40,
   /**< Signals an error condition */
   PROT_MSGTYPE_ERROR            = 0x80
 } protMsgType_t;

@@ -59,8 +59,8 @@ void cmd_help(uint8_t argc, char **argv);
 /**************************************************************************/
 protocol_cmd_t protocol_cmd_tbl[] =
 {
-  /* Command ID (U16), Max args (in bytes), Function name                 */
-  {  0x0000,           0,                   cmd_help,                     },
+  /* Command ID (U16), Min Payload, Max Payload, Function name */
+  {  0x0000,           0,           10,          cmd_help, },
 };
 
 #ifdef __cplusplus
