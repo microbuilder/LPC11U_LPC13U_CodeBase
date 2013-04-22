@@ -27,7 +27,7 @@
     <TargetOption>
       <CLKADS>12000000</CLKADS>
       <OPTTT>
-        <gFlags>0</gFlags>
+        <gFlags>1</gFlags>
         <BeepAtEnd>1</BeepAtEnd>
         <RunSim>0</RunSim>
         <RunTarget>1</RunTarget>
@@ -225,7 +225,7 @@
 
   <Group>
     <GroupName>src</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -235,10 +235,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>24</ColumnNumber>
+      <ColumnNumber>42</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>1</TopLine>
-      <CurrentLine>9</CurrentLine>
+      <TopLine>7</TopLine>
+      <CurrentLine>16</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>./src/hardfault.c</PathWithFileName>
       <FilenameWithoutPath>hardfault.c</FilenameWithoutPath>
@@ -251,10 +251,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>26</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>101</TopLine>
+      <CurrentLine>118</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>./src/printf-retarget.c</PathWithFileName>
       <FilenameWithoutPath>printf-retarget.c</FilenameWithoutPath>
@@ -281,7 +281,7 @@
 
   <Group>
     <GroupName>boards</GroupName>
-    <tvExp>0</tvExp>
+    <tvExp>1</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -307,10 +307,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>56</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>346</TopLine>
+      <CurrentLine>365</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>./src/boards/rf1ghznode/board_rf1ghznode.c</PathWithFileName>
       <FilenameWithoutPath>board_rf1ghznode.c</FilenameWithoutPath>
@@ -984,7 +984,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers</GroupName>
+    <GroupName>drivers_timespan</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1008,7 +1008,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_bitbanging_swspi</GroupName>
+    <GroupName>bitbanging_swspi</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1032,7 +1032,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_displays</GroupName>
+    <GroupName>displays</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1056,7 +1056,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_displays_bitmap_ssd1306</GroupName>
+    <GroupName>displays_bitmap_ssd1306</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1080,7 +1080,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_displays_graphic</GroupName>
+    <GroupName>displays_graphic</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1608,7 +1608,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_motor_stepper</GroupName>
+    <GroupName>motor_stepper</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1632,7 +1632,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_pwm_pca9685</GroupName>
+    <GroupName>pwm_pca9685</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -1984,7 +1984,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_sensors</GroupName>
+    <GroupName>sensors</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2008,7 +2008,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_sensors_accelerometers</GroupName>
+    <GroupName>sensors_accelerometers</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2064,7 +2064,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_sensors_gyroscopes</GroupName>
+    <GroupName>sensors_gyroscopes</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2075,10 +2075,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>58</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>151</TopLine>
+      <CurrentLine>166</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>./src/drivers/sensors/gyroscopes/l3gd20.c</PathWithFileName>
       <FilenameWithoutPath>l3gd20.c</FilenameWithoutPath>
@@ -2088,7 +2088,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_sensors_light</GroupName>
+    <GroupName>sensors_light</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2112,7 +2112,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_sensors_magnetometers</GroupName>
+    <GroupName>sensors_magnetometers</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2136,7 +2136,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_sensors_pressure</GroupName>
+    <GroupName>sensors_pressure</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2176,7 +2176,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_sensors_temperature</GroupName>
+    <GroupName>sensors_temperature</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2200,7 +2200,7 @@
   </Group>
 
   <Group>
-    <GroupName>src_drivers_statistics</GroupName>
+    <GroupName>drivers_statistics</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2288,22 +2288,6 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>./src/drivers/storage/fatfs/ccsbcs.c</PathWithFileName>
-      <FilenameWithoutPath>ccsbcs.c</FilenameWithoutPath>
-      <RteFlg>0</RteFlg>
-      <bShared>0</bShared>
-    </File>
-    <File>
-      <GroupNumber>30</GroupNumber>
-      <FileNumber>118</FileNumber>
-      <FileType>1</FileType>
-      <tvExp>0</tvExp>
-      <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
-      <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
-      <bDave2>0</bDave2>
       <PathWithFileName>./src/drivers/storage/fatfs/ff.c</PathWithFileName>
       <FilenameWithoutPath>ff.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
@@ -2311,7 +2295,7 @@
     </File>
     <File>
       <GroupNumber>30</GroupNumber>
-      <FileNumber>119</FileNumber>
+      <FileNumber>118</FileNumber>
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
@@ -2328,21 +2312,21 @@
   </Group>
 
   <Group>
-    <GroupName>src_localisation</GroupName>
+    <GroupName>localisation</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
     <File>
       <GroupNumber>31</GroupNumber>
-      <FileNumber>120</FileNumber>
+      <FileNumber>119</FileNumber>
       <FileType>1</FileType>
-      <tvExp>0</tvExp>
+      <tvExp>1</tvExp>
       <Focus>0</Focus>
       <ColumnNumber>0</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>31</TopLine>
+      <CurrentLine>16</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>./src/localisation/localisation.c</PathWithFileName>
       <FilenameWithoutPath>localisation.c</FilenameWithoutPath>

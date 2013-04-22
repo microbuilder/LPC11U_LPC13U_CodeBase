@@ -108,3 +108,22 @@ int puts(const char * str)
 
   return 0;
 }
+
+#ifdef __CC_ARM // keil
+
+struct __FILE {
+  uint32_t handle;
+};
+
+int fputc(int ch, FILE *f)
+{
+  __putchar(ch);
+  return ch;
+}
+
+void _ttywrch(int ch)
+{
+  __putchar(ch);
+}
+
+#endif

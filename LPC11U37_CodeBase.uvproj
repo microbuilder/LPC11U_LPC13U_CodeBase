@@ -280,17 +280,17 @@
                 <Size>0x0</Size>
               </XRAM>
               <OCR_RVCT1>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT1>
               <OCR_RVCT2>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT2>
               <OCR_RVCT3>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT3>
@@ -300,7 +300,7 @@
                 <Size>0x20000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
-                <Type>0</Type>
+                <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
                 <Size>0x0</Size>
               </OCR_RVCT5>
@@ -347,7 +347,7 @@
             <uThumb>0</uThumb>
             <uSurpInc>0</uSurpInc>
             <VariousControls>
-              <MiscControls></MiscControls>
+              <MiscControls>--gnu --c99</MiscControls>
               <Define></Define>
               <Undefine></Undefine>
               <IncludePath>src;src/cli</IncludePath>
@@ -654,7 +654,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers</GroupName>
+          <GroupName>drivers_timespan</GroupName>
           <Files>
             <File>
               <FileName>timespan.c</FileName>
@@ -664,7 +664,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_bitbanging_swspi</GroupName>
+          <GroupName>bitbanging_swspi</GroupName>
           <Files>
             <File>
               <FileName>swspi.c</FileName>
@@ -674,7 +674,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_displays</GroupName>
+          <GroupName>displays</GroupName>
           <Files>
             <File>
               <FileName>smallfonts.c</FileName>
@@ -684,7 +684,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_displays_bitmap_ssd1306</GroupName>
+          <GroupName>displays_bitmap_ssd1306</GroupName>
           <Files>
             <File>
               <FileName>ssd1306_i2c.c</FileName>
@@ -694,7 +694,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_displays_graphic</GroupName>
+          <GroupName>displays_graphic</GroupName>
           <Files>
             <File>
               <FileName>aafonts.c</FileName>
@@ -874,7 +874,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_motor_stepper</GroupName>
+          <GroupName>motor_stepper</GroupName>
           <Files>
             <File>
               <FileName>stepper.c</FileName>
@@ -884,7 +884,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_pwm_pca9685</GroupName>
+          <GroupName>pwm_pca9685</GroupName>
           <Files>
             <File>
               <FileName>pca9685.c</FileName>
@@ -1004,7 +1004,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_sensors</GroupName>
+          <GroupName>sensors</GroupName>
           <Files>
             <File>
               <FileName>sensors.c</FileName>
@@ -1014,7 +1014,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_sensors_accelerometers</GroupName>
+          <GroupName>sensors_accelerometers</GroupName>
           <Files>
             <File>
               <FileName>adxl345.c</FileName>
@@ -1034,7 +1034,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_sensors_gyroscopes</GroupName>
+          <GroupName>sensors_gyroscopes</GroupName>
           <Files>
             <File>
               <FileName>l3gd20.c</FileName>
@@ -1044,7 +1044,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_sensors_light</GroupName>
+          <GroupName>sensors_light</GroupName>
           <Files>
             <File>
               <FileName>tsl2561.c</FileName>
@@ -1054,7 +1054,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_sensors_magnetometers</GroupName>
+          <GroupName>sensors_magnetometers</GroupName>
           <Files>
             <File>
               <FileName>lsm303mag.c</FileName>
@@ -1064,7 +1064,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_sensors_pressure</GroupName>
+          <GroupName>sensors_pressure</GroupName>
           <Files>
             <File>
               <FileName>bmp085.c</FileName>
@@ -1079,7 +1079,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_sensors_temperature</GroupName>
+          <GroupName>sensors_temperature</GroupName>
           <Files>
             <File>
               <FileName>lm75b.c</FileName>
@@ -1089,7 +1089,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_drivers_statistics</GroupName>
+          <GroupName>drivers_statistics</GroupName>
           <Files>
             <File>
               <FileName>avg_d.c</FileName>
@@ -1117,11 +1117,6 @@
           <GroupName>storage_fatfs</GroupName>
           <Files>
             <File>
-              <FileName>ccsbcs.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>./src/drivers/storage/fatfs/ccsbcs.c</FilePath>
-            </File>
-            <File>
               <FileName>ff.c</FileName>
               <FileType>1</FileType>
               <FilePath>./src/drivers/storage/fatfs/ff.c</FilePath>
@@ -1134,7 +1129,7 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>src_localisation</GroupName>
+          <GroupName>localisation</GroupName>
           <Files>
             <File>
               <FileName>localisation.c</FileName>
