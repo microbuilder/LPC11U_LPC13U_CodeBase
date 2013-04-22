@@ -13,7 +13,6 @@ void HardFault_Handler(void)
    * and use it as the parameter to the C handler. This function
    * will never return.
    */
-/* TODO temporarily disable for keil build
   __asm(  ".syntax unified\n"
                   "MOVS   R0, #4  \n"
                   "MOV    R1, LR  \n"
@@ -24,7 +23,7 @@ void HardFault_Handler(void)
           "_MSP:  \n"
                   "MRS    R0, MSP \n"
                   "B      HardFault_HandlerC      \n"
-          ".syntax divided\n") ; */
+          ".syntax divided\n") ;
 }
 
 /**

@@ -407,11 +407,6 @@
           <GroupName>src</GroupName>
           <Files>
             <File>
-              <FileName>hardfault.c</FileName>
-              <FileType>1</FileType>
-              <FilePath>./src/hardfault.c</FilePath>
-            </File>
-            <File>
               <FileName>printf-retarget.c</FileName>
               <FileType>1</FileType>
               <FilePath>./src/printf-retarget.c</FilePath>

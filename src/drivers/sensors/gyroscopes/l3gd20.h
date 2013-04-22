@@ -45,13 +45,10 @@ extern "C" {
 #include "core/i2c/i2c.h"
 #include "drivers/sensors/sensors.h"
 
-//TODO quick hack for keil build with binary constant
-#include "../binary.h"
-
 #define L3GD20_ADDRESS                (0x6B<<1)     // 1101001
 #define L3GD20_READBIT                (0x01)
 #define L3GD20_POLL_TIMEOUT           (100)         // Maximum number of read attempts in l3gd20Poll()
-#define L3GD20_ID                     BIN8(11010100)
+#define L3GD20_ID                     (0xd4)
 
 /* Struct to hold the gyroscope sensor data */
 typedef struct
