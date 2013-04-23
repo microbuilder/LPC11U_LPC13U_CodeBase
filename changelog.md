@@ -2,6 +2,10 @@
 
 Major changes in the LPC11U/LPC13U code base by code base version number.
 
+## 0.8.2 [Ongoing] ##
+
+- ...
+
 ## 0.8.1 [23 April 2013] ##
 
 - 'main' entry point moved to board-specific files ('src/boards/*')
