@@ -557,4 +557,21 @@ uint32_t boardGetVIN(void)
   return vcomp;
 }
 
+// TODO add for keil compilation
+#ifdef CFG_SDCARD
+DWORD get_fattime ()
+{
+  DWORD tmr = 0;
+
+  // tmr =  (((DWORD)rtcYear - 80) << 25)
+  //      | ((DWORD)rtcMon << 21)
+  //      | ((DWORD)rtcMday << 16)
+  //      | (WORD)(rtcHour << 11)
+  //      | (WORD)(rtcMin << 5)
+  //      | (WORD)(rtcSec >> 1);
+
+  return tmr;
+}
+#endif
+
 #endif

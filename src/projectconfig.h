@@ -57,6 +57,7 @@ extern "C" {
 #include "sysdefs.h"
 #include "errors.h"
 #include "asserts.h"
+#include "binary.h"
 #include "localisation/localisation.h"
 
 /*=========================================================================

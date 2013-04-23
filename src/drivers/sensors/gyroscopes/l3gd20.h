@@ -48,7 +48,7 @@ extern "C" {
 #define L3GD20_ADDRESS                (0x6B<<1)     // 1101001
 #define L3GD20_READBIT                (0x01)
 #define L3GD20_POLL_TIMEOUT           (100)         // Maximum number of read attempts in l3gd20Poll()
-#define L3GD20_ID                     (0xd4)
+#define L3GD20_ID                     BIN8(11010100)
 
 /* Struct to hold the gyroscope sensor data */
 typedef struct

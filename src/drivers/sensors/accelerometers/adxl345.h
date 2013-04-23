@@ -90,22 +90,22 @@ extern "C" {
 /* Used with register 0x2C (ADXL345_REG_BW_RATE) to set bandwidth */
 typedef enum
 {
-  ADXL345_DATARATE_3200_HZ    = 0x0f, // 1600Hz Bandwidth   140µA IDD
-  ADXL345_DATARATE_1600_HZ    = 0x0e, //  800Hz Bandwidth    90µA IDD
-  ADXL345_DATARATE_800_HZ     = 0x0d, //  400Hz Bandwidth   140µA IDD
-  ADXL345_DATARATE_400_HZ     = 0x0c, //  200Hz Bandwidth   140µA IDD
-  ADXL345_DATARATE_200_HZ     = 0x0b, //  100Hz Bandwidth   140µA IDD
-  ADXL345_DATARATE_100_HZ     = 0x0a, //   50Hz Bandwidth   140µA IDD (Default)
-  ADXL345_DATARATE_50_HZ      = 0x09, //   25Hz Bandwidth    90µA IDD
-  ADXL345_DATARATE_25_HZ      = 0x08, // 12.5Hz Bandwidth    60µA IDD
-  ADXL345_DATARATE_12_5_HZ    = 0x07, // 6.25Hz Bandwidth    50µA IDD
-  ADXL345_DATARATE_6_25HZ     = 0x06, // 3.13Hz Bandwidth    45µA IDD
-  ADXL345_DATARATE_3_13_HZ    = 0x05, // 1.56Hz Bandwidth    40µA IDD
-  ADXL345_DATARATE_1_56_HZ    = 0x04, // 0.78Hz Bandwidth    34µA IDD
-  ADXL345_DATARATE_0_78_HZ    = 0x03, // 0.39Hz Bandwidth    23µA IDD
-  ADXL345_DATARATE_0_39_HZ    = 0x02, // 0.20Hz Bandwidth    23µA IDD
-  ADXL345_DATARATE_0_20_HZ    = 0x01, // 0.10Hz Bandwidth    23µA IDD
-  ADXL345_DATARATE_0_10_HZ    = 0x00  // 0.05Hz Bandwidth    23µA IDD
+  ADXL345_DATARATE_3200_HZ    = BIN8(1111), // 1600Hz Bandwidth   140µA IDD
+  ADXL345_DATARATE_1600_HZ    = BIN8(1110), //  800Hz Bandwidth    90µA IDD
+  ADXL345_DATARATE_800_HZ     = BIN8(1101), //  400Hz Bandwidth   140µA IDD
+  ADXL345_DATARATE_400_HZ     = BIN8(1100), //  200Hz Bandwidth   140µA IDD
+  ADXL345_DATARATE_200_HZ     = BIN8(1011), //  100Hz Bandwidth   140µA IDD
+  ADXL345_DATARATE_100_HZ     = BIN8(1010), //   50Hz Bandwidth   140µA IDD (Default)
+  ADXL345_DATARATE_50_HZ      = BIN8(1001), //   25Hz Bandwidth    90µA IDD
+  ADXL345_DATARATE_25_HZ      = BIN8(1000), // 12.5Hz Bandwidth    60µA IDD
+  ADXL345_DATARATE_12_5_HZ    = BIN8(0111), // 6.25Hz Bandwidth    50µA IDD
+  ADXL345_DATARATE_6_25HZ     = BIN8(0110), // 3.13Hz Bandwidth    45µA IDD
+  ADXL345_DATARATE_3_13_HZ    = BIN8(0101), // 1.56Hz Bandwidth    40µA IDD
+  ADXL345_DATARATE_1_56_HZ    = BIN8(0100), // 0.78Hz Bandwidth    34µA IDD
+  ADXL345_DATARATE_0_78_HZ    = BIN8(0011), // 0.39Hz Bandwidth    23µA IDD
+  ADXL345_DATARATE_0_39_HZ    = BIN8(0010), // 0.20Hz Bandwidth    23µA IDD
+  ADXL345_DATARATE_0_20_HZ    = BIN8(0001), // 0.10Hz Bandwidth    23µA IDD
+  ADXL345_DATARATE_0_10_HZ    = BIN8(0000)  // 0.05Hz Bandwidth    23µA IDD
 } adxl345_dataRate_t;
 
 /* Used with register 0x31 (ADXL345_REG_DATA_FORMAT) to set g range */
