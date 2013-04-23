@@ -96,6 +96,28 @@
 /* VIN resistor divider multiplier is 3.12766 */
 #define RF1GHZNODE_VINADC_MULTIPLIER_FIXED10K (31277)
 
+#ifdef CFG_SDCARD
+/**************************************************************************/
+/*!
+    Handles timestamp requests for SD cards (adjust depending on if you
+    want to use the RTC, or just return 0, etc.)
+*/
+/**************************************************************************/
+DWORD get_fattime ()
+{
+  DWORD tmr = 0;
+
+  // tmr =  (((DWORD)rtcYear - 80) << 25)
+  //      | ((DWORD)rtcMon << 21)
+  //      | ((DWORD)rtcMday << 16)
+  //      | (WORD)(rtcHour << 11)
+  //      | (WORD)(rtcMin << 5)
+  //      | (WORD)(rtcSec >> 1);
+
+  return tmr;
+}
+#endif
+
 #ifdef CFG_CHIBI
 /**************************************************************************/
 /*!
@@ -556,22 +578,5 @@ uint32_t boardGetVIN(void)
   /* Return fixed point value (3157 = 3.157V) */
   return vcomp;
 }
-
-// TODO add for keil compilation
-#ifdef CFG_SDCARD
-DWORD get_fattime ()
-{
-  DWORD tmr = 0;
-
-  // tmr =  (((DWORD)rtcYear - 80) << 25)
-  //      | ((DWORD)rtcMon << 21)
-  //      | ((DWORD)rtcMday << 16)
-  //      | (WORD)(rtcHour << 11)
-  //      | (WORD)(rtcMin << 5)
-  //      | (WORD)(rtcSec >> 1);
-
-  return tmr;
-}
-#endif
 
 #endif

@@ -71,6 +71,28 @@
   #include "core/uart/uart.h"
 #endif
 
+#ifdef CFG_SDCARD
+/**************************************************************************/
+/*!
+    Handles timestamp requests for SD cards (adjust depending on if you
+    want to use the RTC, or just return 0, etc.)
+*/
+/**************************************************************************/
+DWORD get_fattime ()
+{
+  DWORD tmr = 0;
+
+  // tmr =  (((DWORD)rtcYear - 80) << 25)
+  //      | ((DWORD)rtcMon << 21)
+  //      | ((DWORD)rtcMday << 16)
+  //      | (WORD)(rtcHour << 11)
+  //      | (WORD)(rtcMin << 5)
+  //      | (WORD)(rtcSec >> 1);
+
+  return tmr;
+}
+#endif
+
 #ifdef CFG_CHIBI
 /**************************************************************************/
 /*!
