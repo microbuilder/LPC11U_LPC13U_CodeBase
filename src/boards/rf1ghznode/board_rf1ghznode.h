@@ -585,7 +585,7 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #ifdef CFG_ENABLE_USB
       #define CFG_USB_STRING_MANUFACTURER   "microBuilder.eu"
-      #define CFG_USB_STRING_PRODUCT        "LPC1347 CLI"
+      #define CFG_USB_STRING_PRODUCT        "RF1GHZNODE"
       #define CFG_USB_VENDORID              (0x1FC9)
 
       #define CFG_USB_CDC
