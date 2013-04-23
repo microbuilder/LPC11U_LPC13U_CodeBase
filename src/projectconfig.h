@@ -83,7 +83,7 @@ extern "C" {
 
     -----------------------------------------------------------------------*/
     // #define CFG_BRD_LPCXPRESSO_LPC1347
-    #define CFG_BRD_RF1GHZNODE
+    // #define CFG_BRD_RF1GHZNODE
     // #define CFG_BRD_RF1GHZUSB
     // #define CFG_BRD_LPCNFC
 
