@@ -11,6 +11,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Removed some unnecessary files
 - Added binary.h to simplify binary access across toolchains (removed '0b' references)
 - Added 'get_fattime' to board files (get timestamp for FAT32 and SD cards)
+- Moved board selection from projectconfig.h to the make file and IDE project properties
 
 ## 0.8.0 [2 April 2013] ##
 

@@ -81,35 +81,33 @@ extern "C" {
     are using by enabling one of the following definitions. The code base
     will then try to configure itself accordingly for that board.
 
-    -----------------------------------------------------------------------*/
-    // #define CFG_BRD_LPCXPRESSO_LPC1347
-    // #define CFG_BRD_RF1GHZNODE
-    // #define CFG_BRD_RF1GHZUSB
-    // #define CFG_BRD_LPCNFC
+    GNU Toolchain
+    -------------
+    If you are using make, the target board is specified in the makefile
 
-    #ifdef CFG_BRD_LPCXPRESSO_LPC1347
+    Crossworks for ARM
+    ------------------
+    The board is selected as an additional defined in the solution
+    properties window, in the 'Common' group under 'Preprocessor Options >
+    Preprocessor Definitions'
+
+    LPCXpresso/Red Suite
+    --------------------
+    Each board has it's own 'Build Configuration', which can be accessed
+    by right-clicking on your project, and selecting the 'Build
+    Configurations > Set Active ... > BUILD_CONFIG' menu
+
+    -----------------------------------------------------------------------*/
+    #if defined(CFG_BRD_LPCXPRESSO_LPC1347)
       #include "boards/lpcxpresso1347/board_lpcxpresso1347.h"
-    #endif
-    #ifdef CFG_BRD_RF1GHZNODE
+    #elif defined(CFG_BRD_RF1GHZNODE)
        #include "boards/rf1ghznode/board_rf1ghznode.h"
-    #endif
-    #ifdef CFG_BRD_RF1GHZUSB
+    #elif defined(CFG_BRD_RF1GHZUSB)
       #include "boards/rf1ghzusb/board_rf1ghzusb.h"
-    #endif
-    #ifdef CFG_BRD_LPCNFC
+    #elif defined (CFG_BRD_LPCNFC)
       #include "boards/lpcnfc/board_lpcnfc.h"
-    #endif
-/*=========================================================================*/
-
-
-/*=========================================================================
-    CONFIG FILE VALIDATION
-    -----------------------------------------------------------------------*/
-    #if !defined CFG_BRD_LPCXPRESSO_LPC1347 && \
-        !defined CFG_BRD_RF1GHZNODE         && \
-        !defined CFG_BRD_RF1GHZUSB          && \
-        !defined CFG_BRD_LPCNFC
-      #error "You must define a target board in projectconfig.h"
+    #else
+      #error "No CFG_BRD_* has been defined"
     #endif
 /*=========================================================================*/
 

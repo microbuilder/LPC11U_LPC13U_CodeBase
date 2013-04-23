@@ -299,6 +299,6 @@
   <configuration Name="Debug" c_preprocessor_definitions="DEBUG" gcc_debugging_level="Level 2" gcc_optimization_level="None" hidden="Yes"/>
   <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
   <configuration Name="Release" c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET" gcc_debugging_level="Level 1" gcc_optimization_level="Optimize For Size" hidden="Yes"/>
-  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" c_user_include_directories="$(ProjectDir)/src/;$(ProjectDir)/src/cli/" linker_printf_fp_enabled="Yes"/>
+  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" c_preprocessor_definitions="CFG_BRD_LPCXPRESSO_LPC1347" c_user_include_directories="$(ProjectDir)/src/;$(ProjectDir)/src/cli/" linker_printf_fp_enabled="Yes"/>
   <configuration Name="Test" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
 </solution>

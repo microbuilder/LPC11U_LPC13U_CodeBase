@@ -4,6 +4,9 @@
 
 PROJECT=firmware
 
+# See projectconfig.h for a list of valid board options!
+BOARD=CFG_BRD_LPCXPRESSO_LPC1347
+
 TARGET = lpc13u
 ifeq (lpc11u,$(TARGET))
   CORE = cortex-m0
@@ -289,6 +292,7 @@ GCFLAGS += -fmessage-length=0
 GCFLAGS += -fno-builtin 
 GCFLAGS += -mcpu=$(CORE) 
 GCFLAGS += -DTARGET=$(TARGET)
+GCFLAGS += -D$(BOARD)
 # For use with the GCC ARM Embedded toolchain
 # GCFLAGS += --specs=nano.specs
 # For use with the LPCXpresso toolchain
