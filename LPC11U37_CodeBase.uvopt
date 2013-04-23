@@ -230,7 +230,7 @@
 
   <Group>
     <GroupName>src</GroupName>
-    <tvExp>1</tvExp>
+    <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
     <RteFlg>0</RteFlg>
@@ -296,10 +296,10 @@
       <FileType>1</FileType>
       <tvExp>0</tvExp>
       <Focus>0</Focus>
-      <ColumnNumber>0</ColumnNumber>
+      <ColumnNumber>3</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>69</TopLine>
-      <CurrentLine>120</CurrentLine>
+      <TopLine>364</TopLine>
+      <CurrentLine>374</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>./src/boards/rf1ghznode/board_rf1ghznode.c</PathWithFileName>
       <FilenameWithoutPath>board_rf1ghznode.c</FilenameWithoutPath>
@@ -1954,8 +1954,8 @@
       <Focus>0</Focus>
       <ColumnNumber>33</ColumnNumber>
       <tvExpOptDlg>0</tvExpOptDlg>
-      <TopLine>0</TopLine>
-      <CurrentLine>0</CurrentLine>
+      <TopLine>161</TopLine>
+      <CurrentLine>188</CurrentLine>
       <bDave2>0</bDave2>
       <PathWithFileName>./src/drivers/sensors/sensors.c</PathWithFileName>
       <FilenameWithoutPath>sensors.c</FilenameWithoutPath>

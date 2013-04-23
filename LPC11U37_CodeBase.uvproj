@@ -348,7 +348,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls>--gnu --c99</MiscControls>
-              <Define></Define>
+              <Define>CFG_BRD_RF1GHZNODE</Define>
               <Undefine></Undefine>
               <IncludePath>src;src/cli</IncludePath>
             </VariousControls>
