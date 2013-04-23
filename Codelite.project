@@ -363,6 +363,7 @@
       <File Name="src/localisation/localisation.h"/>
     </VirtualDirectory>
     <File Name="src/assert.h"/>
+    <File Name="src/binary.h"/>
     <File Name="src/cr_startup_lpc11u_lpc13u.c"/>
     <File Name="src/errors.h"/>
     <File Name="src/fixedptc.h"/>

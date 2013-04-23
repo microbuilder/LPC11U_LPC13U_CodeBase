@@ -263,6 +263,7 @@
       <file file_name="src/printf-retarget.c"/>
       <file file_name="src/asserts.h"/>
       <file file_name="src/log.h"/>
+      <file file_name="src/binary.h"/>
     </folder>
     <folder Name="System Files">
       <file file_name="$(StudioDir)/source/thumb_crt0.s"/>
