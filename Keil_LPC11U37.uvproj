@@ -7,7 +7,7 @@
 
   <Targets>
     <Target>
-      <TargetName>LPC11U37_CodeBase</TargetName>
+      <TargetName>Keil_LPC11U37</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\UV4Build\</OutputDirectory>
-          <OutputName>LPC11U37_CodeBase</OutputName>
+          <OutputName>Keil_LPC11U37</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>

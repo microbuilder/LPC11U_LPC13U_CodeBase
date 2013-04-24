@@ -4,7 +4,8 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 
 ## 0.8.2 [Ongoing] ##
 
-- ...
+- Renamed Crossworks project files to CW_*
+- Renamed Keil project files to Keil_*
 
 ## 0.8.1 [23 April 2013] ##
 

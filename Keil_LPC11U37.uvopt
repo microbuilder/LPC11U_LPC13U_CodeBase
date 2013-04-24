@@ -21,7 +21,7 @@
   </DaveTm>
 
   <Target>
-    <TargetName>LPC11U37_CodeBase</TargetName>
+    <TargetName>Keil_LPC11U37</TargetName>
     <ToolsetNumber>0x4</ToolsetNumber>
     <ToolsetName>ARM-ADS</ToolsetName>
     <TargetOption>
