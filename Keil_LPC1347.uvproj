@@ -7,19 +7,19 @@
 
   <Targets>
     <Target>
-      <TargetName>Keil_LPC11U37</TargetName>
+      <TargetName>Keil_LPC1347</TargetName>
       <ToolsetNumber>0x4</ToolsetNumber>
       <ToolsetName>ARM-ADS</ToolsetName>
       <TargetOption>
         <TargetCommonOption>
-          <Device>LPC11U37/401</Device>
+          <Device>LPC1347</Device>
           <Vendor>NXP (founded by Philips)</Vendor>
-          <Cpu>IRAM(0x10000000-0x10001FFF) IRAM2(0x20004000-0x200047FF) IROM(0-0x1FFFF) CLOCK(12000000) CPUTYPE("Cortex-M0")</Cpu>
+          <Cpu>IRAM(0x10000000-0x10001FFF) IRAM2(0x20000000-0x200007FF) IROM(0-0xFFFF) CLOCK(12000000) CPUTYPE("Cortex-M3")</Cpu>
           <FlashUtilSpec></FlashUtilSpec>
-          <StartupFile>"STARTUP\NXP\LPC11Uxx\startup_LPC11Uxx.s" ("NXP LPC11Uxx Startup Code")</StartupFile>
-          <FlashDriverDll>UL2CM3(-O4303 -S0 -C0 -FO7 -FD10000000 -FC800 -FN1 -FF0LPC1xxx_128 -FS00 -FL020000)</FlashDriverDll>
-          <DeviceId>6508</DeviceId>
-          <RegisterFile>LPC11Uxx.h</RegisterFile>
+          <StartupFile>"STARTUP\NXP\LPC13Uxx\startup_LPC13Uxx.s" ("NXP LPC13Uxx Startup Code")</StartupFile>
+          <FlashDriverDll>UL2CM3(-O4303 -S0 -C0 -FO7 -FD10000000 -FC800 -FN1 -FF0LPC1xxx_64 -FS00 -FL010000)</FlashDriverDll>
+          <DeviceId>6286</DeviceId>
+          <RegisterFile>LPC13Uxx.h</RegisterFile>
           <MemoryEnv></MemoryEnv>
           <Cmp></Cmp>
           <Asm></Asm>
@@ -29,13 +29,13 @@
           <SLE66CMisc></SLE66CMisc>
           <SLE66AMisc></SLE66AMisc>
           <SLE66LinkerMisc></SLE66LinkerMisc>
-          <SFDFile>SFD\NXP\LPC11Uxx\LPC11Uxx.SFR</SFDFile>
+          <SFDFile>SFD\NXP\LPC13Uxx\LPC13Uxx.sfr</SFDFile>
           <UseEnv>0</UseEnv>
           <BinPath></BinPath>
           <IncludePath></IncludePath>
           <LibPath></LibPath>
-          <RegisterFilePath>NXP\LPC11Uxx\</RegisterFilePath>
-          <DBRegisterFilePath>NXP\LPC11Uxx\</DBRegisterFilePath>
+          <RegisterFilePath>NXP\LPC13Uxx\</RegisterFilePath>
+          <DBRegisterFilePath>NXP\LPC13Uxx\</DBRegisterFilePath>
           <TargetStatus>
             <Error>0</Error>
             <ExitCodeStop>0</ExitCodeStop>
@@ -44,7 +44,7 @@
             <InvalidFlash>1</InvalidFlash>
           </TargetStatus>
           <OutputDirectory>.\UV4Build\</OutputDirectory>
-          <OutputName>Keil_LPC11U37</OutputName>
+          <OutputName>Keil_LPC1347</OutputName>
           <CreateExecutable>1</CreateExecutable>
           <CreateLib>0</CreateLib>
           <CreateHexFile>0</CreateHexFile>
@@ -101,12 +101,12 @@
         <DllOption>
           <SimDllName>SARMCM3.DLL</SimDllName>
           <SimDllArguments></SimDllArguments>
-          <SimDlgDll>DARMCM1.DLL</SimDlgDll>
-          <SimDlgDllArguments>-pCM0</SimDlgDllArguments>
+          <SimDlgDll>DCM.DLL</SimDlgDll>
+          <SimDlgDllArguments>-pCM3</SimDlgDllArguments>
           <TargetDllName>SARMCM3.DLL</TargetDllName>
           <TargetDllArguments></TargetDllArguments>
-          <TargetDlgDll>TARMCM1.DLL</TargetDlgDll>
-          <TargetDlgDllArguments>-pCM0</TargetDlgDllArguments>
+          <TargetDlgDll>TCM.DLL</TargetDlgDll>
+          <TargetDlgDllArguments>-pCM3</TargetDlgDllArguments>
         </DllOption>
         <DebugOption>
           <OPTHX>
@@ -198,7 +198,7 @@
             <AdsLsxf>1</AdsLsxf>
             <RvctClst>0</RvctClst>
             <GenPPlst>0</GenPPlst>
-            <AdsCpuType>"Cortex-M0"</AdsCpuType>
+            <AdsCpuType>"Cortex-M3"</AdsCpuType>
             <RvctDeviceName></RvctDeviceName>
             <mOS>0</mOS>
             <uocRom>0</uocRom>
@@ -272,7 +272,7 @@
               <IROM>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x10000</Size>
               </IROM>
               <XRAM>
                 <Type>0</Type>
@@ -297,7 +297,7 @@
               <OCR_RVCT4>
                 <Type>1</Type>
                 <StartAddress>0x0</StartAddress>
-                <Size>0x20000</Size>
+                <Size>0x10000</Size>
               </OCR_RVCT4>
               <OCR_RVCT5>
                 <Type>1</Type>
@@ -326,7 +326,7 @@
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x20004000</StartAddress>
+                <StartAddress>0x20000000</StartAddress>
                 <Size>0x800</Size>
               </OCR_RVCT10>
             </OnChipMemories>
@@ -348,7 +348,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls>--gnu --c99</MiscControls>
-              <Define>CFG_BRD_RF1GHZNODE</Define>
+              <Define>CFG_BRD_LPCXPRESSO_LPC1347</Define>
               <Undefine></Undefine>
               <IncludePath>./cmsis;src;src/cli</IncludePath>
             </VariousControls>
@@ -370,7 +370,7 @@
             </VariousControls>
           </Aads>
           <LDads>
-            <umfTarg>1</umfTarg>
+            <umfTarg>0</umfTarg>
             <Ropi>0</Ropi>
             <Rwpi>0</Rwpi>
             <noStLib>0</noStLib>
@@ -392,14 +392,14 @@
           <GroupName>cmsis</GroupName>
           <Files>
             <File>
-              <FileName>system_LPC11Uxx.c</FileName>
+              <FileName>system_LPC13Uxx.c</FileName>
               <FileType>1</FileType>
-              <FilePath>./cmsis/system_LPC11Uxx.c</FilePath>
+              <FilePath>./cmsis/system_LPC13Uxx.c</FilePath>
             </File>
             <File>
-              <FileName>startup_LPC11Uxx_arm.s</FileName>
+              <FileName>startup_LPC13Uxx_arm.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\cmsis\startup_LPC11Uxx_arm.s</FilePath>
+              <FilePath>.\cmsis\startup_LPC13Uxx_arm.s</FilePath>
             </File>
           </Files>
         </Group>

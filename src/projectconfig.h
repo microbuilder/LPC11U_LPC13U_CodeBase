@@ -96,6 +96,11 @@ extern "C" {
     Each board has it's own 'Build Configuration', which can be accessed
     by right-clicking on your project, and selecting the 'Build
     Configurations > Set Active ... > BUILD_CONFIG' menu
+    
+    Keil uVision
+    ------------
+    Select a board via the project 'Options' dialogue box, in the C/C++
+    tab, entering an appropriate value in the 'Define' textbox
 
     -----------------------------------------------------------------------*/
     #if defined(CFG_BRD_LPCXPRESSO_LPC1347)
