@@ -144,7 +144,10 @@ pn532_error_t pn532Read(byte_t * pbtResponse, size_t * pszLen)
 {
   if (!_pn532_pcb.initialised)
   {
-    pn532Init();
+    /* Warning: pn532Init uses a different error type! */
+    error_t error;
+    error = pn532Init();
+    if (error) return PN532_ERROR_UNABLETOINIT;
   }
 
   // Try to wake the device up if it's in sleep mode
@@ -187,15 +190,17 @@ pn532_error_t pn532Write(byte_t * abtCommand, size_t szLen)
 {
   if (!_pn532_pcb.initialised)
   {
-    pn532Init();
+    /* Warning: pn532Init uses a different error type! */
+    error_t error;
+    error = pn532Init();
+    if (error) return PN532_ERROR_UNABLETOINIT;
   }
 
   // Try to wake the device up if it's in sleep mode
   if (_pn532_pcb.state == PN532_STATE_SLEEP)
   {
-    pn532_error_t wakeupError = pn532_bus_Wakeup();
-    if (wakeupError)
-      return wakeupError;
+    pn532_error_t error = pn532_bus_Wakeup();
+    if (error) return error;
   }
 
   // Send the command if the device is in an appropriate state

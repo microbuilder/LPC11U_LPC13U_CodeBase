@@ -203,8 +203,8 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_LED_PORT                  (0)
     #define CFG_LED_PIN                   (23)
-    #define CFG_LED_ON                    (1)
-    #define CFG_LED_OFF                   (0)
+    #define CFG_LED_ON                    (0)
+    #define CFG_LED_OFF                   (1)
 /*=========================================================================*/
 
 

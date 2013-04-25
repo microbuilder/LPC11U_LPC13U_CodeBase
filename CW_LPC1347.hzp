@@ -154,20 +154,6 @@
               <file file_name="src/drivers/rf/pn532/mem_allocator/pn532_mem.c"/>
             </folder>
           </folder>
-          <folder Name="cc3000" file_name="">
-            <folder Name="hostdriver" file_name="">
-              <file file_name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/os.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/security.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
-            </folder>
-            <file file_name="src/drivers/rf/cc3000/spi.c"/>
-          </folder>
         </folder>
         <folder Name="storage">
           <folder Name="fatfs">
@@ -275,6 +261,9 @@
         <folder Name="rf1ghzusb" file_name="">
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
+        </folder>
+        <folder Name="rf1ghznode" file_name="">
+          <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
         </folder>
       </folder>
       <file file_name="src/printf-retarget.c"/>

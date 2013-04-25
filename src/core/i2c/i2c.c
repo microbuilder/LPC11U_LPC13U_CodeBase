@@ -347,7 +347,7 @@ uint32_t i2cEngine( void )
   I2CWrIndex = 0;
   if ( I2CStart() != TRUE )
   {
-	// I2C timed out
+        // I2C timed out
     I2CStop();
     return ( I2CSTATE_TIMEOUT );
   }
@@ -388,7 +388,7 @@ bool i2cCheckAddress( uint8_t addr )
   else if (i2cState == I2CSTATE_TIMEOUT)
   {
     // I2C timed out waiting for start/stop
-	return false;
+        return false;
   }
   else
   {

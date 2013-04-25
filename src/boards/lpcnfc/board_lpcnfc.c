@@ -134,6 +134,12 @@ void boardInit(void)
     cliInit();
   #endif
 
+  /* Make sure pins are in a relevant state */
+  LPC_IOCON->PIO0_4         = (1<<0);                     // I2C-SCL            I2C = standard mode
+  LPC_IOCON->PIO0_5         = (1<<0);                     // I2C-SDA            I2C = standard mode
+  LPC_IOCON->PIO0_16        = (0<<0) | (0<<3) | (1<<7);   // GPIO (RSTPD_N)     no pull-up/down, ADMODE = digital
+  LPC_IOCON->PIO0_17        = (0<<0) | (0<<3);            // GPIO (IRQ)         no pull-up/down
+
   /* Start the PN532 */
   #ifdef CFG_PN532
     pn532Init();
