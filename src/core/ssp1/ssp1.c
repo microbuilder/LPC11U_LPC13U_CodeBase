@@ -51,8 +51,16 @@ void ssp1ClockSlow()
   /* (PCLK / (CPSDVSR * [SCR+1])) = (4,800,000 / (2 x [5 + 1])) = 400 KHz */
   LPC_SSP1->CR0 = ( (7u << 0)     // Data size = 8-bit  (bits 3:0)
            | (0 << 4)             // Frame format = SPI (bits 5:4)
-           | (0  << 6)            // CPOL = 0           (bits 6 + 7)
+           #if CFG_SSP_CPOL1 == 1
+           | (1  << 6)            // CPOL = 1           (bit 6)
+           #else
+           | (0  << 6)            // CPOL = 0           (bit 6)
+           #endif
+           #if CFG_SSP_CPHA1 == 1
+           | (1 << 7)             // CPHA = 1           (bit 7)
+           #else
            | (0 << 7)             // CPHA = 0           (bit 7)
+           #endif
            | SSP1_SCR_5);         // Clock rate = 5     (bits 15:8)
 
   /* Clock prescale register must be even and at least 2 in master mode */
@@ -72,8 +80,16 @@ void ssp1ClockFast()
   /* (PCLK / (CPSDVSR * [SCR+1])) = (72,000,000 / (2 * [5 + 1])) = 6.0 MHz */
   LPC_SSP1->CR0 = ( (7u << 0)     // Data size = 8-bit  (bits 3:0)
            | (0 << 4)             // Frame format = SPI (bits 5:4)
-           | (0  << 6)            // CPOL = 0           (bits 6 + 7)
+           #if CFG_SSP_CPOL1 == 1
+           | (1  << 6)            // CPOL = 1           (bit 6)
+           #else
+           | (0  << 6)            // CPOL = 0           (bit 6)
+           #endif
+           #if CFG_SSP_CPHA1 == 1
+           | (1 << 7)             // CPHA = 1           (bit 7)
+           #else
            | (0 << 7)             // CPHA = 0           (bit 7)
+           #endif
            | SSP1_SCR_5);         // Clock rate = 5     (bits 15:8)
 
   /* Clock prescale register must be even and at least 2 in master mode */

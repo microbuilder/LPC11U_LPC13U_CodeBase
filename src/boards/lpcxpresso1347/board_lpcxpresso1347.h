@@ -303,6 +303,12 @@ extern "C" {
     #define CFG_SSP_MISO1_LOCATION      (CFG_SSP_MISO1_1_21)
     #define CFG_SSP_MOSI1_LOCATION      (CFG_SSP_MOSI1_1_22)
     #define CFG_SSP_SCK1_LOCATION       (CFG_SSP_SCK1_1_20)
+
+    // Set the phase and polarity for SSP0 and SSP1
+    #define CFG_SSP_CPOL0               (0)
+    #define CFG_SSP_CPHA0               (0)
+    #define CFG_SSP_CPOL1               (0)
+    #define CFG_SSP_CPHA1               (0)    
 /*=========================================================================*/
 
 

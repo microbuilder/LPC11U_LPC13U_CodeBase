@@ -51,8 +51,16 @@ void ssp0ClockSlow()
   /* (PCLK / (CPSDVSR * [SCR+1])) = (4,800,000 / (2 x [5 + 1])) = 400 KHz */
   LPC_SSP0->CR0 = ( (7u << 0)     // Data size = 8-bit  (bits 3:0)
            | (0 << 4)             // Frame format = SPI (bits 5:4)
-           | (0  << 6)            // CPOL = 0           (bits 6 + 7)
+           #if CFG_SSP_CPOL0 == 1
+           | (1  << 6)            // CPOL = 1           (bit 6)
+           #else
+           | (0  << 6)            // CPOL = 0           (bit 6)
+           #endif
+           #if CFG_SSP_CPHA0 == 1
+           | (1 << 7)             // CPHA = 1           (bit 7)
+           #else
            | (0 << 7)             // CPHA = 0           (bit 7)
+           #endif
            | SSP0_SCR_5);         // Clock rate = 5     (bits 15:8)
 
   /* Clock prescale register must be even and at least 2 in master mode */
@@ -72,8 +80,16 @@ void ssp0ClockFast()
   /* (PCLK / (CPSDVSR * [SCR+1])) = (72,000,000 / (2 * [5 + 1])) = 6.0 MHz */
   LPC_SSP0->CR0 = ( (7u << 0)     // Data size = 8-bit  (bits 3:0)
            | (0 << 4)             // Frame format = SPI (bits 5:4)
-           | (0  << 6)            // CPOL = 0           (bits 6 + 7)
+           #if CFG_SSP_CPOL0 == 1
+           | (1  << 6)            // CPOL = 1           (bit 6)
+           #else
+           | (0  << 6)            // CPOL = 0           (bit 6)
+           #endif
+           #if CFG_SSP_CPHA0 == 1
+           | (1 << 7)             // CPHA = 1           (bit 7)
+           #else
            | (0 << 7)             // CPHA = 0           (bit 7)
+           #endif
            | SSP0_SCR_5);         // Clock rate = 5     (bits 15:8)
 
   /* Clock prescale register must be even and at least 2 in master mode */
@@ -125,8 +141,8 @@ void ssp0Init(void)
   for ( i = 0; i < SSP0_FIFOSIZE; i++ )
   {
     Dummy = LPC_SSP0->DR;
-  }
-
+  }  
+  
   /* Enable device and set it to master mode, no loopback */
   LPC_SSP0->CR1 = SSP0_CR1_SSE_ENABLED | SSP0_CR1_MS_MASTER | SSP0_CR1_LBM_NORMAL;
 }
