@@ -1,15 +1,13 @@
 /**************************************************************************/
 /*!
-    @file     protocl_cmd_tbl.h
+    @file     protocol.c
     @author   K. Townsend (microBuilder.eu)
-
-    @brief    Command lookup table
 
     @section LICENSE
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2013, K. Townsend
+    Copyright (c) 2013, K. Townsend (microBuilder.eu)
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -36,35 +34,13 @@
 */
 /**************************************************************************/
 
-#ifndef __PROTOCOL_CMD_TBL_H__
-#define __PROTOCOL_CMD_TBL_H__
+#include "protocol.h"
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+//------------- command lookup table -------------//
+#define CMD_LOOKUP_EXPAND(command_id, function)\
+  [command_id] = function, \
 
-//#define PROTOCOL_CMD_COUNT (sizeof(protocol_cmd_tbl)/sizeof(protocol_cmd_t))
-//
-///* Function prototypes for the command table */
-//void cmd_help(uint8_t argc, char **argv);
-//
-///**************************************************************************/
-///*!
-//    Command list for the protocol command interpreter and the name of the
-//    corresponding method that handles the command.
-//
-//    Note that a trailing ',' is required on the last entry, which will
-//    cause a NULL entry to be appended to the end of the table.
-//*/
-///**************************************************************************/
-//protocol_cmd_t protocol_cmd_tbl[] =
-//{
-//  /* Command ID (U16), Min Payload, Max Payload, Function name */
-//  {  0x0000,           0,           10,          cmd_help, },
-//};
-
-#ifdef __cplusplus
-}
-#endif
-
-#endif
+protCmdFunc_t protocol_cmd_tbl[] =
+{
+  PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
+};

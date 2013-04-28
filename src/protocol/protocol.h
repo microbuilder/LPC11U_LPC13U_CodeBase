@@ -62,6 +62,29 @@ typedef enum
   PROT_MSGTYPE_ERROR            = 0x80
 } protMsgType_t;
 
+//------------- X macros for create consistent command enum, function prototyp & cmd table -------------//
+#define PROTOCOL_COMMAND_TABLE(ENTRY) \
+    ENTRY(PROT_CMDTYPE_HELP, cmd_help)\
+    ENTRY(PROT_CMDTYPE_CMD1, cmd_cmd1)\
+
+//------------- command type -------------//
+#define CMDTYPE_EXPAND(command_id, function) \
+  command_id,\
+
+typedef enum {
+  PROTOCOL_COMMAND_TABLE(CMDTYPE_EXPAND)
+  PROT_CMDTYPE_COUNT /**< number of commands */
+}protCmdType_t;
+
+//------------- command prototype -------------//
+#define CMD_PROTOTYPE_EXPAND(command_id, function) \
+  void function(uint8_t argc, char **argv);\
+
+PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
+
+typedef void (* const protCmdFunc_t)(uint8_t, char**);
+protCmdFunc_t protocol_cmd_tbl[];
+
 #ifdef __cplusplus
 }
 #endif

@@ -364,12 +364,15 @@ void boardInit(void)
     @brief Primary entry point for this project.
 */
 /**************************************************************************/
+#include "protocol/protocol.h" // TODO move later
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
 
   boardInit();
+
+  protocol_cmd_tbl[PROT_CMDTYPE_HELP](0, NULL);
 
   while (1)
   {
