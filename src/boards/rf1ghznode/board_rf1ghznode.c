@@ -42,7 +42,6 @@
 #if defined CFG_BRD_RF1GHZNODE
 
 #include "boards/board.h"
-#include "board_rf1ghznode.h"
 #include "core/gpio/gpio.h"
 #include "core/systick/systick.h"
 #include "core/eeprom/eeprom.h"

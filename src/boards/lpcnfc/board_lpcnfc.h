@@ -258,7 +258,7 @@ extern "C" {
     #define CFG_SSP_CPOL0               (0)
     #define CFG_SSP_CPHA0               (0)
     #define CFG_SSP_CPOL1               (0)
-    #define CFG_SSP_CPHA1               (0)    
+    #define CFG_SSP_CPHA1               (0)
 /*=========================================================================*/
 
 
@@ -509,6 +509,26 @@ extern "C" {
     #if defined(CFG_RTC) && !defined(CFG_ENABLE_I2C)
       #error "CFG_ENABLE_I2C must be defined with CFG_RTC"
     #endif
+/*=========================================================================*/
+
+
+/*=========================================================================
+    STEPPER MOTOR SUPPORT
+    -----------------------------------------------------------------------
+
+    CFG_STEPPER                 If defined, basic stepper motor support
+                                will be included.  Requires external HW.
+    -----------------------------------------------------------------------*/
+    // #define CFG_STEPPER
+    #define CFG_STEPPER_TIMER32                       (0)
+    #define CFG_STEPPER_IN1_PORT                      (0)
+    #define CFG_STEPPER_IN1_PIN                       (8)
+    #define CFG_STEPPER_IN2_PORT                      (0)
+    #define CFG_STEPPER_IN2_PIN                       (9)
+    #define CFG_STEPPER_IN3_PORT                      (0)
+    #define CFG_STEPPER_IN3_PIN                       (14)
+    #define CFG_STEPPER_IN4_PORT                      (0)
+    #define CFG_STEPPER_IN4_PIN                       (13)
 /*=========================================================================*/
 
 

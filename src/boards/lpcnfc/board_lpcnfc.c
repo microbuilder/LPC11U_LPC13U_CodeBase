@@ -42,7 +42,6 @@
 #if defined CFG_BRD_LPCNFC
 
 #include "boards/board.h"
-#include "board_lpcnfc.h"
 #include "core/gpio/gpio.h"
 #include "core/systick/systick.h"
 #include "core/eeprom/eeprom.h"

@@ -43,7 +43,6 @@
 #if defined CFG_BRD_RF1GHZUSB
 
 #include "boards/board.h"
-#include "board_rf1ghzusb.h"
 #include "core/gpio/gpio.h"
 #include "core/systick/systick.h"
 #include "core/eeprom/eeprom.h"

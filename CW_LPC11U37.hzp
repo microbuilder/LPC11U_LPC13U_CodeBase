@@ -261,6 +261,11 @@
         </folder>
         <folder Name="rf1ghznode" file_name="">
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
+          <file file_name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
+        </folder>
+        <folder Name="lpcstepper" file_name="">
+          <file file_name="src/boards/lpcstepper/board_lpcstepper.c"/>
+          <file file_name="src/boards/lpcstepper/board_lpcstepper.h"/>
         </folder>
       </folder>
       <file file_name="src/printf-retarget.c"/>

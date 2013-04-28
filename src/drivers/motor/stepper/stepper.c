@@ -64,6 +64,10 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+#include "projectconfig.h"
+
+#ifdef CFG_STEPPER
+
 #include <stdlib.h>
 
 #include "stepper.h"
@@ -85,28 +89,28 @@ void stepMotor(uint32_t thisStep)
   switch (thisStep)
   {
     case 0: // 1010
-      GPIOSetBitValue(STEPPER_IN1_PORT, STEPPER_IN1_PIN, 1);
-      GPIOSetBitValue(STEPPER_IN2_PORT, STEPPER_IN2_PIN, 0);
-      GPIOSetBitValue(STEPPER_IN3_PORT, STEPPER_IN3_PIN, 1);
-      GPIOSetBitValue(STEPPER_IN4_PORT, STEPPER_IN4_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN1_PORT, CFG_STEPPER_IN1_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN2_PORT, CFG_STEPPER_IN2_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN3_PORT, CFG_STEPPER_IN3_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN4_PORT, CFG_STEPPER_IN4_PIN, 0);
       break;
     case 1: // 0110
-      GPIOSetBitValue(STEPPER_IN1_PORT, STEPPER_IN1_PIN, 0);
-      GPIOSetBitValue(STEPPER_IN2_PORT, STEPPER_IN2_PIN, 1);
-      GPIOSetBitValue(STEPPER_IN3_PORT, STEPPER_IN3_PIN, 1);
-      GPIOSetBitValue(STEPPER_IN4_PORT, STEPPER_IN4_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN1_PORT, CFG_STEPPER_IN1_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN2_PORT, CFG_STEPPER_IN2_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN3_PORT, CFG_STEPPER_IN3_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN4_PORT, CFG_STEPPER_IN4_PIN, 0);
       break;
     case 2: // 0101
-      GPIOSetBitValue(STEPPER_IN1_PORT, STEPPER_IN1_PIN, 0);
-      GPIOSetBitValue(STEPPER_IN2_PORT, STEPPER_IN2_PIN, 1);
-      GPIOSetBitValue(STEPPER_IN3_PORT, STEPPER_IN3_PIN, 0);
-      GPIOSetBitValue(STEPPER_IN4_PORT, STEPPER_IN4_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN1_PORT, CFG_STEPPER_IN1_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN2_PORT, CFG_STEPPER_IN2_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN3_PORT, CFG_STEPPER_IN3_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN4_PORT, CFG_STEPPER_IN4_PIN, 1);
       break;
     case 3: // 1001
-      GPIOSetBitValue(STEPPER_IN1_PORT, STEPPER_IN1_PIN, 1);
-      GPIOSetBitValue(STEPPER_IN2_PORT, STEPPER_IN2_PIN, 0);
-      GPIOSetBitValue(STEPPER_IN3_PORT, STEPPER_IN3_PIN, 0);
-      GPIOSetBitValue(STEPPER_IN4_PORT, STEPPER_IN4_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN1_PORT, CFG_STEPPER_IN1_PIN, 1);
+      GPIOSetBitValue(CFG_STEPPER_IN2_PORT, CFG_STEPPER_IN2_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN3_PORT, CFG_STEPPER_IN3_PIN, 0);
+      GPIOSetBitValue(CFG_STEPPER_IN4_PORT, CFG_STEPPER_IN4_PIN, 1);
       break;
   }
 }
@@ -123,19 +127,19 @@ void stepMotor(uint32_t thisStep)
 void stepperInit(uint32_t steps)
 {
   // Setup motor control pins
-  GPIOSetDir(STEPPER_IN1_PORT, STEPPER_IN1_PIN, 1);
-  GPIOSetDir(STEPPER_IN2_PORT, STEPPER_IN2_PIN, 1);
-  GPIOSetDir(STEPPER_IN3_PORT, STEPPER_IN3_PIN, 1);
-  GPIOSetDir(STEPPER_IN4_PORT, STEPPER_IN4_PIN, 1);
+  GPIOSetDir(CFG_STEPPER_IN1_PORT, CFG_STEPPER_IN1_PIN, 1);
+  GPIOSetDir(CFG_STEPPER_IN2_PORT, CFG_STEPPER_IN2_PIN, 1);
+  GPIOSetDir(CFG_STEPPER_IN3_PORT, CFG_STEPPER_IN3_PIN, 1);
+  GPIOSetDir(CFG_STEPPER_IN4_PORT, CFG_STEPPER_IN4_PIN, 1);
 
-  GPIOSetBitValue(STEPPER_IN1_PORT, STEPPER_IN1_PIN, 0);
-  GPIOSetBitValue(STEPPER_IN2_PORT, STEPPER_IN2_PIN, 0);
-  GPIOSetBitValue(STEPPER_IN3_PORT, STEPPER_IN3_PIN, 0);
-  GPIOSetBitValue(STEPPER_IN4_PORT, STEPPER_IN4_PIN, 0);
+  GPIOSetBitValue(CFG_STEPPER_IN1_PORT, CFG_STEPPER_IN1_PIN, 0);
+  GPIOSetBitValue(CFG_STEPPER_IN2_PORT, CFG_STEPPER_IN2_PIN, 0);
+  GPIOSetBitValue(CFG_STEPPER_IN3_PORT, CFG_STEPPER_IN3_PIN, 0);
+  GPIOSetBitValue(CFG_STEPPER_IN4_PORT, CFG_STEPPER_IN4_PIN, 0);
 
   // Initialise 32-bit timer (used for delays)
-  timer32Init(STEPPER_TIMER32);
-  timer32Enable(STEPPER_TIMER32);
+  timer32Init(CFG_STEPPER_TIMER32);
+  timer32Enable(CFG_STEPPER_TIMER32);
 
   // Set the number of steps per rotation
   stepperStepsPerRotation = steps;
@@ -260,7 +264,7 @@ void stepperStep(int32_t steps)
   while (stepsLeft > 0)
   {
     // Wait x ticks between individual steps
-    timer32DelayTicks(STEPPER_TIMER32, stepperStepDelay);
+    timer32DelayTicks(CFG_STEPPER_TIMER32, stepperStepDelay);
 
     // Increment or decrement step counters (depending on direction)
     if (steps > 0)
@@ -290,5 +294,4 @@ void stepperStep(int32_t steps)
   }
 }
 
-
-
+#endif

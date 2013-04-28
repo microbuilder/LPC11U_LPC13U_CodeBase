@@ -42,7 +42,6 @@
 #if defined CFG_BRD_LPCXPRESSO_LPC1347
 
 #include "boards/board.h"
-#include "board_lpcxpresso1347.h"
 #include "core/gpio/gpio.h"
 #include "core/systick/systick.h"
 #include "core/eeprom/eeprom.h"

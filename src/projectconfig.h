@@ -96,7 +96,7 @@ extern "C" {
     Each board has it's own 'Build Configuration', which can be accessed
     by right-clicking on your project, and selecting the 'Build
     Configurations > Set Active ... > BUILD_CONFIG' menu
-    
+
     Keil uVision
     ------------
     Select a board via the project 'Options' dialogue box, in the C/C++
@@ -111,6 +111,8 @@ extern "C" {
       #include "boards/rf1ghzusb/board_rf1ghzusb.h"
     #elif defined (CFG_BRD_LPCNFC)
       #include "boards/lpcnfc/board_lpcnfc.h"
+    #elif defined (CFG_BRD_LPCSTEPPER)
+      #include "boards/lpcstepper/board_lpcstepper.h"
     #else
       #error "No CFG_BRD_* has been defined"
     #endif

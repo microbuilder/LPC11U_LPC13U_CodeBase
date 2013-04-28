@@ -7,7 +7,7 @@
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2010, microBuilder SARL
+    Copyright (c) 2013, K. Townsend
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -38,16 +38,6 @@
 #define _STEPPER_H_
 
 #include "projectconfig.h"
-
-#define STEPPER_TIMER32     (0)
-#define STEPPER_IN1_PORT    (1)
-#define STEPPER_IN1_PIN     (25)
-#define STEPPER_IN2_PORT    (1)
-#define STEPPER_IN2_PIN     (26)
-#define STEPPER_IN3_PORT    (1)
-#define STEPPER_IN3_PIN     (27)
-#define STEPPER_IN4_PORT    (1)
-#define STEPPER_IN4_PIN     (28)
 
 void     stepperInit( uint32_t steps );
 void     stepperSetSpeed( uint32_t rpm );
