@@ -155,11 +155,22 @@ void boardInit(void)
 /**************************************************************************/
 int main(void)
 {
+  uint32_t currentSecond, lastSecond;
+  currentSecond = lastSecond = 0;
+  
   /* Configure the HW */
   boardInit();
 
   while (1)
   {
+    currentSecond = systickGetSecondsActive();
+    if (currentSecond != lastSecond)
+    {
+      lastSecond = currentSecond;
+      /* Blinky */
+      boardLED(lastSecond % 2);
+    }
+
     /* Poll for CLI input if CFG_INTERFACE is enabled */
     #ifdef CFG_INTERFACE
       cliPoll();
