@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     protocol.c
+    @file     protocol_cmd_help.c
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
@@ -34,58 +34,12 @@
 */
 /**************************************************************************/
 
-#include "protocol.h"
-#include "core/fifo/fifo.h"
-#include "core/usb/usb_hid.h"
+#include "../protocol.h"
 
-#define CMD_FIFO_DEPTH 128
-
-static uint8_t ff_command_buffer[CMD_FIFO_DEPTH];
-static fifo_t ff_command =
+protError_t protcmd_led(uint8_t length, uint8_t payload[])
 {
-    .buf          = ff_command_buffer,
-    .size         = CMD_FIFO_DEPTH,
-    .overwritable = true,
-    .irq          = USB_IRQn //USB_IRQ_IRQn for lpc13uxx
-};
+  ASSERT( 1 == length, PROT_ERROR_INVALID_PARA);
+  boardLED(payload[0]);
 
-//------------- command lookup table -------------//
-#define CMD_LOOKUP_EXPAND(command_id, function)\
-  [command_id] = function, \
-
-protCmdFunc_t protocol_cmd_tbl[] =
-{
-  PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
-};
-
-void prot_task(void * p_para)
-{
-  if ( fifo_getLength(&ff_command) >= 64 )
-  {
-    uint8_t message[64];
-    uint16_t command_id;
-
-    fifo_readArray(&ff_command, message, 64);
-    ASSERT( PROT_MSGTYPE_COMMAND == message[0], (void) 0);
-
-    command_id = (message[1] << 8) + message[2];
-    ASSERT( command_id < PROT_CMDTYPE_COUNT, (void) 0);
-
-    protocol_cmd_tbl[command_id] ( message[3], message+4 );
-  }
-}
-
-// received command
-void usb_hid_generic_recv_isr(USB_HID_GenericReportOut_t  *out_report)
-{
-  for(uint32_t i=0; i<sizeof(USB_HID_GenericReportOut_t); i++)
-  {
-    fifo_write(&ff_command, out_report->data[i]);
-  }
-}
-
-// send response or error
-bool usb_hid_generic_report_request_isr(USB_HID_GenericReportIn_t *in_report)
-{
-  return false;
+  return PROT_ERROR_NONE;
 }

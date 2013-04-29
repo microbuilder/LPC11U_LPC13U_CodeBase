@@ -371,8 +371,6 @@ int main(void)
 
   boardInit();
 
-  protocol_cmd_tbl[PROT_CMDTYPE_HELP](0, NULL);
-
   while (1)
   {
     currentSecond = systickGetSecondsActive();
@@ -385,6 +383,8 @@ int main(void)
         sendMessage();
       #endif
     }
+
+    prot_task(NULL);
 
     /* Poll for CLI input if CFG_INTERFACE is enabled */
     #ifdef CFG_INTERFACE

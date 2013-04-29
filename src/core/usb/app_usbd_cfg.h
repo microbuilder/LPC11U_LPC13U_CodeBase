@@ -125,18 +125,11 @@ extern "C" {
 
 #ifdef CFG_USB_HID_GENERIC
 typedef struct {
-  uint32_t ReadData[15];
-  char Status;
-  char Count;
-  char Sequence;
+  uint8_t data[64];
 } USB_HID_GenericReportIn_t;
 
 typedef struct {
-  uint32_t WriteData[15];
-  char Opcode;
-  char Address;
-  char Count;
-  char Sequence;
+  uint8_t data[64];
 } USB_HID_GenericReportOut_t;
 
 // report size is not allowed to exceed maximum endpoint size, which is 64 for full speed

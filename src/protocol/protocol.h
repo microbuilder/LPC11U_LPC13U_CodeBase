@@ -33,10 +33,11 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#include "projectconfig.h"
 
 #ifndef _PROTOCOL_H_
 #define _PROTOCOL_H_
+
+#include "projectconfig.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -62,10 +63,17 @@ typedef enum
   PROT_MSGTYPE_ERROR            = 0x80
 } protMsgType_t;
 
+typedef enum
+{
+  PROT_ERROR_NONE = 0,
+  PROT_ERROR_INVALID_PARA,
+  PROT_ERROR_UNKNOWN,
+} protError_t;
+
 //------------- X macros for create consistent command enum, function prototyp & cmd table -------------//
 #define PROTOCOL_COMMAND_TABLE(ENTRY) \
-    ENTRY(PROT_CMDTYPE_HELP, cmd_help)\
-    ENTRY(PROT_CMDTYPE_CMD1, cmd_cmd1)\
+    ENTRY(PROT_CMDTYPE_HELP, protcmd_help)\
+    ENTRY(PROT_CMDTYPE_CMD1, protcmd_led)\
 
 //------------- command type -------------//
 #define CMDTYPE_EXPAND(command_id, function) \
@@ -78,12 +86,12 @@ typedef enum {
 
 //------------- command prototype -------------//
 #define CMD_PROTOTYPE_EXPAND(command_id, function) \
-  void function(uint8_t argc, char **argv);\
+  protError_t function(uint8_t length, uint8_t payload[]);\
 
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
-typedef void (* const protCmdFunc_t)(uint8_t, char**);
-protCmdFunc_t protocol_cmd_tbl[];
+typedef protError_t (* const protCmdFunc_t)(uint8_t, uint8_t[]);
+protCmdFunc_t protocol_cmd_tbl[PROT_CMDTYPE_COUNT];
 
 #ifdef __cplusplus
 }

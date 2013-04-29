@@ -34,14 +34,9 @@
 */
 /**************************************************************************/
 
-#include "protocol.h"
+#include "../protocol.h"
 
-void cmd_help(uint8_t argc, char **argv)
+protError_t protcmd_help(uint8_t length, uint8_t payload[])
 {
-  return;
-}
-
-void cmd_cmd1(uint8_t argc, char **argv)
-{
-  return;
+  return PROT_ERROR_NONE;
 }
