@@ -510,12 +510,16 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
     return error;
   }
 
-  if(abtResponse[7] != 0)
+  /* For authentication success, bytes 5-7 should be: 0xD5 0x41 0x00 */
+  /* Mifare auth error is technically byte 7: 0x14 but anything other and 0x00 */
+  /* is not good */
   {
-          pn532_mifareclassic_reset();
-          return PN532_ERROR_AUTHENTICATE_FAIL;
+    #ifdef PN532_DEBUGMODE
+      PN532_DEBUG("Authentification failed%s", CFG_PRINTF_NEWLINE);
+    #endif
+    pn532_mifareclassic_reset();
+    return PN532_ERROR_AUTHENTICATE_FAIL;
   }
-  // ToDo: How to check if authentification really worked (bad key, etc.)?
 
   /* Output the authentication data */
   #ifdef PN532_DEBUGMODE
