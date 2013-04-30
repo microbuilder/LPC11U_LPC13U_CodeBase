@@ -215,6 +215,7 @@ void boardInit(void)
     @brief Primary entry point for this project.
 */
 /**************************************************************************/
+#if !defined(_TEST_)
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
@@ -249,6 +250,7 @@ int main(void)
 
   }
 }
+#endif
 
 /**************************************************************************/
 /*!

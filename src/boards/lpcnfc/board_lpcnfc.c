@@ -153,6 +153,7 @@ void boardInit(void)
     @brief Primary entry point for this project.
 */
 /**************************************************************************/
+#if !defined(_TEST_)
 int main(void)
 {
   /* Configure the HW */
@@ -166,6 +167,7 @@ int main(void)
     #endif
   }
 }
+#endif
 
 /**************************************************************************/
 /*!

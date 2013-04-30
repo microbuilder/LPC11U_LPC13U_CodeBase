@@ -363,6 +363,7 @@ void boardInit(void)
     @brief Primary entry point for this project.
 */
 /**************************************************************************/
+#if !defined(_TEST_)
 #include "protocol/protocol.h" // TODO move later
 int main(void)
 {
@@ -397,6 +398,7 @@ int main(void)
     #endif
   }
 }
+#endif
 
 /**************************************************************************/
 /*!
