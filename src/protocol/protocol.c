@@ -46,7 +46,13 @@ static fifo_t ff_command =
     .buf          = ff_command_buffer,
     .size         = CMD_FIFO_DEPTH,
     .overwritable = true,
-    .irq          = USB_IRQn //USB_IRQ_IRQn for lpc13uxx
+    #if defined CFG_MCU_FAMILY_LPC11UXX
+    .irq          = USB_IRQn
+    #elif defined CFG_MCU_FAMILY_LPC13UXX
+    .irq          = USB_IRQ_IRQn
+    #else
+      #error "protocol.c: No MCU defined"
+    #endif
 };
 
 //------------- command lookup table -------------//
