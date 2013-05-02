@@ -7,6 +7,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Renamed Crossworks project files to CW_*
 - Renamed Keil project files to Keil_*
 - Added stepper support to board config files
+- Changed the clock setup in core/adc
 
 ## 0.8.1 [23 April 2013] ##
 
