@@ -46,6 +46,7 @@
 #include "core/systick/systick.h"
 #include "core/eeprom/eeprom.h"
 #include "core/pmu/pmu.h"
+#include "drivers/motor/stepper/stepper.h"
 
 #ifdef CFG_USB
   #include "core/usb/usbd.h"
@@ -99,6 +100,10 @@ void boardInit(void)
     uartInit(CFG_UART_BAUDRATE);
   #endif
 
+  /* Set pins to GPIO for MOTOR2 (default = JTAG) */
+  LPC_IOCON->TDO_PIO0_13    = (1<<0) | (0<<3) | (1<<7);   // GPIO (not TDO)     no pull-up/down, ADMODE = digital
+  LPC_IOCON->TRST_PIO0_14   = (1<<0) | (0<<3) | (1<<7);   // GPIO (not TRST)    no pull-up/down, ADMODE = digital
+
   /* Set user LED pin to output and disable it */
   GPIOSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
   boardLED(CFG_LED_OFF);
@@ -128,6 +133,27 @@ int main(void)
 {
   /* Configure the HW */
   boardInit();
+
+  stepperInit(200);         // Initialise driver for 200-step motor
+  stepperSetSpeed(60);      // Set speed to 120 rpm (2 revolutions per second)
+
+  while (1)
+  {
+    stepperStep(400);       // Move forward 400 steps
+    stepperStep(-200);      // Move backward 200 steps
+    systickDelay(1000);     // Wait one second
+
+    // Move 'home' after 10 loops (current position = 2000)
+    if (stepperGetPosition() == 2000)
+    {
+      stepperMoveHome();    // Move back to the starting position
+      systickDelay(1000);   // Wait one second
+    }
+
+    #ifdef CFG_INTERFACE
+      cliPoll();
+    #endif
+  }
 
   while (1)
   {
