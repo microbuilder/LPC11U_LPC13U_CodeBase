@@ -50,9 +50,9 @@ extern "C" {
 
 #define ADC_OFFSET            (0x10)
 #define ADC_INDEX             (4)
-#define ADC_DONE              (1<<31)
+#define ADC_DONE              (0x80000000)
 #define ADC_CHANNELS          (8)
-#define ADC_CLK               (SystemCoreClock / 6)
+#define ADC_CLK               (4000000) /* 4MHz */
 
 void     adcInit (void);
 uint32_t adcRead (uint8_t channelNum);

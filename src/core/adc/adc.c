@@ -84,15 +84,18 @@ void adcInit(void)
   // LPC_IOCON->PIO0_23       |= 0x01;
 
   /* Setup the ADC clock, conversion mode, etc. */
-  LPC_ADC->CR = (( ADC_CLK - 1 ) << 8) |    /* <= 15.5MHz for 12-bit, <= 31MHz for 10-bit */
-                ( 0 << 16 ) |               /* No BURST (ADC is SW controlled) */
+  LPC_ADC->CR = (0x01 << 0)                            |
+                ((SystemCoreClock / ADC_CLK - 1) << 8) |  /* CLKDIV = Fpclk / 1000000 - 1 */
+                (0 << 16)                              |  /* BURST = 0, no BURST, software controlled */
+                (0 << 17)                              |  /* CLKS = 0, 11 clocks/10 bits */
                 #if ADC_MODE_LOWPOWER
-                ( 1 << 22 ) |               /* Enable low-power mode */
+                (1 << 22)                              |  /* Low-power mode */
                 #endif
                 #if ADC_MODE_10BIT
-                ( 1 << 23 ) |               /* Enable 10-bit mode */
+                (1 << 23)                              |  /* 10-bit mode */
                 #endif
-                ( 0 << 24 );                /* No start */
+                (0 << 24)                              |  /* START = 0 A/D conversion stops */
+                (0 << 27);                                /* EDGE = 0 (CAP/MAT singal falling,trigger A/D conversion) */
 }
 
 /**************************************************************************/
