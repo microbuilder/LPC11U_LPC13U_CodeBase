@@ -34,6 +34,7 @@
 */
 /**************************************************************************/
 
+#include "projectconfig.h"
 #include "../protocol.h"
 
 protError_t protcmd_help(uint8_t length, uint8_t payload[])

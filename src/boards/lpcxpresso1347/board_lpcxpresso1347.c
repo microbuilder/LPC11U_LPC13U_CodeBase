@@ -158,7 +158,7 @@ int main(void)
 {
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
-  
+
   /* Configure the HW */
   boardInit();
 

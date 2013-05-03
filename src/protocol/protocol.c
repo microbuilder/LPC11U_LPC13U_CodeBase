@@ -34,6 +34,10 @@
 */
 /**************************************************************************/
 
+#include "projectconfig.h"
+
+#ifdef CFG_PROTOCOL
+
 #include "protocol.h"
 #include "core/fifo/fifo.h"
 #include "core/usb/usb_hid.h"
@@ -95,3 +99,5 @@ bool usb_hid_generic_report_request_isr(USB_HID_GenericReportIn_t *in_report)
 {
   return false;
 }
+
+#endif

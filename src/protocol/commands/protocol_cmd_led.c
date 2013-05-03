@@ -34,6 +34,8 @@
 */
 /**************************************************************************/
 
+#include "projectconfig.h"
+#include "boards/board.h"
 #include "../protocol.h"
 
 protError_t protcmd_led(uint8_t length, uint8_t payload[])
