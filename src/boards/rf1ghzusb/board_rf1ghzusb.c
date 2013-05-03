@@ -245,9 +245,6 @@ int main(void)
     #ifdef CFG_CHIBI
       checkForMessages();
     #endif
-
-        sendMessage();
-
   }
 }
 #endif
