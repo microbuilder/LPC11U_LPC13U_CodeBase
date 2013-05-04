@@ -36,6 +36,7 @@ void iir_f_init(iir_f_t *iir, float alpha)
 {
   iir->k = 0;
   iir->alpha = alpha;
+  iir->avg = 0.0F;
 }
 
 /**************************************************************************/
