@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     test_main.c
+    @file     test_iir.c
     @ingroup  Unit Tests
 
     @section LICENSE
@@ -33,55 +33,70 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef _TEST__
-
+#include <string.h>
 #include "unity_fixture.h"
-#include "projectconfig.h"
-#include "core/systick/systick.h"
-#include "boards/board.h"
+#include "drivers/statistics/iir_f.h"
 
-#ifdef CFG_USB
-  #include "core/usb/usbd.h"
-#endif
+TEST_GROUP(iir);
 
-void runAllTests(void)
+TEST_SETUP(iir)
 {
-  // RUN_TEST_GROUP(fifo);
-  // RUN_TEST_GROUP(fixed);
-  RUN_TEST_GROUP(iir);
-  // RUN_TEST_GROUP(rtc);
-  // RUN_TEST_GROUP(timespan);
-  #ifdef CFG_PN532
-  RUN_TEST_GROUP(ndef);
-  #endif
 }
 
-int main(void)
+TEST_TEAR_DOWN(iir)
 {
-  /* Configure common and board-level peripherals.
-   * If you're using a simulator and doing SW only tests
-   * disable this line since it will likely cause the
-   * simulator to hang initialising a non-existant
-   * peripheral or waiting for a systick event.            */
-  boardInit();
-
-  /* Wait for 't' to start the test if we're using USB CDC */
-  #if defined(CFG_USB) && defined(CFG_PRINTF_USBCDC)
-    while (! usb_isConfigured()) {}
-    uint8_t c = 0;
-    while ( ! (usb_cdc_getc(&c) && c == 't' ) ){}
-  #endif
-
-  /* Run all test groups in verbose mode */
-  char* argv[]= {"unity" , "-v" };
-  UnityMain(2, argv, runAllTests);
-
-  /* Wait around forever when test run is complete */
-  while (1)
-  {
-  }
-
-  return 0;
 }
 
-#endif
+TEST(iir, iir_f_init)
+{
+  iir_f_t iir;
+
+  /* Initialise IIR filter with an alpha of 0.01 */
+  iir_f_init(&iir, 0.01);
+  TEST_ASSERT_EQUAL_FLOAT(0.01F, iir.alpha);
+  TEST_ASSERT_EQUAL_FLOAT(0.0F, iir.avg);
+  TEST_ASSERT_EQUAL(0, iir.k);
+}
+
+TEST(iir, iir_f_add)
+{
+  iir_f_t iir;
+
+  /* Initialise IIR filter with an alpha of 0.01 */
+  iir_f_init(&iir, 0.01);
+
+  /* Add a sample */
+  iir_f_add(&iir, 10);
+  TEST_ASSERT_EQUAL(1, iir.k);
+  TEST_ASSERT_EQUAL_FLOAT(10.0F, iir.avg);
+
+  /* Add three more samples */
+  iir_f_add(&iir, 11);
+  iir_f_add(&iir, 12);
+  iir_f_add(&iir, 13);
+  TEST_ASSERT_EQUAL(4, iir.k);
+}
+
+TEST(iir, iir_f_avg)
+{
+  iir_f_t iir;
+
+  /* Initialise IIR filter with an alpha of 0.01 */
+  iir_f_init(&iir, 0.01);
+
+  /* Add some samples */
+  iir_f_add(&iir, 10);
+  iir_f_add(&iir, 20);
+  iir_f_add(&iir, 30);
+  iir_f_add(&iir, 35);
+
+  /* With an alpha of 0.01 avg should be 10.546 */
+  TEST_ASSERT_EQUAL_FLOAT(10.546F, iir.avg);
+}
+
+TEST_GROUP_RUNNER(iir)
+{
+  RUN_TEST_CASE(iir, iir_f_init);
+  RUN_TEST_CASE(iir, iir_f_add);
+  RUN_TEST_CASE(iir, iir_f_avg);
+}
