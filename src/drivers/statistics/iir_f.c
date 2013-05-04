@@ -29,11 +29,21 @@
                  Pointer to the iir_f_t instances
      @param[in]  alpha
                  alpha value to adjust the 'effect' of the filter
-                 (smaller value = slower response)
+                 (smaller value = slower response).
+                 
+     @note       An alpha of 1.0 effectively disables the filter (no
+                 filtering occurs!), and an alpha of 0.0 is infinitely
+                 'heavy', in the sense that the original value will never
+                 change.
 */
 /**************************************************************************/
 void iir_f_init(iir_f_t *iir, float alpha)
 {
+  if (alpha > 1.0F)
+    alpha = 1.0F;
+  if (alpha < 0.0F)
+    alpha = 0.0F;
+    
   iir->k = 0;
   iir->alpha = alpha;
   iir->avg = 0.0F;

@@ -51,6 +51,16 @@ TEST(iir, iir_f_init)
 {
   iir_f_t iir;
 
+  /* Initialise IIR filter with an alpha of -0.01 */
+  /* Alpha should be adjust to 0 */
+  iir_f_init(&iir, -0.01F);
+  TEST_ASSERT_EQUAL_FLOAT(0.0F, iir.alpha);
+
+  /* Initialise IIR filter with an alpha of 1.1 */
+  /* Alpha should be adjust to 1.0F */
+  iir_f_init(&iir, 1.1F);
+  TEST_ASSERT_EQUAL_FLOAT(1.0F, iir.alpha);
+
   /* Initialise IIR filter with an alpha of 0.01 */
   iir_f_init(&iir, 0.01);
   TEST_ASSERT_EQUAL_FLOAT(0.01F, iir.alpha);
