@@ -33,7 +33,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef _TEST__
+#ifdef _TEST_
 
 #include "unity_fixture.h"
 #include "projectconfig.h"
