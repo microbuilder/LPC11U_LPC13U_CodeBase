@@ -62,18 +62,65 @@ TEST(fixed, add)
   a = fixed_make(-2023.621F);
   b = fixed_make(1.0F);
   result = fixed_add(a, b);
-  TEST_ASSERT_EQUAL_INT(-2022, (int)fixed_float(result));
-  TEST_ASSERT_EQUAL(fixed_make(-2022.621F), result);
+  TEST_ASSERT_EQUAL_FLOAT(fixed_make(-2022.621F), result);
 
-  /* Equality */
+  /* Negation */
   a = fixed_make(-2023.621F);
   b = fixed_make(2023.621F);
   result = fixed_add(a, b);
-  TEST_ASSERT_EQUAL(0.0F, fixed_float(result));
+  TEST_ASSERT_EQUAL_FLOAT(0.0F, fixed_float(result));
+}
+
+TEST(fixed, subtract)
+{
+  /* Negative value */
+  a = fixed_make(-2023.621F);
+  b = fixed_make(1.0F);
+  result = fixed_sub(a, b);
+  TEST_ASSERT_EQUAL_FLOAT(fixed_make(-2024.621F), result);
+
+  /* Negation */
+  a = fixed_make(2023.621F);
+  b = fixed_make(2023.621F);
+  result = fixed_sub(a, b);
+  TEST_ASSERT_EQUAL_FLOAT(0.0F, fixed_float(result));
+}
+
+TEST(fixed, multiply)
+{
+  /* Negative */
+  a = fixed_make(-2023.621F);
+  b = fixed_make(10.0F);
+  result = fixed_mul(a, b);
+  TEST_ASSERT_EQUAL_FLOAT(fixed_make(-20236.21F), result);
+
+  /* Positive */
+  a = fixed_make(2023.621F);
+  b = fixed_make(10.0F);
+  result = fixed_mul(a, b);
+  TEST_ASSERT_EQUAL_FLOAT(fixed_make(20236.21F), result);
+}
+
+TEST(fixed, divide)
+{
+  /* Negative */
+  a = fixed_make(-2023.621F);
+  b = fixed_make(10.0F);
+  result = fixed_div(a, b);
+  TEST_ASSERT_EQUAL_FLOAT(fixed_make(-202.3621F), result);
+
+  /* Positive */
+  a = fixed_make(2023.621F);
+  b = fixed_make(10.0F);
+  result = fixed_div(a, b);
+  TEST_ASSERT_EQUAL_FLOAT(fixed_make(202.3621F), result);
 }
 
 /* All tests that should be run in this group need to be listed below */
 TEST_GROUP_RUNNER(fixed)
 {
   RUN_TEST_CASE(fixed, add);
+  RUN_TEST_CASE(fixed, subtract);
+  RUN_TEST_CASE(fixed, multiply);
+  RUN_TEST_CASE(fixed, divide);
 }
