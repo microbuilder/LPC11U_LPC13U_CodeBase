@@ -46,11 +46,11 @@
 
 void runAllTests(void)
 {
-  // RUN_TEST_GROUP(fifo);
-  // RUN_TEST_GROUP(fixed);
+  RUN_TEST_GROUP(fifo);
+  RUN_TEST_GROUP(fixed);
   RUN_TEST_GROUP(iir);
-  // RUN_TEST_GROUP(rtc);
-  // RUN_TEST_GROUP(timespan);
+  RUN_TEST_GROUP(rtc);
+  RUN_TEST_GROUP(timespan);
   #ifdef CFG_PN532
   RUN_TEST_GROUP(ndef);
   #endif
