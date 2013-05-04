@@ -267,6 +267,10 @@
           <file file_name="src/boards/lpcstepper/board_lpcstepper.c"/>
           <file file_name="src/boards/lpcstepper/board_lpcstepper.h"/>
         </folder>
+        <folder Name="simulator" file_name="">
+          <file file_name="src/boards/simulator/board_simulator.c"/>
+          <file file_name="src/boards/simulator/board_simulator.h"/>
+        </folder>
       </folder>
       <file file_name="src/printf-retarget.c"/>
       <file file_name="src/asserts.h"/>
@@ -306,6 +310,7 @@
       <file file_name="tests/test_rtc.c"/>
       <file file_name="tests/test_ndef.c"/>
       <file file_name="tests/test_timespan.c"/>
+      <file file_name="tests/test_fixed.c"/>
     </folder>
   </project>
   <configuration Name="THUMB Flash Debug" inherited_configurations="THUMB;Flash;Debug"/>
@@ -315,5 +320,5 @@
   <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
   <configuration Name="Release" c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET" gcc_debugging_level="Level 1" gcc_optimization_level="Optimize For Size" hidden="Yes"/>
   <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" c_preprocessor_definitions="CFG_BRD_LPCXPRESSO_LPC1347" c_user_include_directories="$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
-  <configuration Name="Test" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
+  <configuration Name="Test" c_preprocessor_definitions="_TEST_" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
 </solution>
