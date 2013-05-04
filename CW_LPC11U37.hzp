@@ -311,6 +311,7 @@
       <file file_name="tests/test_ndef.c"/>
       <file file_name="tests/test_timespan.c"/>
       <file file_name="tests/test_fixed.c"/>
+      <file file_name="tests/test_iir.c"/>
     </folder>
   </project>
   <configuration Name="THUMB Flash Debug" inherited_configurations="THUMB;Flash;Debug"/>
