@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     test_main.c
+    @file     test_fixed.c
     @ingroup  Unit Tests
 
     @section LICENSE
@@ -33,54 +33,47 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef _TEST__
-
+#include <string.h>
 #include "unity_fixture.h"
-#include "projectconfig.h"
-#include "core/systick/systick.h"
-#include "boards/board.h"
+#include "fixed.h"
 
-#ifdef CFG_USB
-  #include "core/usb/usbd.h"
-#endif
+/* Test for the fixed-point macros in src/fixed.h  */
+/* These tests assume 'fixed_FRAC' = 16 (Q16.16)   */
+/* min = -32768, max =  32768, step =  1.52588e-05 */
 
-void runAllTests(void)
+fixed_t a, b, result;
+
+/* Group declaration */
+TEST_GROUP(fixed);
+
+/* Called before each test in the group, to set up group environment */
+TEST_SETUP(fixed)
 {
-  RUN_TEST_GROUP(fifo);
-  RUN_TEST_GROUP(fixed);
-  RUN_TEST_GROUP(rtc);
-  RUN_TEST_GROUP(timespan);
-  #ifdef CFG_PN532
-  RUN_TEST_GROUP(ndef);
-  #endif
 }
 
-int main(void)
+/* Called after a test in the group has been invoked to clean up */
+TEST_TEAR_DOWN(fixed)
 {
-  /* Configure common and board-level peripherals.
-   * If you're using a simulator and doing SW only tests
-   * disable this line since it will likely cause the
-   * simulator to hang initialising a non-existant
-   * peripheral or waiting for a systick event.            */
-  boardInit();
-
-  /* Wait for 't' to start the test if we're using USB CDC */
-  #if defined(CFG_USB) && defined(CFG_PRINTF_USBCDC)
-    while (! usb_isConfigured()) {}
-    uint8_t c = 0;
-    while ( ! (usb_cdc_getc(&c) && c == 't' ) ){}
-  #endif
-
-  /* Run all test groups in verbose mode */
-  char* argv[]= {"unity" , "-v" };
-  UnityMain(2, argv, runAllTests);
-
-  /* Wait around forever when test run is complete */
-  while (1)
-  {
-  }
-
-  return 0;
 }
 
-#endif
+TEST(fixed, add)
+{
+  /* Negative value */
+  a = fixed_make(-2023.621F);
+  b = fixed_make(1.0F);
+  result = fixed_add(a, b);
+  TEST_ASSERT_EQUAL_INT(-2022, (int)fixed_float(result));
+  TEST_ASSERT_EQUAL(fixed_make(-2022.621F), result);
+
+  /* Equality */
+  a = fixed_make(-2023.621F);
+  b = fixed_make(2023.621F);
+  result = fixed_add(a, b);
+  TEST_ASSERT_EQUAL(0.0F, fixed_float(result));
+}
+
+/* All tests that should be run in this group need to be listed below */
+TEST_GROUP_RUNNER(fixed)
+{
+  RUN_TEST_CASE(fixed, add);
+}
