@@ -1,8 +1,9 @@
 #-------------------------------------------------------------------------------
-# Name:        iir_f_tester
+# Name:        iir_f_response_test
 #
-# Purpose:     Runs a simple IIR filter to determine the number of new samples
-#              required to reach 90% of a new value
+# Purpose:     Shows the response of an IIR filter over time. Used to determine
+#              how many samples are required to reach n percent of the new
+#              input value.
 #
 # Author:      K. Townsend (microBuilder.eu)
 #
@@ -23,7 +24,7 @@ def main():
     values = []
 
     # Get alpha
-    alpha = float(input("Alpha (0..1.0): "))
+    alpha = float(input("IIR alpha (0..1.0): "))
 
     # Check alpha bounds
     if (alpha > 1.0):
@@ -34,17 +35,19 @@ def main():
         alpha = 0.0
 
     # Run the filter until we arrive at 99.9% of newval
+    values.append(0.0)
     while avg < 1.0 * 0.999:
         samples+=1
         avg = iirAddValue(avg, alpha, 1.0)
         # Plot value in percent
         values.append(avg/0.01);
-        print (samples, ': ', avg)
+        print ("%d: %g" % (samples, avg))
 
     # Display the results
-    plt.title("IIR Results (Alpha = %f)" % (alpha))
+    plt.title("IIR Response Over Time (Alpha = %g)" % (alpha))
+    plt.ylim(0, 110)
     plt.xlabel('Samples')
-    plt.ylabel('Value (%)')
+    plt.ylabel('IIR Output (%)')
     plt.plot(values)
     plt.grid(True)
     plt.show()
