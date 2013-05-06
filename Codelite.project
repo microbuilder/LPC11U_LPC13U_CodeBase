@@ -219,13 +219,15 @@
           <File Name="src/drivers/bitbanging/swspi/swspi.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
-      <VirtualDirectory Name="statistics">
-        <File Name="src/drivers/statistics/avg_d.c"/>
-        <File Name="src/drivers/statistics/avg_d.h"/>
-        <File Name="src/drivers/statistics/avg_f.c"/>
-        <File Name="src/drivers/statistics/avg_f.h"/>
-        <File Name="src/drivers/statistics/avg_i.c"/>
-        <File Name="src/drivers/statistics/avg_i.h"/>
+      <VirtualDirectory Name="filters">
+        <File Name="src/drivers/filters/avg_d.c"/>
+        <File Name="src/drivers/filters/avg_d.h"/>
+        <File Name="src/drivers/filters/avg_f.c"/>
+        <File Name="src/drivers/filters/avg_f.h"/>
+        <File Name="src/drivers/filters/avg_i.c"/>
+        <File Name="src/drivers/filters/avg_i.h"/>
+        <File Name="src/drivers/filters/iir_f.c"/>
+        <File Name="src/drivers/filters/iir_f.h"/>
       </VirtualDirectory>
       <File Name="src/drivers/timespan.c"/>
       <VirtualDirectory Name="motor">

@@ -203,11 +203,11 @@
             <file file_name="src/drivers/pwm/pca9685/pca9685.c"/>
           </folder>
         </folder>
-        <folder Name="statistics" file_name="">
-          <file file_name="src/drivers/statistics/avg_d.c"/>
-          <file file_name="src/drivers/statistics/avg_f.c"/>
-          <file file_name="src/drivers/statistics/avg_i.c"/>
-          <file file_name="src/drivers/statistics/iir_f.c"/>
+        <folder Name="filters" file_name="">
+          <file file_name="src/drivers/filters/avg_d.c"/>
+          <file file_name="src/drivers/filters/avg_f.c"/>
+          <file file_name="src/drivers/filters/avg_i.c"/>
+          <file file_name="src/drivers/filters/iir_f.c"/>
         </folder>
         <file file_name="src/drivers/timespan.c"/>
         <folder Name="motor">
@@ -286,6 +286,7 @@
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
         </folder>
       </folder>
+      <file file_name="src/fixed.h"/>
     </folder>
     <folder Name="System Files">
       <file file_name="$(StudioDir)/source/thumb_crt0.s"/>
@@ -323,6 +324,6 @@
   <configuration Name="Debug" c_preprocessor_definitions="DEBUG" gcc_debugging_level="Level 2" gcc_optimization_level="None" hidden="Yes"/>
   <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
   <configuration Name="Release" c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET" gcc_debugging_level="Level 1" gcc_optimization_level="Optimize For Size" hidden="Yes"/>
-  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_LPCXPRESSO_LPC1347" c_user_include_directories="$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
+  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_SIMULATOR" c_user_include_directories="$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
   <configuration Name="Test" c_preprocessor_definitions="_TEST_" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
 </solution>

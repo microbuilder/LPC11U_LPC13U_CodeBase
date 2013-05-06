@@ -2152,7 +2152,7 @@
   </Group>
 
   <Group>
-    <GroupName>drivers_statistics</GroupName>
+    <GroupName>drivers_filters</GroupName>
     <tvExp>0</tvExp>
     <tvExpOptDlg>0</tvExpOptDlg>
     <cbSel>0</cbSel>
@@ -2168,7 +2168,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>./src/drivers/statistics/avg_d.c</PathWithFileName>
+      <PathWithFileName>./src/drivers/filters/avg_d.c</PathWithFileName>
       <FilenameWithoutPath>avg_d.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2184,7 +2184,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>./src/drivers/statistics/avg_f.c</PathWithFileName>
+      <PathWithFileName>./src/drivers/filters/avg_f.c</PathWithFileName>
       <FilenameWithoutPath>avg_f.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2200,7 +2200,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>./src/drivers/statistics/avg_i.c</PathWithFileName>
+      <PathWithFileName>./src/drivers/filters/avg_i.c</PathWithFileName>
       <FilenameWithoutPath>avg_i.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>
@@ -2216,7 +2216,7 @@
       <TopLine>0</TopLine>
       <CurrentLine>0</CurrentLine>
       <bDave2>0</bDave2>
-      <PathWithFileName>./src/drivers/statistics/iir_f.c</PathWithFileName>
+      <PathWithFileName>./src/drivers/filters/iir_f.c</PathWithFileName>
       <FilenameWithoutPath>iir_f.c</FilenameWithoutPath>
       <RteFlg>0</RteFlg>
       <bShared>0</bShared>

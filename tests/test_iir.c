@@ -35,7 +35,7 @@
 /**************************************************************************/
 #include <string.h>
 #include "unity_fixture.h"
-#include "drivers/statistics/iir_f.h"
+#include "drivers/filters/iir_f.h"
 
 TEST_GROUP(iir);
 

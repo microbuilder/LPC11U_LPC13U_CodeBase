@@ -1114,27 +1114,27 @@
           </Files>
         </Group>
         <Group>
-          <GroupName>drivers_statistics</GroupName>
+          <GroupName>drivers_filters</GroupName>
           <Files>
             <File>
               <FileName>avg_d.c</FileName>
               <FileType>1</FileType>
-              <FilePath>./src/drivers/statistics/avg_d.c</FilePath>
+              <FilePath>./src/drivers/filters/avg_d.c</FilePath>
             </File>
             <File>
               <FileName>avg_f.c</FileName>
               <FileType>1</FileType>
-              <FilePath>./src/drivers/statistics/avg_f.c</FilePath>
+              <FilePath>./src/drivers/filters/avg_f.c</FilePath>
             </File>
             <File>
               <FileName>avg_i.c</FileName>
               <FileType>1</FileType>
-              <FilePath>./src/drivers/statistics/avg_i.c</FilePath>
+              <FilePath>./src/drivers/filters/avg_i.c</FilePath>
             </File>
             <File>
               <FileName>iir_f.c</FileName>
               <FileType>1</FileType>
-              <FilePath>./src/drivers/statistics/iir_f.c</FilePath>
+              <FilePath>./src/drivers/filters/iir_f.c</FilePath>
             </File>
           </Files>
         </Group>

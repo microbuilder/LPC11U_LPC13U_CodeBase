@@ -1,6 +1,6 @@
 # DSP Filters and Statistical Helper Functions #
 
-The helper functions in 'drivers/statistics/' can be used to provide basic statistical modelling and DSP filtering functions for sensor data, including:
+The helper functions in 'drivers/filters/' can be used to provide basic statistical modelling and DSP filtering functions for sensor data, including:
 
 * Running average, including standard deviation and standard variance
 * IIR filter (A basic low pass filter that can be used to smooth out noisy sensor data)
@@ -72,7 +72,7 @@ This code is based on **"Calculating standard deviation in one pass"** by Peter 
 
 A basic lowpass filter that can be used to 'smooth out' noisy sensor data by slowing the response to new signals, similar to the way an RC filter works with HW.
 
-A small alpha will result in a slower response from the filter (more samples are required to change the current average), whereas a larger alpha will cause the average to respond more quickly to changes in the signal.
+A small alpha will result in a slower response from the filter (more samples are required to change the current average), whereas a larger alpha will cause the average to respond more quickly to changes in the signal, at the expense of keeping more 'noise' in the signal.
 
 ## How Does it Work? ##
 

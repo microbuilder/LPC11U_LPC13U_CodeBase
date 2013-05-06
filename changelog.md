@@ -12,6 +12,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - First attempt at a simple binary protocol (CFG_PROTOCOL)
 - Added CFG\_BRD\_SIMULATOR as a board option (mostly for unit tests)
 - Fixed negative value bug in timespanCreate
+- Renamed /src/drivers/statistics to /src/drivers/filters
 
 ## 0.8.1 [23 April 2013] ##
 

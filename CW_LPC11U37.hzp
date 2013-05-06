@@ -200,11 +200,11 @@
             <file file_name="src/drivers/pwm/pca9685/pca9685.c"/>
           </folder>
         </folder>
-        <folder Name="statistics" file_name="">
-          <file file_name="src/drivers/statistics/avg_d.c"/>
-          <file file_name="src/drivers/statistics/avg_f.c"/>
-          <file file_name="src/drivers/statistics/avg_i.c"/>
-          <file file_name="src/drivers/statistics/iir_f.c"/>
+        <folder Name="filters" file_name="">
+          <file file_name="src/drivers/filters/avg_d.c"/>
+          <file file_name="src/drivers/filters/avg_f.c"/>
+          <file file_name="src/drivers/filters/avg_i.c"/>
+          <file file_name="src/drivers/filters/iir_f.c"/>
         </folder>
         <file file_name="src/drivers/timespan.c"/>
         <folder Name="motor">

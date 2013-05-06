@@ -232,7 +232,7 @@ OBJS  += $(OBJ_PATH)/mpl115a2.o
 VPATH += src/drivers/sensors/temperature
 OBJS  += $(OBJ_PATH)/lm75b.o
 
-VPATH += src/drivers/statistics
+VPATH += src/drivers/filters
 OBJS  += $(OBJ_PATH)/avg_d.o 
 OBJS  += $(OBJ_PATH)/avg_f.o 
 OBJS  += $(OBJ_PATH)/avg_i.o
