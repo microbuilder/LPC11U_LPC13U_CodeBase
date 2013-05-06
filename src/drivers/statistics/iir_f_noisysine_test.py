@@ -27,8 +27,8 @@ def main():
     # Set the noise level for the input sine wave
     noiselevel = float(input("Input noise level [0..1.0]: "))
 
-    # Set the step size, which determines how many samples are used
-    stepsize = float(input("Step size [0.001..0.25]: "))
+    # Set the number of samples to use
+    samples = float(input("Number of samples: "))
 
     # Check bounds
     if (alpha > 1.0):
@@ -43,21 +43,18 @@ def main():
     if (noiselevel < 0):
         print ('Setting noise level to 0.0')
         noiselevel = 0.0
-    if (stepsize > 0.25):
-        print ('Setting step size to 0.25')
-        stepsize = 0.25
-    if (stepsize < 0.001):
-        print ('Setting step size to 0.001')
-        stepsize = 0.001
+    if (samples < 0):
+        print ('Setting samples to 100')
+        samples = 100
 
     # Generate a sine wave with some noise on it
-    angle = np.arange(start=0,stop=10,step=stepsize)
-    sine = np.sin(angle)
-    noise = np.random.uniform(-1, 1, size=len(angle)) * noiselevel
+    x = np.linspace(0, 4*np.pi, samples)
+    sine = np.sin(x)
+    noise = np.random.uniform(-1, 1, size=len(x)) * noiselevel
     noisysine = sine + noise
 
     # Run the IIR filter over the entire input dataset
-    while current < len(angle):
+    while current < len(x):
         current+=1
         # Add one sample to the IIR filter
         avg = iirAddValue(avg, alpha, noisysine[current-1])
@@ -66,7 +63,7 @@ def main():
         print ("%d: %g" % (current, avg))
 
     # Display the results
-    plt.title("Sine Wave versus IIR Output \n (Alpha: %g, Noise Level: %g)"
+    plt.title("Sine Wave Input vs. IIR Output \n (Alpha: %g, Noise Level: %g)"
         % (alpha, noiselevel))
     plt.xlabel('Samples')
     plt.ylabel('Values')
@@ -74,7 +71,7 @@ def main():
     plt.grid(True)
     plt.plot(noisysine,
         color="blue",
-        alpha = 0.6,
+        alpha = 0.4,
         linestyle="-",
         label="Raw Input")
     plt.plot(iirvals,
