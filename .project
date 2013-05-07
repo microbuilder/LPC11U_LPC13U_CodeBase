@@ -3,8 +3,6 @@
 	<name>LPC11U_LPC13U_Codebase</name>
 	<comment></comment>
 	<projects>
-		<project>CMSISv2p00_LPC11Uxx</project>
-		<project>CMSISv2p10_LPC13Uxx</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>

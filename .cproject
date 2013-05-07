@@ -29,6 +29,7 @@
 								<option id="com.crt.advproject.gcc.thumb.743066961" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.479220184" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__REDLIB__"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM3"/>
 									<listOptionValue builtIn="false" value="CFG_BRD_LPCXPRESSO_LPC1347"/>
 									<listOptionValue builtIn="false" value="_TEST_"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
@@ -38,7 +39,7 @@
 								<option id="gnu.c.compiler.option.misc.other.2003536623" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="com.crt.advproject.gcc.hdrlib.1378930763" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1615147955" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/tests/unity/src}&quot;"/>
@@ -69,11 +70,9 @@
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.hdrlib.1381589174" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
-								<option id="gnu.c.link.option.libs.1055660796" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="CMSISv2p10_LPC13Uxx"/>
-								</option>
+								<option id="gnu.c.link.option.libs.1055660796" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
 								<option id="gnu.c.link.option.paths.1453133917" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.1405455554" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.347561703" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
@@ -85,6 +84,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.813738243.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
+						<entry excluding="math_helper.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="main.c|drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 						<entry flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="tests"/>
 					</sourceEntries>
@@ -120,6 +120,7 @@
 								<option id="com.crt.advproject.gcc.thumb.1359528183" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.818295962" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__REDLIB__"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM0"/>
 									<listOptionValue builtIn="false" value="CFG_BRD_RF1GHZNODE"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="__CODE_RED"/>
@@ -128,7 +129,7 @@
 								<option id="gnu.c.compiler.option.misc.other.220640580" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="com.crt.advproject.gcc.hdrlib.701733772" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1158021021" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p00_LPC11Uxx/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
@@ -157,11 +158,9 @@
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.hdrlib.874162722" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
-								<option id="gnu.c.link.option.libs.918751438" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="CMSISv2p00_LPC11Uxx"/>
-								</option>
+								<option id="gnu.c.link.option.libs.918751438" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
 								<option id="gnu.c.link.option.paths.1326749668" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p00_LPC11Uxx/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.611061657" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.2105041727" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
@@ -173,6 +172,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.1683240460.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
+						<entry excluding="system_LPC13Uxx.c|math_helper.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -207,6 +207,7 @@
 								<option id="com.crt.advproject.gcc.thumb.1220273852" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.386713938" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__REDLIB__"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM3"/>
 									<listOptionValue builtIn="false" value="CFG_BRD_RF1GHZUSB"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="__CODE_RED"/>
@@ -215,7 +216,7 @@
 								<option id="gnu.c.compiler.option.misc.other.1929918352" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="com.crt.advproject.gcc.hdrlib.1563562537" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.923082958" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
@@ -244,11 +245,9 @@
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.hdrlib.1660270697" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
-								<option id="gnu.c.link.option.libs.1263477426" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="CMSISv2p10_LPC13Uxx"/>
-								</option>
+								<option id="gnu.c.link.option.libs.1263477426" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
 								<option id="gnu.c.link.option.paths.1276160123" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.181391152" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -259,6 +258,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.2088192637.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
+						<entry excluding="system_LPC11Uxx.c|math_helper.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -292,6 +292,7 @@
 								<option id="com.crt.advproject.gcc.arch.1425469769" name="Architecture" superClass="com.crt.advproject.gcc.arch" value="com.crt.advproject.gcc.target.cm0" valueType="enumerated"/>
 								<option id="com.crt.advproject.gcc.thumb.215892761" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.326788874" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
+									<listOptionValue builtIn="false" value="ARM_MATH_CM3"/>
 									<listOptionValue builtIn="false" value="__REDLIB__"/>
 									<listOptionValue builtIn="false" value="CFG_BRD_LPCNFC"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
@@ -301,7 +302,7 @@
 								<option id="gnu.c.compiler.option.misc.other.1282586810" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="com.crt.advproject.gcc.hdrlib.1408953164" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.402508251" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
@@ -330,11 +331,9 @@
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.hdrlib.1875188381" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
-								<option id="gnu.c.link.option.libs.465270395" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="CMSISv2p10_LPC13Uxx"/>
-								</option>
+								<option id="gnu.c.link.option.libs.465270395" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
 								<option id="gnu.c.link.option.paths.1747535721" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1707214524" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -345,6 +344,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.2088192637.845617240.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
+						<entry excluding="system_LPC11Uxx.c|math_helper.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -379,6 +379,7 @@
 								<option id="com.crt.advproject.gcc.thumb.348923478" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1784005350" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__REDLIB__"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM3"/>
 									<listOptionValue builtIn="false" value="CFG_BRD_LPCXPRESSO_LPC1347"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="__CODE_RED"/>
@@ -387,7 +388,7 @@
 								<option id="gnu.c.compiler.option.misc.other.244627948" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="com.crt.advproject.gcc.hdrlib.1843567114" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1896358864" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
@@ -416,11 +417,9 @@
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.hdrlib.2128421580" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
-								<option id="gnu.c.link.option.libs.1160871876" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="CMSISv2p10_LPC13Uxx"/>
-								</option>
+								<option id="gnu.c.link.option.libs.1160871876" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
 								<option id="gnu.c.link.option.paths.1129666474" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.1388193091" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1401162176" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
@@ -432,6 +431,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.2088192637.925022945.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
+						<entry excluding="system_LPC11Uxx.c|math_helper.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="protocol/protocol.c|drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -466,6 +466,7 @@
 								<option id="com.crt.advproject.gcc.thumb.1921463726" name="Thumb mode" superClass="com.crt.advproject.gcc.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.1438815367" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__REDLIB__"/>
+									<listOptionValue builtIn="false" value="ARM_MATH_CM3"/>
 									<listOptionValue builtIn="false" value="CFG_BRD_LPCSTEPPER"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="__CODE_RED"/>
@@ -474,7 +475,7 @@
 								<option id="gnu.c.compiler.option.misc.other.1450857191" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
 								<option id="com.crt.advproject.gcc.hdrlib.1773190745" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.71330727" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/inc}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
@@ -503,11 +504,9 @@
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.hdrlib.802565012" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
-								<option id="gnu.c.link.option.libs.189488570" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
-									<listOptionValue builtIn="false" value="CMSISv2p10_LPC13Uxx"/>
-								</option>
+								<option id="gnu.c.link.option.libs.189488570" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs"/>
 								<option id="gnu.c.link.option.paths.1304582147" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/CMSISv2p10_LPC13Uxx/Debug}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.1853652725" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1900511407" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
@@ -519,6 +518,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.2088192637.845617240.860621000.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
+						<entry excluding="system_LPC11Uxx.c|math_helper.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -534,49 +534,45 @@
 	<storageModule moduleId="com.crt.config">
 		<projectStorage>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;
 &lt;TargetConfig&gt;&#13;
-&lt;Properties property_0="" property_2="LPC11_12_13_64K_8K.cfx" property_3="NXP" property_4="LPC1347" property_count="5" version="1"/&gt;&#13;
-&lt;infoList vendor="NXP"&gt;&lt;info chip="LPC1347" flash_driver="LPC11_12_13_64K_8K.cfx" match_id="0x08020543" name="LPC1347" stub="crt_emu_lpc11_13_nxp"&gt;&lt;chip&gt;&lt;name&gt;LPC1347&lt;/name&gt;&#13;
-&lt;family&gt;LPC13xx (12bit ADC)&lt;/family&gt;&#13;
+&lt;Properties property_0="" property_2="LPC11_12_13_128K_8K.cfx" property_3="NXP" property_4="LPC11U37/401" property_count="5" version="1"/&gt;&#13;
+&lt;infoList vendor="NXP"&gt;&lt;info chip="LPC11U37/401" flash_driver="LPC11_12_13_128K_8K.cfx" match_id="0x00017C40" name="LPC11U37/401" stub="crt_emu_lpc11_13_nxp"&gt;&lt;chip&gt;&lt;name&gt;LPC11U37/401&lt;/name&gt;&#13;
+&lt;family&gt;LPC11Uxx&lt;/family&gt;&#13;
 &lt;vendor&gt;NXP (formerly Philips)&lt;/vendor&gt;&#13;
 &lt;reset board="None" core="Real" sys="Real"/&gt;&#13;
 &lt;clock changeable="TRUE" freq="12MHz" is_accurate="TRUE"/&gt;&#13;
 &lt;memory can_program="true" id="Flash" is_ro="true" type="Flash"/&gt;&#13;
 &lt;memory id="RAM" type="RAM"/&gt;&#13;
 &lt;memory id="Periph" is_volatile="true" type="Peripheral"/&gt;&#13;
-&lt;memoryInstance derived_from="Flash" id="MFlash64" location="0x0" size="0x10000"/&gt;&#13;
+&lt;memoryInstance derived_from="Flash" id="MFlash128" location="0x0" size="0x20000"/&gt;&#13;
 &lt;memoryInstance derived_from="RAM" id="RamLoc8" location="0x10000000" size="0x2000"/&gt;&#13;
 &lt;memoryInstance derived_from="RAM" id="RamUsb2" location="0x20004000" size="0x800"/&gt;&#13;
-&lt;memoryInstance derived_from="RAM" id="RamPeriph2" location="0x20000000" size="0x800"/&gt;&#13;
-&lt;prog_flash blocksz="0x1000" location="0x0" maxprgbuff="0x1000" progwithcode="TRUE" size="0x10000"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_MPU" id="MPU" location="0xe000ed90"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_NVIC" id="NVIC" location="0xe000e000"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_DCR" id="DCR" location="0xe000edf0"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_ITM" id="ITM" location="0xe0000000"/&gt;&#13;
-&lt;peripheralInstance derived_from="I2C" id="I2C" location="0x40000000"/&gt;&#13;
-&lt;peripheralInstance derived_from="WWDT" id="WWDT" location="0x40004000"/&gt;&#13;
-&lt;peripheralInstance derived_from="USART" id="USART" location="0x40008000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT16B0" id="CT16B0" location="0x4000c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT16B1" id="CT16B1" location="0x40010000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT32B0" id="CT32B0" location="0x40014000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT32B1" id="CT32B1" location="0x40018000"/&gt;&#13;
-&lt;peripheralInstance derived_from="ADC" id="ADC" location="0x4001c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="PMU" id="PMU" location="0x40038000"/&gt;&#13;
-&lt;peripheralInstance derived_from="FLASHCTRL" id="FLASHCTRL" location="0x4003c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="SSP0" id="SSP0" location="0x40040000"/&gt;&#13;
-&lt;peripheralInstance derived_from="IOCON" id="IOCON" location="0x40044000"/&gt;&#13;
-&lt;peripheralInstance derived_from="SYSCON" id="SYSCON" location="0x40048000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-PIN-INT" id="GPIO-PIN-INT" location="0x4004c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="SSP1" id="SSP1" location="0x40058000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-GROUP-INT0" id="GPIO-GROUP-INT0" location="0x4005c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-GROUP-INT1" id="GPIO-GROUP-INT1" location="0x40060000"/&gt;&#13;
-&lt;peripheralInstance derived_from="RITIMER" id="RITIMER" location="0x40064000"/&gt;&#13;
-&lt;peripheralInstance derived_from="USB" id="USB" location="0x40080000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-PORT" id="GPIO-PORT" location="0x50000000"/&gt;&#13;
+&lt;prog_flash blocksz="0x1000" location="0x0" maxprgbuff="0x1000" progwithcode="TRUE" size="0x20000"/&gt;&#13;
+&lt;peripheralInstance derived_from="CM0_NVIC" id="NVIC" location="0xe000e000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_GPIO" id="GPIO" location="0x50000000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_USBDEV" id="USB" location="0x40080000"/&gt;&#13;
+&lt;peripheralInstance derived_from="CM0_DCR" id="DCR" location="0xe000edf0"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_GPIO_GROUP_INT" id="GPIOGROUP0INT" location="0x40060000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_GPIO_GROUP_INT" id="GPIOGROUP1INT" location="0x4005c000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_GPIO_INT" id="GPIOINT" location="0x4004c000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_SSP" id="SSP1" location="0x40058000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_FMC" id="FMC" location="0x4003c000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_SYSCTL" id="SYSCTL" location="0x40048000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11U_IOCON" id="IOCON" location="0x40044000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_SSP" id="SSP0" location="0x40040000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_PMU" id="PMU" location="0x40038000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_ADC" id="ADC" location="0x4001c000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_TIMER32" id="TIMER1" location="0x40018000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_TIMER32" id="TIMER0" location="0x40014000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_TIMER16" id="TMR161" location="0x40010000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_TIMER16" id="TMR160" location="0x4000c000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC1xxx_UART_MODEM" id="UART0" location="0x40008000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_WDT" id="WDT" location="0x40004000"/&gt;&#13;
+&lt;peripheralInstance derived_from="LPC11_13_I2C" id="I2C0" location="0x40000000"/&gt;&#13;
 &lt;/chip&gt;&#13;
-&lt;processor&gt;&lt;name gcc_name="cortex-m3"&gt;Cortex-M3&lt;/name&gt;&#13;
+&lt;processor&gt;&lt;name gcc_name="cortex-m0"&gt;Cortex-M0&lt;/name&gt;&#13;
 &lt;family&gt;Cortex-M&lt;/family&gt;&#13;
 &lt;/processor&gt;&#13;
-&lt;link href="nxp_lpc13Uxx_peripheral.xme" show="embed" type="simple"/&gt;&#13;
+&lt;link href="nxp_lpc11_13_peripheral.xme" show="embed" type="simple"/&gt;&#13;
 &lt;/info&gt;&#13;
 &lt;/infoList&gt;&#13;
 &lt;/TargetConfig&gt;</projectStorage>
@@ -634,93 +630,7 @@
 				<parser enabled="true"/>
 			</scannerInfoProvider>
 		</profile>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.31686071;com.crt.advproject.config.exe.debug.31686071.;com.crt.advproject.gas.exe.debug.901247457;com.crt.advproject.assembler.input.1899264729">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
-			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1359038632;com.crt.advproject.config.exe.release.1359038632.;com.crt.advproject.gcc.exe.release.924652254;com.crt.advproject.compiler.input.1528512002">
-			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
-			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
-				<buildOutputProvider>
-					<openAction enabled="true" filePath=""/>
-					<parser enabled="true"/>
-				</buildOutputProvider>
-				<scannerInfoProvider id="specsFile">
-					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
-					<parser enabled="true"/>
-				</scannerInfoProvider>
-			</profile>
-		</scannerConfigBuildInfo>
-		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.31686071;com.crt.advproject.config.exe.debug.31686071.;com.crt.advproject.gcc.exe.debug.193771616;com.crt.advproject.compiler.input.1854981945">
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.31686071.813738243;com.crt.advproject.config.exe.debug.31686071.813738243.;com.crt.advproject.gas.exe.debug.1975416117;com.crt.advproject.assembler.input.1699188568">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 				<buildOutputProvider>
@@ -806,7 +716,179 @@
 				</scannerInfoProvider>
 			</profile>
 		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.31686071;com.crt.advproject.config.exe.debug.31686071.;com.crt.advproject.gas.exe.debug.901247457;com.crt.advproject.assembler.input.1899264729">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.31686071;com.crt.advproject.config.exe.debug.31686071.;com.crt.advproject.gcc.exe.debug.193771616;com.crt.advproject.compiler.input.1854981945">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
 		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1359038632;com.crt.advproject.config.exe.release.1359038632.;com.crt.advproject.gas.exe.release.1510879370;com.crt.advproject.assembler.input.131494635">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.debug.31686071.813738243;com.crt.advproject.config.exe.debug.31686071.813738243.;com.crt.advproject.gcc.exe.debug.2075339861;com.crt.advproject.compiler.input.746444375">
+			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
+			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfile">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/${specs_file}" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileCPP">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.cpp" command="g++" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+			<profile id="org.eclipse.cdt.managedbuilder.core.GCCManagedMakePerProjectProfileC">
+				<buildOutputProvider>
+					<openAction enabled="true" filePath=""/>
+					<parser enabled="true"/>
+				</buildOutputProvider>
+				<scannerInfoProvider id="specsFile">
+					<runAction arguments="-E -P -v -dD ${plugin_state_location}/specs.c" command="gcc" useDefault="true"/>
+					<parser enabled="true"/>
+				</scannerInfoProvider>
+			</profile>
+		</scannerConfigBuildInfo>
+		<scannerConfigBuildInfo instanceId="com.crt.advproject.config.exe.release.1359038632;com.crt.advproject.config.exe.release.1359038632.;com.crt.advproject.gcc.exe.release.924652254;com.crt.advproject.compiler.input.1528512002">
 			<autodiscovery enabled="true" problemReportingEnabled="true" selectedProfileId="com.crt.advproject.GCCManagedMakePerProjectProfile"/>
 			<profile id="org.eclipse.cdt.make.core.GCCStandardMakePerProjectProfile">
 				<buildOutputProvider>
