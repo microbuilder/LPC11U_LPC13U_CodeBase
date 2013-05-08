@@ -31,6 +31,10 @@
                  8-bit (0..255) alpha value to adjust the 'effect' of the
                  filter(smaller value = slower response).
 
+     @note       Use an x^2 value for alpha for best results, since the
+                 division operation can be swapped out with a shift (ex.:
+                 set alpha to 1, 2, 4, 8, 16, 32, 64, or 128).
+
      @note       An alpha of 255 effectively disables the filter (no
                  filtering occurs!), and an alpha of 0 is infinitely
                  'heavy', in the sense that the original value will never
