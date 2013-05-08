@@ -34,14 +34,26 @@ def main():
         print ('Setting alpha to 0')
         alpha = 0
 
-    # Run the filter until we arrive at 99% of newval
+    # Start with a known value (0)
     values.append(0)
-    while avg < 990:
-        samples+=1
-        avg = iirAddValue(avg, alpha, 1000)
-        # Plot value in percent
-        values.append(avg/10);
-        print ("%d: %d" % (samples, avg))
+
+    # Run the filter until we arrive at 99% of newval or 500 samples
+    # if we are using a small alpha since the integer filter will never
+    # stabilize at 99.9% of the new value with heaver alpha values
+    if (alpha < 24):
+        while samples < 500:
+            samples+=1
+            avg = iirAddValue(avg, alpha, 1000)
+            # Plot value in percent
+            values.append(avg/10);
+            print ("%d: %d" % (samples, avg))
+    else:
+        while avg < 990:
+            samples+=1
+            avg = iirAddValue(avg, alpha, 1000)
+            # Plot value in percent
+            values.append(avg/10);
+            print ("%d: %d" % (samples, avg))
 
     # Display the results
     plt.title("IIR Response Over Time (Alpha = %d)" % (alpha))
