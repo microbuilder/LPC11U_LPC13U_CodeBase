@@ -228,6 +228,8 @@
         <File Name="src/drivers/filters/avg_i.h"/>
         <File Name="src/drivers/filters/iir_f.c"/>
         <File Name="src/drivers/filters/iir_f.h"/>
+        <File Name="src/drivers/filters/iir_i.c"/>
+        <File Name="src/drivers/filters/iir_i.h"/>
       </VirtualDirectory>
       <File Name="src/drivers/timespan.c"/>
       <VirtualDirectory Name="motor">

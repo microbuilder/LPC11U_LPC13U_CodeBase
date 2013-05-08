@@ -1,4 +1,4 @@
-# LPC11U/LPC13U Code Base - Core Revision History #
+# LPC11U/LPC13U Code Base - Revision History #
 
 Major changes in the LPC11U/LPC13U code base by code base version number.
 
@@ -13,6 +13,9 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added CFG\_BRD\_SIMULATOR as a board option (mostly for unit tests)
 - Fixed negative value bug in timespanCreate
 - Renamed /src/drivers/statistics to /src/drivers/filters
+- Added some basic Python scripts to test the IIR filter
+- Updated LPCXpresso project files to use /cmsis (no more external dependencies)
+- Added int32_t iir filter and matching python scripts
 
 ## 0.8.1 [23 April 2013] ##
 

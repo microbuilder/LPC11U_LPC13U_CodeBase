@@ -237,6 +237,7 @@ OBJS  += $(OBJ_PATH)/avg_d.o
 OBJS  += $(OBJ_PATH)/avg_f.o 
 OBJS  += $(OBJ_PATH)/avg_i.o
 OBJS  += $(OBJ_PATH)/iir_f.o
+OBJS  += $(OBJ_PATH)/iir_i.o
 
 VPATH += src/drivers/storage/fatfs
 OBJS  += $(OBJ_PATH)/ff.o 
