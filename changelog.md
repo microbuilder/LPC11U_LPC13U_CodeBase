@@ -16,9 +16,9 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added some basic Python scripts to test the IIR filter
 - Updated LPCXpresso project files to use /cmsis (no more external dependencies)
 - Added int32_t iir filter and matching python scripts
-- Changed usb hid generic callbacks to be more general: replace USB_HID_GenericReportOut_t, USB_HID_GenericReportIn_t with (uint8_t report[] and uint32_t length). Affected functions are     
-usb_hid_generic_recv_isr, usb_hid_generic_report_request_isr, usb_hid_generic_send.
-
+- Changed usb HID generic callbacks to be more general
+  - Replaced 'USB\_HID\_GenericReportOut\_t' and 'USB\_HID\_GenericReportIn\_t' signatures with '(uint8\_t report[] and uint32\_t length)'
+  - Affected functions are 'usb\_hid\_generic\_recv\_isr', 'usb\_hid\_generic\_report\_request\_isr', and 'usb\_hid\_generic\_send'
 
 ## 0.8.1 [23 April 2013] ##
 
