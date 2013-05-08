@@ -5,8 +5,10 @@
     @code
     iir_i_t iir;
 
-    iir_i_init(&iir, 20);
+    // Initialise the IIR filter with an alpha of 64 (=0.0625)
+    iir_i_init(&iir, 64);
 
+    // Add four samples, with the first sample used at the starting value
     iir_i_add(&iir, 10);
     iir_i_add(&iir, 20);
     iir_i_add(&iir, 30);
@@ -31,9 +33,21 @@
                  8-bit (0..255) alpha value to adjust the 'effect' of the
                  filter(smaller value = slower response).
 
-     @note       Use an x^2 value for alpha for best results, since the
-                 division operation can be swapped out with a shift (ex.:
-                 set alpha to 1, 2, 4, 8, 16, 32, 64, or 128).
+     @note       Use a ^2 value for alpha for best results, since the
+                 division operation can be swapped out with a shift.
+
+                 For example:
+
+                 8-bit Alpha  Float equivalent
+                 -----------  ----------------
+                           1  0.00390625
+                           2  0.0078125
+                           4  0.015625
+                           8  0.03125
+                          16  0.0625
+                          32  0.125
+                          64  0.25
+                         128  0.5
 
      @note       An alpha of 255 effectively disables the filter (no
                  filtering occurs!), and an alpha of 0 is infinitely
@@ -60,6 +74,7 @@ void iir_i_init(iir_i_t *iir, uint8_t alpha)
 /**************************************************************************/
 void iir_i_add(iir_i_t *iir, int32_t x)
 {
+  int64_t xl = x;     /* Promote to 64-bit to avoid overflow issues */
   iir->k++;
   if (1 == iir->k)
   {
@@ -68,6 +83,6 @@ void iir_i_add(iir_i_t *iir, int32_t x)
   else
   {
     /* IIR Filter */
-    iir->avg = (x * iir->alpha + iir->avg * (256 - iir->alpha)) / 256;
+    iir->avg = (int32_t)((xl * iir->alpha + iir->avg * (256 - iir->alpha)) / 256);
   }
 }
