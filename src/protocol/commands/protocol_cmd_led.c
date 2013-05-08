@@ -38,6 +38,8 @@
 #include "boards/board.h"
 #include "../protocol.h"
 
+// turn on  01 00 01 01 00
+// turn off 01 00 01 01 01
 protError_t protcmd_led(uint8_t length, uint8_t payload[])
 {
   ASSERT( 1 == length, PROT_ERROR_INVALID_PARA);
