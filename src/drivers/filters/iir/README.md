@@ -1,4 +1,4 @@
-# Infinite Impulse Response (IIR) Filter - (iir\_f.c and iir\_i.c) #
+# Infinite Impulse Response (IIR) Filter #
 
 An IIR filter is a basic lowpass filter that can be used to 'smooth out' noisy sensor data by slowing the response to new signals, similar to the way an RC filter works with HW.
 
@@ -8,11 +8,9 @@ You can configure the filter by adjusting the 'alpha' value, which controls the 
 
 A small alpha will result in a slower response from the filter (more samples are required to change the current average), whereas a larger alpha will cause the average to respond more quickly to changes in the signal, at the expense of keeping more 'noise' in the signal.
 
-You can see this effect in the charts below that were generated with a python script included in this same folder (iir_i_response_test.py).
+You can see this effect in the charts below (generated with iir_i_response_test.py).  Setting the alpha value lower pushes the response curve further out, meaning more samples are required to reach any new values that are sent into the filter.
 
-Setting the alpha value lower pushes the response curve further out, meaning more samples are required to reach any new values that are sent into the filter.
-
-In the charts below, we start with a value of 0, and the same new value is added into the IIR filter until we reach 99.9% of the value with the IIR output, with the number of samples required visible on the x axis:
+In the charts below, we start with a value of 0, and the same new value is added into the IIR filter until we reach 99.9% of the value with the IIR output.
 
 (**Note**: These charts are a bit 'wobbly' because the output is based on the integer version of the filter ... the floating point version provides more precision and linearity at the expense of more work for the MCU.)
 
@@ -20,15 +18,15 @@ In the charts below, we start with a value of 0, and the same new value is added
 ![Integer IIR Alpha 64](images/integer_responsecurve_alpha_64.png?raw=true)
 ![Integer IIR Alpha 32](images/integer_responsecurve_alpha_32.png?raw=true)
 
-## Tradeoffs of the IIR Filter ##
+As you can see above, a larger alpha means that new values are integrated more quickly so the filter 'responds' more quickly, but there is also less smoothing going on due to the fast response.  All the magic in any filter is finding the right values for variables like alpha that meet your needs!
 
-As you can see above, a larger alpha means that new values are integrated more quickly, but the magic in any filter is finding the right values for variables like alpha to meet your needs.
+## Is IIR the Right Filter For Me? ##
 
-An IIR filter is excellent for smoothing out noisy data, but it isn't a phase stable filter, and some signal attentuation occurs with lower alpha values.
+An IIR filter is excellent for smoothing out noisy data, but it isn't 'phase stable', and some signal attentuation also inevitably occurs with stronger alpha values.
 
-What this means is that using a high alpha (meaning a smaller number!) will very effectively smooth your data out, but the phase will shift and you will no longer have the same peak to peak range as your source data.
+What this means is that using a high alpha (meaning a smaller number!) will very effectively smooth your data out, but it will also phase shift further and further to the right, and you will no longer have the same peak to peak range (or 'amplitude') of your source data.
 
-You can see this in the following charts generated with the iir_i_response_test.py Python script included in this folder.  As the alpha value lowers, the effects of the filter increase and the data is much 'smoother', but it starts to shift to be out of phase with the source signal (in blue), and you lose some amplitude.
+You can see this in the following charts generated with the **iir\_i\_noisysine\_test.py** Python script included in this folder.  As the alpha value lowers, the effect of the filter increases and the data is much 'smoother', but it starts to shift to be out of phase with the source signal (in blue), and you lose some amplitude.
 
 ![Integer IIR Alpha 128](images/integer_sinewave_alpha_128.png?raw=true)
 ![Integer IIR Alpha 64](images/integer_sinewave_alpha_64.png?raw=true)
