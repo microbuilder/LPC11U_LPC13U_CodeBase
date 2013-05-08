@@ -90,8 +90,12 @@ typedef enum {
 
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
+//------------- function pointer table -------------//
 typedef protError_t (* const protCmdFunc_t)(uint8_t, uint8_t[]);
-protCmdFunc_t protocol_cmd_tbl[PROT_CMDTYPE_COUNT];
+extern protCmdFunc_t protocol_cmd_tbl[PROT_CMDTYPE_COUNT];
+
+//------------- Public API -------------//
+void prot_task(void * p_para);
 
 #ifdef __cplusplus
 }

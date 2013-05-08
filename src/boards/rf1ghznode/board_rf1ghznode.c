@@ -385,7 +385,9 @@ int main(void)
       #endif
     }
 
-    prot_task(NULL);
+    #ifdef CFG_PROTOCOL
+      prot_task(NULL);
+    #endif
 
     /* Poll for CLI input if CFG_INTERFACE is enabled */
     #ifdef CFG_INTERFACE

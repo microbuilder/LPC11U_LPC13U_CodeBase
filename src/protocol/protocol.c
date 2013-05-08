@@ -38,6 +38,9 @@
 
 #ifdef CFG_PROTOCOL
 
+//--------------------------------------------------------------------+
+// INCLUDE & DECLARATION
+//--------------------------------------------------------------------+
 #include "protocol.h"
 #include "core/fifo/fifo.h"
 #include "core/usb/usb_hid.h"
@@ -68,6 +71,10 @@ protCmdFunc_t protocol_cmd_tbl[] =
   PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
 };
 
+
+//--------------------------------------------------------------------+
+// Public API
+//--------------------------------------------------------------------+
 void prot_task(void * p_para)
 {
   if ( fifo_getLength(&ff_command) >= 64 )
@@ -85,19 +92,20 @@ void prot_task(void * p_para)
   }
 }
 
+#ifdef CFG_USB_HID_GENERIC
+//--------------------------------------------------------------------+
+// USB Generic callback
+//--------------------------------------------------------------------+
 // received command
-void usb_hid_generic_recv_isr(USB_HID_GenericReportOut_t  *out_report)
+void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length)
 {
-  for(uint32_t i=0; i<sizeof(USB_HID_GenericReportOut_t); i++)
+  (void) length; // for simplicity, always write fixed size to fifo even if host sends out short packet
+
+  for(uint32_t i=0; i<CFG_USB_HID_GENERIC_REPORT_SIZE; i++)
   {
-    fifo_write(&ff_command, out_report->data[i]);
+    fifo_write(&ff_command, out_report[i]);
   }
 }
-
-// send response or error
-bool usb_hid_generic_report_request_isr(USB_HID_GenericReportIn_t *in_report)
-{
-  return false;
-}
+#endif
 
 #endif
