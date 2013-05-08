@@ -14,9 +14,11 @@ Setting the alpha value lower pushes the response curve further out, meaning mor
 
 In the charts below, we start with a value of 0, and the same new value is added into the IIR filter until we reach 99.9% of the value with the IIR output, with the number of samples required visible on the x axis:
 
-![Integer IIR Alpha 128](integer_responsecurve_alpha_128.png?raw=true)
-![Integer IIR Alpha 64](integer_responsecurve_alpha_64.png?raw=true)
-![Integer IIR Alpha 32](integer_responsecurve_alpha_32.png?raw=true)
+(**Note**: These charts are a bit 'wobbly' because the output is based on the integer version of the filter ... the floating point version provides more precision and linearity at the expense of more work for the MCU.)
+
+![Integer IIR Alpha 128](images/integer_responsecurve_alpha_128.png?raw=true)
+![Integer IIR Alpha 64](images/integer_responsecurve_alpha_64.png?raw=true)
+![Integer IIR Alpha 32](images/integer_responsecurve_alpha_32.png?raw=true)
 
 ## Tradeoffs of the IIR Filter ##
 
@@ -28,11 +30,11 @@ What this means is that using a high alpha (meaning a smaller number!) will very
 
 You can see this in the following charts generated with the iir_i_response_test.py Python script included in this folder.  As the alpha value lowers, the effects of the filter increase and the data is much 'smoother', but it starts to shift to be out of phase with the source signal (in blue), and you lose some amplitude.
 
-![Integer IIR Alpha 128](integer_sinewave_alpha_128.png?raw=true)
-![Integer IIR Alpha 64](integer_sinewave_alpha_64.png?raw=true)
-![Integer IIR Alpha 32](integer_sinewave_alpha_32.png?raw=true)
-![Integer IIR Alpha 16](integer_sinewave_alpha_16.png?raw=true)
-![Integer IIR Alpha 8](integer_sinewave_alpha_8.png?raw=true)
+![Integer IIR Alpha 128](images/integer_sinewave_alpha_128.png?raw=true)
+![Integer IIR Alpha 64](images/integer_sinewave_alpha_64.png?raw=true)
+![Integer IIR Alpha 32](images/integer_sinewave_alpha_32.png?raw=true)
+![Integer IIR Alpha 16](images/integer_sinewave_alpha_16.png?raw=true)
+![Integer IIR Alpha 8](images/integer_sinewave_alpha_8.png?raw=true)
 
 All of the magic is, of course, in finding the right numbers for your needs, and if phase shift is an issue in your situation, the IIR filter isn't a very good choice (which is why so many different DSP filters exist)!
 
@@ -60,8 +62,8 @@ You can confirm this by running the two python scripts, iir_i_noisysine_test.py 
 
 The floating point version is run with an alpha of 0.015625, which corresponds to an alpha of 4 in the integer version (4/256).  As you can see in the two images below, the limitations of the fixed point math with a small alpha mean that it peaks at arounf 93% of the new value, whereas the floating point version has a smooth curve and hits 99.9% of the new value at around 439 samples:
 
-![Integer IIR Response - Alpha 0.015625](integer_response_alpha_4.png?raw=true)
-![Floaing Points IIR Response - Alpha 0.015625](float_response_alpha_0_015625.png?raw=true)
+![Integer IIR Response - Alpha 0.015625](images/integer_response_alpha_4.png?raw=true)
+![Floaing Points IIR Response - Alpha 0.015625](images/float_response_alpha_0_015625.png?raw=true)
 
 This advantage, of course, comes at a price, and the floating point math takes more clock cycles for the MCU to calculate, and floating point values are inherently 'lossy'.  The choice between integer and floating point math will be based on your requirements, and how 'heavy' a filter you require, but you can use the python scripts in this folder to test different values on both integer and floating point implementations of the filter.
 
