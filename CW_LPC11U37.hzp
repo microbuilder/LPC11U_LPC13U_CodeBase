@@ -205,6 +205,7 @@
           <file file_name="src/drivers/filters/avg_f.c"/>
           <file file_name="src/drivers/filters/avg_i.c"/>
           <file file_name="src/drivers/filters/iir_f.c"/>
+          <file file_name="src/drivers/filters/iir_i.c"/>
         </folder>
         <file file_name="src/drivers/timespan.c"/>
         <folder Name="motor">
