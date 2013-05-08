@@ -13,6 +13,10 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added CFG\_BRD\_SIMULATOR as a board option (mostly for unit tests)
 - Fixed negative value bug in timespanCreate
 - Renamed /src/drivers/statistics to /src/drivers/filters
+- Changed usb hid generic callbacks to be more general  
++ usb_hid_generic_recv_isr(USB_HID_GenericReportOut_t* report) to usb_hid_generic_recv_isr(uint8_t report[], uint32_t length)
++ usb_hid_generic_report_request_isr(USB_HID_GenericReportIn_t* report) to usb_hid_generic_report_request_isr(uint8_t report[])
++ usb_hid_generic_send(USB_HID_GenericReportIn_t* report) to usb_hid_generic_send(uint8_t report[], uint32_t length)
 
 ## 0.8.1 [23 April 2013] ##
 
