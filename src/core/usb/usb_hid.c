@@ -55,7 +55,7 @@ volatile static bool bMouseChanged = false;
 
 #ifdef CFG_USB_HID_GENERIC
 
-USB_HID_GenericReportIn_t hid_generic_report_in;
+uint8_t hid_generic_report_in[CFG_USB_HID_GENERIC_REPORT_SIZE];
 volatile static bool bGenericChanged= false;
 
 /**************************************************************************/
@@ -63,8 +63,12 @@ volatile static bool bGenericChanged= false;
     @brief      Weak ISR handler for HID Generic out reports (PC to LPC).
 
     @param[in]  report
-                Pointer to the USB_HID_GenericReportOut_t that holds the
+                Pointer to the buffer that holds the
                 incoming report data
+
+    @param[in]  length
+                For most of the time it is CFG_USB_HID_GENERIC_REPORT_SIZE
+                except for few time (if any) host sends out short-packet
 
     @note       Since this is a 'weak' function, to override it you
                 simply need to declare a new function with the same name
@@ -72,7 +76,7 @@ volatile static bool bGenericChanged= false;
 
     @code
     // Buffer to hold incoming HID data
-    static USB_HID_GenericReportOut_t hid_out_report;
+    static uint8_t hid_out_report[CFG_USB_HID_GENERIC_REPORT_SIZE];
     static bool is_received_report = false;
 
     int main(void)
@@ -86,8 +90,7 @@ volatile static bool bGenericChanged= false;
           {
             if(is_received_report)
             {
-              uint32_t i;
-              for (i=0; i<sizeof(USB_HID_GenericReportOut_t); i++)
+              for (uint32_t i=0; i<CFG_USB_HID_GENERIC_REPORT_SIZE; i++)
               {
                 // Display incoming HID data with CDC using printf
                 printf("%02x ", hid_out_report.report[i]);
@@ -100,19 +103,19 @@ volatile static bool bGenericChanged= false;
       }
     }
 
-    void usb_hid_generic_recv_isr(USB_HID_GenericReportOut_t *out_report)
+    void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length)
     {
       // Copy out_report to a buffer in case new data comes in
-      memcpy(&hid_out_report, out_report, sizeof(USB_HID_GenericReportOut_t));
+      memcpy(hid_out_report, out_report, length);
       is_received_report = true;
     }
     @endcode
 */
 /**************************************************************************/
-void usb_hid_generic_recv_isr(USB_HID_GenericReportOut_t *out_report) __attribute__((weak));
+void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length) __attribute__((weak));
 
 // receive report in request from HOST, but have nothing to report
-bool usb_hid_generic_report_request_isr(USB_HID_GenericReportIn_t *in_report) __attribute__((weak));
+bool usb_hid_generic_report_request_isr(uint8_t in_report[]) __attribute__((weak));
 
 #endif
 
@@ -164,14 +167,14 @@ ErrorCode_t HID_GetReport( USBD_HANDLE_T hHid, USB_SETUP_PACKET* pSetup, uint8_t
         if (!bGenericChanged) // no report to send
         {
           // callback is not defined in application or return false --> sent 0s
-          if ( ! (usb_hid_generic_report_request_isr && usb_hid_generic_report_request_isr(&hid_generic_report_in)) )
+          if ( ! (usb_hid_generic_report_request_isr && usb_hid_generic_report_request_isr(hid_generic_report_in)) )
           {
-            memset(&hid_generic_report_in, 0x00, sizeof(USB_HID_GenericReportIn_t));
+            memset(hid_generic_report_in, 0x00, CFG_USB_HID_GENERIC_REPORT_SIZE);
           }
         }
 
-        *pBuffer = (uint8_t*) &hid_generic_report_in;
-        *plength = sizeof(USB_HID_GenericReportIn_t);
+        *pBuffer = hid_generic_report_in;
+        *plength = CFG_USB_HID_GENERIC_REPORT_SIZE;
 
         bGenericChanged = false;
       }
@@ -217,8 +220,7 @@ ErrorCode_t HID_SetReport( USBD_HANDLE_T hHid, USB_SETUP_PACKET* pSetup, uint8_t
 #ifdef CFG_USB_HID_GENERIC
       if (pHidCtrl->epout_adr == HID_GENERIC_EP_OUT)
       {
-        ASSERT_USB_STATUS(sizeof(USB_HID_GenericReportOut_t) != length);
-        usb_hid_generic_recv_isr( (USB_HID_GenericReportOut_t*) (*pBuffer) );
+        usb_hid_generic_recv_isr( (*pBuffer), (uint32_t) length );
       }
 #endif
     break;
@@ -265,9 +267,9 @@ ErrorCode_t HID_EpIn_Hdlr (USBD_HANDLE_T hUsb, void* data, uint32_t event)
         if (pHidCtrl->epin_adr == HID_GENERIC_EP_IN)
         {
           // report is ready or callback is define and return with true
-          if (bGenericChanged || (usb_hid_generic_report_request_isr && usb_hid_generic_report_request_isr(&hid_generic_report_in)) )
+          if (bGenericChanged || (usb_hid_generic_report_request_isr && usb_hid_generic_report_request_isr(hid_generic_report_in)) )
           {
-            USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, (uint8_t*) &hid_generic_report_in, sizeof(USB_HID_GenericReportIn_t));
+            USBD_API->hw->WriteEP(hUsb, pHidCtrl->epin_adr, hid_generic_report_in, CFG_USB_HID_GENERIC_REPORT_SIZE);
           }else
           {
             // callback is not defined in application or return false --> NAK
@@ -297,13 +299,12 @@ ErrorCode_t HID_EpOut_Hdlr (USBD_HANDLE_T hUsb, void* data, uint32_t event)
 #ifdef CFG_USB_HID_GENERIC
     if (pHidCtrl->epout_adr == HID_GENERIC_EP_OUT)
     {
-      USB_HID_GenericReportOut_t out_report;
+      uint8_t out_report[CFG_USB_HID_GENERIC_REPORT_SIZE];
       uint32_t length;
 
-      length = USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, (uint8_t*) &out_report);
-      ASSERT_USB_STATUS(sizeof(USB_HID_GenericReportOut_t) != length);
+      length = USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, out_report);
 
-      usb_hid_generic_recv_isr( &out_report);
+      usb_hid_generic_recv_isr(out_report, length);
     }
 #endif
   }
@@ -369,7 +370,7 @@ ErrorCode_t usb_hid_configured(USBD_HANDLE_T hUsb)
   #endif
 
   #ifdef CFG_USB_HID_GENERIC
-    USBD_API->hw->WriteEP(hUsb , HID_GENERIC_EP_IN  , (uint8_t*) &hid_generic_report_in, sizeof(USB_HID_GenericReportIn_t)); // initial packet for IN endpoint, will not work if omitted
+    USBD_API->hw->WriteEP(hUsb , HID_GENERIC_EP_IN  , hid_generic_report_in, CFG_USB_HID_GENERIC_REPORT_SIZE); // initial packet for IN endpoint, will not work if omitted
   #endif
 
   return LPC_OK;
@@ -494,23 +495,24 @@ ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel
     if (usb_isConfigured())
     {
       uint32_t currentSecond = systickGetSecondsActive();
-      USB_HID_GenericReport_t in_report = { .report = {currentSecond % 100} };
-      usb_hid_generic_send(&in_report);
+      uint8_t in_report[CFG_USB_HID_GENERIC_REPORT_SIZE] = { currentSecond % 100 };
+      usb_hid_generic_send(in_report, CFG_USB_HID_GENERIC_REPORT_SIZE);
     }
     @endcode
 */
 /**************************************************************************/
-ErrorCode_t usb_hid_generic_send(USB_HID_GenericReportIn_t *report_in)
+ErrorCode_t usb_hid_generic_send(uint8_t report_in[], uint32_t length)
 {
   uint32_t start_time = systickGetSecondsActive();
 
-  ASSERT(report_in, ERR_FAILED);
+  ASSERT(report_in && length <= CFG_USB_HID_GENERIC_REPORT_SIZE, ERR_FAILED);
   while (bGenericChanged) // TODO Block while previous key hasn't been sent - can use fifo to improve this
   {
     ASSERT_MESSAGE(systickGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Generic Timeout");
   }
 
-  memcpy(&hid_generic_report_in, report_in, sizeof(USB_HID_GenericReportIn_t));
+  memset(&hid_generic_report_in, 0, CFG_USB_HID_GENERIC_REPORT_SIZE);
+  memcpy(&hid_generic_report_in, report_in, length);
   bGenericChanged = true;
 
   return LPC_OK;

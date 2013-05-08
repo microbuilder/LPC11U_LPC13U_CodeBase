@@ -333,8 +333,8 @@ extern "C" {
     #define CFG_PRINTF_NEWLINE              "\n"
 
     // #define CFG_PRINTF_UART
-    #define CFG_PRINTF_USBCDC
-    // #define CFG_PRINTF_DEBUG
+//    #define CFG_PRINTF_USBCDC
+     #define CFG_PRINTF_DEBUG
 /*=========================================================================*/
 
 
@@ -412,7 +412,7 @@ extern "C" {
     CFG_PROTOCOL             If this field is defined the binary command
                               parser will be included
     -----------------------------------------------------------------------*/
-    // #define CFG_PROTOCOL
+     #define CFG_PROTOCOL
 /*=========================================================================*/
 
 
@@ -629,7 +629,8 @@ extern "C" {
 
       // #define CFG_USB_HID_KEYBOARD
       // #define CFG_USB_HID_MOUSE
-       #define CFG_USB_HID_GENERIC
+      #define CFG_USB_HID_GENERIC
+      #define CFG_USB_HID_GENERIC_REPORT_SIZE (64)
 
       // #define CFG_USB_MSC
 
