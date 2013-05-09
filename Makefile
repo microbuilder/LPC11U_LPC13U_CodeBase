@@ -329,16 +329,15 @@ LDFLAGS += -mthumb
 LDFLAGS += -O$(OPTIMIZATION) 
 LDFLAGS += -Wl,--gc-sections 
 LDFLAGS += -T $(LDSCRIPT)
-
-# External Libraries
-LDLIBS   = -lm
-# CMSIS DSP Library
-LDLIBS  += -L./cmsis
+# CMSIS Libraries
+LDFLAGS += -L./cmsis/libs
 ifeq (lpc11u,$(TARGET))
-  LDLIBS  += -larm_cortexM0l_math
+  LDLIBS   = -larm_cortexM0l_math -lRTX_CM0
 else
-  LDLIBS  += -larm_cortexM3l_math
+  LDLIBS   = -larm_cortexM3l_math -lRTX_CM3
 endif
+# External Libraries
+LDLIBS   += -lm
 # The following libraries are required with the LPCXpresso toolchain
 # LDLIBS  += -lcr_c -lcr_eabihelpers
 

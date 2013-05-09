@@ -72,9 +72,10 @@
 								<option id="com.crt.advproject.link.gcc.hdrlib.1381589174" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.1055660796" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM3l_math"/>
+									<listOptionValue builtIn="false" value="RTX_CM3"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1453133917" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.1405455554" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.347561703" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
@@ -162,9 +163,10 @@
 								<option id="com.crt.advproject.link.gcc.hdrlib.874162722" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.918751438" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM0l_math"/>
+									<listOptionValue builtIn="false" value="RTX_CM0"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1326749668" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.611061657" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.2105041727" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
@@ -251,9 +253,10 @@
 								<option id="com.crt.advproject.link.gcc.hdrlib.1660270697" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.1263477426" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM3l_math"/>
+									<listOptionValue builtIn="false" value="RTX_CM3"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1276160123" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.181391152" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -339,9 +342,10 @@
 								<option id="com.crt.advproject.link.gcc.hdrlib.1875188381" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.465270395" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM3l_math"/>
+									<listOptionValue builtIn="false" value="RTX_CM3"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1747535721" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1707214524" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
@@ -427,9 +431,10 @@
 								<option id="com.crt.advproject.link.gcc.hdrlib.2128421580" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.1160871876" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM3l_math"/>
+									<listOptionValue builtIn="false" value="RTX_CM3"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1129666474" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.1388193091" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1401162176" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
@@ -516,9 +521,10 @@
 								<option id="com.crt.advproject.link.gcc.hdrlib.802565012" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.189488570" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM3l_math"/>
+									<listOptionValue builtIn="false" value="RTX_CM3"/>
 								</option>
 								<option id="gnu.c.link.option.paths.1304582147" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
-									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
+									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
 								<option id="com.crt.advproject.link.gcc.multicore.slave.1853652725" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1900511407" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
