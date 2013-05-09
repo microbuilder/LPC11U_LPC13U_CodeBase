@@ -9,6 +9,12 @@ requirement being that individual messages are 64 bytes or smaller,
 and that the first byte of every message is a one byte (U8) identifier that
 indicates the format for the rest of the payload (if there is one).
 
+Endianness
+----------
+
+All values > 8-bit should be little-endian, meaning '0x12345678' would be
+tranmitted as '78 56 34 12', etc.
+
 Implementation Notes
 --------------------
 
@@ -56,7 +62,7 @@ Any payload error checking should be handled by the command interpretter.
 A sample command message would be:
 
 Byte   0    1 2    3    4
-      [01] [1234] [01] [FF]
+      [01] [3412] [01] [FF]
  
 - The first byte is the Message Type (0x01), which identifies this as a
   command message.
@@ -99,7 +105,7 @@ high-level protocol.
 A sample response message would be:
 
 Byte   0    1 2    3    4
-      [02] [1234] [01] [FF]
+      [02] [3412] [01] [FF]
  
 - The first byte is the Message Type (0x02), which identifies this as a
   response message.
