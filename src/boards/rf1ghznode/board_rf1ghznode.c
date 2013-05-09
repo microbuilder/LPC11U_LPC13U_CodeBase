@@ -75,6 +75,10 @@
   #include "cli/cli.h"
 #endif
 
+#ifdef CFG_PROTOCOL
+  #include "protocol/protocol.h"
+#endif
+
 #ifdef CFG_ENABLE_UART
   #include "core/uart/uart.h"
 #endif
@@ -139,6 +143,11 @@ int edToDBM(uint32_t ed)
   return dbm / 100;
 }
 
+/**************************************************************************/
+/*!
+    Sends a test message over the air
+*/
+/**************************************************************************/
 void sendMessage(void)
 {
   uint8_t msgbuf[10] = { 0, 1, 2, 3, 4, 5, 6, 7, 8, 9 };
@@ -148,6 +157,11 @@ void sendMessage(void)
   }
 }
 
+/**************************************************************************/
+/*!
+    Checks if any incmoing messages were received over the air
+*/
+/**************************************************************************/
 void checkForMessages(void)
 {
   chb_pcb_t *pcb = chb_get_pcb();
@@ -364,7 +378,6 @@ void boardInit(void)
 */
 /**************************************************************************/
 #if !defined(_TEST_)
-#include "protocol/protocol.h" // TODO move later
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
