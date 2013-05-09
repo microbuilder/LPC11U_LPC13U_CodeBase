@@ -2,7 +2,7 @@
 
 An IIR filter is a basic lowpass filter that can be used to 'smooth out' noisy sensor data by slowing the response to new signals, similar to the way an RC filter works with HW.
 
-You can configure the filter by adjusting the 'alpha' value, which controls the delay or amount of time required for new signal to be integrated into the current output value.
+You can configure the filter by adjusting the 'alpha' value, which controls the delay or amount of time required for new signals to be integrated into the current output value.
 
 ## What is the Effect of 'Alpha' on the IIR Output? ##
 
@@ -38,15 +38,15 @@ All of the magic is, of course, in finding the right numbers for your needs, and
 
 ## Which Filter Version Should I Use (int32_t or float)? ##
 
-Two versions of this filter are included, one that uses single-precision floating point values (iir_f.c), and another that uses 32-bit signed integers (iir_t.c).
+Two versions of this filter are included, one that uses single-precision floating point values (iir_f.c), and another that uses 32-bit signed integers (iir_i.c).
 
 There are advantages and tradeoffs to both of these implementations that you should be aware of when using them!
 
 ### Integer Advantages/Limitations ###
 
-The advantage of the integer version is that it will be much faster, particularly if you use an ^2 alpha value (2, 4, 8, 16, 32, 64 or 128) since this allows the compiler to replace a division operation with a simple (single-cycle) shift.
+The advantage of the integer version is that it will be much faster ... particularly if you use an ^2 alpha value -- 2, 4, 8, 16, 32, 64 or 128 -- since this allows the compiler to replace a division operation with a simple (single-cycle) shift.
 
-The disadvantage is that at smaller alpha values (<24 or so) the filter will never reach 99.9% of the new value, regardless of how many samples are presented.  As such, the integer version is really only appropriate for higher alpha values and quicker responses.
+The disadvantage is that at smaller alpha values (<24 or so) the filter will never reach 99.9% of the new value, regardless of how many samples are presented, and the output isn't nearly as smooth as the floating point version.  As such, the integer version is really only appropriate for higher alpha values and quicker responses.
 
 ### Floating Point Advantages/Limitations ###
 
@@ -58,12 +58,14 @@ With the floating point version, you can easily use a very small alpha value, su
 
 You can confirm this by running the two python scripts, iir_i_noisysine_test.py (for integer math) and iir_f_noisysine_test.py (for floating point math).
 
-The floating point version is run with an alpha of 0.015625, which corresponds to an alpha of 4 in the integer version (4/256).  As you can see in the two images below, the limitations of the fixed point math with a small alpha mean that it peaks at arounf 93% of the new value, whereas the floating point version has a smooth curve and hits 99.9% of the new value at around 439 samples:
+The floating point version is run with an alpha of 0.015625, which corresponds to an alpha of 4 in the integer version (4/256).  As you can see in the two images below, the limitations of the integer math with a small alpha mean that it peaks at around 93% of the new value, whereas the floating point version has a smooth curve and hits 99.9% of the new value at around 439 samples:
 
 ![Integer IIR Response - Alpha 0.015625](images/integer_response_alpha_4.png?raw=true)
 ![Floaing Points IIR Response - Alpha 0.015625](images/float_response_alpha_0_015625.png?raw=true)
 
-This advantage, of course, comes at a price, and the floating point math takes more clock cycles for the MCU to calculate, and floating point values are inherently 'lossy'.  The choice between integer and floating point math will be based on your requirements, and how 'heavy' a filter you require, but you can use the python scripts in this folder to test different values on both integer and floating point implementations of the filter.
+This advantage, of course, comes at a price, and the floating point math takes more clock cycles for the MCU to calculate, and floating point values are inherently 'lossy'.  
+
+The choice between integer and floating point math will ultimately be based on your requirements, and how 'heavy' a filter you require, but you can use the python scripts in this folder to test different values on both integer and floating point implementations of the filter.
 
 ## How Do I Use This Code? ##
 
