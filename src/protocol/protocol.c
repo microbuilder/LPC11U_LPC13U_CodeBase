@@ -45,6 +45,23 @@
 #include "core/fifo/fifo.h"
 #include "core/usb/usb_hid.h"
 
+typedef PRE_PACK struct POST_PACK {
+  uint8_t msg_type;
+
+  uint8_t cmd_id_high; // declare command_id as uin16_t can have alignment issue with M0
+  uint8_t cmd_id_low;
+
+  uint8_t length;
+  uint8_t payload[PROT_MAX_MSG_SIZE-4];
+} protMsgCommand_t;
+
+typedef PRE_PACK struct POST_PACK {
+  uint16_t error_id;
+
+  uint8_t length;
+  uint8_t payload[PROT_MAX_MSG_SIZE-4];
+} protMsgResponse_t;
+
 #define CMD_FIFO_DEPTH 128
 
 static uint8_t ff_command_buffer[CMD_FIFO_DEPTH];
@@ -63,10 +80,12 @@ static fifo_t ff_command =
 };
 
 //------------- command lookup table -------------//
+typedef protError_t (* const protCmdFunc_t)(uint8_t, uint8_t[]);
+
 #define CMD_LOOKUP_EXPAND(command_id, function)\
   [command_id] = function, \
 
-protCmdFunc_t protocol_cmd_tbl[] =
+static protCmdFunc_t protocol_cmd_tbl[] =
 {
   PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
 };
@@ -79,16 +98,31 @@ void prot_task(void * p_para)
 {
   if ( fifo_getLength(&ff_command) >= 64 )
   {
-    uint8_t message[64];
-    uint16_t command_id;
+    protError_t error;
 
-    fifo_readArray(&ff_command, message, 64);
-    ASSERT( PROT_MSGTYPE_COMMAND == message[0], (void) 0);
+    //------------- command phase -------------//
+    {
+      protMsgCommand_t message_cmd;
+      uint16_t command_id;
 
-    command_id = (message[1] << 8) + message[2];
-    ASSERT( command_id < PROT_CMDTYPE_COUNT, (void) 0);
+      fifo_readArray(&ff_command, (uint8_t*) &message_cmd, 64);
+      ASSERT( PROT_MSGTYPE_COMMAND == message_cmd.msg_type, (void) 0);
 
-    protocol_cmd_tbl[command_id] ( message[3], message+4 );
+      command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
+      ASSERT( command_id < PROT_CMDTYPE_COUNT && message_cmd.length <= (PROT_MAX_MSG_SIZE-4), (void) 0);
+
+      error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload );
+    }
+
+    //------------- response phase -------------//
+    {
+      protMsgResponse_t message_response;
+
+      message_response.error_id = (uint16_t) error;
+      message_response.length   = 0;
+
+      usb_hid_generic_send( (uint8_t*) &message_response, sizeof(protMsgResponse_t));
+    }
   }
 }
 
