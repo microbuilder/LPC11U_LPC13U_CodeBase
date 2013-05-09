@@ -124,19 +124,8 @@ is present on the system, and have the following structure:
 | Name              | Type     | Meaning                                      |
 |-------------------+----------+----------------------------------------------|
 | Error ID          | U16      | Unique ID for the error condition            |
-| Payload Length    | U8       | Payload length (0..60)                       |
-| Payload           | ...      | Optional error payload                       |
 |-------------------+----------+----------------------------------------------|
 
 Whenever an error condition is present and the system needs to be alerted (such
 as a failed request, an attempt to access a non-existing resource, etc.) the
 system can return a specific error message with an appropriate Error ID.
-
-While the 16-bit Error ID is often sufficient, if required an optional payload
-can be included with further information on the error.  Due to this optional
-payload, all error messages much indicate the payload length, which can be
-set to 0x00 when no payload is present.
-
-The contents of the error payload is user-defined, with the only limitation
-being that it can bot exceed 60 bytes to stay within the 64 byte message
-length limit.
