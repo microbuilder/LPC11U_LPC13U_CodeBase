@@ -37,6 +37,7 @@ else
   OBJS   = $(OBJ_PATH)/startup_lpc13u.o 
   OBJS  += $(OBJ_PATH)/system_LPC13Uxx.o
 endif
+OBJS  += $(OBJ_PATH)/math_helper.o
 
 VPATH += src
 OBJS  += $(OBJ_PATH)/printf-retarget.o
@@ -296,6 +297,12 @@ GCFLAGS += -fno-builtin
 GCFLAGS += -mcpu=$(CORE) 
 GCFLAGS += -DTARGET=$(TARGET)
 GCFLAGS += -D$(BOARD)
+# CMSIS DSP Flags
+ifeq (lpc11u,$(TARGET))
+  GCFLAGS += -DARM_MATH_CM0
+else
+  GCFLAGS += -DARM_MATH_CM3
+endif
 # For use with the GCC ARM Embedded toolchain
 # GCFLAGS += --specs=nano.specs
 # For use with the LPCXpresso toolchain
@@ -325,6 +332,13 @@ LDFLAGS += -T $(LDSCRIPT)
 
 # External Libraries
 LDLIBS   = -lm
+# CMSIS DSP Library
+LDLIBS  += -L./cmsis
+ifeq (lpc11u,$(TARGET))
+  LDLIBS  += -larm_cortexM0l_math
+else
+  LDLIBS  += -larm_cortexM3l_math
+endif
 # The following libraries are required with the LPCXpresso toolchain
 # LDLIBS  += -lcr_c -lcr_eabihelpers
 
@@ -350,7 +364,7 @@ firmware: $(OBJS) $(SYS_OBJS)
 	@mkdir -p $(BIN_PATH)
 	-@echo ""
 	-@echo "LINKING $(OUTFILE).elf ($(CORE) -O$(OPTIMIZATION))"
-	@$(LD) $(LDFLAGS) -o $(OUTFILE).elf $(LDLIBS) $(OBJS) $(LDLIBS)
+	$(LD) $(LDFLAGS) -o $(OUTFILE).elf $(LDLIBS) $(OBJS) $(LDLIBS)
 	-@echo ""
 	@$(SIZE) $(OUTFILE).elf
 	-@echo ""
