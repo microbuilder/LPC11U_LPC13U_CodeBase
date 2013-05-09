@@ -236,6 +236,8 @@ VPATH += src/drivers/filters
 OBJS  += $(OBJ_PATH)/avg_d.o 
 OBJS  += $(OBJ_PATH)/avg_f.o 
 OBJS  += $(OBJ_PATH)/avg_i.o
+
+VPATH += src/drivers/filters/iir
 OBJS  += $(OBJ_PATH)/iir_f.o
 OBJS  += $(OBJ_PATH)/iir_i.o
 
