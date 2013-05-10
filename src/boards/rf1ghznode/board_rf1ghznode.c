@@ -41,6 +41,7 @@
 
 #if defined CFG_BRD_RF1GHZNODE
 
+#include "cmsis_os.h"
 #include "boards/board.h"
 #include "core/gpio/gpio.h"
 #include "core/systick/systick.h"
@@ -98,6 +99,41 @@
 
 /* VIN resistor divider multiplier is 3.12766 */
 #define RF1GHZNODE_VINADC_MULTIPLIER_FIXED10K (31277)
+
+///* Thread IDs */
+//osThreadId tid_thread1;               /* assigned ID for thread 1            */
+//osThreadId tid_thread2;               /* assigned ID for thread 2            */
+//
+///*----------------------------------------------------------------------------
+// *   Thread 1 - High Priority - Active every 3ms
+// *---------------------------------------------------------------------------*/
+//void thread1 (void const *argument)
+//{
+//  while (1)
+//  {
+//    /* Pass control to other tasks for 1s */
+//    osDelay(1000);
+//    printf ("Thread 1\n");
+//  }
+//}
+//
+///*----------------------------------------------------------------------------
+// *   Thread 2 - Normal Priority - looks for a free semaphore and uses
+// *                                the resource whenever it is available
+// *---------------------------------------------------------------------------*/
+//void thread2 (void const *argument)
+//{
+//  while (1)
+//  {
+//    /* Pass control to other tasks for 1s */
+//    osDelay(500);
+//    printf ("Thread 2\n");
+//  }
+//}
+//
+///* Thread definitions */
+//osThreadDef(thread1, osPriorityHigh,   1, 0);
+//osThreadDef(thread2, osPriorityNormal, 1, 0);
 
 #ifdef CFG_SDCARD
 /**************************************************************************/
@@ -384,6 +420,11 @@ int main(void)
   currentSecond = lastSecond = 0;
 
   boardInit();
+
+//  tid_thread1 = osThreadCreate(osThread(thread1), NULL);
+//  tid_thread2 = osThreadCreate(osThread(thread2), NULL);
+//  osDelay(osWaitForever);
+//  for (;;);
 
   while (1)
   {
