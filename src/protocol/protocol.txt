@@ -17,6 +17,12 @@ to function with any binary serial bus.  The original design goal is a
 protocol that can function via USB HID, SPI Slave, and I2C Slave modes, but
 any similar protocol should be able to be added to the implementation.
 
+Endianness
+----------
+
+All values larger than 8-bits are expected to be little endian, such as the 
+command IDs, and the payload contents.
+
 Message Types
 -------------
 
@@ -27,7 +33,7 @@ the format and content of the rest of the message:
 | Message Type          | ID (U8) | Meaning                                   |
 |-----------------------+---------+-------------------------------------------|
 | Command               | 0x10    |                                           |
-| Response              | 0x02    |                                           |
+| Response              | 0x20    |                                           |
 | Error                 | 0x80    |                                           |
 |-----------------------+---------+-------------------------------------------|
 
@@ -57,13 +63,13 @@ Any payload error checking should be handled by the command interpretter.
 A sample command message would be:
 
 Byte   0    1  2    3    4
-      [10] [12 34] [01] [FF]
+      [10] [34 12] [01] [FF]
  
 - The first byte is the Message Type (0x10), which identifies this as a
   command message.
-- The second and third bytes are 0x1234, which is the unique command ID that
-  will be parsed to the command lookup function, and redirected to an 
-  appropriate command handler function.
+- The second and third bytes are 0x1234 (34 12 in little-endian notation),
+  which is the unique command ID that will be parsed to the command lookup
+  function, and redirected to an appropriate command handler function.
 - The fourth byte indicates that we have a message payload of 1 byte
 - The fifth bytes is the 1 byte payload: 0xFF
 
@@ -101,7 +107,7 @@ high-level protocol.
 A sample response message would be:
 
 Byte   0    1  2    3    4
-      [20] [12 34] [01] [FF]
+      [20] [34 12] [01] [FF]
  
 - The first byte is the Message Type (0x20), which identifies this as a
   response message.
@@ -126,3 +132,14 @@ is present on the system, and have the following structure:
 Whenever an error condition is present and the system needs to be alerted (such
 as a failed request, an attempt to access a non-existing resource, etc.) the
 system can return a specific error message with an appropriate Error ID.
+
+A sample error message would be:
+
+Byte   0    1  2
+      [80] [00 01]
+
+- The first byte is the Message Type (0x80), which identifies this is an
+  error message.
+- The second and third bytes are 0x0100 (00 01 in little-endian notation),
+  which is the error code corresponding to PROT_ERROR_INVALID_PARAM.
+  
