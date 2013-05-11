@@ -76,6 +76,17 @@ typedef unsigned char byte_t;
   #define INLINE_POST __attribute__((always_inline))
 #endif
 
+/* SRAM placement for critical functions depends on the linker script */
+#ifdef __GNUC__
+  #ifdef __CROSSWORKS_ARM
+    #define RAMFUNC __attribute__ ((long_call, section (".fast_run")))
+  #else
+    #define RAMFUNC __attribute__ ((long_call, section (".data")))
+  #endif
+#else
+  #error "No section defined for RAMFUNC in sysdefs.h"
+#endif
+
 /* NULL placeholder */
 #ifndef NULL
   #define NULL ((void *) 0)
