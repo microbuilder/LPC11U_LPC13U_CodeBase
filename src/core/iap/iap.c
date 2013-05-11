@@ -54,7 +54,9 @@ error_t iapReadUID(uint32_t uid[])
 
   /* Invoke IAP call...*/
   /* ToDo: Check error messages */
+  __disable_irq();
   iap_entry(command, (unsigned int *)uid);
+  __enable_irq();
 
   return ERROR_NONE;
 }

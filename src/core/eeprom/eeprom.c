@@ -48,8 +48,8 @@ static const IAP iap_entry = (IAP) 0x1FFF1FF1;
     @brief   Writes a byte array to the on-chip EEPROM memory
 
     @code
+    uint8_t buffer[4];
     uint32_t address = 0x00000000;
-    uint8_t buffer[4] = { 0x00, 0x00, 0x00, 0x00 };
 
     buffer[0] = 0x87;
     buffer[1] = 0x65;
@@ -77,10 +77,12 @@ error_t writeEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCoun
   command[1] = (uint32_t) eeAddress;
   command[2] = (uint32_t) buffAddress;
   command[3] = byteCount;
-  command[4] = SystemCoreClock/1000;
+  command[4] = (uint32_t) (SystemCoreClock/1000);
 
-  /* Invoke IAP call...*/
+  /* Invoke IAP call (interrupts need to be disabled during IAP calls)...*/
+  __disable_irq();
   iap_entry(command, result);
+  __enable_irq();
   if (0 != result[0])
   {
     return ERROR_ADDRESSOUTOFRANGE;
@@ -93,8 +95,8 @@ error_t writeEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCoun
     @brief   Reads a byte array from the on-chip EEPROM memory
 
     @code
-    uint32_t address = 0x00000000;
     uint8_t buffer[4] = { 0x00, 0x00, 0x00, 0x00 };
+    uint32_t address = 0x00000000;
 
     // Read four bytes starting at address
     readEEPROM((uint8_t*) address, buffer, 4);
@@ -117,9 +119,12 @@ error_t readEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount
   command[1] = (uint32_t) eeAddress;
   command[2] = (uint32_t) buffAddress;
   command[3] = byteCount;
-  command[4] = SystemCoreClock/1000;
+  command[4] = (uint32_t) (SystemCoreClock/1000);
 
-  iap_entry( command, result);
+  /* Invoke IAP call (interrupts need to be disabled during IAP calls)...*/
+  __disable_irq();
+  iap_entry(command, result);
+  __enable_irq();
   if (0 != result[0])
   {
     return ERROR_ADDRESSOUTOFRANGE;
