@@ -43,7 +43,7 @@
 #include "core/dwt/dwt.h"
 #include "core/systick/systick.h"
 
-#if CC3000_SPI_PORT == 1
+#if CFG_CC3000_SPI_PORT == 1
   #include "core/ssp1/ssp1.h"
 #else
   #include "core/ssp0/ssp0.h"
@@ -53,8 +53,8 @@
 #define WRITE                           (1)
 #define HI(value)                       (((value) & 0xFF00) >> 8)
 #define LO(value)                       ((value) & 0x00FF)
-#define CC3000_ASSERT_CS()              do { LPC_GPIO->CLR[CC3000_CS_PORT] = (1 << CC3000_CS_PIN); } while(0)
-#define CC3000_DEASSERT_CS()            do { LPC_GPIO->SET[CC3000_CS_PORT] = (1 << CC3000_CS_PIN); } while(0)
+#define CC3000_ASSERT_CS                do { LPC_GPIO->CLR[CFG_CC3000_CS_PORT] = (1 << CFG_CC3000_CS_PIN); } while(0)
+#define CC3000_DEASSERT_CS              do { LPC_GPIO->SET[CFG_CC3000_CS_PORT] = (1 << CFG_CC3000_CS_PIN); } while(0)
 #define HEADERS_SIZE_EVNT               (SPI_HEADER_SIZE + 5)
 #define SPI_HEADER_SIZE                 (5)
 
@@ -159,26 +159,26 @@ void SpiOpen(gcSpiHandleRx pfRxHandler)
 /**************************************************************************/
 int init_spi(void)
 {
-  #if CC3000_SPI_PORT == 1
+  #if CFG_CC3000_SPI_PORT == 1
     ssp1Init();
   #else
     ssp0Init();
   #endif
 
   /* Set VBAT EN pin to output */
-  GPIOSetDir(CC3000_EN_PORT, CC3000_EN_PIN, 1);
-  LPC_GPIO->SET[CC3000_EN_PORT] = (1 << CC3000_EN_PIN);
+  GPIOSetDir(CFG_CC3000_EN_PORT, CFG_CC3000_EN_PIN, 1);
+  LPC_GPIO->SET[CFG_CC3000_EN_PORT] = (1 << CFG_CC3000_EN_PIN);
   systickDelay(100);
 
   /* Set CS pin to output */
-  GPIOSetDir(CC3000_CS_PORT, CC3000_CS_PIN, 1);
-  CC3000_DEASSERT_CS();
+  GPIOSetDir(CFG_CC3000_CS_PORT, CFG_CC3000_CS_PIN, 1);
+  CC3000_DEASSERT_CS;
 
   /* Set interrupt/gpio pin to input */
-  GPIOSetDir(CC3000_IRQ_PORT, CC3000_IRQ_PIN, 0);
+  GPIOSetDir(CFG_CC3000_IRQ_PORT, CFG_CC3000_IRQ_PIN, 0);
 
   /* Channel 2, sense (0=edge, 1=level), polarity (0=low/falling, 1=high/rising) */
-  GPIOSetPinInterrupt( 2, CC3000_IRQ_PORT, CC3000_IRQ_PIN, 0, 1 );
+  GPIOSetPinInterrupt( 2, CFG_CC3000_IRQ_PORT, CFG_CC3000_IRQ_PIN, 0, 1 );
 
   /* Enable interrupt 2 on falling edge */
   GPIOPinIntEnable( 2, 0 );
@@ -194,7 +194,7 @@ int init_spi(void)
 long SpiFirstWrite(unsigned char *ucBuf, unsigned short usLength)
 {
   /* Workaround for the first transaction */
-  CC3000_ASSERT_CS();
+  CC3000_ASSERT_CS;
 
   /* Delay (stay low) for ~50us */
   dwtDelay((SystemCoreClock / 1000000) * 50);
@@ -209,7 +209,7 @@ long SpiFirstWrite(unsigned char *ucBuf, unsigned short usLength)
   /* From this point on - operate in a regular manner */
   sSpiInformation.ulSpiState = eSPI_STATE_IDLE;
 
-  CC3000_DEASSERT_CS();
+  CC3000_DEASSERT_CS;
 
   return(0);
 }
@@ -268,7 +268,7 @@ long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength)
     sSpiInformation.usTxPacketLength = usLength;
 
     /* Assert the CS line and wait till SSI IRQ line is active and then initialize write operation */
-    CC3000_ASSERT_CS();
+    CC3000_ASSERT_CS;
 
     /* Re-enable IRQ - if it was not disabled - this is not a problem... */
     tSLInformation.WlanInterruptEnable();
@@ -280,7 +280,7 @@ long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength)
 
       sSpiInformation.ulSpiState = eSPI_STATE_IDLE;
 
-      CC3000_DEASSERT_CS();
+      CC3000_DEASSERT_CS;
     }
   }
 
@@ -303,7 +303,7 @@ void SpiWriteDataSynchronous(unsigned char *data, unsigned short size)
   while (size)
   {
     /* TX */
-    #if CC3000_SPI_PORT == 1
+    #if CFG_CC3000_SPI_PORT == 1
       while ((LPC_SSP1->SR & (SSP1_SR_TNF_NOTFULL | SSP1_SR_BSY_BUSY)) != SSP1_SR_TNF_NOTFULL);
       LPC_SSP1->DR = *data;
     #else
@@ -312,7 +312,7 @@ void SpiWriteDataSynchronous(unsigned char *data, unsigned short size)
     #endif
 
     /* RX */
-    #if CC3000_SPI_PORT == 1
+    #if CFG_CC3000_SPI_PORT == 1
       while ( (LPC_SSP1->SR & (SSP1_SR_BSY_BUSY|SSP1_SR_RNE_NOTEMPTY)) != SSP1_SR_RNE_NOTEMPTY );
       LPC_SSP1->DR = dummy;
     #else
@@ -338,7 +338,7 @@ void SpiReadDataSynchronous(unsigned char *data, unsigned short size)
   for (i = 0; i < size; i ++)
   {
     /* Dummy write */
-    #if CC3000_SPI_PORT == 1
+    #if CFG_CC3000_SPI_PORT == 1
       while ((LPC_SSP1->SR & (SSP1_SR_TNF_NOTFULL | SSP1_SR_BSY_BUSY)) != SSP1_SR_TNF_NOTFULL);
       LPC_SSP1->DR = data_to_send[0];
     #else
@@ -347,7 +347,7 @@ void SpiReadDataSynchronous(unsigned char *data, unsigned short size)
     #endif
 
     /* RX */
-    #if CC3000_SPI_PORT == 1
+    #if CFG_CC3000_SPI_PORT == 1
       while ( (LPC_SSP1->SR & (SSP1_SR_BSY_BUSY|SSP1_SR_RNE_NOTEMPTY)) != SSP1_SR_RNE_NOTEMPTY );
       data[i] = LPC_SSP1->DR;
     #else
@@ -453,7 +453,7 @@ void SpiTriggerRxProcessing(void)
 {
   /* Trigger Rx processing */
   SpiPauseSpi();
-  CC3000_DEASSERT_CS();
+  CC3000_DEASSERT_CS;
 
   /* The magic number that resides at the end of the TX/RX buffer (1 byte after the allocated size)
    * for the purpose of detection of the overrun. If the magic number is overriten - buffer overrun
@@ -518,7 +518,7 @@ void PIN_INT2_IRQHandler(void)
         sSpiInformation.ulSpiState = eSPI_STATE_READ_IRQ;
 
         /* IRQ line goes down - start reception */
-        CC3000_ASSERT_CS();
+        CC3000_ASSERT_CS;
 
         // Wait for TX/RX Compete which will come as DMA interrupt
         SpiReadHeader();
@@ -533,7 +533,7 @@ void PIN_INT2_IRQHandler(void)
 
         sSpiInformation.ulSpiState = eSPI_STATE_IDLE;
 
-        CC3000_DEASSERT_CS();
+        CC3000_DEASSERT_CS;
       }
       LPC_GPIO_PIN_INT->FALL = 0x1 << 2;
     }

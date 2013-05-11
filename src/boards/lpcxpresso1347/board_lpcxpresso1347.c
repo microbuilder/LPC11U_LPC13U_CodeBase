@@ -77,6 +77,10 @@
   #include "core/uart/uart.h"
 #endif
 
+#ifdef CFG_CC3000
+  // ToDo: Figure out which headers are required
+#endif
+
 #ifdef CFG_SDCARD
 /**************************************************************************/
 /*!
@@ -142,6 +146,13 @@ void boardInit(void)
   /* Start the command line interface */
   #ifdef CFG_INTERFACE
     cliInit();
+  #endif
+
+  /* Start CC3000 WiFi Module */
+  #ifdef CFG_CC3000
+    // ToDo: Make sure CC3000 pins are multiplexed to the correct function
+    //       since the init code only sets gpio dir, etc.
+    // ToDo: Init anything else required for the CC3000!
   #endif
 
   /* Turn the user LED on after init to indicate that everything is OK */

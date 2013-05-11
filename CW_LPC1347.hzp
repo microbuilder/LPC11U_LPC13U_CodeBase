@@ -154,6 +154,20 @@
               <file file_name="src/drivers/rf/pn532/mem_allocator/pn532_mem.c"/>
             </folder>
           </folder>
+          <folder Name="cc3000" file_name="">
+            <file file_name="src/drivers/rf/cc3000/spi.c"/>
+            <file file_name="src/drivers/rf/cc3000/spi.h"/>
+            <folder Name="hostdriver" file_name="">
+              <file file_name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/security.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
+            </folder>
+          </folder>
         </folder>
         <folder Name="storage">
           <folder Name="fatfs">
@@ -328,6 +342,6 @@
   <configuration Name="Debug" c_preprocessor_definitions="DEBUG" gcc_debugging_level="Level 2" gcc_optimization_level="None" hidden="Yes"/>
   <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
   <configuration Name="Release" c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET" gcc_debugging_level="Level 1" gcc_optimization_level="Optimize For Size" hidden="Yes"/>
-  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_SIMULATOR;ARM_MATH_CM3" c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
+  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_LPCXPRESSO_LPC1347;ARM_MATH_CM3" c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
   <configuration Name="Test" c_preprocessor_definitions="_TEST_" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
 </solution>
