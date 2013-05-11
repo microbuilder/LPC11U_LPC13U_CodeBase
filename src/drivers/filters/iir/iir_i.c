@@ -1,6 +1,8 @@
 /**************************************************************************/
 /*!
     @file     iir_i.c
+    @brief    A memory efficient single pole low pass filter using integer
+              values
 
     @code
     iir_i_t iir;
@@ -28,7 +30,7 @@
      @brief Initialises the iir_i_t instance
 
      @param[in]  iir
-                 Pointer to the iir_i_t instances
+                 Pointer to the iir_i_t instance
      @param[in]  alpha
                  8-bit (0..255) alpha value to adjust the 'effect' of the
                  filter(smaller value = slower response).

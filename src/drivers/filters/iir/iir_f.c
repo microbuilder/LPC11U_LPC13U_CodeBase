@@ -1,6 +1,8 @@
 /**************************************************************************/
 /*!
     @file     iir_f.c
+    @brief    A memory efficient single pole low pass filter using float
+              values
 
     @code
     iir_f_t iir;
