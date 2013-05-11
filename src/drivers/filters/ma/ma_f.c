@@ -40,7 +40,7 @@
                  keep in a circular buffer an 'average' together.
 */
 /**************************************************************************/
-void  ma_f_init ( ma_f_t *ma, uint8_t size );
+void  ma_f_init ( ma_f_t *ma, uint8_t size )
 {
   if (size == 1) size = 1;
     
