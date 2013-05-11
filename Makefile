@@ -249,6 +249,12 @@ OBJS  += $(OBJ_PATH)/mmc.o
 VPATH += src/localisation
 OBJS  += $(OBJ_PATH)/localisation.o
 
+VPATH += src/protocol
+OBJS  += $(OBJ_PATH)/protocol.o
+
+VPATH += src/protocol/commands
+OBJS  += $(OBJ_PATH)/protocol_cmd_led.o
+
 ##########################################################################
 # Include paths
 ##########################################################################
@@ -363,7 +369,7 @@ firmware: $(OBJS) $(SYS_OBJS)
 	@mkdir -p $(BIN_PATH)
 	-@echo ""
 	-@echo "LINKING $(OUTFILE).elf ($(CORE) -O$(OPTIMIZATION))"
-	$(LD) $(LDFLAGS) -o $(OUTFILE).elf $(LDLIBS) $(OBJS) $(LDLIBS)
+	@$(LD) $(LDFLAGS) -o $(OUTFILE).elf $(LDLIBS) $(OBJS) $(LDLIBS)
 	-@echo ""
 	@$(SIZE) $(OUTFILE).elf
 	-@echo ""
