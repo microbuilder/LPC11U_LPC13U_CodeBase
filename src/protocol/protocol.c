@@ -47,20 +47,25 @@
 
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
-
-  uint8_t cmd_id_high; // declare command_id as uin16_t can have alignment issue with M0
+  uint8_t cmd_id_high;
   uint8_t cmd_id_low;
-
   uint8_t length;
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
 } protMsgCommand_t;
 
 typedef PRE_PACK struct POST_PACK {
-  uint16_t error_id;
-
+  uint8_t msg_type;
+  uint8_t cmd_id_high;
+  uint8_t cmd_id_low;
   uint8_t length;
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
 } protMsgResponse_t;
+
+typedef PRE_PACK struct POST_PACK {
+  uint8_t msg_type;
+  uint8_t error_id_high;
+  uint8_t error_id_low;
+} protMsgError_t;
 
 #define CMD_FIFO_DEPTH 128
 
@@ -116,12 +121,11 @@ void prot_task(void * p_para)
 
     //------------- response phase -------------//
     {
-      protMsgResponse_t message_response;
-
-      message_response.error_id = (uint16_t) error;
-      message_response.length   = 0;
-
-      usb_hid_generic_send( (uint8_t*) &message_response, sizeof(protMsgResponse_t));
+      protMsgError_t message_error;
+      message_error.msg_type = PROT_MSGTYPE_ERROR;
+      message_error.error_id_high = (uint8_t)((error & 0xFFFF) << 8);
+      message_error.error_id_low = (uint8_t)(error & 0xFF);
+      usb_hid_generic_send( (uint8_t*) &message_error, sizeof(protMsgError_t));
     }
   }
 }
