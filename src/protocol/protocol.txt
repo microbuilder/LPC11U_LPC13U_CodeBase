@@ -9,12 +9,6 @@ requirement being that individual messages are 64 bytes or smaller,
 and that the first byte of every message is a one byte (U8) identifier that
 indicates the format for the rest of the payload (if there is one).
 
-Endianness
-----------
-
-All values > 8-bit should be little-endian, meaning '0x12345678' would be
-tranmitted as '78 56 34 12', etc.
-
 Implementation Notes
 --------------------
 
@@ -32,7 +26,7 @@ the format and content of the rest of the message:
 |-----------------------+---------+-------------------------------------------|
 | Message Type          | ID (U8) | Meaning                                   |
 |-----------------------+---------+-------------------------------------------|
-| Command               | 0x01    |                                           |
+| Command               | 0x10    |                                           |
 | Response              | 0x02    |                                           |
 | Error                 | 0x80    |                                           |
 |-----------------------+---------+-------------------------------------------|
@@ -40,11 +34,12 @@ the format and content of the rest of the message:
 Command Messages
 ----------------
 
-Command messages (Message Type = 0x01) have the following structure:
+Command messages (Message Type = 0x10) have the following structure:
 
 |-------------------+----------+----------------------------------------------|
 | Name              | Type     | Meaning                                      |
 |-------------------+----------+----------------------------------------------|
+| Message Type      | U8       | Always '0x10'                                |
 | Command ID        | U16      | Unique command identifier                    |
 | Payload Length    | U8       | Payload length (0..60)                       |
 | Payload           | ...      | Optional command payload (params, etc.)      |
@@ -61,10 +56,10 @@ Any payload error checking should be handled by the command interpretter.
 
 A sample command message would be:
 
-Byte   0    1 2    3    4
-      [01] [3412] [01] [FF]
+Byte   0    1  2    3    4
+      [10] [12 34] [01] [FF]
  
-- The first byte is the Message Type (0x01), which identifies this as a
+- The first byte is the Message Type (0x10), which identifies this as a
   command message.
 - The second and third bytes are 0x1234, which is the unique command ID that
   will be parsed to the command lookup function, and redirected to an 
@@ -75,12 +70,13 @@ Byte   0    1 2    3    4
 Response Messages
 -----------------
 
-Responses messages (Message Type = 0x02) are generated in response to an
+Responses messages (Message Type = 0x20) are generated in response to an
 incoming command, and have the following structure:
 
 |-------------------+----------+----------------------------------------------|
 | Name              | Type     | Meaning                                      |
 |-------------------+----------+----------------------------------------------|
+| Message Type      | U8       | Always '0x20'                                |
 | Command ID        | U16      | Command ID of the command this message is    |
 |                   |          | a response to, to correlate Responses and    |
 |                   |          | commands                                     |
@@ -104,10 +100,10 @@ high-level protocol.
 
 A sample response message would be:
 
-Byte   0    1 2    3    4
-      [02] [3412] [01] [FF]
+Byte   0    1  2    3    4
+      [20] [12 34] [01] [FF]
  
-- The first byte is the Message Type (0x02), which identifies this as a
+- The first byte is the Message Type (0x20), which identifies this as a
   response message.
 - The second and third bytes are 0x1234, which is the unique command ID that
   this response is related to.
@@ -123,6 +119,7 @@ is present on the system, and have the following structure:
 |-------------------+----------+----------------------------------------------|
 | Name              | Type     | Meaning                                      |
 |-------------------+----------+----------------------------------------------|
+| Message Type      | U8       | Always '0x80'                                |
 | Error ID          | U16      | Unique ID for the error condition            |
 |-------------------+----------+----------------------------------------------|
 

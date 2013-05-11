@@ -55,18 +55,20 @@ extern "C" {
 /**************************************************************************/
 typedef enum
 {
-  /**< Command message */
-  PROT_MSGTYPE_COMMAND          = 0x01,
-  /**< Response to a command message */
-  PROT_MSGTYPE_RESPONSE         = 0x02,
-  /**< Signals an error condition */
+  PROT_MSGTYPE_COMMAND          = 0x10,
+  PROT_MSGTYPE_RESPONSE         = 0x10,
   PROT_MSGTYPE_ERROR            = 0x80
 } protMsgType_t;
 
+/**************************************************************************/
+/*!
+    Global error codes
+*/
+/**************************************************************************/
 typedef enum
 {
-  PROT_ERROR_NONE = 0,
-  PROT_ERROR_INVALID_PARA,
+  PROT_ERROR_NONE               = 0,
+  PROT_ERROR_INVALID_PARAM      = 0x100,
   PROT_ERROR_UNKNOWN,
 } protError_t;
 

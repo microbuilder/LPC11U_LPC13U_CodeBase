@@ -45,6 +45,11 @@
 #include "core/fifo/fifo.h"
 #include "core/usb/usb_hid.h"
 
+/**************************************************************************/
+/*!
+    Command message struct
+*/
+/**************************************************************************/
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
   uint8_t cmd_id_high;
@@ -53,6 +58,11 @@ typedef PRE_PACK struct POST_PACK {
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
 } protMsgCommand_t;
 
+/**************************************************************************/
+/*!
+    Response message struct
+*/
+/**************************************************************************/
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
   uint8_t cmd_id_high;
@@ -61,6 +71,11 @@ typedef PRE_PACK struct POST_PACK {
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
 } protMsgResponse_t;
 
+/**************************************************************************/
+/*!
+    Error message struct
+*/
+/**************************************************************************/
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
   uint8_t error_id_high;
@@ -95,7 +110,6 @@ static protCmdFunc_t protocol_cmd_tbl[] =
   PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
 };
 
-
 //--------------------------------------------------------------------+
 // Public API
 //--------------------------------------------------------------------+
@@ -116,6 +130,7 @@ void prot_task(void * p_para)
       command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
       ASSERT( command_id < PROT_CMDTYPE_COUNT && message_cmd.length <= (PROT_MAX_MSG_SIZE-4), (void) 0);
 
+      /* Call the command handler associated with command_id */
       error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload );
     }
 
@@ -123,7 +138,7 @@ void prot_task(void * p_para)
     {
       protMsgError_t message_error;
       message_error.msg_type = PROT_MSGTYPE_ERROR;
-      message_error.error_id_high = (uint8_t)((error & 0xFFFF) << 8);
+      message_error.error_id_high = (uint8_t)((error & 0xFFFF) >> 8);
       message_error.error_id_low = (uint8_t)(error & 0xFF);
       usb_hid_generic_send( (uint8_t*) &message_error, sizeof(protMsgError_t));
     }
@@ -131,10 +146,11 @@ void prot_task(void * p_para)
 }
 
 #ifdef CFG_USB_HID_GENERIC
-//--------------------------------------------------------------------+
-// USB Generic callback
-//--------------------------------------------------------------------+
-// received command
+/**************************************************************************/
+/*!
+    USB HID Generic callback (captures incoming commands)
+*/
+/**************************************************************************/
 void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length)
 {
   (void) length; // for simplicity, always write fixed size to fifo even if host sends out short packet

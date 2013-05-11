@@ -40,9 +40,15 @@
 
 // turn on  01 00 01 01 00
 // turn off 01 00 01 01 01
+/**************************************************************************/
+/*!
+    Enables or disables the on board LEDs via boardLED()
+*/
+/**************************************************************************/
 protError_t protcmd_led(uint8_t length, uint8_t payload[])
 {
-  ASSERT( 1 == length, PROT_ERROR_INVALID_PARA);
+  ASSERT( 1 == length, PROT_ERROR_INVALID_PARAM);
+
   boardLED(payload[0]);
 
   return PROT_ERROR_NONE;
