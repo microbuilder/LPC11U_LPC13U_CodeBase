@@ -22,7 +22,15 @@ As you can see above, a larger alpha means that new values are integrated more q
 
 ## Is IIR the Right Filter For Me? ##
 
-An IIR filter is excellent for smoothing out noisy data, but it isn't 'phase stable', and some signal attentuation also inevitably occurs with stronger alpha values.
+An IIR filter is very memory efficient, and is excellent for smoothing out noisy data, but it does have some limitations and drawbacks.
+
+One big advantage of a simple IIR filter is that it requires very little memory. This filter keeps a single 'running average' value, which allows a much smaller memory footprint than some other filters. 
+
+This also presents a potential problem, though, since any errors that are introduced in that single 'running average' -- floating point precision losses, etc. -- also get multiplied over time! After running 10,000 samples through the IIR filter, we have to take into account the effect of 10,000 accumulated errors, which may or may not be an issue for you.
+
+Accumulated errors are generally only an issue over large, long-running sample sets, but it's important to keep this in mind when deciding which filter(s) to use with your data.
+
+Two other tradeoffs of IIR filters is that they aren't 'phase stable', and some signal attentuation also inevitably occurs with stronger alpha values.
 
 What this means is that using a high alpha (meaning a smaller number!) will very effectively smooth your data out, but it will also phase shift further and further to the right, and you will no longer have the same peak to peak range (or 'amplitude') of your source data.
 
