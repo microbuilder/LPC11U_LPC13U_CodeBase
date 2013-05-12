@@ -82,7 +82,10 @@ typedef unsigned char byte_t;
     #define RAMFUNC __attribute__ ((long_call, section (".fast")))
   #else
     /* ToDo: Throws 'ignoring changed section attributes for .data' */
-    #define RAMFUNC __attribute__ ((long_call, section (".data")))
+    // #define RAMFUNC __attribute__ ((long_call, section (".data")))
+    /* Hmm ... not working from the makefile ... need to debug! */
+    /* Leave it blank for now unless we're in Crossworks */
+    #define RAMFUNC
   #endif
 #else
   #error "No section defined for RAMFUNC in sysdefs.h"
