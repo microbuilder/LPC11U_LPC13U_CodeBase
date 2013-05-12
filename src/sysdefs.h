@@ -79,7 +79,7 @@ typedef unsigned char byte_t;
 /* SRAM placement for critical functions depends on the linker script */
 #ifdef __GNUC__
   #ifdef __CROSSWORKS_ARM
-    #define RAMFUNC __attribute__ ((long_call, section (".fast_run")))
+    #define RAMFUNC __attribute__ ((long_call, section (".fast")))
   #else
     #define RAMFUNC __attribute__ ((long_call, section (".data")))
   #endif

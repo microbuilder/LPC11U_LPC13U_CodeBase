@@ -42,10 +42,10 @@ extern "C" {
 
 #include "projectconfig.h"
 
-error_t iapReadUID(uint32_t uid[]);
+RAMFUNC error_t iapReadUID(uint32_t uid[]);
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
