@@ -60,14 +60,14 @@
 typedef protError_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
 
 //------------- command prototype -------------//
-#define CMD_PROTOTYPE_EXPAND(command_id, function) \
+#define CMD_PROTOTYPE_EXPAND(command, id, function) \
   protError_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
 
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
 //------------- command lookup table -------------//
-#define CMD_LOOKUP_EXPAND(command_id, function)\
-  [command_id] = function,\
+#define CMD_LOOKUP_EXPAND(command, id, function)\
+  [command] = function,\
 
 static protCmdFunc_t protocol_cmd_tbl[] =
 {
