@@ -2,7 +2,7 @@
 
 Major changes in the LPC11U/LPC13U code base by code base version number.
 
-## 0.8.2 [Ongoing] ##
+## 0.8.5 [Ongoing] ##
 
 - Updated CMSIS to v3.20
 - Renamed Crossworks project files to CW_*
@@ -10,7 +10,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added stepper support to board config files
 - Changed the clock setup in core/adc
 - Added basic TCS34725 driver
-- First attempt at a simple binary protocol (CFG_PROTOCOL)
+- First attempt at a simple binary protocol (CFG_PROTOCOL, /src/protocol)
 - Added CFG\_BRD\_SIMULATOR as a board option (mostly for unit tests)
 - Fixed negative value bug in timespanCreate
 - Renamed /src/drivers/statistics to /src/drivers/filters
