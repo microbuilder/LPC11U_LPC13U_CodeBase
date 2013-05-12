@@ -106,13 +106,13 @@ typedef PRE_PACK struct POST_PACK {
 
 
 //------------- X macros for create consistent command enum, function prototyp & cmd table -------------//
+// command enum, command id, command function
 #define PROTOCOL_COMMAND_TABLE(ENTRY) \
-    ENTRY(PROT_CMDTYPE_HELP, protcmd_help)\
-    ENTRY(PROT_CMDTYPE_LED, protcmd_led)\
+    ENTRY(PROT_CMDTYPE_LED, 1, protcmd_led)\
 
 //------------- command type -------------//
-#define CMDTYPE_EXPAND(command_id, function) \
-  command_id,\
+#define CMDTYPE_EXPAND(command, id, function) \
+  command = id,\
 
 typedef enum {
   PROTOCOL_COMMAND_TABLE(CMDTYPE_EXPAND)
