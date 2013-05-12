@@ -81,6 +81,7 @@ typedef unsigned char byte_t;
   #ifdef __CROSSWORKS_ARM
     #define RAMFUNC __attribute__ ((long_call, section (".fast")))
   #else
+    /* ToDo: Throws 'ignoring changed section attributes for .data' */
     #define RAMFUNC __attribute__ ((long_call, section (".data")))
   #endif
 #else
