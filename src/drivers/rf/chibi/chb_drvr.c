@@ -621,11 +621,11 @@ void chb_set_hgm(U8 enb)
 {
     if (enb)
     {
-        GPIOSetBitValue(CFG_CHIBI_CC1190_HGM_PORT, CFG_CHIBI_CC1190_HGM_PIN, 1);
+        LPC_GPIO->SET[CFG_CHIBI_CC1190_HGM_PORT] = (1 << CFG_CHIBI_CC1190_HGM_PIN);
     }
     else
     {
-        GPIOSetBitValue(CFG_CHIBI_CC1190_HGM_PORT, CFG_CHIBI_CC1190_HGM_PIN, 0);
+        LPC_GPIO->CLR[CFG_CHIBI_CC1190_HGM_PORT] = (1 << CFG_CHIBI_CC1190_HGM_PIN);
     }
 }
 #endif
@@ -735,8 +735,8 @@ static error_t chb_radio_init()
 
 #if (CHB_CC1190_PRESENT)
     // set high gain mode pin to output and init to zero
-    GPIOSetDir(CFG_CHIBI_CC1190_HGM_PORT, CFG_CHIBI_CC1190_HGM_PIN, 1);
-    GPIOSetBitValue(CFG_CHIBI_CC1190_HGM_PORT, CFG_CHIBI_CC1190_HGM_PIN, 0);
+    LPC_GPIO->DIR[CFG_CHIBI_CC1190_HGM_PORT] |= (1 << CFG_CHIBI_CC1190_HGM_PIN);
+    LPC_GPIO->CLR[CFG_CHIBI_CC1190_HGM_PORT] = (1 << CFG_CHIBI_CC1190_HGM_PIN);
 
     // set external power amp on AT86RF212
     chb_reg_read_mod_write(TRX_CTRL_1, 1<<CHB_PA_EXT_EN_POS, 1<<CHB_PA_EXT_EN_POS);
@@ -746,7 +746,7 @@ static error_t chb_radio_init()
 #endif
 
     // set interrupt/gpio pin to input
-    GPIOSetDir(CFG_CHIBI_EINTPORT, CFG_CHIBI_EINTPIN, 0);
+    LPC_GPIO->DIR[CFG_CHIBI_EINTPORT] &= ~(1 << CFG_CHIBI_EINTPIN);
 
     // Channel 0, sense (0=edge, 1=level), polarity (0=low/falling, 1=high/rising)
     GPIOSetPinInterrupt( 0, CFG_CHIBI_EINTPORT, CFG_CHIBI_EINTPIN, 0, 1 );
@@ -775,8 +775,8 @@ error_t chb_drvr_init()
     chb_spi_init();
 
     // Set sleep and reset as output
-    GPIOSetDir(CFG_CHIBI_SLPTRPORT, CFG_CHIBI_SLPTRPIN, 1);
-    GPIOSetDir(CFG_CHIBI_RSTPORT, CFG_CHIBI_RSTPIN, 1);
+    LPC_GPIO->DIR[CFG_CHIBI_SLPTRPORT] |= (1 << CFG_CHIBI_SLPTRPIN);
+    LPC_GPIO->DIR[CFG_CHIBI_RSTPORT] |= (1 << CFG_CHIBI_RSTPIN);
 
     // configure IOs
     LPC_GPIO->SET[CFG_CHIBI_SLPTRPORT] = (1 << CFG_CHIBI_SLPTRPIN); // Set sleep high

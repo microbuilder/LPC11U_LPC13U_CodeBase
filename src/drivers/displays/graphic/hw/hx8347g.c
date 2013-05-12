@@ -317,20 +317,20 @@ void hx8347gSetWindow(uint16_t x0, uint16_t y0, uint16_t x1, uint16_t y1)
 void lcdInit(void)
 {
   // Set control line pins to output
-  GPIOSetDir(HX8347G_CONTROL_PORT, HX8347G_CS_PIN, 1);
-  GPIOSetDir(HX8347G_CONTROL_PORT, HX8347G_CD_PIN, 1);
-  GPIOSetDir(HX8347G_CONTROL_PORT, HX8347G_WR_PIN, 1);
-  GPIOSetDir(HX8347G_CONTROL_PORT, HX8347G_RD_PIN, 1);
+  LPC_GPIO->DIR[HX8347G_CONTROL_PORT] |=  (1 << HX8347G_CS_PIN);
+  LPC_GPIO->DIR[HX8347G_CONTROL_PORT] |=  (1 << HX8347G_CD_PIN);
+  LPC_GPIO->DIR[HX8347G_CONTROL_PORT] |=  (1 << HX8347G_WR_PIN);
+  LPC_GPIO->DIR[HX8347G_CONTROL_PORT] |=  (1 << HX8347G_RD_PIN);
   
   // Set data port pins to output
-  GPIOSetDir(HX8347G_DATA_PORT, HX8347G_DATA_MASK, 1);
+  LPC_GPIO->DIR[HX8347G_DATA_PORT] |=  (1 << HX8347G_DATA_MASK);
 
   // Set backlight pin to output and turn it on
-  GPIOSetDir(HX8347G_BL_PORT, HX8347G_BL_PIN, 1);      // set to output
+  LPC_GPIO->DIR[HX8347G_BL_PORT] |=  (1 << HX8347G_BL_PIN);
   lcdBacklight(TRUE);
 
   // Set reset pin to output
-  GPIOSetDir(HX8347G_RES_PORT, HX8347G_RES_PIN, 1);
+  LPC_GPIO->DIR[HX8347G_RES_PORT] |=  (1 << HX8347G_RES_PIN);
   // Low then high to reset
   CLR_RESET;
   systickDelay(50);

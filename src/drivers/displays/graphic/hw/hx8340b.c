@@ -249,12 +249,12 @@ static inline void hx8340bSetPosition(uint32_t x0, uint32_t y0, uint32_t x1, uin
 void lcdInit(void)
 {
   // Set control pins to output
-  GPIOSetDir(HX8340B_PORT, HX8340B_SDI_PIN, 1);
-  GPIOSetDir(HX8340B_PORT, HX8340B_SCL_PIN, 1);
-  GPIOSetDir(HX8340B_PORT, HX8340B_CS_PIN, 1);
-  GPIOSetDir(HX8340B_PORT, HX8340B_BL_PIN, 1);
+  LPC_GPIO->DIR[HX8340B_PORT] |=  (1 << HX8340B_SDI_PIN);
+  LPC_GPIO->DIR[HX8340B_PORT] |=  (1 << HX8340B_SCL_PIN);
+  LPC_GPIO->DIR[HX8340B_PORT] |=  (1 << HX8340B_CS_PIN);
+  LPC_GPIO->DIR[HX8340B_PORT] |=  (1 << HX8340B_BL_PIN);
   #ifdef HX8340B_USERESET
-  GPIOSetDir(HX8340B_PORT, HX8340B_RES_PIN, 1);
+  LPC_GPIO->DIR[HX8340B_PORT] |=  (1 << HX8340B_RES_PIN);
   #endif
 
   // Set pins low by default (except reset)

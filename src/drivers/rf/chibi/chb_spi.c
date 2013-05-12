@@ -58,7 +58,7 @@
 void chb_spi_init()
 {
     // Set slave select to output and high
-    GPIOSetDir(CFG_CHIBI_SSPORT, CFG_CHIBI_SSPIN, 1);
+    LPC_GPIO->DIR[CFG_CHIBI_SSPORT] |= (1 << CFG_CHIBI_SSPIN);
 
     // set the slave select to idle
     CHB_SPI_DISABLE();

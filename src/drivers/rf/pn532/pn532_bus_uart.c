@@ -107,7 +107,7 @@ error_t pn532_bus_HWInit(void)
   uartInit(PN532_UART_BAUDRATE);
 
   // Set reset pin as output and reset device
-  GPIOSetDir(CFG_PN532_RSTPD_PORT, CFG_PN532_RSTPD_PIN, 1);
+  LPC_GPIO->DIR[CFG_PN532_RSTPD_PORT] |= (1 << CFG_PN532_RSTPD_PIN);
   #ifdef PN532_DEBUGMODE
   PN532_DEBUG("Resetting the PN532...\r\n");
   #endif

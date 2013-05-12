@@ -215,7 +215,7 @@ error_t pn532_bus_HWInit(void)
   i2cInit(I2CMASTER);
 
   // Set reset pin as output and reset device
-  GPIOSetDir(CFG_PN532_RSTPD_PORT, CFG_PN532_RSTPD_PIN, 1);
+  LPC_GPIO->DIR[CFG_PN532_RSTPD_PORT] |= (1 << CFG_PN532_RSTPD_PIN);
   #ifdef PN532_DEBUGMODE
   PN532_DEBUG("Resetting the PN532%s", CFG_PRINTF_NEWLINE);
   #endif
@@ -236,7 +236,7 @@ error_t pn532_bus_HWInit(void)
   }
 
   // Set IRQ pin to input
-  GPIOSetDir(CFG_PN532_I2C_IRQPORT, CFG_PN532_I2C_IRQPIN, 0);
+  LPC_GPIO->DIR[CFG_PN532_I2C_IRQPORT] &= ~(1 << CFG_PN532_I2C_IRQPIN);
 
   return ERROR_NONE;
 }

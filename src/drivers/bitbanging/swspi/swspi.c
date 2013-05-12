@@ -91,9 +91,9 @@ void swspiInit(swspi_config_t *config)
 {
   // Note: This function assumes that the IOCON registers have already
   // been configured to set the pins to GPIO!
-  GPIOSetDir(config->miso_port, config->miso_pin, 0);
-  GPIOSetDir(config->mosi_port, config->mosi_pin, 1);
-  GPIOSetDir(config->sck_port, config->sck_pin, 1);
+  LPC_GPIO->DIR[config->miso_port] &= ~(1 << config->miso_pin);
+  LPC_GPIO->DIR[config->mosi_port] |=  (1 << config->mosi_pin);
+  LPC_GPIO->DIR[config->sck_port] |=  (1 << config->sck_pin);
 }
 
 /**************************************************************************/

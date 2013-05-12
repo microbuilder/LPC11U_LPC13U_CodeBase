@@ -324,9 +324,9 @@ DSTATUS disk_initialize (
           ssp1Init();
         #endif
 
-        GPIOSetDir(CFG_SDCARD_ENBLPORT, CFG_SDCARD_ENBLPIN, 1);
-        GPIOSetDir(CFG_SDCARD_SSELPORT, CFG_SDCARD_SSELPIN, 1);
-        GPIOSetDir(CFG_SDCARD_CDPORT, CFG_SDCARD_CDPIN, 0);
+        LPC_GPIO->DIR[CFG_SDCARD_ENBLPORT] |= (1 << CFG_SDCARD_ENBLPORT);
+        LPC_GPIO->DIR[CFG_SDCARD_SSELPORT] |= (1 << CFG_SDCARD_SSELPORT);
+        LPC_GPIO->DIR[CFG_SDCARD_CDPORT]   &= ~(1 << CFG_SDCARD_CDPIN);
 
         // Wait 20ms for card detect to stabilise
         systickDelay(20);

@@ -346,25 +346,25 @@ void boardInit(void)
   LPC_GPIO->DIR[1] = 0xFFFFFFFF;
 
   /* Set user LED pin to output and disable it */
-  GPIOSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
+  LPC_GPIO->DIR[CFG_LED_PORT] |= (1 << CFG_LED_PIN);
   boardLED(CFG_LED_OFF);
 
   /* Enable I2C pullups by default */
-  GPIOSetDir(PINS_I2C_PULLUPS_PORT, PINS_I2C_PULLUPS_PIN, 1);
+  LPC_GPIO->DIR[PINS_I2C_PULLUPS_PORT] |= (1 << PINS_I2C_PULLUPS_PIN);
   LPC_GPIO->CLR[PINS_I2C_PULLUPS_PORT] = (1 << PINS_I2C_PULLUPS_PIN);
 
   /* Set VREG voltage selection pin to output and switch to 3.3V */
-  GPIOSetDir(PINS_VREGVSEL_PORT, PINS_VREGVSEL_PIN, 1);
+  LPC_GPIO->DIR[PINS_VREGVSEL_PORT] |= (1 << PINS_VREGVSEL_PIN);
   boardSetVREG3V3();
 
   /* Turn the SD card off by default */
-  GPIOSetDir(CFG_SDCARD_ENBLPORT, CFG_SDCARD_ENBLPIN, 1);
+  LPC_GPIO->DIR[CFG_SDCARD_ENBLPORT] |= (1 << CFG_SDCARD_ENBLPIN);
   LPC_GPIO->SET[CFG_SDCARD_ENBLPORT] = (1 << CFG_SDCARD_ENBLPIN);
 
   /* Turn the VIN ADC off by default */
-  GPIOSetDir(PINS_VINADC_EN_PORT, PINS_VINADC_EN_PIN, 1);
+  LPC_GPIO->DIR[PINS_VINADC_EN_PORT] |= (1 << PINS_VINADC_EN_PIN);
   LPC_GPIO->SET[PINS_VINADC_EN_PORT] = (1 << PINS_VINADC_EN_PIN);
-  GPIOSetDir(PINS_VINADC_INPUT_PORT, PINS_VINADC_INPUT_PIN, 1);
+  LPC_GPIO->DIR[PINS_VINADC_INPUT_PORT] |= (1 << PINS_VINADC_INPUT_PIN);
   LPC_GPIO->CLR[PINS_VINADC_INPUT_PORT] = (1 << PINS_VINADC_INPUT_PIN);
 
   /* Start Chibi */
@@ -480,9 +480,9 @@ void boardLED(uint8_t state)
 /**************************************************************************/
 void boardSleep(void)
 {
-  /* Configure ISP switch as a wakeup source (pin 0.1)  */
+  /* Configure ISP switch as a wakeup source (pin 0.1 = input)  */
   LPC_IOCON->PIO0_1 = (0<<0) | (2<<3);
-  GPIOSetDir(0, 1, 0);
+  LPC_GPIO->DIR[0] &= ~(1 << 1);
   GPIOSetPinInterrupt(CHANNEL0, 0, 1, 0, 0);
   LPC_SYSCON->STARTERP0 = 0x1<<0;
 
@@ -497,26 +497,28 @@ void boardSleep(void)
        to be drawn through to the SD card, and need to be set
        to GPIO output and low to prevent this from happening.
        Can save up to 1mA of current when a card is inserted. */
-    GPIOSetDir(CFG_SDCARD_ENBLPORT, CFG_SDCARD_ENBLPIN, 1);           // SD_EN
+    LPC_GPIO->DIR[CFG_SDCARD_ENBLPORT] |= (1 << CFG_SDCARD_ENBLPIN);  // SD_EN
     LPC_GPIO->SET[CFG_SDCARD_ENBLPORT] = (1 << CFG_SDCARD_ENBLPIN);
-    GPIOSetDir(CFG_SDCARD_CDPORT, CFG_SDCARD_CDPIN, 1);               // SD_DETECT
+    LPC_GPIO->DIR[CFG_SDCARD_CDPORT] |= (1 << CFG_SDCARD_CDPIN);      // SD_DETECT
     LPC_GPIO->CLR[CFG_SDCARD_CDPORT] = (1 << CFG_SDCARD_CDPIN);
-    GPIOSetDir(CFG_SDCARD_SSELPORT, CFG_SDCARD_SSELPIN, 1);           // SD_CS
+    LPC_GPIO->DIR[CFG_SDCARD_SSELPORT] |= (1 << CFG_SDCARD_SSELPIN);  // SD_CS
     LPC_GPIO->CLR[CFG_SDCARD_SSELPORT] = (1 << CFG_SDCARD_SSELPIN);
+
     LPC_IOCON->PIO1_20 = (0<<0) | (0<<3);                             // SCK1  -> GPIO
     LPC_IOCON->PIO1_21 = (0<<0) | (0<<3);                             // MISO1 -> GPIO
     LPC_IOCON->PIO1_22 = (0<<0) | (0<<3);                             // MOSI1 -> GPIO
-    GPIOSetDir(1, 20, 1);
-    LPC_GPIO->CLR[1] = (1 << 20);
-    GPIOSetDir(1, 21, 1);
-    LPC_GPIO->CLR[1] = (1 << 21);
-    GPIOSetDir(1, 22, 1);
-    LPC_GPIO->CLR[1] = (1 << 22);
+
+    LPC_GPIO->DIR[1] |= (1 << 20);
+    LPC_GPIO->CLR[1]  = (1 << 20);
+    LPC_GPIO->DIR[1] |= (1 << 21);
+    LPC_GPIO->CLR[1]  = (1 << 21);
+    LPC_GPIO->DIR[1] |= (1 << 22);
+    LPC_GPIO->CLR[1]  = (1 << 22);
   #endif
 
   /* Turn the VIN voltage divider off */
   LPC_GPIO->SET[PINS_VINADC_EN_PORT] = (1 << PINS_VINADC_EN_PIN);
-  GPIOSetDir(PINS_VINADC_INPUT_PORT, PINS_VINADC_INPUT_PIN, 1);
+  LPC_GPIO->DIR[PINS_VINADC_INPUT_PORT] |= (1 << PINS_VINADC_INPUT_PIN);
   LPC_GPIO->CLR[PINS_VINADC_INPUT_PORT] = (1 << PINS_VINADC_INPUT_PIN);
 
   /* Disable I2C pullups */
@@ -527,18 +529,18 @@ void boardSleep(void)
 
   /* Set SWCLK to GPIO (comment out to maintain SWD connection) */
   LPC_IOCON->SWCLK_PIO0_10 = (1<<0) | (0<<3);
-  GPIOSetDir(0, 10, 1);
-  LPC_GPIO->CLR[0] = (1 << 10);
+  LPC_GPIO->DIR[0] |= (1 << 10);
+  LPC_GPIO->CLR[0]  = (1 << 10);
 
   /* Set SWDIO to GPIO (comment out to maintain SWD connection) */
   LPC_IOCON->SWDIO_PIO0_15 = (1<<0) | (0<<3) | (1<<7);
-  GPIOSetDir(0, 15, 1);
-  LPC_GPIO->CLR[0] = (1 << 15);
+  LPC_GPIO->DIR[0] |= (1 << 15);
+  LPC_GPIO->CLR[0]  = (1 << 15);
 
   /* Set USBConnect to GPIO output low */
   LPC_IOCON->PIO0_6 = (0<<0) | (0<<3);
-  GPIOSetDir(0, 6, 1);
-  LPC_GPIO->CLR[0] = (1 << 6);
+  LPC_GPIO->DIR[0] |= (1 << 6);
+  LPC_GPIO->CLR[0]  = (1 << 6);
 
   /* Switch to 2.2V supply (less leakage current, etc.) */
   boardSetVREG2V2();
@@ -631,7 +633,7 @@ uint32_t boardGetVIN(void)
 
   /* Turn everything back off to save power */
   LPC_GPIO->SET[PINS_VINADC_EN_PORT] = (1 << PINS_VINADC_EN_PIN);
-  GPIOSetDir(PINS_VINADC_INPUT_PORT, PINS_VINADC_INPUT_PIN, 1);
+  LPC_GPIO->DIR[PINS_VINADC_INPUT_PORT] = (1 << PINS_VINADC_INPUT_PIN);
   LPC_GPIO->CLR[PINS_VINADC_INPUT_PORT] = (1 << PINS_VINADC_INPUT_PIN);
   LPC_IOCON->TDI_PIO0_11 = (1<<0) | (0<<3) | (1<<7);
 

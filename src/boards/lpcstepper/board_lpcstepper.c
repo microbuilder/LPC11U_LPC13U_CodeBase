@@ -105,7 +105,7 @@ void boardInit(void)
   LPC_IOCON->TRST_PIO0_14   = (1<<0) | (0<<3) | (1<<7);   // GPIO (not TRST)    no pull-up/down, ADMODE = digital
 
   /* Set user LED pin to output and disable it */
-  GPIOSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
+  LPC_GPIO->DIR[CFG_LED_PORT] |= (1 << CFG_LED_PIN);
   boardLED(CFG_LED_OFF);
 
   /* Initialise USB */

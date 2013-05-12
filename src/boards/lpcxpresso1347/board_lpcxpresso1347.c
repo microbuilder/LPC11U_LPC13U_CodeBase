@@ -119,7 +119,7 @@ void boardInit(void)
   #endif
 
   /* Set user LED pin to output and disable it */
-  GPIOSetDir(CFG_LED_PORT, CFG_LED_PIN, 1);
+  LPC_GPIO->DIR[CFG_LED_PORT] |= (1 << CFG_LED_PIN);
   boardLED(CFG_LED_OFF);
 
   /* Start Chibi */

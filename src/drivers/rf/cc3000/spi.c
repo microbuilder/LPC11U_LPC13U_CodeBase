@@ -166,16 +166,16 @@ int init_spi(void)
   #endif
 
   /* Set VBAT EN pin to output */
-  GPIOSetDir(CFG_CC3000_EN_PORT, CFG_CC3000_EN_PIN, 1);
-  LPC_GPIO->SET[CFG_CC3000_EN_PORT] = (1 << CFG_CC3000_EN_PIN);
+  LPC_GPIO->DIR[CFG_CC3000_EN_PORT] |= (1 << CFG_CC3000_EN_PIN);
+  LPC_GPIO->SET[CFG_CC3000_EN_PORT]  = (1 << CFG_CC3000_EN_PIN);
   systickDelay(100);
 
   /* Set CS pin to output */
-  GPIOSetDir(CFG_CC3000_CS_PORT, CFG_CC3000_CS_PIN, 1);
+  LPC_GPIO->DIR[CFG_CC3000_CS_PORT] |= (1 << CFG_CC3000_CS_PIN);
   CC3000_DEASSERT_CS;
 
   /* Set interrupt/gpio pin to input */
-  GPIOSetDir(CFG_CC3000_IRQ_PORT, CFG_CC3000_IRQ_PIN, 0);
+  LPC_GPIO->DIR[CFG_CC3000_IRQ_PORT]  &= ~(1 << CFG_CC3000_IRQ_PIN);
 
   /* Channel 2, sense (0=edge, 1=level), polarity (0=low/falling, 1=high/rising) */
   GPIOSetPinInterrupt( 2, CFG_CC3000_IRQ_PORT, CFG_CC3000_IRQ_PIN, 0, 1 );

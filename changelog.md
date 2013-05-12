@@ -22,6 +22,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
   - Affected functions are 'usb\_hid\_generic\_recv\_isr', 'usb\_hid\_generic\_report\_request\_isr', and 'usb\_hid\_generic\_send'
 - Added CMSIS DSP library to the makefile, LPCXpresso and Crossworks project files
 - Added RTX library for CMSIS-RTOS (currently untested)
+- Removed all use of GPIOSetBitValue and GPIOSetDir (wasteful fluff)
 
 ## 0.8.1 [23 April 2013] ##
 

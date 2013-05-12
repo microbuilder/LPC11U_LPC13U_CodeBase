@@ -270,7 +270,7 @@ error_t pcf2129Init(void)
     PCF2129_INT_SETPULLUP;
 
     /* Set interrupt/gpio pin to input */
-    GPIOSetDir( PCF2129_INT_PORT, PCF2129_INT_PIN, 0 );
+    LPC_GPIO->DIR[PCF2129_INT_PORT] &= ~(1 << PCF2129_INT_PIN);
 
     /* Set RTC INT pin as edge sensitive, and active on the falling edge */
     GPIOSetPinInterrupt( PCF2129_INT_FLEXIRQNUM, PCF2129_INT_PORT, PCF2129_INT_PIN, 0, 0 );
