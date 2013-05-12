@@ -33,7 +33,6 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-
 #ifndef _PROTOCOL_H_
 #define _PROTOCOL_H_
 
@@ -58,6 +57,7 @@ typedef enum
 {
   PROT_MSGTYPE_COMMAND          = 0x10,
   PROT_MSGTYPE_RESPONSE         = 0x20,
+  PROT_MSGTYPE_ALERT            = 0x40,
   PROT_MSGTYPE_ERROR            = 0x80
 } protMsgType_t;
 
@@ -80,7 +80,7 @@ typedef enum
 /**************************************************************************/
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
-  uint8_t cmd_id_low;     // little-endian
+  uint8_t cmd_id_low;     // Little-endian encoding
   uint8_t cmd_id_high;
   uint8_t length;
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
@@ -95,12 +95,19 @@ typedef protMsgCommand_t protMsgResponse_t;
 
 /**************************************************************************/
 /*!
+    Alert message struct
+*/
+/**************************************************************************/
+typedef protMsgCommand_t protMsgAlert_t;
+
+/**************************************************************************/
+/*!
     Error message struct
 */
 /**************************************************************************/
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
-  uint8_t error_id_low;   // little-endian
+  uint8_t error_id_low;   // Little-endian encoding
   uint8_t error_id_high;
 } protMsgError_t;
 
@@ -116,7 +123,7 @@ typedef PRE_PACK struct POST_PACK {
 
 typedef enum {
   PROTOCOL_COMMAND_TABLE(CMDTYPE_EXPAND)
-  PROT_CMDTYPE_COUNT /**< number of commands */
+  PROT_CMDTYPE_COUNT /**< Number of commands */
 }protCmdType_t;
 
 //--------------------------------------------------------------------+

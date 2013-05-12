@@ -2,7 +2,7 @@ Protocol Description
 --------------------
 
 The basic messaging protocol can be used to send and receive binary messages
-using any binary serial bus (USB HID, SPI, I2C).
+using any binary serial bus (USB HID, SPI, I2C, Wireless, etc.).
 
 The protocol is designed to be flexible and extensible, with the only
 requirement being that individual messages are 64 bytes or smaller,
@@ -12,16 +12,18 @@ indicates the format for the rest of the payload (if there is one).
 Implementation Notes
 --------------------
 
-The protocol implementation must be serial bus agnostic, and should be able
-to function with any binary serial bus.  The original design goal is a
+The protocol implementation must be transport mechanism agnostic, and should
+be able to function with any binary serial bus.  The original design goal is a
 protocol that can function via USB HID, SPI Slave, and I2C Slave modes, but
-any similar protocol should be able to be added to the implementation.
+any similar protocol should be able to be added to the implementation
+(wireless transfers, etc.).
 
 Endianness
 ----------
 
 All values larger than 8-bits are expected to be little endian, such as the 
-command IDs, and the payload contents.
+command IDs, and the payload contents.  Any deviation from this rule should
+be clearly documentated.
 
 Message Types
 -------------
@@ -34,6 +36,7 @@ the format and content of the rest of the message:
 |-----------------------+---------+-------------------------------------------|
 | Command               | 0x10    |                                           |
 | Response              | 0x20    |                                           |
+| Alert                 | 0x40    |                                           |
 | Error                 | 0x80    |                                           |
 |-----------------------+---------+-------------------------------------------|
 
@@ -116,6 +119,33 @@ Byte   0    1  2    3    4
 - The fourth byte indicates that we have a message payload of 1 byte
 - The fifth bytes is the 1 byte payload: 0xFF
 
+Alert Messages
+--------------
+
+Alert messages (Message Type = 0x40) are sent whenever an alert condition
+is present on the system (low battery, etc.), and have the following structure:
+
+|-------------------+----------+----------------------------------------------|
+| Name              | Type     | Meaning                                      |
+|-------------------+----------+----------------------------------------------|
+| Message Type      | U8       | Always '0x40'                                |
+| Alert ID          | U16      | Unique ID for the alert condition            |
+| Payload Length    | U8       | Payload length (0..60)                       |
+| Payload           | ...      | Optional response payload                    |
+|-------------------+----------+----------------------------------------------|
+
+A sample alert message would be:
+
+Byte   0    1  2    3    4    5    6    7
+      [40] [34 12] [04] [42] [07] [00] [10]
+ 
+- The first byte is the Message Type (0x40), which identifies this as an
+  alert message.
+- The second and third bytes are 0x1234, which is the unique alert ID.
+- The fourth byte indicates that we have a message payload of 4 byte
+- The last four bytes are the actual payload: '0x10000742' in this case,
+  assuming we were transmitting a 32-bit value in little-endian format.
+ 
 Error Messages
 --------------
 
