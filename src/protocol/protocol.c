@@ -43,44 +43,37 @@
 //--------------------------------------------------------------------+
 #include "protocol.h"
 #include "core/fifo/fifo.h"
-#include "core/usb/usb_hid.h"
 
 /**************************************************************************/
 /*!
-    Command message struct
-*/
-/**************************************************************************/
-typedef PRE_PACK struct POST_PACK {
-  uint8_t msg_type;
-  uint8_t cmd_id_high;
-  uint8_t cmd_id_low;
-  uint8_t length;
-  uint8_t payload[PROT_MAX_MSG_SIZE-4];
-} protMsgCommand_t;
+    @brief standard function type for a protocol command
 
-/**************************************************************************/
-/*!
-    Response message struct
-*/
-/**************************************************************************/
-typedef PRE_PACK struct POST_PACK {
-  uint8_t msg_type;
-  uint8_t cmd_id_high;
-  uint8_t cmd_id_low;
-  uint8_t length;
-  uint8_t payload[PROT_MAX_MSG_SIZE-4];
-} protMsgResponse_t;
+    @param[in]  payload's length
 
-/**************************************************************************/
-/*!
-    Error message struct
+    @param[in]  payload's content
+
+    @param[out] response message, already filled with msg type & command id
+
+    @returns  error code if there is, otherwise PROT_ERROR_NONE
 */
 /**************************************************************************/
-typedef PRE_PACK struct POST_PACK {
-  uint8_t msg_type;
-  uint8_t error_id_high;
-  uint8_t error_id_low;
-} protMsgError_t;
+typedef protError_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
+
+//------------- command prototype -------------//
+#define CMD_PROTOTYPE_EXPAND(command_id, function) \
+  protError_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
+
+PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
+
+//------------- command lookup table -------------//
+#define CMD_LOOKUP_EXPAND(command_id, function)\
+  [command_id] = function,\
+
+static protCmdFunc_t protocol_cmd_tbl[] =
+{
+  PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
+};
+
 
 #define CMD_FIFO_DEPTH 128
 
@@ -99,16 +92,6 @@ static fifo_t ff_command =
     #endif
 };
 
-//------------- command lookup table -------------//
-typedef protError_t (* const protCmdFunc_t)(uint8_t, uint8_t[]);
-
-#define CMD_LOOKUP_EXPAND(command_id, function)\
-  [command_id] = function, \
-
-static protCmdFunc_t protocol_cmd_tbl[] =
-{
-  PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
-};
 
 //--------------------------------------------------------------------+
 // Public API
@@ -120,26 +103,36 @@ void prot_task(void * p_para)
     protError_t error;
 
     //------------- command phase -------------//
-    {
-      protMsgCommand_t message_cmd;
-      uint16_t command_id;
+    protMsgCommand_t message_cmd = { 0 };
+    protMsgResponse_t message_reponse = {0};
+    uint16_t command_id;
 
-      fifo_readArray(&ff_command, (uint8_t*) &message_cmd, 64);
-      ASSERT( PROT_MSGTYPE_COMMAND == message_cmd.msg_type, (void) 0);
+    fifo_readArray(&ff_command, (uint8_t*) &message_cmd, 64);
+    ASSERT( PROT_MSGTYPE_COMMAND == message_cmd.msg_type, (void) 0);
 
-      command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
-      ASSERT( command_id < PROT_CMDTYPE_COUNT && message_cmd.length <= (PROT_MAX_MSG_SIZE-4), (void) 0);
+    // command_id is at odd address, directly use the value in message_cmd can lead to alignment issue on M0
+    command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
+    ASSERT( command_id < PROT_CMDTYPE_COUNT && message_cmd.length <= (PROT_MAX_MSG_SIZE-4), (void) 0);
 
-      /* Call the command handler associated with command_id */
-      error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload );
-    }
+    message_reponse.msg_type    = PROT_MSGTYPE_RESPONSE;
+    message_reponse.cmd_id_high = message_cmd.cmd_id_high;
+    message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
+
+    /* Call the command handler associated with command_id */
+    error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
 
     //------------- response phase -------------//
+    if (error == PROT_ERROR_NONE)
     {
-      protMsgError_t message_error;
-      message_error.msg_type = PROT_MSGTYPE_ERROR;
-      message_error.error_id_high = (uint8_t)((error & 0xFFFF) >> 8);
-      message_error.error_id_low = (uint8_t)(error & 0xFF);
+      usb_hid_generic_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
+    }else
+    {
+      protMsgError_t message_error =
+      {
+          .msg_type      = PROT_MSGTYPE_ERROR,
+          .error_id_high = (uint8_t)((error >> 8) & 0x00FF),
+          .error_id_low  = (uint8_t)(error & 0x00FF)
+      };
       usb_hid_generic_send( (uint8_t*) &message_error, sizeof(protMsgError_t));
     }
   }

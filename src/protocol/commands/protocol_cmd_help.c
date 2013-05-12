@@ -37,7 +37,7 @@
 #include "projectconfig.h"
 #include "../protocol.h"
 
-protError_t protcmd_help(uint8_t length, uint8_t payload[])
+protError_t protcmd_help(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   return PROT_ERROR_NONE;
 }

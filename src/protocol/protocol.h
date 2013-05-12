@@ -38,6 +38,7 @@
 #define _PROTOCOL_H_
 
 #include "projectconfig.h"
+#include "core/usb/usb_hid.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -56,7 +57,7 @@ extern "C" {
 typedef enum
 {
   PROT_MSGTYPE_COMMAND          = 0x10,
-  PROT_MSGTYPE_RESPONSE         = 0x10,
+  PROT_MSGTYPE_RESPONSE         = 0x20,
   PROT_MSGTYPE_ERROR            = 0x80
 } protMsgType_t;
 
@@ -72,10 +73,42 @@ typedef enum
   PROT_ERROR_UNKNOWN,
 } protError_t;
 
+/**************************************************************************/
+/*!
+    Command message struct
+*/
+/**************************************************************************/
+typedef PRE_PACK struct POST_PACK {
+  uint8_t msg_type;
+  uint8_t cmd_id_low;     // little-endian
+  uint8_t cmd_id_high;
+  uint8_t length;
+  uint8_t payload[PROT_MAX_MSG_SIZE-4];
+} protMsgCommand_t;
+
+/**************************************************************************/
+/*!
+    Response message struct
+*/
+/**************************************************************************/
+typedef protMsgCommand_t protMsgResponse_t;
+
+/**************************************************************************/
+/*!
+    Error message struct
+*/
+/**************************************************************************/
+typedef PRE_PACK struct POST_PACK {
+  uint8_t msg_type;
+  uint8_t error_id_low;   // little-endian
+  uint8_t error_id_high;
+} protMsgError_t;
+
+
 //------------- X macros for create consistent command enum, function prototyp & cmd table -------------//
 #define PROTOCOL_COMMAND_TABLE(ENTRY) \
     ENTRY(PROT_CMDTYPE_HELP, protcmd_help)\
-    ENTRY(PROT_CMDTYPE_CMD1, protcmd_led)\
+    ENTRY(PROT_CMDTYPE_LED, protcmd_led)\
 
 //------------- command type -------------//
 #define CMDTYPE_EXPAND(command_id, function) \
@@ -85,12 +118,6 @@ typedef enum {
   PROTOCOL_COMMAND_TABLE(CMDTYPE_EXPAND)
   PROT_CMDTYPE_COUNT /**< number of commands */
 }protCmdType_t;
-
-//------------- command prototype -------------//
-#define CMD_PROTOTYPE_EXPAND(command_id, function) \
-  protError_t function(uint8_t length, uint8_t payload[]);\
-
-PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
 //--------------------------------------------------------------------+
 // PUBLIC API

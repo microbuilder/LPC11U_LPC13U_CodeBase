@@ -38,18 +38,18 @@
 #include "boards/board.h"
 #include "../protocol.h"
 
-// turn on  01 00 01 01 00
-// turn off 01 00 01 01 01
+// turn on  10 01 00 01 01
+// turn off 10 01 00 01 00
 /**************************************************************************/
 /*!
     Enables or disables the on board LEDs via boardLED()
 */
 /**************************************************************************/
-protError_t protcmd_led(uint8_t length, uint8_t payload[])
+protError_t protcmd_led(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   ASSERT( 1 == length, PROT_ERROR_INVALID_PARAM);
 
-  boardLED(payload[0]);
+  boardLED(payload[0] ? CFG_LED_ON : CFG_LED_OFF);
 
   return PROT_ERROR_NONE;
 }
