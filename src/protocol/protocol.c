@@ -112,7 +112,8 @@ void prot_task(void * p_para)
 
     // command_id is at odd address, directly use the value in message_cmd can lead to alignment issue on M0
     command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
-    ASSERT( command_id < PROT_CMDTYPE_COUNT && message_cmd.length <= (PROT_MAX_MSG_SIZE-4), (void) 0);
+    ASSERT( 0 < command_id && command_id < PROT_CMDTYPE_COUNT &&
+            message_cmd.length <= (PROT_MAX_MSG_SIZE-4), (void) 0);
 
     message_reponse.msg_type    = PROT_MSGTYPE_RESPONSE;
     message_reponse.cmd_id_high = message_cmd.cmd_id_high;
