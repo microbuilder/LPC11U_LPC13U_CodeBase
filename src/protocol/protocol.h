@@ -126,6 +126,13 @@ typedef enum {
 //--------------------------------------------------------------------+
 void prot_task(void * p_para);
 
+//--------------------------------------------------------------------+
+// Callback API
+//--------------------------------------------------------------------+
+void prot_cmd_received_cb(protMsgCommand_t const * p_mess) __attribute__ ((weak));
+void prot_cmd_executed_cb(protMsgResponse_t const * p_resonse) __attribute__ ((weak));
+void prot_cmd_error_cb(protMsgError_t const * p_error) __attribute__ ((weak));
+
 #ifdef __cplusplus
 }
 #endif
