@@ -37,6 +37,7 @@
 #define _PROTOCOL_H_
 
 #include "projectconfig.h"
+#include "prot_cmdtable.h"
 #include "core/usb/usb_hid.h"
 
 #ifdef __cplusplus
@@ -110,12 +111,6 @@ typedef PRE_PACK struct POST_PACK {
   uint8_t error_id_low;   // Little-endian encoding
   uint8_t error_id_high;
 } protMsgError_t;
-
-
-//------------- X macros for create consistent command enum, function prototyp & cmd table -------------//
-// command enum, command id, command function
-#define PROTOCOL_COMMAND_TABLE(ENTRY) \
-    ENTRY(PROT_CMDTYPE_LED, 1, protcmd_led)\
 
 //------------- command type -------------//
 #define CMDTYPE_EXPAND(command, id, function) \
