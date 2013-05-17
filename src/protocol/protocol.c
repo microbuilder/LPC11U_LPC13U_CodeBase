@@ -119,12 +119,22 @@ void prot_task(void * p_para)
     message_reponse.cmd_id_high = message_cmd.cmd_id_high;
     message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
 
+    // invoke callback before executing command
+    if (prot_cmd_received_cb)
+    {
+      prot_cmd_received_cb(&message_cmd);
+    }
+
     /* Call the command handler associated with command_id */
     error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
 
     //------------- response phase -------------//
     if (error == PROT_ERROR_NONE)
     {
+      if (prot_cmd_executed_cb)
+      {
+        prot_cmd_executed_cb(&message_reponse);
+      }
       usb_hid_generic_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
     }else
     {
@@ -134,6 +144,10 @@ void prot_task(void * p_para)
           .error_id_high = (uint8_t)((error >> 8) & 0x00FF),
           .error_id_low  = (uint8_t)(error & 0x00FF)
       };
+      if (prot_cmd_error_cb)
+      {
+        prot_cmd_error_cb(&message_error);
+      }
       usb_hid_generic_send( (uint8_t*) &message_error, sizeof(protMsgError_t));
     }
   }
