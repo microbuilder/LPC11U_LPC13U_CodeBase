@@ -1,6 +1,6 @@
 # Infinite Impulse Response (IIR) Filter #
 
-This IIR filter is a simple single pole low pass filter that can be used to 'smooth out' noisy sensor data by slowing the response to new signals, similar to the way an RC filter works with HW.
+This simple IIR implementation is a basic single-pole low-pass filter. It's a 'low pass' filter since it attempts to filter out short term fluctuations, giving more weight to the longer-term average. You can use it to 'smooth out' fluctuating sensor data by slowing the response to new signals. It operates on the same principle as an RC filter in HW -- numerous samples are required before the output of the filter shifts to reach the 'new' value, gradual shifting up or down towards any newly integrated values.
 
 You can configure the filter by adjusting the 'alpha' value, which controls the delay or amount of time required for new signals to be integrated into the current output value.
 
