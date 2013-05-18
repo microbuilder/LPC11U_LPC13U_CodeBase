@@ -23,7 +23,7 @@ There are advantages and tradeoffs to both of these implementations that you sho
 ## How Do I Use This Code? ##
 
 ### 1. Allocate Memory for the Window Buffer ###
-The moving average filter requires a buffer to store the 'windowed' data, so before we can do anything with this filter, we need to set a chunk of SRAM aside for the filter to work with behind the scenes.  We do this using the a circular buffer based on the FIFO code in '**/src/core/fifo**'
+The moving average filter requires a buffer to store the 'windowed' data, so before we can do anything with this filter, we need to set a chunk of SRAM aside for the filter to work with behind the scenes.  We do this using the a circular buffer based on the FIFO code in **/src/core/fifo**
 
 The following code will create the fifo, configuring it as a 'circular buffer' 5 samples wide, and using floating point data (meaning 20 bytes of memory will be used, since a single float takes 4 bytes, multiplied by our window size of 5 samples):
 ```
@@ -38,10 +38,10 @@ To do the same for uint16\_t data, we would use the following code, which would 
 ### 2. Declare the Filter Object ###
 The current filter code is based on a single 'struct' that contains all of the implementation details for our filter, including the FIFO buffer.  The benefit of this approach is that we can have many 'instances' of the filter, each encapsulate in a single 'variable', and we can cascade them by running the filter once, and then running those results through another filter a second time with slightly different parameters, and many similar filters can happily coexist in our system (limited only by available memory).
 
-To declare a field that will hold the filter data, we use the following code (being careful to use the same window size and FIFO name that we declared above!):
+To declare a field that will hold the filter data, we use the following code, being careful to use the same window size (.size) and FIFO name (.buffer) that we declared above!):
 
 ```
-  // Declare the ma filter with the window size and a FIFO pointer used earlier
+  // Declare the ma filter with the window size and a pointer to the FIFO used earlier
   ma_f_t ma = { .k = 0,
                 .size = 5,
                 .avg = 0.0F,
@@ -49,7 +49,7 @@ To declare a field that will hold the filter data, we use the following code (be
 ```
 ... or for uint16\_t data this would be:
 ```
-  // Declare the ma filter with the window size and a FIFO pointer used earlier
+  // Declare the ma filter with the window size and a pointer to the FIFO used earlier
   ma_u16_t ma = { .k = 0,
                   .size = 5,
                   .avg = 0,
@@ -57,9 +57,9 @@ To declare a field that will hold the filter data, we use the following code (be
 ```
 
 ### 3. Initialise the Filter ###
-After declaring a placeholder **ma\_f\_t** (for floating point math), **ma\_i\_t** (for 32-bit signed integer math) object, or **ma\_u16\_t** (for unsigned 16-bit integers), we need to call the init function and supply a reference to our IIR placeholder as well as an appropriate alpha value.
+After declaring a placeholder **ma\_f\_t** (for floating point math), **ma\_i\_t** (for 32-bit signed integer math) object, or **ma\_u16\_t** (for unsigned 16-bit integers), we need to call the init function and supply a reference to our ma placeholder.
 
-This function essentially just does some basic error checking, and will return false if for some reason the filter couldn't be initialised, such as a problem with the window size of the circular buffer.
+This function essentially just does some basic error checking, and will return **false** if for some reason the filter couldn't be initialised, such as a problem with the window size of the circular buffer.
 
 We'll use the floating point version below as an example.
 ```
