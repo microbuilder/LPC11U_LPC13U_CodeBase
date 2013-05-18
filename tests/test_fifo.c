@@ -41,37 +41,42 @@
 // GROUP fifo, start with Group Declare
 //--------------------------------------------------------------------+
 #define FIFO_SIZE 10
-static fifo_t ff;
-static uint8_t buffer[FIFO_SIZE];
+
+FIFO_DEF(ff, FIFO_SIZE, uint8_t, false, 0);
 
 TEST_GROUP(fifo); // Group declaration
 
 TEST_SETUP(fifo) // called before each test in the group, to set up group environment
 {
-  fifo_init(&ff, buffer, FIFO_SIZE, 0, 0);
+  fifo_clear(&ff);
 }
 TEST_TEAR_DOWN(fifo) // called after a test in the group has been invoked to clean up
 {
   memset(&ff, 0, sizeof(fifo_t));
 }
 
-TEST(fifo, create_null)
+TEST(fifo, read_from_null_ff)
 {
-  memset(&ff, 0, sizeof(fifo_t)); // clear fifo to test null created
-  TEST_ASSERT_FALSE( fifo_init(&ff, buffer, 0, 0, 0) );
-  TEST_ASSERT_TRUE( fifo_init(&ff, buffer, 1, 0, 0) );
+  fifo_t ff_null = { 0 };
+  uint8_t dummy;
+  TEST_ASSERT_FALSE ( fifo_read(&ff_null, &dummy) );
+}
+
+TEST(fifo, write_to_null_ff)
+{
+  fifo_t ff_null = { 0 };
+  uint8_t dummy;
+  TEST_ASSERT_FALSE ( fifo_write(&ff_null, &dummy) );
 }
 
 TEST(fifo, normal)
 {
-  uint8_t i;
-
-  for(i=0; i < FIFO_SIZE; i++)
+  for(uint8_t i=0; i < FIFO_SIZE; i++)
   {
-    fifo_write(&ff, i);
+    fifo_write(&ff, &i);
   }
 
-  for(i=0; i < FIFO_SIZE; i++)
+  for(uint8_t i=0; i < FIFO_SIZE; i++)
   {
     uint8_t c;
     fifo_read(&ff, &c);
@@ -81,20 +86,19 @@ TEST(fifo, normal)
 
 TEST(fifo, is_empty)
 {
+  uint8_t dummy;
   TEST_ASSERT_TRUE(fifo_isEmpty(&ff));
-  fifo_write(&ff, 1);
+  fifo_write(&ff, &dummy);
   TEST_ASSERT_FALSE(fifo_isEmpty(&ff));
 }
 
 TEST(fifo, is_full)
 {
-  uint8_t i;
-
   TEST_ASSERT_FALSE(fifo_isFull(&ff));
 
-  for(i=0; i < FIFO_SIZE; i++)
+  for(uint8_t i=0; i < FIFO_SIZE; i++)
   {
-    fifo_write(&ff, i);
+    fifo_write(&ff, &i);
   }
 
   TEST_ASSERT_TRUE(fifo_isFull(&ff));
@@ -104,7 +108,8 @@ TEST(fifo, is_full)
 //----- Group Runner required hand installed, all tests should be above -----
 TEST_GROUP_RUNNER(fifo)
 {
-  RUN_TEST_CASE(fifo, create_null);
+  RUN_TEST_CASE(fifo, read_from_null_ff);
+  RUN_TEST_CASE(fifo, write_to_null_ff);
   RUN_TEST_CASE(fifo, normal);
   RUN_TEST_CASE(fifo, is_empty);
   RUN_TEST_CASE(fifo, is_full)
