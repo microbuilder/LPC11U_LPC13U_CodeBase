@@ -60,37 +60,6 @@ static bool isConnected = false;             /* ToDo: Consider work-around */
     #error __FILE__ No MCU defined
 #endif
 
-//static uint8_t qBuffer[2][CDC_BUFFER_SIZE];  /* TX and RX buffers */
-//static fifo_t ffTX =
-//{
-//    .buffer       = qBuffer[0],
-//    .depth        = CDC_BUFFER_SIZE,
-//    .item_size    = sizeof(uint8_t),
-//    .overwritable = false,
-//#if defined CFG_MCU_FAMILY_LPC11UXX
-//    .irq          = USB_IRQn
-//#elif defined CFG_MCU_FAMILY_LPC13UXX
-//    .irq          = USB_IRQ_IRQn
-//#else
-//    #error __FILE__ No MCU defined
-//#endif
-//};
-
-//static fifo_t ffRX =
-//{
-//    .buffer       = qBuffer[1],
-//    .depth        = CDC_BUFFER_SIZE,
-//    .item_size    = sizeof(uint8_t),
-//    .overwritable = true,
-//#if defined CFG_MCU_FAMILY_LPC11UXX
-//    .irq          = USB_IRQn
-//#elif defined CFG_MCU_FAMILY_LPC13UXX
-//    .irq          = USB_IRQ_IRQn
-//#else
-//    #error __FILE__ No MCU defined
-//#endif
-//};
-
 void usb_cdc_recv_isr(void) ALIAS(usb_cdc_recv_isr_default);
 /**************************************************************************/
 /*!

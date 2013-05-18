@@ -45,11 +45,11 @@ extern "C" {
 typedef struct _fifo_t
 {
            void *  const buffer    ; ///< buffer pointer
-           uint8_t const depth     ; ///< max items
-           uint8_t const item_size ; ///< size of each item
-  volatile uint8_t count           ; ///< number of items in queue
-  volatile uint8_t wr_idx          ; ///< write pointer
-  volatile uint8_t rd_idx          ; ///< read pointer
+           uint16_t const depth     ; ///< max items
+           uint16_t const item_size ; ///< size of each item
+  volatile uint16_t count           ; ///< number of items in queue
+  volatile uint16_t wr_idx          ; ///< write pointer
+  volatile uint16_t rd_idx          ; ///< read pointer
   bool overwritable;
   IRQn_Type irq;
 } fifo_t;

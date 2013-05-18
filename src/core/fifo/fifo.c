@@ -133,15 +133,15 @@ bool fifo_read(fifo_t* f, void * p_buffer)
 /**************************************************************************/
 uint16_t fifo_readArray(fifo_t* f, void * p_buffer, uint16_t maxlen)
 {
-  uint16_t len = 0;
+  uint16_t count = 0;
   
-  while ( len < maxlen && fifo_read(f, p_buffer) )
+  while ( count < maxlen && fifo_read(f, p_buffer) )
   {
-    len++;
+    count++;
     p_buffer += f->item_size;
   }
   
-  return len;
+  return count;
 }
 
 /**************************************************************************/
