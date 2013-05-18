@@ -4,24 +4,39 @@
     @brief    A basic moving average filter using float values
 
     @code
-    ma_f_t ma;
 
-    // Initialise a moving average filter with an 8 sample window
-    ma_f_init(&ma, 8);
+    #include "core/fifo/fifo.h"
 
+    // Create a circular buffer 5 values wide
+    FIFO_DEF(ffMavg, 5, float, true, NULL);
+
+    // Now declare the filter with the window size and a FIFO pointer
+    ma_f_t ma = { .k = 0,
+                  .size = 5,
+                  .avg = 0.0F,
+                  .buffer = &ffMavg };
+
+    // Initialise the moving average filter (mostly error checks)
+    if (ma_f_init(&ma))
+    {
+      printf("Something failed during filter init!\n");
+    }
+
+    // Add some values
     ma_f_add(&ma, 10.0F);
     ma_f_add(&ma, 20.0F);
     ma_f_add(&ma, 30.0F);
     ma_f_add(&ma, 35.0F);
-    ma_f_add(&ma, 35.0F);
+    ma_f_add(&ma, 35.0F);  // We should have an avg value starting here
     ma_f_add(&ma, 35.0F);
     ma_f_add(&ma, 30.0F);
     ma_f_add(&ma, 20.0F);
     ma_f_add(&ma, 15.0F);
     ma_f_add(&ma, 10.0F);
 
-    printf("WINDOW SIZE : %d\n", ma.k);
-    printf("CURRENT AVG : %f\n", ma.avg);
+    printf("WINDOW SIZE   : %d\n", ma.size);
+    printf("TOTAL SAMPLES : %d\n", ma.k);
+    printf("CURRENT AVG   : %f\n", ma.avg);
     printf("\n");
 
     @endcode

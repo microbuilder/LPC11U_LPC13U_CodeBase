@@ -45,11 +45,11 @@
     Enables or disables the on board LEDs via boardLED()
 */
 /**************************************************************************/
-protError_t protcmd_led(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+error_t protcmd_led(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
-  ASSERT( 1 == length, PROT_ERROR_INVALID_PARAM);
+  ASSERT( 1 == length, ERROR_PROT_INVALID_PARAM);
 
   boardLED(payload[0] ? CFG_LED_ON : CFG_LED_OFF);
 
-  return PROT_ERROR_NONE;
+  return ERROR_NONE;
 }

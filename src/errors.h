@@ -80,7 +80,9 @@ typedef enum
   ERROR_CHIBI_CHANACCESSFAILURE = 0x111,    /**< Channel access failure */
   ERROR_CHIBI_PAYLOADOVERFLOW   = 0x112,    /**< Payload exceeds buffer size */
   ERROR_RTC_OUTOFEPOCHRANGE     = 0x140,    /**< RTC time must be kept in epoch range */
-  ERROR_TIMESPAN_OUTOFRANGE     = 0x150     /**< timespan_t must be kept within int64_t nanosecond range */
+  ERROR_TIMESPAN_OUTOFRANGE     = 0x150,    /**< timespan_t must be kept within int64_t nanosecond range */
+  ERROR_PROT_UNKNOWN_COMMAND    = 0x200,    /**< No command corresponding to the supplied CMD ID */
+  ERROR_PROT_INVALID_PARAM      = 0x201     /**< Invalid parameter in the message/command */
 } error_t;
 
 #ifdef __cplusplus

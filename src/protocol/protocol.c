@@ -54,14 +54,14 @@
 
     @param[out] response message, already filled with msg type & command id
 
-    @returns  error code if there is, otherwise PROT_ERROR_NONE
+    @returns  error code if there is, otherwise ERROR_NONE
 */
 /**************************************************************************/
-typedef protError_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
+typedef error_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
 
 //------------- command prototype -------------//
 #define CMD_PROTOTYPE_EXPAND(command, id, function) \
-  protError_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
+  error_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
 
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
@@ -110,7 +110,7 @@ void prot_task(void * p_para)
 {
   if ( !fifo_isEmpty(&ff_command) )
   {
-    protError_t error;
+    error_t error;
 
     //------------- command phase -------------//
     protMsgCommand_t message_cmd = { 0 };
@@ -139,7 +139,7 @@ void prot_task(void * p_para)
     error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
 
     //------------- response phase -------------//
-    if (error == PROT_ERROR_NONE)
+    if (error == ERROR_NONE)
     {
       if (prot_cmd_executed_cb)
       {
