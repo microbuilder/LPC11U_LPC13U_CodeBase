@@ -59,10 +59,6 @@ error_t ma_i_init ( ma_i_t *ma )
   ma->avg = 0;
   ma->k = 0;
 
-  // ToDo: Initialise circular buffer of size 'size' ... how to handle
-  // this to allow a variable size, but without using something like
-  // malloc (yuck)?  Always use the maximum buffer size (0xFF)?
-
   return ERROR_NONE;
 }
 
