@@ -101,10 +101,8 @@ static inline void mutex_unlock (fifo_t* f) __attribute__ ((always_inline));
 /**************************************************************************/
 bool fifo_read(fifo_t* f, void * p_buffer)
 {
-  if (fifo_isEmpty(f))
-  {
-    return false;
-  }
+  ASSERT( f->buffer != NULL && f->depth != 0 && f->item_size != 0 &&
+          !fifo_isEmpty(f), false);
 
   mutex_lock(f);
 
@@ -165,10 +163,8 @@ uint16_t fifo_readArray(fifo_t* f, void * p_buffer, uint16_t maxlen)
 /**************************************************************************/
 bool fifo_write(fifo_t* f, void const * p_data)
 {
-  if ( fifo_isFull(f) && f->overwritable == false)
-  {
-    return false;
-  }
+  ASSERT( f->buffer != NULL && f->depth != 0 && f->item_size != 0 &&
+          !(fifo_isFull(f) && f->overwritable == false), false );
 
   mutex_lock(f);
 
