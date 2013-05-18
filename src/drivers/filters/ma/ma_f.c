@@ -41,16 +41,15 @@
 /**************************************************************************/
 error_t ma_f_init ( ma_f_t *ma )
 {
-  if (0 == size) return ERROR_UNEXPECTEDVALUE;
-    
-  ma->size = size;
+  if (0 == ma->size) return ERROR_UNEXPECTEDVALUE;
+
   ma->avg = 0.0F;
   ma->k = 0;
-  
+
   // ToDo: Initialise circular buffer of size 'size' ... how to handle
   // this to allow a variable size, but without using something like
   // malloc (yuck)?  Always use the maximum buffer size (0xFF)?
-  
+
   return ERROR_NONE;
 }
 
@@ -68,7 +67,7 @@ void ma_f_add(ma_f_t *ma, float x)
 {
   ma->k++;
 
-  // ToDo: 
+  // ToDo:
   // 1. Increment ma->k (total sample count)
   // 2. Add value x into the circular buffer, deplacing first value if
   //    necessary (the circular buffer handles the wrap-around)
