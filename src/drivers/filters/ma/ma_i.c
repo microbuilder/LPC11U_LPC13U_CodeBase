@@ -87,7 +87,7 @@ void ma_i_add(ma_i_t *ma, int32_t x)
   }
 
   // Recalculate the average over the entire buffer
-  int16_t i;
+  uint16_t i;
   int64_t total = 0;                   // Overflow prevention!
   for (i = 0; i < ma->size; i++)
   {
