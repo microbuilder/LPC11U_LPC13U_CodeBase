@@ -59,7 +59,7 @@ To declare a field that will hold the filter data, we use the following code, be
 ### 3. Initialise the Filter ###
 After declaring a placeholder **ma\_f\_t** (for floating point math), **ma\_i\_t** (for 32-bit signed integer math) object, or **ma\_u16\_t** (for unsigned 16-bit integers), we need to call the init function and supply a reference to our ma placeholder.
 
-This function essentially just does some basic error checking, and will return **false** if for some reason the filter couldn't be initialised, such as a problem with the window size of the circular buffer.
+This function essentially just does some basic error checking, and will return **false** if for some reason the filter couldn't be initialised, such as a problem with the window size or the circular buffer.
 
 We'll use the floating point version below as an example.
 ```
@@ -83,16 +83,16 @@ After initialising the filter, you continually add in your samples via the **ma\
 For example, for the floating point version we could use the following code:
 ```
   // Add some values
-  ma\_f\_add(&ma, 10.0F);
-  ma\_f\_add(&ma, 20.0F);
-  ma\_f\_add(&ma, 30.15F);
-  ma\_f\_add(&ma, 35.0F);
-  ma\_f\_add(&ma, 12.0F);  // We should have an avg value starting here
-  ma\_f\_add(&ma, -6.7);
-  ma\_f\_add(&ma, 30.3F);
-  ma\_f\_add(&ma, 20.0F);
-  ma\_f\_add(&ma, 0.0F);
-  ma\_f\_add(&ma, 10.0F);
+  ma_f_add(&ma, 10.0F);
+  ma_f_add(&ma, 20.0F);
+  ma_f_add(&ma, 30.15F);
+  ma_f_add(&ma, 35.0F);
+  ma_f_add(&ma, 12.0F);  // We should have an avg value starting here
+  ma_f_add(&ma, -6.7);
+  ma_f_add(&ma, 30.3F);
+  ma_f_add(&ma, 20.0F);
+  ma_f_add(&ma, 0.0F);
+  ma_f_add(&ma, 10.0F);
 
   printf("WINDOW SIZE   : %d\n", ma.size);
   printf("TOTAL SAMPLES : %d\n", ma.k);
@@ -102,16 +102,16 @@ For example, for the floating point version we could use the following code:
 ... or for the uint16_t version:
 ```
   // Add some values
-  ma\_u16\_add(&ma, 10);
-  ma\_u16\_add(&ma, 20);
-  ma\_u16\_add(&ma, -30);
-  ma\_u16\_add(&ma, 37);
-  ma\_u16\_add(&ma, 11);  // We should have an avg value starting here
-  ma\_u16\_add(&ma, 31);
-  ma\_u16\_add(&ma, 30);
-  ma\_u16\_add(&ma, 20);
-  ma\_u16\_add(&ma, 3);
-  ma\_u16\_add(&ma, 10);
+  ma_u16_add(&ma, 10);
+  ma_u16_add(&ma, 20);
+  ma_u16_add(&ma, -30);
+  ma_u16_add(&ma, 37);
+  ma_u16_add(&ma, 11);  // We should have an avg value starting here
+  ma_u16_add(&ma, 31);
+  ma_u16_add(&ma, 30);
+  ma_u16_add(&ma, 20);
+  ma_u16_add(&ma, 3);
+  ma_u16_add(&ma, 10);
 
   printf("WINDOW SIZE   : %d\n", ma.size);
   printf("TOTAL SAMPLES : %d\n", ma.k);
