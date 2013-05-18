@@ -37,11 +37,11 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#include <string.h>
 #include "fifo.h"
 
-static inline void mutex_lock (fifo_t* f) __attribute__ ((always_inline));
-static inline void mutex_unlock (fifo_t* f) __attribute__ ((always_inline));
+static inline void mutex_lock   (fifo_t* f) INLINE_POST;
+static inline void mutex_unlock (fifo_t* f) INLINE_POST;
+static inline bool is_fifo_initalized(fifo_t* f) INLINE_POST;
 
 /**************************************************************************/
 /*!
@@ -102,8 +102,7 @@ static inline void mutex_unlock (fifo_t* f) __attribute__ ((always_inline));
 /**************************************************************************/
 bool fifo_read(fifo_t* f, void * p_buffer)
 {
-  if( f->buffer == NULL || f->depth == 0 ||
-      f->item_size == 0 || fifo_isEmpty(f) )
+  if( !is_fifo_initalized(f) || fifo_isEmpty(f) )
   {
     return false;
   }
@@ -148,6 +147,21 @@ uint16_t fifo_readArray(fifo_t* f, void * p_buffer, uint16_t maxlen)
   return count;
 }
 
+bool fifo_peek(fifo_t* f, uint16_t position, void * p_buffer)
+{
+  if( !is_fifo_initalized(f) || fifo_isEmpty(f) || (position >= f->count) )
+  {
+    return false;
+  }
+
+  uint16_t index = (f->rd_idx + position) % f->depth; // rd_idx is position=0
+  memcpy(p_buffer,
+         f->buffer + (index * f->item_size),
+         f->item_size);
+
+  return true;
+}
+
 /**************************************************************************/
 /*!
     @brief Write one byte into the RX buffer.
@@ -167,8 +181,7 @@ uint16_t fifo_readArray(fifo_t* f, void * p_buffer, uint16_t maxlen)
 /**************************************************************************/
 bool fifo_write(fifo_t* f, void const * p_data)
 {
-  if ( f->buffer == NULL || f->depth == 0 ||
-      f->item_size == 0 || (fifo_isFull(f) && f->overwritable == false) )
+  if ( !is_fifo_initalized(f) || (fifo_isFull(f) && !f->overwritable) )
   {
     return false;
   }
@@ -245,5 +258,16 @@ static inline void mutex_unlock (fifo_t* f)
   if (f->irq > 0)
   {
     NVIC_EnableIRQ(f->irq);
+  }
+}
+
+static inline bool is_fifo_initalized(fifo_t* f)
+{
+  if( f->buffer == NULL || f->depth == 0 || f->item_size == 0)
+  {
+    return false;
+  }else
+  {
+    return true;
   }
 }
