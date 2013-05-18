@@ -1,6 +1,6 @@
 # Simple Moving Average Filter #
 
-The 'simple moving average' is an extremely common filter, that's very easy to understimate or overlook due to it's relative simplicity.  
+The **simple moving average** is a type of **FIR** filter, and is probably the most common filter type used due to it's speed and simplicity. Don't understimate or overlook it due to it's relative simplicity, though, since you can solve many problems admirably with this unassuming little filter!  
 
 Effectively, the filter works by setting a 'window size', which defines the number of samples we want to average together.  We then move through our dataset, averaging the last 'n' samples, where 'n' is your window size. As new samples are added, the oldest sample is dropped to make room for the new one, and a new average is calculate based on the data in the current window range.
 
@@ -12,7 +12,7 @@ One of the key advantages of the moving average filter (aside from it's speed an
 
 Because you are working with a continuously moving subset of your data (the 'window'), the rest of the historical data has no weight and the only accumulated error is over the small data subset in the current window.
 
-The moving average filter is a good choice for removing random noise or spikes in the data, while still maintaining excellent responsivity to changes in the signal.  It's an excellent choice for filters in the time domain, since it is very responsive to changes over time, without introducing any 'phase shift' the way an IIR filter would.
+The moving average filter is a good choice for removing random noise or spikes in the data, while still maintaining excellent responsivity to changes in the signal.  It's an excellent choice for filters in the time domain, since it is very responsive to changes over time, without introducing as much 'phase shift' or instability as an IIR filter might.
 
 ## Which Filter Version Should I Use (float, int32\_t, or uint16\_t)? ##
 
