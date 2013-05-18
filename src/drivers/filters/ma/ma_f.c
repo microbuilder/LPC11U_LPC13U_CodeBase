@@ -5,8 +5,6 @@
 
     @code
 
-    #include "core/fifo/fifo.h"
-
     // Create a circular buffer 5 values wide
     FIFO_DEF(ffMavg, 5, float, true, NULL);
 
@@ -80,15 +78,28 @@ error_t ma_f_init ( ma_f_t *ma )
 /**************************************************************************/
 void ma_f_add(ma_f_t *ma, float x)
 {
+  // Increment the total sample count
   ma->k++;
 
-  // ToDo:
-  // 1. Increment ma->k (total sample count)
-  // 2. Add value x into the circular buffer, deplacing first value if
-  //    necessary (the circular buffer handles the wrap-around)
-  // 2. If (ma->k < ma->size), exit function and wait until we have 'size'
-  //    samples
-  // 3. If (ma->k >= ma->size), calculate average of the last 'size'
-  //    values from the circular buffer, and assign the value to
-  //    ma->avg
+  // Add value into the circular buffer
+  fifo_write(ma->buffer, &x);
+
+  // Wait for 'window-size' worth of samples before averaging
+  if (ma->k < ma->size)
+  {
+    return;
+  }
+
+  // Recalculate the average over the entire buffer
+  int16_t i;
+  double total = 0;                   // Overflow prevention!
+  for (i = 0; i < ma->size; i++)
+  {
+    float val = 0;
+    fifo_peek(ma->buffer, i, &val);   // Peak since read is destructive!
+    total += val;
+  }
+
+  // Update the current average value
+  ma->avg = (float)(total / ma->size);
 }
