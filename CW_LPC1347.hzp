@@ -299,7 +299,6 @@
       <folder Name="protocol" file_name="">
         <file file_name="src/protocol/protocol.c"/>
         <folder Name="commands" file_name="">
-          <file file_name="src/protocol/commands/protocol_cmd_help.c"/>
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
         </folder>
       </folder>
