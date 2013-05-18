@@ -37,6 +37,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+#include <string.h>
 #include "fifo.h"
 
 static inline void mutex_lock (fifo_t* f) __attribute__ ((always_inline));
@@ -101,8 +102,11 @@ static inline void mutex_unlock (fifo_t* f) __attribute__ ((always_inline));
 /**************************************************************************/
 bool fifo_read(fifo_t* f, void * p_buffer)
 {
-  ASSERT( f->buffer != NULL && f->depth != 0 && f->item_size != 0 &&
-          !fifo_isEmpty(f), false);
+  if( f->buffer == NULL || f->depth == 0 ||
+      f->item_size == 0 || fifo_isEmpty(f) )
+  {
+    return false;
+  }
 
   mutex_lock(f);
 
@@ -133,15 +137,15 @@ bool fifo_read(fifo_t* f, void * p_buffer)
 /**************************************************************************/
 uint16_t fifo_readArray(fifo_t* f, void * p_buffer, uint16_t maxlen)
 {
-  uint16_t len = 0;
+  uint16_t count = 0;
   
-  while ( len < maxlen && fifo_read(f, p_buffer) )
+  while ( count < maxlen && fifo_read(f, p_buffer) )
   {
-    len++;
+    count++;
     p_buffer += f->item_size;
   }
   
-  return len;
+  return count;
 }
 
 /**************************************************************************/
@@ -163,8 +167,11 @@ uint16_t fifo_readArray(fifo_t* f, void * p_buffer, uint16_t maxlen)
 /**************************************************************************/
 bool fifo_write(fifo_t* f, void const * p_data)
 {
-  ASSERT( f->buffer != NULL && f->depth != 0 && f->item_size != 0 &&
-          !(fifo_isFull(f) && f->overwritable == false), false );
+  if ( f->buffer == NULL || f->depth == 0 ||
+      f->item_size == 0 || (fifo_isFull(f) && f->overwritable == false) )
+  {
+    return false;
+  }
 
   mutex_lock(f);
 
