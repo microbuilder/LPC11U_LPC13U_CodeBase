@@ -75,22 +75,32 @@ static protCmdFunc_t protocol_cmd_tbl[] =
 };
 
 
-#define CMD_FIFO_DEPTH 128
+#define CMD_FIFO_DEPTH 4
 
-static uint8_t ff_command_buffer[CMD_FIFO_DEPTH];
-static fifo_t ff_command =
-{
-    .buf          = ff_command_buffer,
-    .size         = CMD_FIFO_DEPTH,
-    .overwritable = true,
-    #if defined CFG_MCU_FAMILY_LPC11UXX
-    .irq          = USB_IRQn
-    #elif defined CFG_MCU_FAMILY_LPC13UXX
-    .irq          = USB_IRQ_IRQn
-    #else
-      #error "protocol.c: No MCU defined"
-    #endif
-};
+#if defined CFG_MCU_FAMILY_LPC11UXX
+  FIFO_DEF(ff_command, CMD_FIFO_DEPTH, protMsgCommand_t, true , USB_IRQn);
+#elif defined CFG_MCU_FAMILY_LPC13UXX
+  FIFO_DEF(ff_command, CMD_FIFO_DEPTH, protMsgCommand_t, true , USB_IRQ_IRQn);
+#else
+    #error __FILE__ No MCU defined
+#endif
+
+//static protMsgCommand_t ff_command_buffer[CMD_FIFO_DEPTH];
+//static fifo_t ff_command =
+//{
+//    .buffer       = ff_command_buffer,
+//    .depth        = CMD_FIFO_DEPTH,
+//    .item_size    = 64,
+//    .overwritable = true,
+//
+//#if defined CFG_MCU_FAMILY_LPC11UXX
+//    .irq          = USB_IRQn
+//#elif defined CFG_MCU_FAMILY_LPC13UXX
+//    .irq          = USB_IRQ_IRQn
+//#else
+//    #error "protocol.c: No MCU defined"
+//#endif
+//};
 
 
 //--------------------------------------------------------------------+
@@ -98,7 +108,7 @@ static fifo_t ff_command =
 //--------------------------------------------------------------------+
 void prot_task(void * p_para)
 {
-  if ( fifo_getLength(&ff_command) >= 64 )
+  if ( !fifo_isEmpty(&ff_command) )
   {
     protError_t error;
 
@@ -107,7 +117,7 @@ void prot_task(void * p_para)
     protMsgResponse_t message_reponse = {0};
     uint16_t command_id;
 
-    fifo_readArray(&ff_command, (uint8_t*) &message_cmd, 64);
+    fifo_read(&ff_command, &message_cmd);
     ASSERT( PROT_MSGTYPE_COMMAND == message_cmd.msg_type, (void) 0);
 
     // command_id is at odd address, directly use the value in message_cmd can lead to alignment issue on M0
@@ -162,11 +172,7 @@ void prot_task(void * p_para)
 void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length)
 {
   (void) length; // for simplicity, always write fixed size to fifo even if host sends out short packet
-
-  for(uint32_t i=0; i<CFG_USB_HID_GENERIC_REPORT_SIZE; i++)
-  {
-    fifo_write(&ff_command, out_report[i]);
-  }
+  fifo_write(&ff_command, out_report);
 }
 #endif
 

@@ -44,34 +44,48 @@ extern "C" {
 
 typedef struct _fifo_t
 {
-  uint8_t* buf;
-  uint16_t size;
-  volatile uint16_t len;
-  volatile uint16_t wr_ptr;
-  volatile uint16_t rd_ptr;
+           void *  const buffer    ; ///< buffer pointer
+           uint8_t const depth     ; ///< max items
+           uint8_t const item_size ; ///< size of each item
+  volatile uint8_t count           ; ///< number of items in queue
+  volatile uint8_t wr_idx          ; ///< write pointer
+  volatile uint8_t rd_idx          ; ///< read pointer
   bool overwritable;
   IRQn_Type irq;
 } fifo_t;
 
-bool fifo_init(fifo_t* f, uint8_t* buffer, uint16_t size, bool overwritable, IRQn_Type irq);
-bool fifo_write(fifo_t* f, uint8_t data);
-bool fifo_read(fifo_t* f, uint8_t *data);
-uint16_t fifo_readArray(fifo_t* f, uint8_t * rx, uint16_t maxlen);
+#define FIFO_DEF(name, ff_depth, type, is_overwritable, irq_mutex)\
+  type name##_buffer[ff_depth];\
+  fifo_t name = {\
+      .buffer       = name##_buffer,\
+      .depth        = ff_depth,\
+      .item_size    = sizeof(type),\
+      .overwritable = is_overwritable,\
+      .irq          = irq_mutex\
+  }
+
+//bool fifo_init(fifo_t* f, uint8_t* buffer, uint16_t size, bool overwritable, IRQn_Type irq);
+bool fifo_write(fifo_t* f, void const * p_data);
+bool fifo_read(fifo_t* f, void * p_buffer);
+uint16_t fifo_readArray(fifo_t* f, void * p_buffer, uint16_t maxlen);
 void fifo_clear(fifo_t *f);
 
+static inline bool fifo_isEmpty(fifo_t* f) __attribute__ ((always_inline));
 static inline bool fifo_isEmpty(fifo_t* f)
 {
-  return (f->len == 0);
+  return (f->count == 0);
 }
 
+static inline bool fifo_isFull(fifo_t* f) __attribute__ ((always_inline));
 static inline bool fifo_isFull(fifo_t* f)
 {
-  return (f->len == f->size);
+  return (f->count == f->depth);
 }
 
+static inline uint16_t fifo_getLength(fifo_t* f) __attribute__ ((always_inline));
 static inline uint16_t fifo_getLength(fifo_t* f)
 {
-  return f->len;
+  return f->count;
 }
 
 #ifdef __cplusplus

@@ -50,8 +50,46 @@ static USBD_HANDLE_T g_hCdc;
 static CDC_LINE_CODING line_coding;
 static bool isConnected = false;             /* ToDo: Consider work-around */
 
-static uint8_t qBuffer[2][CDC_BUFFER_SIZE];  /* TX and RX buffers */
-static fifo_t ffTX, ffRX;
+#if defined CFG_MCU_FAMILY_LPC11UXX
+  FIFO_DEF(ffTX, CDC_BUFFER_SIZE, uint8_t, false, USB_IRQn);
+  FIFO_DEF(ffRX, CDC_BUFFER_SIZE, uint8_t, true , USB_IRQn);
+#elif defined CFG_MCU_FAMILY_LPC13UXX
+  FIFO_DEF(ffTX, CDC_BUFFER_SIZE, uint8_t, false, USB_IRQ_IRQn);
+  FIFO_DEF(ffRX, CDC_BUFFER_SIZE, uint8_t, true , USB_IRQ_IRQn);
+#else
+    #error __FILE__ No MCU defined
+#endif
+
+//static uint8_t qBuffer[2][CDC_BUFFER_SIZE];  /* TX and RX buffers */
+//static fifo_t ffTX =
+//{
+//    .buffer       = qBuffer[0],
+//    .depth        = CDC_BUFFER_SIZE,
+//    .item_size    = sizeof(uint8_t),
+//    .overwritable = false,
+//#if defined CFG_MCU_FAMILY_LPC11UXX
+//    .irq          = USB_IRQn
+//#elif defined CFG_MCU_FAMILY_LPC13UXX
+//    .irq          = USB_IRQ_IRQn
+//#else
+//    #error __FILE__ No MCU defined
+//#endif
+//};
+
+//static fifo_t ffRX =
+//{
+//    .buffer       = qBuffer[1],
+//    .depth        = CDC_BUFFER_SIZE,
+//    .item_size    = sizeof(uint8_t),
+//    .overwritable = true,
+//#if defined CFG_MCU_FAMILY_LPC11UXX
+//    .irq          = USB_IRQn
+//#elif defined CFG_MCU_FAMILY_LPC13UXX
+//    .irq          = USB_IRQ_IRQn
+//#else
+//    #error __FILE__ No MCU defined
+//#endif
+//};
 
 void usb_cdc_recv_isr(void) ALIAS(usb_cdc_recv_isr_default);
 /**************************************************************************/
@@ -91,7 +129,7 @@ bool usb_cdc_putc(uint8_t c)
 {
   uint32_t start_time = systickGetSecondsActive();
 
-  while ( !fifo_write(&ffTX, c) ) /* TODO: blocking until fifo is available */
+  while ( !fifo_write(&ffTX, &c) ) /* TODO: blocking until fifo is available */
   {
     if(systickGetSecondsActive() - start_time > 2)
     {
@@ -275,7 +313,7 @@ ErrorCode_t CDC_BulkOut_Hdlr(USBD_HANDLE_T hUsb, void* data, uint32_t event)
     count = USBD_API->hw->ReadEP(hUsb, CDC_DATA_EP_OUT, buffer);
     for (i=0; i<count; i++)
     {
-      fifo_write(&ffRX, buffer[i]);
+      fifo_write(&ffRX, buffer+i);
     }
 
     isConnected = true;
@@ -341,15 +379,8 @@ ErrorCode_t usb_cdc_configured(USBD_HANDLE_T hUsb)
 
   isConnected = true;
 
-  #if defined CFG_MCU_FAMILY_LPC11UXX
-    fifo_init (&ffTX, qBuffer[0], CDC_BUFFER_SIZE, false, USB_IRQn);     // TX is non-overwritable
-    fifo_init (&ffRX, qBuffer[1], CDC_BUFFER_SIZE, true, USB_IRQn);      // RX is overwritable
-  #elif defined CFG_MCU_FAMILY_LPC13UXX
-    fifo_init (&ffTX, qBuffer[0], CDC_BUFFER_SIZE, false, USB_IRQ_IRQn); // TX is non-overwritable
-    fifo_init (&ffRX, qBuffer[1], CDC_BUFFER_SIZE, true, USB_IRQ_IRQn);  // RX is overwritable
-  #else
-    #error "usb_cdc.c: No MCU defined"
-  #endif
+  fifo_clear(&ffTX);
+  fifo_clear(&ffRX);
 
   return LPC_OK;
 }
