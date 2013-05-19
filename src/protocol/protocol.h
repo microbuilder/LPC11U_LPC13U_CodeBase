@@ -100,19 +100,13 @@ typedef PRE_PACK struct POST_PACK {
   uint8_t error_id_high;
 } protMsgError_t;
 
-//------------- command type -------------//
-#define CMDTYPE_EXPAND(command, id, function) \
-  command = id,\
 
-typedef enum {
-  PROTOCOL_COMMAND_TABLE(CMDTYPE_EXPAND)
-  PROT_CMDTYPE_COUNT /**< Number of commands */
-}protCmdType_t;
 
 //--------------------------------------------------------------------+
 // PUBLIC API
 //--------------------------------------------------------------------+
 void prot_task(void * p_para);
+void prot_init(void);
 
 //--------------------------------------------------------------------+
 // Callback API

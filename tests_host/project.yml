@@ -41,7 +41,7 @@
   :commmon: &common_defines 
     - __CODE_RED -std=gnu99 
     - _TEST_ 
-    - CFG_BRD_LPCXPRESSO_LPC1347
+    - CFG_BRD_RF1GHZNODE
     - __USE_CMSIS=CMSISv2p10_LPC13Uxx
   :test:
     - *common_defines
@@ -68,7 +68,7 @@
     - :ignore
     - :callback
     - :array
-  #:ignore: :args_only
+  :ignore: :args_only
 #  :unity_helper_path: test/support/type_helper.h
   :treat_as:
     uint8:    HEX8

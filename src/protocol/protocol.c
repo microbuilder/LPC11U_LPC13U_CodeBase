@@ -60,13 +60,13 @@
 typedef error_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
 
 //------------- command prototype -------------//
-#define CMD_PROTOTYPE_EXPAND(command, id, function) \
+#define CMD_PROTOTYPE_EXPAND(command, function) \
   error_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
 
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
 //------------- command lookup table -------------//
-#define CMD_LOOKUP_EXPAND(command, id, function)\
+#define CMD_LOOKUP_EXPAND(command, function)\
   [command] = function,\
 
 static protCmdFunc_t protocol_cmd_tbl[] =
@@ -82,30 +82,17 @@ static protCmdFunc_t protocol_cmd_tbl[] =
 #elif defined CFG_MCU_FAMILY_LPC13UXX
   FIFO_DEF(ff_command, CMD_FIFO_DEPTH, protMsgCommand_t, true , USB_IRQ_IRQn);
 #else
-    #error __FILE__ No MCU defined
+  #error __FILE__ No MCU defined
 #endif
-
-//static protMsgCommand_t ff_command_buffer[CMD_FIFO_DEPTH];
-//static fifo_t ff_command =
-//{
-//    .buffer       = ff_command_buffer,
-//    .depth        = CMD_FIFO_DEPTH,
-//    .item_size    = 64,
-//    .overwritable = true,
-//
-//#if defined CFG_MCU_FAMILY_LPC11UXX
-//    .irq          = USB_IRQn
-//#elif defined CFG_MCU_FAMILY_LPC13UXX
-//    .irq          = USB_IRQ_IRQn
-//#else
-//    #error "protocol.c: No MCU defined"
-//#endif
-//};
-
 
 //--------------------------------------------------------------------+
 // Public API
 //--------------------------------------------------------------------+
+void prot_init(void)
+{
+  fifo_clear(&ff_command);
+}
+
 void prot_task(void * p_para)
 {
   if ( !fifo_isEmpty(&ff_command) )
@@ -130,6 +117,7 @@ void prot_task(void * p_para)
     message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
 
     // invoke callback before executing command
+
     if (prot_cmd_received_cb)
     {
       prot_cmd_received_cb(&message_cmd);

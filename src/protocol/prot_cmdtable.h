@@ -41,6 +41,11 @@
  extern "C" {
 #endif
 
+typedef enum {
+  PROT_CMDTYPE_LED = 0x0001,
+  PROT_CMDTYPE_COUNT /**< Number of commands */
+}protCmdType_t;
+
 //------------- X macros for create consistent command enum, function prototyp & cmd table -------------//
 // This table serves as a central database where each entry is consisted of all information of a command.
 // Define your own 'Expansion Macro' and expand the table to form a specific list/table. The following example
@@ -57,7 +62,9 @@ typedef enum {
 
 // command enum, command id, command function
 #define PROTOCOL_COMMAND_TABLE(ENTRY) \
-    ENTRY(PROT_CMDTYPE_LED, 1, protcmd_led)\
+    ENTRY(PROT_CMDTYPE_LED, protcmd_led)\
+
+
 
 #ifdef __cplusplus
  }

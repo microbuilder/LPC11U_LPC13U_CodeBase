@@ -2297,11 +2297,11 @@
 								<option id="gnu.c.compiler.option.preprocessor.def.symbols.487822153" name="Defined symbols (-D)" superClass="gnu.c.compiler.option.preprocessor.def.symbols" valueType="definedSymbols">
 									<listOptionValue builtIn="false" value="__REDLIB__"/>
 									<listOptionValue builtIn="false" value="ARM_MATH_CM3"/>
-									<listOptionValue builtIn="false" value="CFG_BRD_LPCXPRESSO_LPC1347"/>
 									<listOptionValue builtIn="false" value="_TEST_"/>
 									<listOptionValue builtIn="false" value="DEBUG"/>
 									<listOptionValue builtIn="false" value="__CODE_RED"/>
 									<listOptionValue builtIn="false" value="__USE_CMSIS=CMSISv2p10_LPC13Uxx"/>
+									<listOptionValue builtIn="false" value="CFG_BRD_RF1GHZNODE=1"/>
 								</option>
 								<inputType id="cdt.managedbuild.tool.gnu.c.compiler.input.1234878819" superClass="cdt.managedbuild.tool.gnu.c.compiler.input"/>
 							</tool>

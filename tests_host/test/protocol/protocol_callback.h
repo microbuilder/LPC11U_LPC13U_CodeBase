@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     test_fifo.c
+    @file     protocol_callback.c
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
@@ -33,93 +33,14 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#include <string.h>
-#include "unity.h"
-#include "fifo.h"
 
-#define FIFO_SIZE 10
+#ifndef _PROTOCOL_CALLBACK_H_
+#define _PROTOCOL_CALLBACK_H_
 
-FIFO_DEF(ff_non_overwritable , FIFO_SIZE, uint32_t, false, 0);
+#include "protocol.h"
 
-void setUp(void)
-{
-  fifo_clear(&ff_non_overwritable);
-}
+void prot_cmd_received_cb(protMsgCommand_t const * p_mess);
+void prot_cmd_executed_cb(protMsgResponse_t const * p_resonse);
+void prot_cmd_error_cb(protMsgError_t const * p_error);
 
-void tearDown(void)
-{
-
-}
-void test_read_from_null_fifo(void)
-{
-  fifo_t ff_null = { 0 };
-  uint32_t dummy;
-  TEST_ASSERT_FALSE ( fifo_read(&ff_null, &dummy) );
-}
-
-void test_write_to_null_fifo(void)
-{
-  fifo_t ff_null = { 0 };
-  uint32_t dummy;
-  TEST_ASSERT_FALSE ( fifo_write(&ff_null, &dummy) );
-}
-
-void test_normal(void)
-{
-  for(uint32_t i=0; i < FIFO_SIZE; i++)
-  {
-    fifo_write(&ff_non_overwritable, &i);
-  }
-
-  for(uint32_t i=0; i < FIFO_SIZE; i++)
-  {
-    uint32_t c;
-    fifo_read(&ff_non_overwritable, &c);
-    TEST_ASSERT_EQUAL(i, c);
-  }
-}
-
-void test_circular(void)
-{
-  FIFO_DEF(ff_overwritable, 2, uint32_t, true, 0);
-
-  uint32_t data;
-
-  // feed fifo to full
-  data = 1;
-  fifo_write(&ff_overwritable, &data); // 1
-  data = 2;
-  fifo_write(&ff_overwritable, &data); // 2
-
-  // overflow data
-  data = 100;
-  fifo_write(&ff_overwritable, &data);
-
-  //------------- 1st read should be 2, second is 100 -------------//
-  fifo_read(&ff_overwritable, &data);
-  TEST_ASSERT_EQUAL(2, data);
-
-  fifo_read(&ff_overwritable, &data);
-  TEST_ASSERT_EQUAL(100, data);
-}
-
-void test_is_empty(void)
-{
-  uint32_t dummy;
-  TEST_ASSERT_TRUE(fifo_isEmpty(&ff_non_overwritable));
-  fifo_write(&ff_non_overwritable, &dummy);
-  TEST_ASSERT_FALSE(fifo_isEmpty(&ff_non_overwritable));
-}
-
-void test_is_full(void)
-{
-  TEST_ASSERT_FALSE(fifo_isFull(&ff_non_overwritable));
-
-  for(uint32_t i=0; i < FIFO_SIZE; i++)
-  {
-    fifo_write(&ff_non_overwritable, &i);
-  }
-
-  TEST_ASSERT_TRUE(fifo_isFull(&ff_non_overwritable));
-}
-
+#endif

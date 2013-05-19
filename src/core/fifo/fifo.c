@@ -241,7 +241,9 @@ static inline void mutex_lock (fifo_t* f)
 {
   if (f->irq > 0)
   {
+    #ifndef _TEST_
     NVIC_DisableIRQ(f->irq);
+    #endif
   }
 }
 
@@ -257,7 +259,9 @@ static inline void mutex_unlock (fifo_t* f)
 {
   if (f->irq > 0)
   {
+    #ifndef _TEST_
     NVIC_EnableIRQ(f->irq);
+    #endif
   }
 }
 
