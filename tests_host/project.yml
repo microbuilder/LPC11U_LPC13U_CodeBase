@@ -28,11 +28,8 @@
     - +:test/**
     - -:test/support
   :source:
-    - ../tinyusb/**
-    - +:../demos/bsp/lpc43xx/**
-    - -:../demos/
-    - ../vendor/freertos/freertos/Source/*
-    - ../vendor/freertos/freertos/Source/portable/MSVC-MingW/*
+    - ../src/**
+    - ../cmsis/**
     
   :support:
     - test/support
@@ -42,12 +39,10 @@
   #  1) remove the trailing [] from the :common: section
   #  2) add entries to the :common: section (e.g. :test: has TEST defined)
   :commmon: &common_defines 
-    - MCU=MCU_LPC43XX -std=gnu99 
-#    - -mx32
-    - CORE_M4
-    - __CODE_RED
-    - _TINY_USB_SOURCE_FILE_
+    - __CODE_RED -std=gnu99 
     - _TEST_ 
+    - CFG_BRD_LPCXPRESSO_LPC1347
+    - __USE_CMSIS=CMSISv2p10_LPC13Uxx
   :test:
     - *common_defines
   :test_preprocess:

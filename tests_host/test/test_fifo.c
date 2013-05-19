@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
     @file     test_fifo.c
-    @ingroup  Unit Tests
+    @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
 
@@ -34,42 +34,37 @@
 */
 /**************************************************************************/
 #include <string.h>
-#include "unity_fixture.h"
-#include "core/fifo/fifo.h"
+#include "unity.h"
+#include "fifo.h"
 
-//--------------------------------------------------------------------+
-// GROUP fifo, start with Group Declare
-//--------------------------------------------------------------------+
 #define FIFO_SIZE 10
 
 FIFO_DEF(ff, FIFO_SIZE, uint8_t, false, 0);
 
-TEST_GROUP(fifo); // Group declaration
-
-TEST_SETUP(fifo) // called before each test in the group, to set up group environment
+void setUp(void)
 {
   fifo_clear(&ff);
 }
-TEST_TEAR_DOWN(fifo) // called after a test in the group has been invoked to clean up
+
+void tearDown(void)
 {
 
 }
-
-TEST(fifo, read_from_null_ff)
+void test_read_from_null_ff(void)
 {
   fifo_t ff_null = { 0 };
   uint8_t dummy;
   TEST_ASSERT_FALSE ( fifo_read(&ff_null, &dummy) );
 }
 
-TEST(fifo, write_to_null_ff)
+void test_write_to_null_ff(void)
 {
   fifo_t ff_null = { 0 };
   uint8_t dummy;
   TEST_ASSERT_FALSE ( fifo_write(&ff_null, &dummy) );
 }
 
-TEST(fifo, normal)
+void test_normal(void)
 {
   for(uint8_t i=0; i < FIFO_SIZE; i++)
   {
@@ -84,7 +79,7 @@ TEST(fifo, normal)
   }
 }
 
-TEST(fifo, is_empty)
+void test_is_empty(void)
 {
   uint8_t dummy;
   TEST_ASSERT_TRUE(fifo_isEmpty(&ff));
@@ -92,7 +87,7 @@ TEST(fifo, is_empty)
   TEST_ASSERT_FALSE(fifo_isEmpty(&ff));
 }
 
-TEST(fifo, is_full)
+void test_is_full(void)
 {
   TEST_ASSERT_FALSE(fifo_isFull(&ff));
 
@@ -104,13 +99,3 @@ TEST(fifo, is_full)
   TEST_ASSERT_TRUE(fifo_isFull(&ff));
 }
 
-
-//----- Group Runner required hand installed, all tests should be above -----
-TEST_GROUP_RUNNER(fifo)
-{
-  RUN_TEST_CASE(fifo, read_from_null_ff);
-  RUN_TEST_CASE(fifo, write_to_null_ff);
-  RUN_TEST_CASE(fifo, normal);
-  RUN_TEST_CASE(fifo, is_empty);
-  RUN_TEST_CASE(fifo, is_full)
-}
