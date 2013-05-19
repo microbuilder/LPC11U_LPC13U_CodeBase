@@ -1,0 +1,4 @@
+language: c
+compiler:
+  - gcc
+script: cd tests_host/ && mkdir build && rake test:all
