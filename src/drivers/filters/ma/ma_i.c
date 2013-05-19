@@ -1,62 +1,62 @@
 /**************************************************************************/
 /*!
-    @file     ma_f.c
-    @brief    A basic moving average filter using float values
+    @file     ma_i.c
+    @brief    A basic moving average filter using int32_t values
 
     @code
 
     // Create a circular buffer 5 values wide
-    FIFO_DEF(ffMavg, 5, float, true, NULL);
+    FIFO_DEF(ffMavg, 5, int32_t, true, NULL);
 
     // Now declare the filter with the window size and a FIFO pointer
-    ma_f_t ma = { .k = 0,
+    ma_i_t ma = { .k = 0,
                   .size = 5,
-                  .avg = 0.0F,
+                  .avg = 0,
                   .buffer = &ffMavg };
 
     // Initialise the moving average filter (mostly error checks)
-    if (ma_f_init(&ma))
+    if (ma_i_init(&ma))
     {
       printf("Something failed during filter init!\n");
     }
 
     // Add some values
-    ma_f_add(&ma, 10.0F);
-    ma_f_add(&ma, 20.0F);
-    ma_f_add(&ma, 30.0F);
-    ma_f_add(&ma, 35.0F);
-    ma_f_add(&ma, 35.0F);  // We should have an avg value starting here
-    ma_f_add(&ma, 35.0F);
-    ma_f_add(&ma, 30.0F);
-    ma_f_add(&ma, 20.0F);
-    ma_f_add(&ma, 15.0F);
-    ma_f_add(&ma, 10.0F);
+    ma_i_add(&ma, 10);
+    ma_i_add(&ma, 20);
+    ma_i_add(&ma, -30);
+    ma_i_add(&ma, -35);
+    ma_i_add(&ma, 11);  // We should have an avg value starting here
+    ma_i_add(&ma, 35);
+    ma_i_add(&ma, 30);
+    ma_i_add(&ma, 20);
+    ma_i_add(&ma, 3);
+    ma_i_add(&ma, 10);
 
     printf("WINDOW SIZE   : %d\n", ma.size);
     printf("TOTAL SAMPLES : %d\n", ma.k);
-    printf("CURRENT AVG   : %f\n", ma.avg);
+    printf("CURRENT AVG   : %d\n", ma.avg);
     printf("\n");
 
     @endcode
  */
 /**************************************************************************/
-#include "ma_f.h"
+#include "ma_i.h"
 
 /**************************************************************************/
 /*!
-     @brief Initialises the ma_f_t instance
+     @brief Initialises the ma_i_t instance
 
      @param[in]  ma
-                 Pointer to the ma_f_t instance that includes the
+                 Pointer to the ma_i_t instance that includes the
                  window size, a pointer to the circular buffer (fifo_t),
                  and the current average (the output value).
 */
 /**************************************************************************/
-error_t ma_f_init ( ma_f_t *ma )
+error_t ma_i_init ( ma_i_t *ma )
 {
   if (0 == ma->size) return ERROR_UNEXPECTEDVALUE;
 
-  ma->avg = 0.0F;
+  ma->avg = 0;
   ma->k = 0;
 
   return ERROR_NONE;
@@ -64,15 +64,15 @@ error_t ma_f_init ( ma_f_t *ma )
 
 /**************************************************************************/
 /*!
-     @brief Adds a new record to the ma_f_t instances
+     @brief Adds a new record to the ma_i_t instances
 
      @param[in]  ma
-                 Pointer to the ma_f_t instances
+                 Pointer to the ma_i_t instances
      @param[in]  x
                  Value to insert
 */
 /**************************************************************************/
-void ma_f_add(ma_f_t *ma, float x)
+void ma_i_add(ma_i_t *ma, int32_t x)
 {
   // Increment the total sample count
   ma->k++;
@@ -88,14 +88,14 @@ void ma_f_add(ma_f_t *ma, float x)
 
   // Recalculate the average over the entire buffer
   uint16_t i;
-  double total = 0;                   // Overflow prevention!
+  int64_t total = 0;                   // Overflow prevention!
   for (i = 0; i < ma->size; i++)
   {
-    float val = 0;
+    int32_t val = 0;
     fifo_peek(ma->buffer, i, &val);   // Peak since read is destructive!
     total += val;
   }
 
   // Update the current average value
-  ma->avg = (float)(total / ma->size);
+  ma->avg = (int32_t)(total / ma->size);
 }
