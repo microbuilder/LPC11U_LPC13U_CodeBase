@@ -14,6 +14,15 @@ Because you are working with a continuously moving subset of your data (the 'win
 
 The moving average filter is a good choice for removing random noise or spikes in the data, while still maintaining excellent responsivity to changes in the signal.  It's an excellent choice for filters in the time domain, since it is very responsive to changes over time, without introducing as much 'phase shift' or instability as an IIR filter might.
 
+## Filter Results ##
+
+You can see the results of the simple moving average filter in the images below, using a variety of window sizes on an integer sine wave with a little bit of noisy added on to it (since this is the most common problem you use an ma filter to solve).  A larger window increases the phase shift and requires more memory (for the larger window buffer), but results in smoother data.  Take note of the 'setup period' at the start of the images where the filter output is 0:
+
+![Integer MA Window 4](images/ma_u16_win4_noise0_025_12-bitrange.png?raw=true)
+![Integer MA Window 8](images/ma_u16_win8_noise0_025_12-bitrange.png?raw=true)
+![Integer MA Window 16](images/ma_u16_win16_noise0_025_12-bitrange.png?raw=true)
+![Integer MA Window 32](images/ma_u16_win32_noise0_025_12-bitrange.png?raw=true)
+
 ## Which Filter Version Should I Use (float, int32\_t, or uint16\_t)? ##
 
 Three versions of this filter are included, one that uses single-precision floating point values (ma\_f.c), one that uses uses signed 32-bit integers (ma\_i.c), and another that uses unsigned 16-bit integers (ma\_u16.c).
