@@ -85,7 +85,7 @@ def main():
         current+=1
         # Make sure we've reached 'windowlength' samples in the buffer
         if (current <= windowsize):
-            window.append(0)
+            window.append(noisysine[current-1])
             mavals.append(0)
         else:
             # Add the current sample to the 'window' ring buffer
