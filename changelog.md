@@ -23,6 +23,9 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added CMSIS DSP library to the makefile, LPCXpresso and Crossworks project files
 - Added RTX library for CMSIS-RTOS (currently untested)
 - Removed all use of GPIOSetBitValue and GPIOSetDir (wasteful fluff)
+- Added simple moving average filter and python tester
+- Improved fifo_t to support any object size (previously uint8_t only)
+- Added ceedling support (experimental)
 
 ## 0.8.1 [23 April 2013] ##
 
