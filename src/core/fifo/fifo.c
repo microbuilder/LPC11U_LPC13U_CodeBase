@@ -37,6 +37,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+#include <string.h>
 #include "fifo.h"
 
 static inline void mutex_lock   (fifo_t* f) INLINE_POST;
