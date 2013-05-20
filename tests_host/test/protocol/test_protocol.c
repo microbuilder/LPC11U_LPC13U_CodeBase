@@ -118,12 +118,49 @@ void test_cmd_led_invalid_length(void)
   prot_task(NULL);
 }
 
+ErrorCode_t hid_send_stub(uint8_t report_in[], uint32_t length, int num_call)
+{
+
+}
+
 void test_cmd_led_on(void)
 {
-  TEST_IGNORE();
+  message_cmd = (protMsgCommand_t)
+  {
+    .msg_type    = PROT_MSGTYPE_COMMAND,
+    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
+    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .length      = 1,
+    .payload[0]  = 1
+  };
+  fifo_write(&ff_command, &message_cmd);
+
+  prot_cmd_received_cb_Ignore();
+  boardLED_Expect(CFG_LED_ON);
+  prot_cmd_executed_cb_Ignore();
+  usb_hid_generic_send_IgnoreAndReturn(LPC_OK);
+
+  //------------- CUT -------------//
+  prot_task(NULL);
 }
 
 void test_cmd_led_off(void)
 {
-  TEST_IGNORE();
+  message_cmd = (protMsgCommand_t)
+  {
+    .msg_type    = PROT_MSGTYPE_COMMAND,
+    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
+    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .length      = 1,
+    .payload[0]  = 0
+  };
+  fifo_write(&ff_command, &message_cmd);
+
+  prot_cmd_received_cb_Ignore();
+  boardLED_Expect(CFG_LED_OFF);
+  prot_cmd_executed_cb_Ignore();
+  usb_hid_generic_send_IgnoreAndReturn(LPC_OK);
+
+  //------------- CUT -------------//
+  prot_task(NULL);
 }
