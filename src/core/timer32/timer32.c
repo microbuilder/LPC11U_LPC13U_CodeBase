@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     systick.c
+    @file     timer32.c
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
