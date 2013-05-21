@@ -2,7 +2,7 @@
 
 Major changes in the LPC11U/LPC13U code base by code base version number.
 
-## 0.8.5 [Ongoing] ##
+## 0.8.5 [21 May 2013] ##
 
 - Updated CMSIS to v3.20
 - Renamed Crossworks project files to CW_*

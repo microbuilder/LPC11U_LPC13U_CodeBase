@@ -201,12 +201,14 @@
           </folder>
         </folder>
         <folder Name="filters" file_name="">
-          <file file_name="src/drivers/filters/avg_d.c"/>
-          <file file_name="src/drivers/filters/avg_f.c"/>
-          <file file_name="src/drivers/filters/avg_i.c"/>
           <folder Name="iir" file_name="">
             <file file_name="src/drivers/filters/iir/iir_f.c"/>
             <file file_name="src/drivers/filters/iir/iir_i.c"/>
+          </folder>
+          <folder Name="ma" file_name="">
+            <file file_name="src/drivers/filters/ma/ma_f.c"/>
+            <file file_name="src/drivers/filters/ma/ma_i.c"/>
+            <file file_name="src/drivers/filters/ma/ma_u16.c"/>
           </folder>
         </folder>
         <file file_name="src/drivers/timespan.c"/>
@@ -241,7 +243,6 @@
         <file file_name="src/cli/cli.c"/>
       </folder>
       <file file_name="src/projectconfig.h"/>
-      <file file_name="src/messages.c"/>
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
       <folder Name="localisation" file_name="">
@@ -282,10 +283,10 @@
       <folder Name="protocol" file_name="">
         <file file_name="src/protocol/protocol.c"/>
         <folder Name="commands" file_name="">
-          <file file_name="src/protocol/commands/protocol_cmd_help.c"/>
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
         </folder>
       </folder>
+      <file file_name="src/fixed.h"/>
     </folder>
     <folder Name="System Files">
       <file file_name="$(StudioDir)/source/thumb_crt0.s"/>
