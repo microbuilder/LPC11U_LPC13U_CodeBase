@@ -547,7 +547,7 @@ extern "C" {
                                    included during build.  Requires
                                    external HW
     -----------------------------------------------------------------------*/
-    #define CFG_CC3000
+    // #define CFG_CC3000
     #define CFG_CC3000_SPI_PORT         (1)
     #define CFG_CC3000_EN_PORT          (0)
     #define CFG_CC3000_EN_PIN           (14)
