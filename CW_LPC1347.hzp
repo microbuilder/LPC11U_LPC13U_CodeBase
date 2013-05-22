@@ -62,6 +62,9 @@
         <folder Name="timer32" file_name="">
           <file file_name="src/core/timer32/timer32.c"/>
         </folder>
+        <folder Name="timer16" file_name="">
+          <file file_name="src/core/timer16/timer16.c"/>
+        </folder>
       </folder>
       <folder Name="drivers">
         <folder Name="displays">
