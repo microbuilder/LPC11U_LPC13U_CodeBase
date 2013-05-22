@@ -158,7 +158,7 @@ extern "C" {
     ------------------------------------------    -------------------------
     PIN_INT0_IRQHandler - FLEX_INT0_IRQHandler    chb_drvr.c
     PIN_INT1_IRQHandler - FLEX_INT1_IRQHandler    pcf2129.c
-    PIN_INT2_IRQHandler - FLEX_INT2_IRQHandler
+    PIN_INT2_IRQHandler - FLEX_INT2_IRQHandler    cc3000 (spi.c)
     PIN_INT3_IRQHandler - FLEX_INT3_IRQHandler
     PIN_INT4_IRQHandler - FLEX_INT4_IRQHandler
     PIN_INT5_IRQHandler - FLEX_INT5_IRQHandler
@@ -536,6 +536,25 @@ extern "C" {
         #error "Invalid SPI port for CFG_CHIBI_SPIPORT"
       #endif
     #endif
+/*=========================================================================*/
+
+
+/*=========================================================================
+    CC3000 WIFI MODULES
+    -----------------------------------------------------------------------
+
+    CFG_CC3000                     If defined, CC3000 support will be
+                                   included during build.  Requires
+                                   external HW
+    -----------------------------------------------------------------------*/
+    #define CFG_CC3000
+    #define CFG_CC3000_SPI_PORT         (1)
+    #define CFG_CC3000_EN_PORT          (0)
+    #define CFG_CC3000_EN_PIN           (14)
+    #define CFG_CC3000_IRQ_PORT         (0)
+    #define CFG_CC3000_IRQ_PIN          (16)
+    #define CFG_CC3000_CS_PORT          (0)
+    #define CFG_CC3000_CS_PIN           (17)
 /*=========================================================================*/
 
 
