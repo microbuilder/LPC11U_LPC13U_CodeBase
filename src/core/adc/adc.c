@@ -95,7 +95,7 @@ void adcInit(void)
                 (1 << 23)                              |  /* 10-bit mode */
                 #endif
                 (0 << 24)                              |  /* START = 0 A/D conversion stops */
-                (0 << 27);                                /* EDGE = 0 (CAP/MAT singal falling,trigger A/D conversion) */
+                (0 << 27);                                /* EDGE = 0 (CAP/MAT rising edge, trigger A/D conversion) */
 }
 
 /**************************************************************************/
