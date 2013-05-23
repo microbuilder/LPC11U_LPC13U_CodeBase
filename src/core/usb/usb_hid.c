@@ -39,7 +39,7 @@
 /**************************************************************************/
 #include <string.h>
 #include "usbd.h"
-#include "../systick/systick.h"
+#include "../delay/delay.h"
 
 #ifdef CFG_USB_HID
 
@@ -411,10 +411,10 @@ ErrorCode_t usb_hid_configured(USBD_HANDLE_T hUsb)
 /**************************************************************************/
 ErrorCode_t usb_hid_keyboard_sendKeys(uint8_t modifier, uint8_t keycodes[], uint8_t numkey)
 {
-  uint32_t start_time = systickGetSecondsActive();
+  uint32_t start_time = delayGetSecondsActive();
   while (bKeyChanged) // TODO blocking while previous key has yet sent - can use fifo to improve this
   {
-    ASSERT_MESSAGE(systickGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Keyboard Timeout");
+    ASSERT_MESSAGE(delayGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Keyboard Timeout");
   }
   ASSERT(keycodes && numkey && numkey <=6, ERR_FAILED);
 
@@ -462,10 +462,10 @@ ErrorCode_t usb_hid_keyboard_sendKeys(uint8_t modifier, uint8_t keycodes[], uint
 /**************************************************************************/
 ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel, int8_t pan)
 {
-  uint32_t start_time = systickGetSecondsActive();
+  uint32_t start_time = delayGetSecondsActive();
   while (bMouseChanged) // TODO Block while previous key hasn't been sent - can use fifo to improve this
   {
-    ASSERT_MESSAGE(systickGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Mouse Timeout");
+    ASSERT_MESSAGE(delayGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Mouse Timeout");
   }
 
   hid_mouse_report.Button = buttons;
@@ -494,7 +494,7 @@ ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel
     @code
     if (usb_isConfigured())
     {
-      uint32_t currentSecond = systickGetSecondsActive();
+      uint32_t currentSecond = delayGetSecondsActive();
       uint8_t in_report[CFG_USB_HID_GENERIC_REPORT_SIZE] = { currentSecond % 100 };
       usb_hid_generic_send(in_report, CFG_USB_HID_GENERIC_REPORT_SIZE);
     }
@@ -503,12 +503,12 @@ ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel
 /**************************************************************************/
 ErrorCode_t usb_hid_generic_send(uint8_t report_in[], uint32_t length)
 {
-  uint32_t start_time = systickGetSecondsActive();
+  uint32_t start_time = delayGetSecondsActive();
 
   ASSERT(report_in && length <= CFG_USB_HID_GENERIC_REPORT_SIZE, ERR_FAILED);
   while (bGenericChanged) // TODO Block while previous key hasn't been sent - can use fifo to improve this
   {
-    ASSERT_MESSAGE(systickGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Generic Timeout");
+    ASSERT_MESSAGE(delayGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Generic Timeout");
   }
 
   memset(&hid_generic_report_in, 0, CFG_USB_HID_GENERIC_REPORT_SIZE);

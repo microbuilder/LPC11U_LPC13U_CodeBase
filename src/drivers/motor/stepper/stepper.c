@@ -22,13 +22,13 @@
     {
       stepperStep(400);       // Move forward 400 steps
       stepperStep(-200);      // Move backward 200 steps
-      systickDelay(1000);     // Wait one second
+      delay(1000);     // Wait one second
 
       // Move 'home' after 10 loops (current position = 2000)
       if (stepperGetPosition() == 2000)
       {
         stepperMoveHome();    // Move back to the starting position
-        systickDelay(1000);   // Wait one second
+        delay(1000);   // Wait one second
       }
     }
 

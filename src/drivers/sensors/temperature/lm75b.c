@@ -81,7 +81,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "lm75b.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
@@ -242,7 +242,7 @@ error_t lm75bGetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _lm75bSensorID;
   event->type      = SENSOR_TYPE_AMBIENT_TEMPERATURE;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Retrieve values from the sensor */
   ASSERT_STATUS(lm75bGetTemperature(&temp));

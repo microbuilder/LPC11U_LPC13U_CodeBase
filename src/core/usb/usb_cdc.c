@@ -40,7 +40,7 @@
 #include <string.h>
 #include "usbd.h"
 #include "core/fifo/fifo.h"
-#include "../systick/systick.h"
+#include "core/delay/delay.h"
 
 #ifdef CFG_USB_CDC
 
@@ -96,11 +96,11 @@ bool usb_cdc_isConnected(void)
 /**************************************************************************/
 bool usb_cdc_putc(uint8_t c)
 {
-  uint32_t start_time = systickGetSecondsActive();
+  uint32_t start_time = delayGetSecondsActive();
 
   while ( !fifo_write(&ffTX, &c) ) /* TODO: blocking until fifo is available */
   {
-    if(systickGetSecondsActive() - start_time > 2)
+    if(delayGetSecondsActive() - start_time > 2)
     {
       isConnected = false;
       fifo_clear(&ffTX);

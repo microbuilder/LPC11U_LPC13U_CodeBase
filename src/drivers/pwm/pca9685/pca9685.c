@@ -49,7 +49,7 @@
 #include <string.h>
 #include "pca9685.h"
 #include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
 extern volatile uint8_t   I2CSlaveBuffer[I2C_BUFSIZE];
@@ -210,7 +210,7 @@ error_t pca9685SetFrequency(uint16_t freqHz)
 
   // Wakeup
   ASSERT_STATUS(pca9685Write8(PCA9685_REG_MODE1, oldMode));
-  systickDelay(5);
+  delay(5);
   ASSERT_STATUS(pca9685Write8(PCA9685_REG_MODE1, oldMode | 0x80));
 
   return ERROR_NONE;

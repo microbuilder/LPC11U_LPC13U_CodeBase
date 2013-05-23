@@ -28,9 +28,6 @@
             <configuration Name="THUMB Flash Release" build_exclude_from_build="No"/>
           </file>
         </folder>
-        <folder Name="systick">
-          <file file_name="src/core/systick/systick.c"/>
-        </folder>
         <folder Name="ssp1">
           <file file_name="src/core/ssp1/ssp1.c"/>
         </folder>
@@ -58,6 +55,12 @@
         </folder>
         <folder Name="timer32" file_name="">
           <file file_name="src/core/timer32/timer32.c"/>
+        </folder>
+        <folder Name="timer16" file_name="">
+          <file file_name="src/core/timer16/timer16.c"/>
+        </folder>
+        <folder Name="delay" file_name="">
+          <file file_name="src/core/delay/delay.c"/>
         </folder>
       </folder>
       <folder Name="drivers">
@@ -243,6 +246,7 @@
         <file file_name="src/cli/cli.c"/>
       </folder>
       <file file_name="src/projectconfig.h"/>
+      <file file_name="src/messages.c"/>
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
       <folder Name="localisation" file_name="">

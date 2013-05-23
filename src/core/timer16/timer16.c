@@ -40,65 +40,65 @@ volatile uint32_t timer16_1_counter[4] = {0,0,0,0};
 volatile uint32_t timer16_0_capture[4] = {0,0,0,0};
 volatile uint32_t timer16_1_capture[4] = {0,0,0,0};
 
-/**************************************************************************/
-/*!
-    @brief Interrupt handler for 16-bit timer 0
-*/
-/**************************************************************************/
-#if defined CFG_MCU_FAMILY_LPC11UXX
-void TIMER16_0_IRQHandler(void)
-#elif defined CFG_MCU_FAMILY_LPC13UXX
-void CT16B0_IRQHandler(void)
-#else
-  #error "timer16.c: No MCU defined"
-#endif
-{
-  /* Handle match events */
-  if (LPC_CT16B0->IR & (0x01 << 0))
-  {
-    LPC_CT16B0->IR = 0x1 << 0;
-    timer16_0_counter[0]++;
-  }
-  if (LPC_CT16B0->IR & (0x01 << 1))
-  {
-    LPC_CT16B0->IR = 0x1 << 1;
-    timer16_0_counter[1]++;
-  }
-  if (LPC_CT16B0->IR & (0x01 << 2))
-  {
-    LPC_CT16B0->IR = 0x1 << 2;
-    timer16_0_counter[2]++;
-  }
-  if (LPC_CT16B0->IR & (0x01 << 3))
-  {
-    LPC_CT16B0->IR = 0x1 << 3;
-    timer16_0_counter[3]++;
-  }
-
-  /* Handle capture events */
-  if (LPC_CT16B0->IR & (0x1 << 4))
-  {
-    LPC_CT16B0->IR = 0x1 << 4;
-    timer16_0_capture[0]++;
-  }
-  if (LPC_CT16B0->IR & (0x1 << 5))
-  {
-    LPC_CT16B0->IR = 0x1 << 5;
-    timer16_0_capture[1]++;
-  }
-  if (LPC_CT16B0->IR & (0x1 << 6))
-  {
-    LPC_CT16B0->IR = 0x1 << 6;
-    timer16_0_capture[2]++;
-  }
-  if (LPC_CT16B0->IR & (0x1 << 7))
-  {
-    LPC_CT16B0->IR = 0x1 << 7;
-    timer16_0_capture[3]++;
-  }
-
-  return;
-}
+///**************************************************************************/
+///*!
+//    @brief Interrupt handler for 16-bit timer 0
+//*/
+///**************************************************************************/
+//#if defined CFG_MCU_FAMILY_LPC11UXX
+//void TIMER16_0_IRQHandler(void)
+//#elif defined CFG_MCU_FAMILY_LPC13UXX
+//void CT16B0_IRQHandler(void)
+//#else
+//  #error "timer16.c: No MCU defined"
+//#endif
+//{
+//  /* Handle match events */
+//  if (LPC_CT16B0->IR & (0x01 << 0))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 0;
+//    timer16_0_counter[0]++;
+//  }
+//  if (LPC_CT16B0->IR & (0x01 << 1))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 1;
+//    timer16_0_counter[1]++;
+//  }
+//  if (LPC_CT16B0->IR & (0x01 << 2))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 2;
+//    timer16_0_counter[2]++;
+//  }
+//  if (LPC_CT16B0->IR & (0x01 << 3))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 3;
+//    timer16_0_counter[3]++;
+//  }
+//
+//  /* Handle capture events */
+//  if (LPC_CT16B0->IR & (0x1 << 4))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 4;
+//    timer16_0_capture[0]++;
+//  }
+//  if (LPC_CT16B0->IR & (0x1 << 5))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 5;
+//    timer16_0_capture[1]++;
+//  }
+//  if (LPC_CT16B0->IR & (0x1 << 6))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 6;
+//    timer16_0_capture[2]++;
+//  }
+//  if (LPC_CT16B0->IR & (0x1 << 7))
+//  {
+//    LPC_CT16B0->IR = 0x1 << 7;
+//    timer16_0_capture[3]++;
+//  }
+//
+//  return;
+//}
 
 /**************************************************************************/
 /*!

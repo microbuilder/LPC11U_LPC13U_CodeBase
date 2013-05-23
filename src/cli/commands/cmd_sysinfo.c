@@ -40,7 +40,7 @@
 
 #include "projectconfig.h"
 #include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/iap/iap.h"
 #include "cli/cli.h"
 #include "cli/commands.h"       // Generic helper functions
@@ -104,8 +104,8 @@ void cmd_sysinfo(uint8_t argc, char **argv)
   /* EEPROM Size */
   printf("%-25s : %u %s %s", STRING(LOCALISATION_TEXT_EEPROM_Size_COLON_SPACE), (unsigned int)CFG_EEPROM_SIZE, STRING(LOCALISATION_TEXT_bytes), CFG_PRINTF_NEWLINE);
 
-  /* System Uptime (based on systick timer) */
-  printf("%-25s : %u %s %s", STRING(LOCALISATION_TEXT_System_Uptime), (unsigned int)systickGetSecondsActive(), STRING(LOCALISATION_SYMBOL_SECONDS), CFG_PRINTF_NEWLINE);
+  /* System Uptime (based on delay timer) */
+  printf("%-25s : %u %s %s", STRING(LOCALISATION_TEXT_System_Uptime), (unsigned int)delayGetSecondsActive(), STRING(LOCALISATION_SYMBOL_SECONDS), CFG_PRINTF_NEWLINE);
 
   /* Wireless Settings (if CFG_CHIBI enabled) */
   #ifdef CFG_CHIBI

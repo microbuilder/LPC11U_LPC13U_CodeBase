@@ -43,7 +43,7 @@
 
 #include "boards/board.h"
 #include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/eeprom/eeprom.h"
 #include "core/pmu/pmu.h"
 
@@ -111,7 +111,7 @@ DWORD get_fattime ()
 void boardInit(void)
 {
   SystemCoreClockUpdate();
-  systickInit(CFG_SYSTICK_DELAY_IN_MS);
+  delayInit();
   GPIOInit();
 
   #ifdef CFG_PRINTF_UART
@@ -124,7 +124,7 @@ void boardInit(void)
 
   /* Initialise USB */
   #ifdef CFG_USB
-    systickDelay(500);
+    delay(500);
     usb_init();
   #endif
 

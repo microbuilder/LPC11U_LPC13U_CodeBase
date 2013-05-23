@@ -42,7 +42,7 @@
 
 #ifdef PN532_BUS_UART
 
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/gpio/gpio.h"
 #include "core/uart/uart.h"
 
@@ -112,11 +112,11 @@ error_t pn532_bus_HWInit(void)
   PN532_DEBUG("Resetting the PN532...\r\n");
   #endif
   LPC_GPIO->CLR[CFG_PN532_RSTPD_PORT] = (1 << CFG_PN532_RSTPD_PIN);
-  systickDelay(400);
+  delay(400);
   LPC_GPIO->SET[CFG_PN532_RSTPD_PORT] = (1 << CFG_PN532_RSTPD_PIN);
 
   // Wait for the PN532 to finish booting
-  systickDelay(100);
+  delay(100);
 
   // ToDo: Find a way to check of device is connected!
   return ERROR_NONE;
@@ -172,7 +172,7 @@ pn532_error_t pn532_bus_SendCommand(const byte_t * pbtData, const size_t szData)
   // Wait for ACK
   byte_t abtRxBuf[6];
   uart_pcb_t *uart = uartGetPCB();
-  systickDelay(10);   // FIXME: How long should we wait for ACK?
+  delay(10);   // FIXME: How long should we wait for ACK?
   if (uart->rxfifo.len < 6)
   {
     // Unable to read ACK
@@ -318,7 +318,7 @@ pn532_error_t pn532_bus_Wakeup(void)
   PN532_DEBUG("Sending Wakeup Sequence%s", CFG_PRINTF_NEWLINE);
   #endif
   uartSend(abtWakeUp,sizeof(abtWakeUp));
-  systickDelay(100);
+  delay(100);
 
   byte_t response[32];
   pn532_bus_ReadResponse(response, &szLen);

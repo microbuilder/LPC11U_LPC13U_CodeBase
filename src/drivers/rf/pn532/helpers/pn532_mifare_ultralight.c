@@ -119,7 +119,7 @@
 #include "../pn532_bus.h"
 #include "pn532_mifare_ultralight.h"
 
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 /**************************************************************************/
 /*!
@@ -174,7 +174,7 @@ pn532_error_t pn532_mifareultralight_WaitForPassiveTarget (byte_t * pbtCUID, siz
   /* Wait until we get a valid response or a timeout                      */
   do
   {
-    systickDelay(25);
+    delay(25);
     error = pn532Read(abtResponse, &szLen);
   } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
   if (error)
@@ -283,7 +283,7 @@ pn532_error_t pn532_mifareultralight_ReadPage (uint8_t page, byte_t * pbtBuffer)
   memset(abtResponse, 0, PN532_RESPONSELEN_INDATAEXCHANGE);
   do
   {
-    systickDelay(50);
+    delay(50);
     error = pn532Read(abtResponse, &szLen);
   }
   while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);

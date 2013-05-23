@@ -43,7 +43,7 @@
 
 #ifdef PN532_BUS_I2C
 
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/gpio/gpio.h"
 #include "core/i2c/i2c.h"
 
@@ -127,7 +127,7 @@ bool pn532_bus_i2c_WaitForReady(uint32_t timeout)
     while (busy)
     {
       busy = GPIOGetPinValue(CFG_PN532_I2C_IRQPORT, CFG_PN532_I2C_IRQPIN);
-      systickDelay(1);
+      delay(1);
       busyTimeout++;
       if (busyTimeout == PN532_I2C_READYTIMEOUT)
       {
@@ -141,7 +141,7 @@ bool pn532_bus_i2c_WaitForReady(uint32_t timeout)
     while (busy)
     {
       busy = GPIOGetPinValue(CFG_PN532_I2C_IRQPORT, CFG_PN532_I2C_IRQPIN);
-      systickDelay(1);
+      delay(1);
     }
   }
 
@@ -220,11 +220,11 @@ error_t pn532_bus_HWInit(void)
   PN532_DEBUG("Resetting the PN532%s", CFG_PRINTF_NEWLINE);
   #endif
   LPC_GPIO->CLR[CFG_PN532_RSTPD_PORT] = (1 << CFG_PN532_RSTPD_PIN);
-  systickDelay(400);
+  delay(400);
   LPC_GPIO->SET[CFG_PN532_RSTPD_PORT] = (1 << CFG_PN532_RSTPD_PIN);
 
   // Wait for the PN532 to finish booting
-  systickDelay(100);
+  delay(100);
 
   // Ping the I2C device first to see if it exists!
   if (i2cCheckAddress(PN532_I2C_ADDRESS) == false)
@@ -504,7 +504,7 @@ pn532_error_t pn532_bus_Wakeup(void)
     return error;
   }
 
-  systickDelay(100);
+  delay(100);
 
   // Wait for the IRQ/Ready flag to indicate a response is ready
   if (!(pn532_bus_i2c_WaitForReady(PN532_I2C_TIMEOUT)))
@@ -520,7 +520,7 @@ pn532_error_t pn532_bus_Wakeup(void)
   I2CReadLength = 7;  // ACK + Ready bit = 7
   I2CMasterBuffer[0] = PN532_I2C_ADDRESS | PN532_I2C_READBIT;
   i2cEngine();
-  systickDelay(1);
+  delay(1);
 
   // Wait for the IRQ/Ready flag to indicate a response is ready
   if (!(pn532_bus_i2c_WaitForReady(PN532_I2C_TIMEOUT)))

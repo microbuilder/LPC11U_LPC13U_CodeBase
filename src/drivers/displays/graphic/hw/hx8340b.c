@@ -41,7 +41,7 @@
 */
 /**************************************************************************/
 #include "hx8340b.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/gpio/gpio.h"
 
 static lcdOrientation_t lcdOrientation = LCD_ORIENTATION_PORTRAIT;
@@ -134,7 +134,7 @@ void hx8340bInitDisplay(void)
   hx8340bWriteData(0x40);
 
   hx8340bWriteCmd(HX8340B_N_SPLOUT);
-  systickDelay(100);
+  delay(100);
 
   hx8340bWriteCmd(0xCA);                  // Undocumented register?
   hx8340bWriteData(0x70);
@@ -152,7 +152,7 @@ void hx8340bInitDisplay(void)
   hx8340bWriteData(0x10);
   hx8340bWriteData(0x00);
   hx8340bWriteData(0x06);
-  systickDelay(20);
+  delay(20);
 
   hx8340bWriteCmd(HX8340B_N_SETGAMMAP);
   hx8340bWriteData(0x60);
@@ -174,7 +174,7 @@ void hx8340bInitDisplay(void)
   hx8340bWriteData(0x07);
   hx8340bWriteData(0x05);
   hx8340bWriteData(0x33);
-  systickDelay(10);
+  delay(10);
 
   hx8340bWriteCmd(HX8340B_N_SETPWCTR5);
   hx8340bWriteData(0x35);
@@ -185,13 +185,13 @@ void hx8340bInitDisplay(void)
   hx8340bWriteData(0x33);
   hx8340bWriteData(0x25);
   hx8340bWriteData(0x4c);
-  systickDelay(10);
+  delay(10);
 
   hx8340bWriteCmd(HX8340B_N_COLMOD);      // Color Mode
   hx8340bWriteData(0x05);                 // 0x05 = 16bpp, 0x06 = 18bpp
 
   hx8340bWriteCmd(HX8340B_N_DISPON);
-  systickDelay(10);
+  delay(10);
 
   hx8340bWriteCmd(HX8340B_N_CASET);
   hx8340bWriteData(0x00);
@@ -272,11 +272,11 @@ void lcdInit(void)
   // Reset display
   #ifdef HX8340B_USERESET
     SET_RES;
-    systickDelay(100);
+    delay(100);
     CLR_RES;
-    systickDelay(50);
+    delay(50);
     SET_RES;
-    systickDelay(50);
+    delay(50);
   #endif
 
   // Run LCD init sequence

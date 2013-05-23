@@ -42,7 +42,7 @@
 #include "../pn532_bus.h"
 #include "pn532_config.h"
 
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 /**************************************************************************/
 /*!
@@ -77,7 +77,7 @@ pn532_error_t pn532_config_SetPassiveActivationRetries(uint8_t maxRetries)
   /* Wait until we get a valid response or a timeout                      */
   do
   {
-    systickDelay(25);
+    delay(25);
     error = pn532Read(abtResponse, &szLen);
   } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
   if (error)

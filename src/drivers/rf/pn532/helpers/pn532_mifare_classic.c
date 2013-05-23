@@ -187,7 +187,7 @@
 #include "pn532_mifare.h"
 #include "pn532_mifare_classic.h"
 
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 /**************************************************************************/
 /*!
@@ -203,7 +203,7 @@ static pn532_error_t pn532_mifareclassic_reset()
   pn532_error_t error;
 
   pn532_mifareclassic_RFfield(FALSE);
-  systickDelay(50);
+  delay(50);
   pn532_mifareclassic_RFfield(TRUE);
   error = pn532_mifareclassic_WaitForTypeATags(&sak, &atqa, &uid[0], &leng);
 
@@ -295,7 +295,7 @@ pn532_error_t pn532_mifareclassic_WaitForPassiveTarget (byte_t * pbtCUID, size_t
   /* Wait until we get a valid response or a timeout                      */
   do
   {
-    systickDelay(25);
+    delay(25);
     error = pn532Read(abtResponse, &szLen);
   } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
   if (error)
@@ -411,7 +411,7 @@ pn532_error_t pn532_mifareclassic_WaitForTypeATags (byte_t * pSak, uint16_t * pA
   /* Wait until we get a valid response or a timeout                      */
   do
   {
-    systickDelay(25);
+    delay(25);
     error = pn532Read(abtResponse, &szLen);
   } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
   if (error)
@@ -496,7 +496,7 @@ pn532_error_t pn532_mifareclassic_AuthenticateBlock (byte_t * pbtCUID, size_t sz
   memset(abtResponse, 0, PN532_RESPONSELEN_INDATAEXCHANGE);
   do
   {
-    systickDelay(25);
+    delay(25);
     error = pn532Read(abtResponse, &szLen);
   }
   while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
@@ -577,7 +577,7 @@ pn532_error_t pn532_mifareclassic_ReadDataBlock (uint8_t uiBlockNumber, byte_t *
   memset(abtResponse, 0, PN532_RESPONSELEN_INDATAEXCHANGE);
   do
   {
-    systickDelay(50);
+    delay(50);
     error = pn532Read(abtResponse, &szLen);
   }
   while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
@@ -661,7 +661,7 @@ pn532_error_t pn532_mifareclassic_WriteDataBlock (uint8_t uiBlockNumber, byte_t 
   memset(abtResponse, 0, PN532_RESPONSELEN_INDATAEXCHANGE);
   do
   {
-    systickDelay(50);
+    delay(50);
     error = pn532Read(abtResponse, &szResponseLen);
   }
   while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);

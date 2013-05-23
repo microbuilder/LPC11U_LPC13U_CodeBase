@@ -38,7 +38,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "lsm303mag.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
@@ -267,7 +267,7 @@ error_t lsm303magGetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _lsm303magSensorID;
   event->type      = SENSOR_TYPE_MAGNETIC_FIELD;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Convert units to micro-Tesla (1 Gauss = 1 micro-Tesla) */
   ASSERT_STATUS(lsm303magRead());

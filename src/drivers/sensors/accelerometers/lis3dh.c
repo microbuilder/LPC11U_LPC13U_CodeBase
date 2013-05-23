@@ -38,7 +38,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "lis3dh.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 #define LIS3DH_SENSITIVITY_2G  (0.001F)
@@ -247,7 +247,7 @@ error_t lis3dhGetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _lis3dhSensorID;
   event->type      = SENSOR_TYPE_ACCELEROMETER;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Retrieve values from the sensor */
   ASSERT_STATUS(lis3dhPoll(&data));

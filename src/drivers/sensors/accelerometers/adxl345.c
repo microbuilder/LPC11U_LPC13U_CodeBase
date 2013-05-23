@@ -43,7 +43,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "adxl345.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 #define ADXL345_MG2G_MULTIPLIER (0.004)  // 4mg per lsb
@@ -258,7 +258,7 @@ error_t adxl345GetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _adxl345SensorID;
   event->type      = SENSOR_TYPE_ACCELEROMETER;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Retrieve values from the sensor */
   ASSERT_STATUS(adxl345GetXYZ(&x, &y, &z));

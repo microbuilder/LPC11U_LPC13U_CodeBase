@@ -44,7 +44,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "mpl115a2.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
@@ -74,7 +74,7 @@ error_t mpl115a2ReadPressureTemp(uint16_t *pressure, uint16_t *temp)
   i2cEngine();
 
   /* Wait a bit for the conversion to complete (3ms max) */
-  systickDelay(4);
+  delay(4);
 
   I2CWriteLength = 2;
   I2CReadLength = 4;
@@ -210,7 +210,7 @@ error_t mpl115a2GetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _mpl115a2SensorID;
   event->type      = SENSOR_TYPE_PRESSURE;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Retrieve values from the sensor */
   ASSERT_STATUS(mpl115a2GetPressure(&pressure_kPa));

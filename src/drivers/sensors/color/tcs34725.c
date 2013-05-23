@@ -12,7 +12,7 @@
 
 #include "projectconfig.h"
 #include "tcs34725.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 extern volatile uint8_t  I2CMasterBuffer[I2C_BUFSIZE];
 extern volatile uint8_t  I2CSlaveBuffer[I2C_BUFSIZE];
@@ -102,7 +102,7 @@ error_t tcs34725Read16(uint8_t reg, uint16_t *value)
 error_t tcs34725Enable(void)
 {
   ASSERT_STATUS(tcs34725Write8(TCS34725_ENABLE, TCS34725_ENABLE_PON));
-  systickDelay(3);
+  delay(3);
   ASSERT_STATUS(tcs34725Write8(TCS34725_ENABLE, TCS34725_ENABLE_PON | TCS34725_ENABLE_AEN));
 
   return ERROR_NONE;
@@ -302,7 +302,7 @@ error_t tcs34725GetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _tcs34725SensorID;
   event->type      = SENSOR_TYPE_COLOR;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Get the raw RGB values */
   ASSERT_STATUS(tcs34725GetRawData(&r, &g, &b, &c));

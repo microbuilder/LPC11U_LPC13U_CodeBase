@@ -43,7 +43,7 @@
 
 #include "boards/board.h"
 #include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/eeprom/eeprom.h"
 #include "core/pmu/pmu.h"
 
@@ -111,7 +111,7 @@ DWORD get_fattime ()
 void boardInit(void)
 {
   SystemCoreClockUpdate();
-  systickInit(CFG_SYSTICK_DELAY_IN_MS);
+  delayInit();
   GPIOInit();
 
   #ifdef CFG_PRINTF_UART
@@ -134,7 +134,7 @@ void boardInit(void)
 
   /* Initialise USB */
   #ifdef CFG_USB
-    systickDelay(500);
+    delay(500);
     usb_init();
   #endif
 
@@ -164,7 +164,7 @@ void boardInit(void)
     @brief Primary entry point for this project.
 */
 /**************************************************************************/
-#if !defined(_TEST_)
+#ifndef _TEST_
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
@@ -175,7 +175,7 @@ int main(void)
 
   while (1)
   {
-    currentSecond = systickGetSecondsActive();
+    currentSecond = delayGetSecondsActive();
     if (currentSecond != lastSecond)
     {
       lastSecond = currentSecond;

@@ -194,7 +194,7 @@ error\_t l3gd20GetSensorEvent(sensors\_event\_t *event)
   event->version   = sizeof(sensors\_event\_t);
   event->sensor_id = \_l3gd20SensorID;
   event->type      = SENSOR\_TYPE\_GYROSCOPE;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Retrieve values from the sensor */
   ASSERT\_STATUS(l3gd20Poll(&data));

@@ -45,9 +45,9 @@
 #include <string.h>
 #include "ht16k33.h"
 #include "core/i2c/i2c.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
-#define DELAY(mS)     do { systickDelay( mS / CFG_SYSTICK_DELAY_IN_MS ); } while(0);
+#define DELAY(mS)     do { delay(mS); } while(0);
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
 extern volatile uint8_t   I2CSlaveBuffer[I2C_BUFSIZE];

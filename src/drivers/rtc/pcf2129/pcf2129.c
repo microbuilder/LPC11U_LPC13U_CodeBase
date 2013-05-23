@@ -49,7 +49,6 @@
 #include <string.h>
 #include "pcf2129.h"
 #include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
 extern volatile uint8_t   I2CSlaveBuffer[I2C_BUFSIZE];

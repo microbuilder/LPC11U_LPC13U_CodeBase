@@ -38,7 +38,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "bmp085.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 #include <math.h>
 
@@ -170,7 +170,7 @@ error_t bmp085ReadRawTemperature(int32_t *temperature)
   #else
     uint16_t t;
     ASSERT_STATUS(bmp085WriteCommand(BMP085_REGISTER_CONTROL, BMP085_REGISTER_READTEMPCMD));
-    systickDelay(5);
+    delay(5);
     ASSERT_STATUS(bmp085Read16(BMP085_REGISTER_TEMPDATA, &t));
     *temperature = t;
   #endif
@@ -196,17 +196,17 @@ error_t bmp085ReadRawPressure(int32_t *pressure)
     switch(_bmp085Mode)
     {
       case BMP085_MODE_ULTRALOWPOWER:
-        systickDelay(5);
+        delay(5);
         break;
       case BMP085_MODE_STANDARD:
-        systickDelay(8);
+        delay(8);
         break;
       case BMP085_MODE_HIGHRES:
-        systickDelay(14);
+        delay(14);
         break;
       case BMP085_MODE_ULTRAHIGHRES:
       default:
-        systickDelay(26);
+        delay(26);
         break;
     }
 
@@ -376,7 +376,7 @@ error_t bmp085GetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _bmp085SensorID;
   event->type      = SENSOR_TYPE_PRESSURE;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
   ASSERT_STATUS(bmp085GetPressure(&pressure_kPa));
   event->pressure = pressure_kPa / 100.0F; /* kPa to hPa */
 

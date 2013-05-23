@@ -43,7 +43,7 @@
 
 #include <string.h>
 #include "messages.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "drivers/rf/chibi/chb.h"
 #include "drivers/rf/chibi/chb_drvr.h"
 
@@ -118,7 +118,7 @@ error_t msgSend(uint16_t targetAddr, msg_MessageType_t msgType, uint8_t *payload
 
   /* Timestamp (U32) */
   /* Need to use memcpy here since the M0 can't do unaligned accesses! */
-  timestamp = systickGetSecondsActive();
+  timestamp = delayGetSecondsActive();
   memcpy(&_msg[3], &timestamp, 4);
 
   /* Reserved (U8) */

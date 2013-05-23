@@ -42,7 +42,6 @@
 #ifdef CFG_PN532
 
 #include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
 #include "cli/cli.h"
 #include "cli/commands.h"
 

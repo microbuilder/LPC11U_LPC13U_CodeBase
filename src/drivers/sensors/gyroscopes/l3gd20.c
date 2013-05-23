@@ -38,7 +38,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "l3gd20.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 #define L3GD20_SENSITIVITY_250DPS  (0.00875F)   // Roughly 22/256 for fixed point match
@@ -313,7 +313,7 @@ error_t l3gd20GetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _l3gd20SensorID;
   event->type      = SENSOR_TYPE_GYROSCOPE;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Retrieve values from the sensor */
   ASSERT_STATUS(l3gd20Poll(&data));

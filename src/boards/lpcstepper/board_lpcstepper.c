@@ -43,7 +43,7 @@
 
 #include "boards/board.h"
 #include "core/gpio/gpio.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/eeprom/eeprom.h"
 #include "core/pmu/pmu.h"
 #include "drivers/motor/stepper/stepper.h"
@@ -93,7 +93,7 @@ DWORD get_fattime ()
 void boardInit(void)
 {
   SystemCoreClockUpdate();
-  systickInit(CFG_SYSTICK_DELAY_IN_MS);
+  delayInit();
   GPIOInit();
 
   #ifdef CFG_PRINTF_UART
@@ -110,7 +110,7 @@ void boardInit(void)
 
   /* Initialise USB */
   #ifdef CFG_USB
-    systickDelay(500);
+    delay(500);
     usb_init();
   #endif
 
@@ -141,13 +141,13 @@ int main(void)
   {
     stepperStep(400);       // Move forward 400 steps
     stepperStep(-200);      // Move backward 200 steps
-    systickDelay(1000);     // Wait one second
+    delay(1000);     // Wait one second
 
     // Move 'home' after 10 loops (current position = 2000)
     if (stepperGetPosition() == 2000)
     {
       stepperMoveHome();    // Move back to the starting position
-      systickDelay(1000);   // Wait one second
+      delay(1000);   // Wait one second
     }
 
     #ifdef CFG_INTERFACE

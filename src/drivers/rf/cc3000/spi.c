@@ -41,7 +41,7 @@
 #include "spi.h"
 #include "core/gpio/gpio.h"
 #include "core/dwt/dwt.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 #if CFG_CC3000_SPI_PORT == 1
   #include "core/ssp1/ssp1.h"
@@ -168,7 +168,7 @@ int init_spi(void)
   /* Set VBAT EN pin to output */
   LPC_GPIO->DIR[CFG_CC3000_EN_PORT] |= (1 << CFG_CC3000_EN_PIN);
   LPC_GPIO->SET[CFG_CC3000_EN_PORT]  = (1 << CFG_CC3000_EN_PIN);
-  systickDelay(100);
+  delay(100);
 
   /* Set CS pin to output */
   LPC_GPIO->DIR[CFG_CC3000_CS_PORT] |= (1 << CFG_CC3000_CS_PIN);

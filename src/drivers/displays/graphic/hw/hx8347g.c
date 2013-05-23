@@ -40,7 +40,7 @@
 */
 /**************************************************************************/
 #include "hx8347g.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "core/gpio/gpio.h"
 // #include "drivers/displays/graphic/touchscreen.h"
 
@@ -274,9 +274,9 @@ void hx8347gInitDisplay(void)
 
   // Reset display
   CLR_RESET;
-  systickDelay(10);
+  delay(10);
   SET_RESET;
-  systickDelay(500);
+  delay(500);
 
   // Send the init sequence
   for (i = 0; i < sizeof(HX8347G_InitSequence) / 2; i++) 
@@ -333,13 +333,13 @@ void lcdInit(void)
   LPC_GPIO->DIR[HX8347G_RES_PORT] |=  (1 << HX8347G_RES_PIN);
   // Low then high to reset
   CLR_RESET;
-  systickDelay(50);
+  delay(50);
   SET_RESET;
 
   // Initialize the display
   hx8347gInitDisplay();
 
-  systickDelay(50);
+  delay(50);
 
   // Set lcd to default orientation
   // lcdSetOrientation(lcdOrientation);

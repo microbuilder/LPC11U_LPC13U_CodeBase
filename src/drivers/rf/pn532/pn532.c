@@ -40,7 +40,6 @@
 
 #include "pn532.h"
 #include "pn532_bus.h"
-#include "core/systick/systick.h"
 #include "core/uart/uart.h"
 
 static pn532_pcb_t _pn532_pcb;

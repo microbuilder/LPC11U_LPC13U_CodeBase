@@ -71,7 +71,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "tsl2561.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
@@ -182,13 +182,13 @@ error_t tsl2561GetData (uint16_t *broadband, uint16_t *ir)
   switch (_tsl2561IntegrationTime)
   {
     case TSL2561_INTEGRATIONTIME_13MS:
-      systickDelay(14);
+      delay(14);
       break;
     case TSL2561_INTEGRATIONTIME_101MS:
-      systickDelay(102);
+      delay(102);
       break;
     default:
-      systickDelay(403);
+      delay(403);
       break;
   }
 
@@ -542,7 +542,7 @@ error_t tsl2561GetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _tsl2561SensorID;
   event->type      = SENSOR_TYPE_LIGHT;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Calculate the actual lux value */
   ASSERT_STATUS(tsl2561GetLuminosity(&broadband, &ir));

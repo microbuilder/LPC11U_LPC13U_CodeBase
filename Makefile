@@ -76,6 +76,9 @@ OBJS  += $(OBJ_PATH)/cmd_sysinfo.o
 VPATH += src/core/adc
 OBJS  += $(OBJ_PATH)/adc.o
 
+VPATH += src/core/delay
+OBJS  += $(OBJ_PATH)/delay.o
+
 VPATH += src/core/eeprom
 OBJS  += $(OBJ_PATH)/eeprom.o
 
@@ -104,8 +107,8 @@ OBJS  += $(OBJ_PATH)/ssp0.o
 VPATH += src/core/ssp1
 OBJS  += $(OBJ_PATH)/ssp1.o
 
-VPATH += src/core/systick
-OBJS  += $(OBJ_PATH)/systick.o
+VPATH += src/core/timer16
+OBJS  += $(OBJ_PATH)/timer16.o
 
 VPATH += src/core/timer32
 OBJS  += $(OBJ_PATH)/timer32.o

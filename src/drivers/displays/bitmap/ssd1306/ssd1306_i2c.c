@@ -44,10 +44,10 @@
 #include <string.h>
 #include "ssd1306_i2c.h"
 #include "core/i2c/i2c.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include "drivers/displays/smallfonts.h"
 
-#define DELAY(mS)     do { systickDelay( mS / CFG_SYSTICK_DELAY_IN_MS ); } while(0);
+#define DELAY(mS)     do { delay(mS); } while(0);
 
 uint8_t _ssd1306buffer[SSD1306_LCDWIDTH * SSD1306_LCDHEIGHT / 8];
 
@@ -371,7 +371,7 @@ void ssd1306DrawString(uint16_t x, uint16_t y, char* text, struct FONT_DEF font)
       // Refresh the screen to see the results
       ssd1306Refresh();
       // Wait a bit before writing the next line
-      systickDelay(1000);
+      delay(1000);
     }
 
     @endcode

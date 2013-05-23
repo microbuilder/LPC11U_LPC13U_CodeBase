@@ -16,7 +16,7 @@
 #elif CFG_SDCARD_SPIPORT == 1
   #include "core/ssp1/ssp1.h"
 #endif
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 /* Definitions for MMC/SDC command */
 #define CMD0        (0x40+0)         /* GO_IDLE_STATE */
@@ -41,7 +41,7 @@
 #define CS_LOW()    do { LPC_GPIO->CLR[CFG_SDCARD_SSELPORT] = (1 << CFG_SDCARD_SSELPIN); } while(0)
 #define CS_HIGH()   do { LPC_GPIO->SET[CFG_SDCARD_SSELPORT] = (1 << CFG_SDCARD_SSELPIN); } while(0)
 
-#define FDELAY(ms) systickDelay(ms)     // Assumes delay = 1ms, ugly
+#define FDELAY(ms) delay(ms)     // Assumes delay = 1ms, ugly
 
 /*--------------------------------------------------------------------------
 
@@ -329,7 +329,7 @@ DSTATUS disk_initialize (
         LPC_GPIO->DIR[CFG_SDCARD_CDPORT]   &= ~(1 << CFG_SDCARD_CDPIN);
 
         // Wait 20ms for card detect to stabilise
-        systickDelay(20);
+        delay(20);
 
         if (drv) return STA_NOINIT;                        /* Supports only single drive */
         if (Stat & STA_NODISK) return Stat;        /* No card in the socket */
@@ -616,7 +616,7 @@ DRESULT disk_ioctl (
 /* Device Timer Interrupt Procedure  (Platform dependent)                */
 /*-----------------------------------------------------------------------*/
 /* This function must be called in period of 10ms                        */
-/* Called from SysTick_Handler in systick.c                              */
+/* Called in delay.c                                                     */
 
 void disk_timerproc (void)
 {

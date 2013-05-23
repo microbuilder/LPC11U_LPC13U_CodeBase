@@ -37,7 +37,6 @@
 
 #include "unity_fixture.h"
 #include "projectconfig.h"
-#include "core/systick/systick.h"
 #include "boards/board.h"
 
 #ifdef CFG_USB

@@ -38,7 +38,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "lsm303accel.h"
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 #include <string.h>
 
 extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
@@ -207,7 +207,7 @@ error_t lsm303accelGetSensorEvent(sensors_event_t *event)
   event->version   = sizeof(sensors_event_t);
   event->sensor_id = _lsm303accelSensorID;
   event->type      = SENSOR_TYPE_ACCELEROMETER;
-  event->timestamp = systickGetTicks();
+  event->timestamp = delayGetTicks();
 
   /* Convert units to m/s^2 */
   ASSERT_STATUS(lsm303accelRead());

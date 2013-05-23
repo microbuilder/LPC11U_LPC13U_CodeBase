@@ -42,8 +42,6 @@
 #include "chb_spi.h"
 #include "chb_eeprom.h"
 
-#include "core/systick/systick.h"
-
 // #if defined CFG_MCU_LPC1347FBD48
 //   #include "core/dwt/dwt.h"           // Cortex M3 only!
 // #endif

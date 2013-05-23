@@ -42,7 +42,7 @@
 #include "../pn532_bus.h"
 #include "pn532_gpio.h"
 
-#include "core/systick/systick.h"
+#include "core/delay/delay.h"
 
 /**************************************************************************/
 /*!
@@ -84,7 +84,7 @@ pn532_error_t pn532_gpio_WriteGPIO (uint8_t pinState)
   /* Wait until we get a valid response or a timeout                      */
   do
   {
-    systickDelay(25);
+    delay(25);
     error = pn532Read(_pn532_gpio_abtResponse, &szLen);
   } while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
   if (error)
@@ -124,7 +124,7 @@ pn532_error_t pn532_gpio_ReadGPIO (uint8_t * pinState)
   /* Wait for a response */
   do
   {
-    systickDelay(25);
+    delay(25);
     error = pn532Read(_pn532_gpio_abtResponse, &szLen);
   }
   while (error == PN532_ERROR_RESPONSEBUFFEREMPTY);
