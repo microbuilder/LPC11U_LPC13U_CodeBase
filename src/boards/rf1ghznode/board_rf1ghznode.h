@@ -379,7 +379,8 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-//    #define CFG_INTERFACE
+		/* This isnot safe, disable make commands.c unable to be linked */
+    #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE        (256)
     #define CFG_INTERFACE_PROMPT            "LPC1347 >> "
     #define CFG_INTERFACE_SILENTMODE        (0)
@@ -680,6 +681,12 @@ extern "C" {
     #endif
 /*=========================================================================*/
 
+/*=========================================================================
+    ENABLE CMSIS-RTOS TEST.
+
+    -----------------------------------------------------------------------*/
+		#define CMSIS_RTOS_ENABLE
+/*=========================================================================*/	
 void     boardSetVREG3V3 ( void );
 void     boardSetVREG2V2 ( void );
 uint32_t boardGetVIN ( void );

@@ -64,7 +64,7 @@
 //   <i> Defines stack size for main thread.
 //   <i> Default: 200
 #ifndef OS_MAINSTKSIZE
- #define OS_MAINSTKSIZE 50
+ #define OS_MAINSTKSIZE 100
 #endif
 
 //   <o>Number of threads with user-provided stack size <0-250>
@@ -276,5 +276,4 @@ void os_error (uint32_t err_code) {
 /*----------------------------------------------------------------------------
  * end of file
  *---------------------------------------------------------------------------*/
-
 #endif
