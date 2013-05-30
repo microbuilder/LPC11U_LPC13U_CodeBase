@@ -5,9 +5,9 @@
 PROJECT=firmware
 
 # See projectconfig.h for a list of valid board options!
-BOARD=CFG_BRD_LPCXPRESSO_LPC1347
+BOARD=CFG_BRD_RF1GHZNODE
 
-TARGET = lpc13u
+TARGET = lpc11u
 ifeq (lpc11u,$(TARGET))
   CORE = cortex-m0
   LDSCRIPT = cmsis/lpc11U37.ld
@@ -50,6 +50,10 @@ OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
 
 VPATH += src/boards/rf1ghzusb
 OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
+
+VPATH += src/boards/rf1ghznode
+OBJS  += $(OBJ_PATH)/board_rf1ghznode.o
+OBJS  += $(OBJ_PATH)/RTX_Conf_CM.o
 
 VPATH += src/cli
 OBJS  += $(OBJ_PATH)/cli.o 
@@ -338,6 +342,7 @@ LDFLAGS += -mthumb
 LDFLAGS += -O$(OPTIMIZATION) 
 LDFLAGS += -Wl,--gc-sections 
 LDFLAGS += -T $(LDSCRIPT)
+LDFLAGS += -Xlinker -Map=bin/firmware.map
 # CMSIS Libraries
 LDFLAGS += -L./cmsis/libs
 ifeq (lpc11u,$(TARGET))

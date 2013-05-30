@@ -123,7 +123,6 @@ void USBWakeup_IRQHandler (void) ALIAS(IntDefaultHandler);
 // main() is the entry point for Newlib based applications
 //
 //*****************************************************************************
-#include "projectconfig.h"
 #include "cmsis_os.h"
 #if defined (__REDLIB__)
 extern void __main(void);
@@ -522,7 +521,6 @@ void USBWakeup_IRQHandler(void) ALIAS(IntDefaultHandler);
 // main() is the entry point for Newlib based applications
 //
 //*****************************************************************************
-#include "projectconfig.h"
 #include "cmsis_os.h"
 #if defined (__REDLIB__)
 extern void __main(void);

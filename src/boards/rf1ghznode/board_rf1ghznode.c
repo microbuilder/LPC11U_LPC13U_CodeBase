@@ -411,8 +411,10 @@ int main(void)
 #if defined CMSIS_RTOS_ENABLE
  tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
  tid_mainthread = osThreadGetId();
- osDelay(osWaitForever);
- for (;;);
+ for (;;){
+	 osDelay(1000);
+	 boardLED((currentSecond++) & 1);
+ }
 #endif
 	
   while (1)
