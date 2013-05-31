@@ -100,7 +100,7 @@
 /* VIN resistor divider multiplier is 3.12766 */
 #define RF1GHZNODE_VINADC_MULTIPLIER_FIXED10K (31277)
 
-#if defined CMSIS_RTOS_ENABLE
+#if defined CFG_CMSIS_RTOS
 /* Thread IDs */
 osThreadId tid_mainthread;               /* assigned ID for main thread            */
 osThreadId tid_blinkthread;               /* assigned ID for blink thread           */
@@ -408,10 +408,11 @@ int main(void)
 
   boardInit();
 
-#if defined CMSIS_RTOS_ENABLE
+#if defined CFG_CMSIS_RTOS
  tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
  tid_mainthread = osThreadGetId();
- for (;;){
+ for (;;)
+ {
 	 osDelay(1000);
 	 boardLED((currentSecond++) & 1);
  }

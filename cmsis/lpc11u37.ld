@@ -67,16 +67,16 @@ SECTIONS
   {
     FILL(0xff)
     *(USB_RAM)
-	*(.bss*)
+    *(.bss*)
   } > isramUsb
 
   /* MAIN BSS SECTION */
   .bss 0x10000100: ALIGN(4)
   {
     __bss_start = .;
-	rt_*.o(COMMON)
+    rt_*.o(COMMON)
     *(COMMON)
-	bin/obj/usbd.o(COMMON)
+    bin/obj/usbd.o(COMMON)
     *(.heap)
     __fixed_heap_end = .;
     *(.stack)
