@@ -40,20 +40,20 @@
 extern "C" {
 #endif
 
-#define CFG_USE_REFERENCE		/**< Configuration for using ringbuffer_ref() function	*/
+#define CFG_USE_REFERENCE     /**< Configuration for using ringbuffer_ref() function                  */
 
 #include "projectconfig.h"
 #include "drivers/filters/ringbuffer.h"
 
 typedef struct sma_i_s
 {
-  uint32_t 			k;      	/**< Total number of samples needed to full fill the window						*/
-  uint16_t 			size;   	/**< Window size (number of samples to average)   										*/
-  bool					isPowerOf2;	/**< True if the filter uses ^2 window size													*/
-  int16_t				power_num;	/**< The exponential number in the case isPowerOf2 true							*/
-  int32_t  			avg;    	/**< Current average                              										*/
-  ringbuffer_t*	rBuffer;	/**< Pointer to the circular buffer (size=window) 										*/
-  int64_t				total;		/**< Total value of current window (use int64 for overflow prevention)*/
+  uint32_t      k;            /**< Total number of samples that have been run through the filter      */
+  uint16_t      size;         /**< Window size (number of samples to average)                         */
+  bool          isPowerOf2;   /**< True if the filter uses ^2 window size                             */
+  int16_t       power_num;    /**< The exponential number in the case isPowerOf2 true                 */
+  int32_t       avg;          /**< Current average                                                    */
+  ringbuffer_t* rBuffer;      /**< Pointer to the circular buffer (size=window)                       */
+  int64_t       total;        /**< Total value of current window (use int64 for overflow prevention)  */
 } sma_i_t;
 
 error_t sma_i_init ( sma_i_t *sma );

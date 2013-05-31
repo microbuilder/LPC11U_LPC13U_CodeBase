@@ -51,12 +51,12 @@ typedef struct _ringbuffer_t
   volatile uint16_t wr_idx          ; ///< write pointer
 } ringbuffer_t;
 
-#define RINGBUFFER_DEF(name, ff_depth, type)\
-  type name##_buffer[ff_depth];\
-  ringbuffer_t name = {\
-      .buffer       = name##_buffer,\
-      .depth        = ff_depth,\
-      .item_size   	= sizeof(type),\
+#define RINGBUFFER_DEF(name, ff_depth, type) \
+  type name##_buffer[ff_depth];              \
+  ringbuffer_t name = {                      \
+      .buffer       = name##_buffer,         \
+      .depth        = ff_depth,              \
+      .item_size    = sizeof(type),          \
   }
 
 static inline void ring_memcpy(void *pDestination, const void *pSource, size_t num) INLINE_POST;
@@ -64,27 +64,27 @@ static inline void ring_memcpy(void *pDestination, const void *pSource, size_t n
 {
   unsigned char *pByteDestination;
   unsigned char *pByteSource;
-  unsigned int 	*pAlignedSource = (unsigned int *) pSource;
-  unsigned int 	*pAlignedDestination = (unsigned int *) pDestination;
+  unsigned int  *pAlignedSource = (unsigned int *) pSource;
+  unsigned int  *pAlignedDestination = (unsigned int *) pDestination;
 
   // If "rBuffer->item_size" is more than 4 bytes, and both dest. and source are aligned,
   // then copy dwords
   if ((((unsigned int) pAlignedDestination & 0x3) == 0)
-	  && (((unsigned int) pAlignedSource & 0x3) == 0)
-	  && (num >= 4)) {
-
-  	while (num) {
-
-  		*pAlignedDestination++ = *pAlignedSource++;
-  		num -= 4;
-  	}
+    && (((unsigned int) pAlignedSource & 0x3) == 0)
+    && (num >= 4))
+  {
+    while (num)
+    {
+      *pAlignedDestination++ = *pAlignedSource++;
+      num -= 4;
+    }
   }
 
   // Copy remaining bytes
   pByteDestination = (unsigned char *) pAlignedDestination;
   pByteSource = (unsigned char *) pAlignedSource;
-  while (num--) {
-
+  while (num--)
+  {
     *pByteDestination++ = *pByteSource++;
   }
 }
@@ -105,8 +105,8 @@ static inline void ringbuffer_write(ringbuffer_t *rBuffer, void const *pData) IN
 static inline void ringbuffer_write(ringbuffer_t *rBuffer, void const *pData)
 {
   ring_memcpy( rBuffer->buffer + (rBuffer->wr_idx * rBuffer->item_size),
-		  	   	 	 pData,
-		  	   	 	 rBuffer->item_size );
+               pData,
+               rBuffer->item_size );
 
   rBuffer->wr_idx = (rBuffer->wr_idx + 1) % rBuffer->depth;
 }
@@ -127,14 +127,14 @@ static inline void ringbuffer_peek(ringbuffer_t *rBuffer, uint16_t position, voi
 static inline void ringbuffer_peek(ringbuffer_t *rBuffer, uint16_t position, void * pBuffer)
 {
   ring_memcpy( pBuffer,
-		  	   	 	 rBuffer->buffer + position * rBuffer->item_size,
-		  	   	 	 rBuffer->item_size);
+               rBuffer->buffer + position * rBuffer->item_size,
+               rBuffer->item_size );
 }
 
 /**************************************************************************/
 /*!
      @brief Assign pointer "pBuffer" to the element at "position" of ring buffer
-     	 	instead of copying its value
+            instead of copying its value
 
      @param[in]  rBuffer
                  Pointer to the ring buffer to manipulate
