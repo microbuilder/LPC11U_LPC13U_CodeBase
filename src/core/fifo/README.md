@@ -28,14 +28,14 @@ We can also clear the fifo with the 'fifo\_clear' function:
 
 ## Using fifo.c as a Circular Buffer ##
 
-The following code will create a circular buffer named 'cbuffer' using fifo.c, configuring it to be 8 samples wide, and using floating point data (meaning 32 bytes of memory will be used, since a single float takes 4 bytes, multiplied by our window size of 8 samples).  Notice the 'true' parameter, which means that this fifo instance is overwrittable, which is what allows us to emulate a circular buffer:
+The following code will create a circular buffer named 'cbuffer' using fifo.c, configuring it to be 8 samples wide, and using floating point data (meaning 32 bytes of memory will be used, since a single float takes 4 bytes, multiplied by our buffer size of 8 samples).  Notice the 'true' parameter, which means that this fifo instance is overwrittable, which is what allows us to emulate a circular buffer:
 ```
-  // Create a circular buffer named 'ffMavg' 8 float values wide
+  // Create a circular buffer named 'cbuffer' 8 float values wide
   FIFO_DEF(cbuffer, 8, float, true, NULL);
 ```
 To do the same for uint16\_t data, we would use the following code, which would require 16 bytes of memory since uint16\_t uses two bytes compared to four for float:
 ```
-  // Create a circular buffer named 'ffMavg' 8 uint16_t values wide
+  // Create a circular buffer named 'cbuffer' 8 uint16_t values wide
   FIFO_DEF(cbuffer, 8, uint16_t, true, NULL);
 ```
 To add samples into the circular buffer, we simple call the 'add' function as follows (assuming we are using float values):
