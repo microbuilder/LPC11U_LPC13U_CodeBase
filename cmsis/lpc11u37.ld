@@ -49,34 +49,19 @@ SECTIONS
   } > irom
   __exidx_end = .;
 
-  __data_load_addr = .;
-
-  .data : ALIGN(4)
-  {
-    FILL(0xff)
-    __data_start = .;
-    *(.data*)
-    . = ALIGN(4) ;
-    __data_end = .;
-  } > isram AT>irom
-
-  /* MAIN DATA SECTION */
-
   /* This is used for USB RAM section */
   .usb_ram (NOLOAD): ALIGN(4)
   {
     FILL(0xff)
     *(USB_RAM)
-	*(.bss*)
   } > isramUsb
-
+ 
   /* MAIN BSS SECTION */
-  .bss 0x10000100: ALIGN(4)
+  .bss : ALIGN(4)
   {
     __bss_start = .;
-	rt_*.o(COMMON)
+	*(.bss*)
     *(COMMON)
-	bin/obj/usbd.o(COMMON)
     *(.heap)
     __fixed_heap_end = .;
     *(.stack)
@@ -85,6 +70,18 @@ SECTIONS
     PROVIDE(end = .);
   } > isram
 
+  __data_load_addr = LOADADDR (.data);
+  
+  .data : ALIGN(4)
+  {
+    FILL(0xff)
+    __data_start = .;
+    *(.data*)
+    . = ALIGN(4) ;
+    __data_end = .;
+  } > isram AT>irom
+  
+  
   /* Define a symbol for the start of heap */
   /* It won't be used if user defined FIXED_STACKHEAP_SIZE */
   PROVIDE(_pvHeapStart = .);

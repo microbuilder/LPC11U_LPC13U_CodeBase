@@ -100,10 +100,8 @@ void USBWakeup_IRQHandler (void) ALIAS(IntDefaultHandler);
 #include "cmsis_os.h"
 #if defined (__REDLIB__)
 extern void __main(void);
-#define MAIN_ENTRY_FUNC		__main
 #else
 extern int main(void);
-#define MAIN_ENTRY_FUNC		main
 #endif
 
 #if defined(CMSIS_RTOS_ENABLE)
