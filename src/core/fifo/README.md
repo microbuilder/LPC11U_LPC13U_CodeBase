@@ -40,8 +40,7 @@ To do the same for uint16\_t data, we would use the following code, which would 
 ```
 To add samples into the circular buffer, we simple call the 'add' function as follows (assuming we are using float values):
 ```
-  float x = 1.5F;
-  fifo_write(&cbuffer, &x);
+  fifo_write(&cbuffer, 1.5F);
 ```
 To read the samples back, we need to use the 'fifo\_peek' function (since fifo\_read is destructive and is used for a classic FIFO configuration):
 ```
