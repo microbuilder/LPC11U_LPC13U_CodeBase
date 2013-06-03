@@ -136,23 +136,35 @@ void checkForMessages(void)
     // make sure the length is nonzero
     if (rx_data.len)
     {
+      uint8_t msgType = *(uint8_t*)&rx_data.data[2];
+      sensors_event_t *event;
       int dbm = edToDBM(pcb->ed);
-      // printf("Message received from node %02X: %s, len=%d, dBm=%d.%s", rx_data.src_addr, rx_data.data, rx_data.len, dbm, CFG_PRINTF_NEWLINE);
-      printf("Message received from node 0x%04X (len=%d, dBm=%d):%s", rx_data.src_addr, rx_data.len, dbm, CFG_PRINTF_NEWLINE);
-      printf("  Message ID:   0x%04X%s", *(uint16_t*)&rx_data.data[0], CFG_PRINTF_NEWLINE);
-      printf("  Message Type: 0x%02X%s", *(uint8_t*)&rx_data.data[2], CFG_PRINTF_NEWLINE);
-      printf("  Timestamp:    %d%s", *(uint32_t*)&rx_data.data[3], CFG_PRINTF_NEWLINE);
-      printf("  Payload:      %d bytes%s", *(uint8_t*)&rx_data.data[8], CFG_PRINTF_NEWLINE);
-      if (rx_data.data[8])
+      /* Handle the message based on the msgType */
+      switch(msgType)
       {
-        uint8_t i;
-        printf("%s", CFG_PRINTF_NEWLINE);
-        for (i = 0; i < rx_data.data[8]; i++)
-        {
-          printf("0x%02X ", *(uint8_t*)&rx_data.data[9+i]);
-        }
+        case (MSG_MESSAGETYPE_SENSOREVENT):
+          event = (sensors_event_t*)&rx_data.data[9];
+          printf("%04X,%d,", rx_data.src_addr, event->timestamp);
+          printf("%f,%f,%f%s", event->acceleration.x, event->acceleration.y, event->acceleration.z, CFG_PRINTF_NEWLINE);
+          break;
+        default:
+          printf("Message received from node 0x%04X (len=%d, dBm=%d):%s", rx_data.src_addr, rx_data.len, dbm, CFG_PRINTF_NEWLINE);
+          printf("  Message ID:   0x%04X%s", *(uint16_t*)&rx_data.data[0], CFG_PRINTF_NEWLINE);
+          printf("  Message Type: 0x%02X%s", *(uint8_t*)&rx_data.data[2], CFG_PRINTF_NEWLINE);
+          printf("  Timestamp:    %d%s", *(uint32_t*)&rx_data.data[3], CFG_PRINTF_NEWLINE);
+          printf("  Payload:      %d bytes%s", *(uint8_t*)&rx_data.data[8], CFG_PRINTF_NEWLINE);
+          if (rx_data.data[8])
+          {
+            uint8_t i;
+            printf("%s", CFG_PRINTF_NEWLINE);
+            for (i = 0; i < rx_data.data[8]; i++)
+            {
+              printf("0x%02X ", *(uint8_t*)&rx_data.data[9+i]);
+            }
+          }
+          printf("%s", CFG_PRINTF_NEWLINE);
+          break;
       }
-      printf("%s", CFG_PRINTF_NEWLINE);
     }
     // Disable LED
     boardLED(CFG_LED_OFF);
@@ -232,7 +244,7 @@ int main(void)
 
       /* Send a message over the air */
       #ifdef CFG_CHIBI
-        sendMessage();
+        // sendMessage();
       #endif
     }
 
