@@ -212,6 +212,7 @@
             <file file_name="src/drivers/filters/ma/ma_f.c"/>
             <file file_name="src/drivers/filters/ma/ma_i.c"/>
             <file file_name="src/drivers/filters/ma/ma_u16.c"/>
+            <file file_name="src/drivers/filters/ma/sma_i.c"/>
           </folder>
         </folder>
         <file file_name="src/drivers/timespan.c"/>
