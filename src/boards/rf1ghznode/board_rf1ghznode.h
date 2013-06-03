@@ -191,6 +191,14 @@ extern "C" {
 
 
 /*=========================================================================
+    ENABLE CMSIS-RTOS
+
+    -----------------------------------------------------------------------*/
+    #define CFG_CMSIS_RTOS
+/*=========================================================================*/
+
+
+/*=========================================================================
     EEPROM
     -----------------------------------------------------------------------
     EEPROM is used to persist certain user modifiable values to make
@@ -322,7 +330,7 @@ extern "C" {
 
     // #define CFG_PRINTF_UART
     #define CFG_PRINTF_USBCDC
-//     #define CFG_PRINTF_DEBUG
+    // #define CFG_PRINTF_DEBUG
 /*=========================================================================*/
 
 
@@ -379,7 +387,6 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-		/* This isnot safe, disable make commands.c unable to be linked */
     #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE        (256)
     #define CFG_INTERFACE_PROMPT            "LPC1347 >> "
@@ -461,7 +468,7 @@ extern "C" {
     NOTE:                     All config settings for FAT32 are defined
                               in ffconf.h
     -----------------------------------------------------------------------*/
-//    #define CFG_SDCARD
+    #define CFG_SDCARD
     #define CFG_SDCARD_READONLY             (0)   // Must be 0 or 1
     #define CFG_SDCARD_SPIPORT              (1)
     #define CFG_SDCARD_SSELPORT             (0)
@@ -500,7 +507,7 @@ extern "C" {
                                 to an appropriately large value (ex. 1024)
     CFG_CHIBI_BUFFERSIZE        The size of the message buffer in bytes
     -----------------------------------------------------------------------*/
-//    #define CFG_CHIBI
+    #define CFG_CHIBI
     #define CFG_CHIBI_MODE                  (0)       // OQPSK_868MHZ
     #define CFG_CHIBI_POWER                 (0xE9)    // CHB_PWR_EU2_3DBM
     #define CFG_CHIBI_CHANNEL               (0)       // 868-868.6 MHz
@@ -681,12 +688,6 @@ extern "C" {
     #endif
 /*=========================================================================*/
 
-/*=========================================================================
-    ENABLE CMSIS-RTOS TEST.
-
-    -----------------------------------------------------------------------*/
-		#define CMSIS_RTOS_ENABLE
-/*=========================================================================*/	
 void     boardSetVREG3V3 ( void );
 void     boardSetVREG2V2 ( void );
 uint32_t boardGetVIN ( void );

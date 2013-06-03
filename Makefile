@@ -5,9 +5,9 @@
 PROJECT=firmware
 
 # See projectconfig.h for a list of valid board options!
-BOARD=CFG_BRD_RF1GHZNODE
+BOARD=CFG_BRD_LPCXPRESSO_LPC1347
+TARGET = lpc13u
 
-TARGET = lpc11u
 ifeq (lpc11u,$(TARGET))
   CORE = cortex-m0
   LDSCRIPT = cmsis/lpc11U37.ld

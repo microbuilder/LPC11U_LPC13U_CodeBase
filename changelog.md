@@ -7,6 +7,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added core/timer16
 - Added core/delay
 - Removed core/systick and changed all systick* calls to delay* (for RTOS compatability)
+- Added flow control to uart.c
 
 ## 0.8.5 [21 May 2013] ##
 
