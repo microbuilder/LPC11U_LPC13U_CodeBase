@@ -88,6 +88,8 @@
   #include "drivers/rtc/pcf2129/pcf2129.h"
 #endif
 
+#include "drivers/sensors/accelerometers/lsm303accel.h"
+
 #define PINS_VREGVSEL_PORT      (1)
 #define PINS_VREGVSEL_PIN       (16)
 #define PINS_VINADC_EN_PORT     (0)
@@ -177,6 +179,33 @@ void sendMessage(void)
   if(msgSend(0xFFFF, MSG_MESSAGETYPE_NONE, msgbuf, 10))
   {
     printf("Message TX failure%s", CFG_PRINTF_NEWLINE);
+  }
+}
+
+/**************************************************************************/
+/*!
+    Sends a test message over the air
+*/
+/**************************************************************************/
+void sendSensorEvent(void)
+{
+  error_t error;
+  sensors_event_t event;
+
+  // Change this to whatever sensor you want/have!
+  error = lsm303accelGetSensorEvent(&event);
+
+  if (!error)
+  {
+    // Serialize the data before transmitting
+    uint8_t msgbuf[sizeof(event)];
+    sensorsSerializeSensorsEvent(msgbuf, &event);
+
+    // Broadcast the sensor event data over the air
+    if(msgSend(0xFFFF, MSG_MESSAGETYPE_SENSOREVENT, msgbuf, sizeof(event)))
+    {
+      printf("Message TX failure%s", CFG_PRINTF_NEWLINE);
+    }
   }
 }
 
@@ -413,11 +442,15 @@ int main(void)
  tid_mainthread = osThreadGetId();
  for (;;)
  {
-	 osDelay(1000);
-	 boardLED((currentSecond++) & 1);
+   osDelay(1000);
+   boardLED((currentSecond++) & 1);
  }
 #endif
-	
+
+  #ifdef CFG_CHIBI
+    // lsm303accelInit();
+  #endif
+
   while (1)
   {
     currentSecond = delayGetSecondsActive();
@@ -425,7 +458,7 @@ int main(void)
     {
       lastSecond = currentSecond;
 
-      /* Send a message over the air */
+      /* Send a test message over the air */
       #ifdef CFG_CHIBI
         sendMessage();
       #endif
@@ -443,6 +476,12 @@ int main(void)
     /* Check for incoming wireless messages */
     #ifdef CFG_CHIBI
       checkForMessages();
+    #endif
+
+    /* Send some sensor data over the air */
+    #ifdef CFG_CHIBI
+      // sendSensorEvent();
+      // delay(100);
     #endif
   }
 }

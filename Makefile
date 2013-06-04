@@ -54,7 +54,7 @@ OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
 
 VPATH += src/boards/rf1ghznode
 OBJS  += $(OBJ_PATH)/board_rf1ghznode.o
-#OBJS  += $(OBJ_PATH)/RTX_Conf_CM.o
+OBJS  += $(OBJ_PATH)/board_rf1ghznode_rtxconf.o
 
 VPATH += src/cli
 OBJS  += $(OBJ_PATH)/cli.o 
@@ -249,6 +249,7 @@ VPATH += src/drivers/filters/ma
 OBJS  += $(OBJ_PATH)/ma_f.o 
 OBJS  += $(OBJ_PATH)/ma_i.o 
 OBJS  += $(OBJ_PATH)/ma_u16.o
+OBJS  += $(OBJ_PATH)/sma_i.o
 
 VPATH += src/drivers/storage/fatfs
 OBJS  += $(OBJ_PATH)/ff.o 

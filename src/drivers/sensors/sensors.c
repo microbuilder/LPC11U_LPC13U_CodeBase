@@ -124,8 +124,6 @@ size_t sensorsSerializeSensorsEvent(uint8_t *buffer,
    i += sizeof event->reserved0;
    memcpy(&buffer[i], &event->timestamp, sizeof event->timestamp);
    i += sizeof event->timestamp;
-   memcpy(&buffer[i], &event->version, sizeof event->version);
-   i += sizeof event->version;
    memcpy(&buffer[i], &event->data, sizeof event->data);
    i += sizeof event->data;
 

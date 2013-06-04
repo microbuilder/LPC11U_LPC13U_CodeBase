@@ -40,6 +40,8 @@ volatile uint32_t timer16_1_counter[4] = {0,0,0,0};
 volatile uint32_t timer16_0_capture[4] = {0,0,0,0};
 volatile uint32_t timer16_1_capture[4] = {0,0,0,0};
 
+// NOTE: 16-bit Timer 0 is used by src/core/delay/delay.c
+
 ///**************************************************************************/
 ///*!
 //    @brief Interrupt handler for 16-bit timer 0
@@ -377,7 +379,7 @@ void timer16SetMatch(uint8_t timer, uint8_t matchNum, uint16_t value)
 
 /**************************************************************************/
 /*!
-    @brief  Configures 16-bit Timer 0 for PWM output using MR0 to control
+    @brief  Configures 16-bit Timer 1 for PWM output using MR0 to control
             the period, and MR1, MR2 and MR3 for duty cycle.  Duty cycle
             can be adjusted via timer16SetMatch.
 
@@ -386,38 +388,38 @@ void timer16SetMatch(uint8_t timer, uint8_t matchNum, uint16_t value)
 
     @code
     // Setup PWM with 12,000 cycle period (MAT0 used for period)
-    timer16SetPWM0(12000);
+    timer16SetPWM1(12000);
 
     // PWM Match Settings
-    timer16SetMatch(0, 1, 12000); // MAT1 will go high on last cycle
-    timer16SetMatch(0, 2, 8000);  // MAT2 will go high for final 1/3
-    timer16SetMatch(0, 3, 4000);  // MAT3 will go high for final 2/3
+    timer16SetMatch(1, 1, 12000); // MAT1 will go high on last cycle
+    timer16SetMatch(1, 2, 8000);  // MAT2 will go high for final 1/3
+    timer16SetMatch(1, 3, 4000);  // MAT3 will go high for final 2/3
 
     // Enable to PWM output
-    timer16Enable(0);
+    timer16Enable(1);
     @endcode
 */
 /**************************************************************************/
-void timer16SetPWM0(uint16_t period)
+void timer16SetPWM1(uint16_t period)
 {
-  timer16Disable(0);
+  timer16Disable(1);
 
-  /* Make sure 16-bit timer 0 is enabled */
-  LPC_SYSCON->SYSAHBCLKCTRL |= (1<<7);
+  /* Make sure 16-bit timer 1 is enabled */
+  LPC_SYSCON->SYSAHBCLKCTRL |= (1<<8);
 
   /* Setup the external match register (clear on match) */
-  LPC_CT16B0->EMR =  (1<<10) | (1<<8) | (1<<6) | (1<<4) |
+  LPC_CT16B1->EMR =  (1<<10) | (1<<8) | (1<<6) | (1<<4) |
                      (1<<0)  | (1<<1) | (1<<2) | (1<<3);
 
   /* Set MAT0..3 to PWM mode via the PWM Control register */
-  LPC_CT16B0->PWMC = (1<<0)  | (1<<1) | (1<<2) | (1<<3);
+  LPC_CT16B1->PWMC = (1<<0)  | (1<<1) | (1<<2) | (1<<3);
 
   /* MAT0 controls period, set MAT1..3 to 50% duty cycle to start */
-  timer16SetMatch(0, 0, period);
-  timer16SetMatch(0, 1, period / 2);
-  timer16SetMatch(0, 2, period / 2);
-  timer16SetMatch(0, 3, period / 2);
+  timer16SetMatch(1, 0, period);
+  timer16SetMatch(1, 1, period / 2);
+  timer16SetMatch(1, 2, period / 2);
+  timer16SetMatch(1, 3, period / 2);
 
   /* Reset on MR0 */
-  LPC_CT16B0->MCR = 1 << 1;
+  LPC_CT16B1->MCR = 1 << 1;
 }

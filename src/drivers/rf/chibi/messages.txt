@@ -1,0 +1,136 @@
+Message Overview
+----------------
+
+messages.c/h provides a common envelope for wireless messages, inserting a
+unique message ID, a timestamp, and a uint8_t message type to indicate how
+the message payload should be intepretted.
+
+Endianness
+----------
+
+All values larger than 8-bits are expected to be little endian, such as the 
+command IDs, and the payload contents.  Any deviation from this rule should
+be clearly documentated.
+
+Message Envelope
+----------------
+
+Every payload is wrapped in a standardised 9-byte envelope with the following
+format:
+
+|-----------------------+---------+-------------------------------------------|
+| Field                 | Type    | Meaning                                   |
+|-----------------------+---------+-------------------------------------------|
+| Message ID            | U16     | Sequential message ID (auto-incrementing) |
+| Message Type          | U8      | Message type (msg_MessageType_t)          |
+| Timestamp             | U32     | Millisecond tick counter                  |
+| Reserved              | U8      |                                           |
+| Payload Length        | U8      | Payload length in bytes                   |
+| Payload               | ...     | Payload (max 91 bytes)                    |
+|-----------------------+---------+-------------------------------------------|
+
+Message Types
+-------------
+
+In order to determine how a message should be handled, or how the payload
+should be interpretted, each message includes a one-byte 'Message Type', based
+on the following values:
+
+|-------------------------------+-----+---------------------------------------|
+| Message Type                  | ID  | Meaning                               |
+|-------------------------------+-----+---------------------------------------|
+| MSG_MESSAGETYPE_NONE          | 0   | Normally not used                     |
+| MSG_MESSAGETYPE_ALERT         | 1   | Alert message (not yet implemented)   |
+| MSG_MESSAGETYPE_PROTOCOLDATA  | 10  | 64 byte payload for the simple binary |
+|                               |     | protocol (see src/protocol)           |
+| MSG_MESSAGETYPE_SENSORDETAILS | 20  | sensor_details_t payload              |
+| MSG_MESSAGETYPE_SENSOREVENT   | 21  | sensors_event_t payload               |
+| MSG_MESSAGETYPE_FILEDETAILS   | 30  | File meta data (not yet implemented)  |
+| MSG_MESSAGETYPE_FILEDATA      | 31  | File data chunk (not yet implemented) |
+|-------------------------------+-----+---------------------------------------|
+
+Sending Messages (msgSend)
+--------------------------
+
+messages.c include a simple helper function that can be used to send messages,
+auto-incrementing the message ID, inserting the appropriate timestamp, etc.
+
+To send a SENSOREVENT message, for example, we could call msgSend with the
+following parameters:
+
+void sendSensorEvent(void)
+{
+  error_t error;
+  sensors_event_t event;
+
+  // Change this to whatever sensor you want/have!
+  error = lsm303accelGetSensorEvent(&event);
+
+  if (!error)
+  {
+    // Serialize the data before transmitting
+    uint8_t msgbuf[sizeof(event)];
+    sensorsSerializeSensorsEvent(msgbuf, &event);
+
+    // Broadcast the sensor event data over the air
+    if(msgSend(0xFFFF, MSG_MESSAGETYPE_SENSOREVENT, msgbuf, sizeof(event)))
+    {
+      printf("Message TX failure%s", CFG_PRINTF_NEWLINE);
+    }
+  }
+}
+
+Reading Messages
+----------------
+
+Reading and interpretting messages is an application specific task, but one
+possible approach to read SENSOREVENT data and parse it, and then simply
+display any other message type can be seen below:
+
+void checkForMessages(void)
+{
+  chb_pcb_t *pcb = chb_get_pcb();
+
+  while (pcb->data_rcv)
+  {
+    // Enable LED to indicate message reception
+    boardLED(CFG_LED_ON);
+    // get the length of the data
+    rx_data.len = chb_read(&rx_data);
+    // make sure the length is nonzero
+    if (rx_data.len)
+    {
+      uint8_t msgType = rx_data.data[2];
+      sensors_event_t *event;
+      int dbm = edToDBM(pcb->ed);
+      /* Handle the message based on the msgType */
+      switch(msgType)
+      {
+        case (MSG_MESSAGETYPE_SENSOREVENT):
+          event = (sensors_event_t*)&rx_data.data[9];
+          printf("%04X,%d,", rx_data.src_addr, event->timestamp);
+          printf("%f,%f,%f%s", event->acceleration.x, event->acceleration.y, event->acceleration.z, CFG_PRINTF_NEWLINE);
+          break;
+        default:
+          printf("Message received from node 0x%04X (len=%d, dBm=%d):%s", rx_data.src_addr, rx_data.len, dbm, CFG_PRINTF_NEWLINE);
+          printf("  Message ID:   0x%04X%s", *(uint16_t*)&rx_data.data[0], CFG_PRINTF_NEWLINE);
+          printf("  Message Type: 0x%02X%s", *(uint8_t*)&rx_data.data[2], CFG_PRINTF_NEWLINE);
+          printf("  Timestamp:    %d%s", *(uint32_t*)&rx_data.data[3], CFG_PRINTF_NEWLINE);
+          printf("  Payload:      %d bytes%s", *(uint8_t*)&rx_data.data[8], CFG_PRINTF_NEWLINE);
+          if (rx_data.data[8])
+          {
+            uint8_t i;
+            printf("%s", CFG_PRINTF_NEWLINE);
+            for (i = 0; i < rx_data.data[8]; i++)
+            {
+              printf("0x%02X ", *(uint8_t*)&rx_data.data[9+i]);
+            }
+          }
+          printf("%s", CFG_PRINTF_NEWLINE);
+          break;
+      }
+    }
+    // Disable LED
+    boardLED(CFG_LED_OFF);
+  }
+}

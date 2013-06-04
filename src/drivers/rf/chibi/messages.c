@@ -50,7 +50,6 @@
 static uint8_t  _msg[CHB_MAX_PAYLOAD];     // Buffer used when sending messages
 static uint16_t _msg_msgID;                // Auto-incrementing ID for message envelopes
 static uint32_t _msg_alert_uniqueID;       // Auto-incrementing ID for alert messages
-static uint32_t _msg_command_uniqueID;     // Auto-incrementing ID for command messages
 
 /**************************************************************************/
 /*!
@@ -162,18 +161,6 @@ void msgCreateAlert(msg_Alert_t *msg)
   // Clear memory and assign unique ID
   memset(msg, 0, sizeof(msg_Alert_t));
   msg->uniqueID = _msg_alert_uniqueID++;
-}
-
-/**************************************************************************/
-/*!
-    @brief Creates a new 'Command Message' instance (msg_Command_t)
-*/
-/**************************************************************************/
-void msgCreateCommand(msg_Command_t *msg)
-{
-  // Clear memory and assign unique ID
-  memset(msg, 0, sizeof(msg_Command_t));
-  msg->uniqueID = _msg_command_uniqueID++;
 }
 
 #endif

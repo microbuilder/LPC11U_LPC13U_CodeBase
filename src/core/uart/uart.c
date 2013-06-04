@@ -185,7 +185,7 @@ void uartInit(uint32_t baudrate)
   LPC_IOCON->PIO0_19 |= 0x01;
 
 #if defined UART_RTS_CTS_FLOWCONTROL
-  /* start RTS/CTS flow control setup - davidson 130531 *§
+  /* start RTS/CTS flow control setup - davidson 130531 */
   LPC_IOCON->PIO0_7 &= ~0x07;   /* Flow control CTS UART I/O Config  Type Input */
   LPC_IOCON->PIO0_7 |= 0x01; 
 

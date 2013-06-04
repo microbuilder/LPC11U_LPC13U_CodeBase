@@ -48,9 +48,9 @@ void timer16Disable    ( uint8_t timer );
 void timer16Reset      ( uint8_t timer );
 void timer16DelayTicks ( uint8_t timer, uint16_t delayInTicks );
 void timer16SetMatch   ( uint8_t timer, uint8_t matchNum, uint16_t value );
-void timer16SetPWM0    ( uint16_t period );
+void timer16SetPWM1    ( uint16_t period );
 
-#ifdef __cplusplus
+#ifdef __cplusplus0
 }
 #endif
 
