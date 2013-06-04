@@ -1,0 +1,81 @@
+Message Overview
+----------------
+
+messages.c/h provides a common envelope for wireless messages, inserting a
+unique message ID, a timestamp, and a uint8_t message type to indicate how
+the message payload should be intepretted.
+
+Endianness
+----------
+
+All values larger than 8-bits are expected to be little endian, such as the 
+command IDs, and the payload contents.  Any deviation from this rule should
+be clearly documentated.
+
+Message Envelope
+----------------
+
+Every payload is wrapped in a standardised 9-byte envelope with the following
+format:
+
+|-----------------------+---------+-------------------------------------------|
+| Field                 | Type    | Meaning                                   |
+|-----------------------+---------+-------------------------------------------|
+| Message ID            | U16     | Sequential message ID (auto-incrementing) |
+| Message Type          | U8      | Message type (msg_MessageType_t)          |
+| Timestamp             | U32     | Millisecond tick counter                  |
+| Reserved              | U8      |                                           |
+| Payload Length        | U8      | Payload length in bytes                   |
+| Payload               | ...     | Payload (max 91 bytes)                    |
+|-----------------------+---------+-------------------------------------------|
+
+Message Types
+-------------
+
+In order to determine how a message should be handled, or how the payload
+should be interpretted, each message includes a one-byte 'Message Type', based
+on the following values:
+
+|-------------------------------+-----+---------------------------------------|
+| Message Type                  | ID  | Meaning                               |
+|-------------------------------+-----+---------------------------------------|
+| MSG_MESSAGETYPE_NONE          | 0   | Normally not used                     |
+| MSG_MESSAGETYPE_ALERT         | 1   | Alert message (not yet implemented)   |
+| MSG_MESSAGETYPE_PROTOCOLDATA  | 10  | 64 byte payload for the simple binary |
+|                               |     | protocol (see src/protocol)           |
+| MSG_MESSAGETYPE_SENSORDETAILS | 20  | sensor_details_t payload              |
+| MSG_MESSAGETYPE_SENSOREVENT   | 21  | sensors_event_t payload               |
+| MSG_MESSAGETYPE_FILEDETAILS   | 30  | File meta data (not yet implemented)  |
+| MSG_MESSAGETYPE_FILEDATA      | 31  | File data chunk (not yet implemented) |
+|-------------------------------+-----+---------------------------------------|
+
+Sending Messages (msgSend)
+--------------------------
+
+messages.c include a simple helper function that can be used to send messages,
+auto-incrementing the message ID, inserting the appropriate timestamp, etc.
+
+To send a SENSOREVENT message, for example, we could call msgSend with the
+following parameters:
+
+void sendSensorEvent(void)
+{
+  error_t error;
+  sensors_event_t event;
+
+  // Change this to whatever sensor you want/have!
+  error = lsm303accelGetSensorEvent(&event);
+
+  if (!error)
+  {
+    // Serialize the data before transmitting
+    uint8_t msgbuf[sizeof(event)];
+    sensorsSerializeSensorsEvent(msgbuf, &event);
+
+    // Broadcast the sensor event data over the air
+    if(msgSend(0xFFFF, MSG_MESSAGETYPE_SENSOREVENT, msgbuf, sizeof(event)))
+    {
+      printf("Message TX failure%s", CFG_PRINTF_NEWLINE);
+    }
+  }
+}
