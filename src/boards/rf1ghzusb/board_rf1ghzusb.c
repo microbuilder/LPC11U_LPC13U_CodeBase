@@ -136,7 +136,7 @@ void checkForMessages(void)
     // make sure the length is nonzero
     if (rx_data.len)
     {
-      uint8_t msgType = *(uint8_t*)&rx_data.data[2];
+      uint8_t msgType = rx_data.data[2];
       sensors_event_t *event;
       int dbm = edToDBM(pcb->ed);
       /* Handle the message based on the msgType */
