@@ -47,13 +47,14 @@ OBJS  += $(OBJ_PATH)/board_lpcnfc.o
 
 VPATH += src/boards/lpcxpresso1347
 OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
+OBJS  += $(OBJ_PATH)/RTX_Conf_CM.o
 
 VPATH += src/boards/rf1ghzusb
 OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
 
 VPATH += src/boards/rf1ghznode
 OBJS  += $(OBJ_PATH)/board_rf1ghznode.o
-OBJS  += $(OBJ_PATH)/RTX_Conf_CM.o
+#OBJS  += $(OBJ_PATH)/RTX_Conf_CM.o
 
 VPATH += src/cli
 OBJS  += $(OBJ_PATH)/cli.o 

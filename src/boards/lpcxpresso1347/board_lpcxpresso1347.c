@@ -41,6 +41,7 @@
 
 #if defined CFG_BRD_LPCXPRESSO_LPC1347
 
+#include "cmsis_os.h"
 #include "boards/board.h"
 #include "core/gpio/gpio.h"
 #include "core/delay/delay.h"
@@ -79,6 +80,28 @@
 
 #ifdef CFG_CC3000
   // ToDo: Figure out which headers are required
+#endif
+
+#if defined CFG_CMSIS_RTOS
+/* Thread IDs */
+osThreadId tid_mainthread;               /* assigned ID for main thread            */
+osThreadId tid_blinkthread;               /* assigned ID for blink thread           */
+
+/*----------------------------------------------------------------------------
+*   Blink Thread - High Priority - Active every 3ms
+*---------------------------------------------------------------------------*/
+void blink_thread (void const *argument)
+{
+ while (1)
+ {
+   /* Pass control to other tasks for 1s */
+   osDelay(1000);
+   printf ("Thread 1\n");
+ }
+}
+
+/* Thread definitions */
+osThreadDef(blink_thread, osPriorityHigh,   1, 0);
 #endif
 
 #ifdef CFG_SDCARD
@@ -173,6 +196,16 @@ int main(void)
   /* Configure the HW */
   boardInit();
 
+#if defined CFG_CMSIS_RTOS
+ tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
+ tid_mainthread = osThreadGetId();
+ for (;;)
+ {
+	 osDelay(1000);
+	 boardLED((currentSecond++) & 1);
+ }
+#endif
+	
   while (1)
   {
     currentSecond = delayGetSecondsActive();
