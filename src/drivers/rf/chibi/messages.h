@@ -51,7 +51,7 @@ typedef enum msg_MessageType_s
 {
   MSG_MESSAGETYPE_NONE          = 0,
   MSG_MESSAGETYPE_ALERT         = 1,
-  MSG_MESSAGETYPE_COMMAND       = 10,
+  MSG_MESSAGETYPE_PROTOCOLDATA  = 10,
   MSG_MESSAGETYPE_SENSORDETAILS = 20,
   MSG_MESSAGETYPE_SENSOREVENT   = 21,
   MSG_MESSAGETYPE_FILEDETAILS   = 30,
@@ -69,16 +69,6 @@ typedef struct
   uint8_t     reserved2;
   uint8_t     payload[4];         // Alert payload (max 4 bytes)
 } msg_Alert_t;
-
-/* Command Frame: 9-24 bytes */
-typedef struct
-{
-  uint32_t    uniqueID;           // Unique ID to track this command
-  uint16_t    command;            // ID indicating the specific command
-  uint8_t     reserved1;
-  uint8_t     reserved2;
-  uint8_t     payload[16];        // Command payload/params (max 16 bytes)
-} msg_Command_t;
 
 /* File Details Frame: 15-78 bytes */
 typedef struct
@@ -105,7 +95,6 @@ typedef struct
 
 error_t msgSend ( uint16_t targetAddr, msg_MessageType_t msgType, uint8_t *payload, uint8_t payloadLength );
 void    msgCreateAlert ( msg_Alert_t *msg );
-void    msgCreateCommand ( msg_Command_t *msg );
 
 #ifdef __cplusplus
 }
