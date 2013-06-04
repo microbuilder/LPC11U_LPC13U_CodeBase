@@ -275,7 +275,7 @@
         <folder Name="rf1ghznode" file_name="">
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
-          <file file_name="src/boards/rf1ghznode/RTX_Conf_CM.c"/>
+          <file file_name="src/boards/rf1ghznode/board_rf1ghznode_rtxconf.c"/>
         </folder>
         <folder Name="lpcstepper" file_name="">
           <file file_name="src/boards/lpcstepper/board_lpcstepper.c"/>
@@ -335,6 +335,6 @@
   <configuration Name="Debug" c_preprocessor_definitions="DEBUG" gcc_debugging_level="Level 2" gcc_optimization_level="None" hidden="Yes"/>
   <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
   <configuration Name="Release" c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET" gcc_debugging_level="Level 1" gcc_optimization_level="Optimize For Size" hidden="Yes"/>
-  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_RF1GHZUSB;ARM_MATH_CM3" c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
+  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_RF1GHZNODE;ARM_MATH_CM3" c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
   <configuration Name="Test" c_preprocessor_definitions="_TEST_" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
 </solution>

@@ -271,7 +271,7 @@
         <folder Name="rf1ghznode" file_name="">
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
-          <file file_name="src/boards/rf1ghznode/RTX_Conf_CM.c"/>
+          <file file_name="src/boards/rf1ghznode/board_rf1ghznode_rtxconf.c"/>
         </folder>
         <folder Name="lpcstepper" file_name="">
           <file file_name="src/boards/lpcstepper/board_lpcstepper.c"/>
