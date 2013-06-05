@@ -1,59 +1,59 @@
 /**************************************************************************/
 /*!
-    @file     sma_i.c
+    @file     sma_f.c
     @author   Nguyen Quang Huy, Nguyen Thien Tin
-    @brief    A simple moving average filter using int32_t values
+    @brief    A simple moving average filter using float values
 
     @code
 
     // Declare a data buffer 8 values wide
-    int32_t sma_buffer[8];
+    float sma_buffer[8];
 
     // Now declare the filter with the window size and a buffer pointer
-    sma_i_t sma = { .k = 0,
+    sma_f_t sma = { .k = 0,
                     .size = 8,
                     .avg = 0,
                     .buffer = sma_buffer };
 
     // Initialise the moving average filter
-    if (sma_i_init(&sma))
+    if (sma_f_init(&sma))
     {
       printf("Something failed during filter init!\n");
     }
 
     // Add some values
-    sma_i_add(&sma, 10);
-    sma_i_add(&sma, 20);
-    sma_i_add(&sma, -30);
-    sma_i_add(&sma, -35);
-    sma_i_add(&sma, 11);
-    sma_i_add(&sma, 35);
-    sma_i_add(&sma, 30);
-    sma_i_add(&sma, 20); // We should have an avg value starting here
-    sma_i_add(&sma, 3);
-    sma_i_add(&sma, 10);
+    sma_f_add(&sma, 1.0);
+    sma_f_add(&sma, 2.1);
+    sma_f_add(&sma, -30.2);
+    sma_f_add(&sma, -35.3);
+    sma_f_add(&sma, 11.4);
+    sma_f_add(&sma, 35.5);
+    sma_f_add(&sma, 30.6);
+    sma_f_add(&sma, 20.7); // We should have an avg value starting here
+    sma_f_add(&sma, 3.8);
+    sma_f_add(&sma, 10.9);
 
-    printf("WINDOW SIZE   : %d\n", sma.size);
-    printf("TOTAL SAMPLES : %d\n", sma.k);
-    printf("CURRENT AVG   : %d\n", sma.avg);
+    printf("WINDOW SIZE   : %f\n", sma.size);
+    printf("TOTAL SAMPLES : %f\n", sma.k);
+    printf("CURRENT AVG   : %f\n", sma.avg);
     printf("\n");
 
     @endcode
  */
 /**************************************************************************/
-#include "sma_i.h"
+#include "sma_f.h"
 
 /**************************************************************************/
 /*!
-     @brief Initialises the sma_i_t instance
+     @brief Initialises the sma_f_t instance
 
      @param[in]  sma
-                 Pointer to the sma_i_t instance that includes the
+                 Pointer to the sma_f_t instance that includes the
                  window size, a pointer to the data buffer,
                  the current average (the output value), etc.
 */
 /**************************************************************************/
-error_t sma_i_init ( sma_i_t *sma )
+error_t sma_f_init ( sma_f_t *sma )
 {
   // check if the window size is valid (!= 0 and is a power of 2)
   if ((0 == sma->size) || ( sma->size & (sma->size - 1) )) return ERROR_UNEXPECTEDVALUE;
@@ -64,7 +64,7 @@ error_t sma_i_init ( sma_i_t *sma )
 
   // update the exponential number
   sma->exponent = 0;
-  int windowSize = sma->size;
+  uint16_t windowSize = sma->size;
   while (windowSize > 1)
   {
     windowSize = windowSize >> 1;
@@ -72,7 +72,7 @@ error_t sma_i_init ( sma_i_t *sma )
   }
 
   // Fill the buffer with zero value
-  for (int i = 0; i < sma->size; i++)
+  for (uint16_t i = 0; i < sma->size; i++)
   {
     *(sma->buffer + i) = 0;
   }
@@ -81,17 +81,17 @@ error_t sma_i_init ( sma_i_t *sma )
 
 /**************************************************************************/
 /*!
-     @brief Adds a new value to the sma_i_t instances
+     @brief Adds a new value to the sma_f_t instances
 
      @param[in]  sma
-                 Pointer to the sma_i_t instances
+                 Pointer to the sma_f_t instances
      @param[in]  x
                  Value to insert
 */
 /**************************************************************************/
-void sma_i_add(sma_i_t *sma, int32_t x)
+void sma_f_add(sma_f_t *sma, float x)
 {
-  int32_t *pSource = sma->buffer + (sma->k % sma->size);
+  float *pSource = sma->buffer + (sma->k % sma->size);
 
   // Subtract oldest value from the total sum
   sma->total -= *pSource;
@@ -110,5 +110,9 @@ void sma_i_add(sma_i_t *sma, int32_t x)
     return;
 
   // Update the current average value
-  sma->avg = (int32_t)(sma->total >> sma->exponent);
+  double tmp_total = sma->total;
+  uint64_t *ptr = (uint64_t *)(&tmp_total);
+  *ptr -= ((uint64_t)(sma->exponent)) << 52;  // Subtract exponent of window size from exponent of total value
+                                              // refer to double precision for more details
+  sma->avg = (float)(tmp_total);
 }
