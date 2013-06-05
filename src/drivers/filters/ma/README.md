@@ -1,4 +1,4 @@
-# Simple Moving Average Filter #
+# Simple Moving Average Filter (sma_*) #
 
 The **simple moving average** is a type of **FIR** filter, and is probably the most common filter type used due to it's speed and simplicity. Don't understimate or overlook it due to it's relative simplicity, though, since you can solve many problems admirably with this unassuming little filter!  
 
@@ -32,48 +32,47 @@ There are advantages and tradeoffs to both of these implementations that you sho
 ## How Do I Use This Code? ##
 
 ### 1. Allocate Memory for the Window Buffer ###
-The moving average filter requires a buffer to store the 'windowed' data, so before we can do anything with this filter, we need to set a chunk of SRAM aside for the filter to work with behind the scenes.  We do this using the a circular buffer based on the FIFO code in **/src/core/fifo**
+The moving average filter requires a buffer to store the 'windowed' data, so before we can do anything with this filter, we need to set a chunk of SRAM aside for the filter to work with behind the scenes.  We do this by declaring an array with the right type and ^2 in length (meaning that the array must be 2, 4, 8, 16, 32, etc. values wide).
 
 The following code will create the fifo, configuring it as a 'circular buffer' 5 samples wide, and using floating point data (meaning 20 bytes of memory will be used, since a single float takes 4 bytes, multiplied by our window size of 5 samples):
 ```
-  // Create a circular buffer named 'ffMavg' 5 float values wide
-  FIFO_DEF(ffMavg, 5, float, true, NULL);
+  // Create a buffer named 'bufsma' 8 float values wide
+  float bufsma[8];
 ```
-To do the same for uint16\_t data, we would use the following code, which would require 10 bytes of memory since uint16\_t uses two bytes compared to four for float:
+To do the same for uint16\_t data, we would use the following code, which would require half of the memory since uint16_t uses 2 bytes instead of the four bytes in float:
 ```
-  // Create a circular buffer named 'ffMavg' 5 uint16_t values wide
-  FIFO_DEF(ffMavg, 5, uint16_t, true, NULL);
+  // Create a buffer named 'bufsma' 8 uint16_t values wide
+  uint16_t bufsma[8];
 ```
 ### 2. Declare the Filter Object ###
-The current filter code is based on a single 'struct' that contains all of the implementation details for our filter, including the FIFO buffer.  The benefit of this approach is that we can have many 'instances' of the filter, each encapsulate in a single 'variable', and we can cascade them by running the filter once, and then running those results through another filter a second time with slightly different parameters, and many similar filters can happily coexist in our system (limited only by available memory).
+The current filter code is based on a single 'struct' that contains all of the implementation details for our filter, including the buffer.  The benefit of this approach is that we can have many 'instances' of the filter, each encapsulated in a single 'variable', and we can cascade them by running the filter once, and then running those results through another filter a second time.
 
-To declare a field that will hold the filter data, we use the following code, being careful to use the same window size (.size) and FIFO name (.buffer) that we declared above!):
+To declare a field that will hold the filter data, we use the following code, being careful to use the same window size (.size) and buffer name (.buffer) that we declared above!):
 
 ```
-  // Declare the ma filter with the window size and a pointer to the FIFO used earlier
-  ma_f_t ma = { .k = 0,
-                .size = 5,
-                .avg = 0.0F,
-                .buffer = &ffMavg };
+  // Now declare the filter with the window size and a buffer pointer
+  sma_f_t sma = { .k = 0,
+                  .size = 8,
+                  .avg = 0,
+                  .buffer = sma_buffer };
 ```
 ... or for uint16\_t data this would be:
 ```
-  // Declare the ma filter with the window size and a pointer to the FIFO used earlier
-  ma_u16_t ma = { .k = 0,
-                  .size = 5,
-                  .avg = 0,
-                  .buffer = &ffMavg };
+  // Now declare the filter with the window size and a buffer pointer
+  sma_u16_t sma = { .k = 0,
+                    .size = 8,
+                    .avg = 0,
+                    .buffer = sma_buffer };
 ```
-
 ### 3. Initialise the Filter ###
-After declaring a placeholder **ma\_f\_t** (for floating point math), **ma\_i\_t** (for 32-bit signed integer math) object, or **ma\_u16\_t** (for unsigned 16-bit integers), we need to call the init function and supply a reference to our ma placeholder.
+After declaring a placeholder **sma\_f\_t** (for floating point math), **sma\_i\_t** (for 32-bit signed integer math) object, or **sma\_u16\_t** (for unsigned 16-bit integers), we need to call the init function and supply a reference to our ma placeholder.
 
-This function essentially just does some basic error checking, and will return **false** if for some reason the filter couldn't be initialised, such as a problem with the window size or the circular buffer.
+This function essentially just does some basic error checking, and will return **false** if for some reason the filter couldn't be initialised, such as a problem with the window size (**which must be a ^2 value!**).
 
 We'll use the floating point version below as an example.
 ```
   // Initialise the moving average filter (mostly error checks)
-  if (ma_f_init(&ma))
+  if (sma_f_init(&sma))
   {
     printf("Something failed during filter init!\n");
   }
@@ -81,60 +80,58 @@ We'll use the floating point version below as an example.
 ... or the uint16\_t version would look like this
 ```
   // Initialise the moving average filter (mostly error checks)
-  if (ma_u16_init(&ma))
+  if (sma_u16_init(&sma))
   {
     printf("Something failed during filter init!\n");
   }
 ```
 ### 4. Start Adding Values! ###
-After initialising the filter, you continually add in your samples via the **ma\_*\_add** functions, and read the current 'ma.avg' value whenever you need it.
+After initialising the filter, you continually add in your samples via the **sma\_*\_add** functions, and read the current 'sma.avg' value whenever you need it.
 
 For example, for the floating point version we could use the following code:
 ```
   // Add some values
-  ma_f_add(&ma, 10.0F);
-  ma_f_add(&ma, 20.0F);
-  ma_f_add(&ma, 30.15F);
-  ma_f_add(&ma, 35.0F);
-  ma_f_add(&ma, 12.0F);  // We should have an avg value starting here
-  ma_f_add(&ma, -6.7);
-  ma_f_add(&ma, 30.3F);
-  ma_f_add(&ma, 20.0F);
-  ma_f_add(&ma, 0.0F);
-  ma_f_add(&ma, 10.0F);
+  sma_f_add(&sma, 10.0F);
+  sma_f_add(&sma, 20.0F);
+  sma_f_add(&sma, 30.15F);
+  sma_f_add(&sma, 35.0F);
+  sma_f_add(&sma, 12.0F);
+  sma_f_add(&sma, -6.7);
+  sma_f_add(&sma, 30.3F);
+  sma_f_add(&sma, 20.0F);  // We should have an avg value starting here
+  sma_f_add(&sma, 0.0F);
+  sma_f_add(&sma, 10.0F);
 
-  printf("WINDOW SIZE   : %d\n", ma.size);
-  printf("TOTAL SAMPLES : %d\n", ma.k);
-  printf("CURRENT AVG   : %f\n", ma.avg);
+  printf("WINDOW SIZE   : %d\n", sma.size);
+  printf("TOTAL SAMPLES : %d\n", sma.k);
+  printf("CURRENT AVG   : %f\n", sma.avg);
   printf("\n");
 ```
 ... or for the uint16_t version:
 ```
   // Add some values
-  ma_u16_add(&ma, 10);
-  ma_u16_add(&ma, 20);
-  ma_u16_add(&ma, -30);
-  ma_u16_add(&ma, 37);
-  ma_u16_add(&ma, 11);  // We should have an avg value starting here
-  ma_u16_add(&ma, 31);
-  ma_u16_add(&ma, 30);
-  ma_u16_add(&ma, 20);
-  ma_u16_add(&ma, 3);
-  ma_u16_add(&ma, 10);
+  sma_u16_add(&sma, 10);
+  sma_u16_add(&sma, 20);
+  sma_u16_add(&sma, -30);
+  sma_u16_add(&sma, 37);
+  sma_u16_add(&sma, 11);  
+  sma_u16_add(&sma, 31);
+  sma_u16_add(&sma, 30);
+  sma_u16_add(&sma, 20);  // We should have an avg value starting here
+  sma_u16_add(&sma, 3);
+  sma_u16_add(&sma, 10);
 
-  printf("WINDOW SIZE   : %d\n", ma.size);
-  printf("TOTAL SAMPLES : %d\n", ma.k);
-  printf("CURRENT AVG   : %d\n", ma.avg);
+  printf("WINDOW SIZE   : %d\n", sma.size);
+  printf("TOTAL SAMPLES : %d\n", sma.k);
+  printf("CURRENT AVG   : %d\n", sma.avg);
   printf("\n");
 ```
 
 ## Implementation Warning ##
 
-Please note that the current implementation of this filter (with basic error checking and use of fifo_t for the circular buffer) is not anywhere near as fast as an optimized moving average filter could be!
-
-The filter itself is provided more for convenience or reference sake.  In the future (i.e., when there is actually a reason to use this code in the real world!) a 'fast' version will be implemented and included here, with less error checking, and a focus on maximum throughput.
-
 A major strength of the 'simple moving average' is that it is one of the fastest filters, particulary if you use a ^2 window size (2, 4, 8, 16, 32, etc.).  The ^2 window means the expensive division operator can be replaced with a single-cycle right-shift.
+
+To avoid extra overhead, the current sma implementation will only allow you to init a filter with a ^2 window size.
 
 ## Further Reading ##
 
