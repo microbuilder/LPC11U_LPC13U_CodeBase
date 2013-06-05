@@ -31,10 +31,10 @@ OBJ_PATH = bin/obj
 
 VPATH = cmsis
 ifeq (lpc11u,$(TARGET))
-  OBJS   = $(OBJ_PATH)/startup_lpc11u.o 
+  OBJS   = $(OBJ_PATH)/startup_lpc11u_gnimake.o 
   OBJS  += $(OBJ_PATH)/system_LPC11Uxx.o
 else
-  OBJS   = $(OBJ_PATH)/startup_lpc13u.o 
+  OBJS   = $(OBJ_PATH)/startup_lpc13u_gnumake.o 
   OBJS  += $(OBJ_PATH)/system_LPC13Uxx.o
 endif
 OBJS  += $(OBJ_PATH)/math_helper.o

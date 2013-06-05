@@ -9,6 +9,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Removed core/systick and changed all systick* calls to delay* (for RTOS compatability)
 - Added flow control to uart.c
 - Added faster simple moving average filter (drivers/filters/ma/sma\_i.c)
+- Renamed CMSIS startup_* file to be clearer
 
 ## 0.8.5 [21 May 2013] ##
 
