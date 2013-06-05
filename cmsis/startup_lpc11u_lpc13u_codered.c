@@ -132,8 +132,8 @@ extern int main(void);
 #define MAIN_ENTRY_FUNC		main
 #endif
 
-#if defined(CMSIS_RTOS_ENABLE)
-osThreadDef_t os_thread_def_main = {(os_pthread)MAIN_ENTRY_FUNC, osPriorityNormal, 1, 4*200 };
+#if defined(CFG_CMSIS_RTOS)
+extern osThreadDef_t os_thread_def_main;
 #endif
 //*****************************************************************************
 //
@@ -324,7 +324,7 @@ ResetISR(void) {
 	__libc_init_array();
 #endif
 
-#if defined(CMSIS_RTOS_ENABLE)
+#if defined(CFG_CMSIS_RTOS)
 	osKernelInitialize();
 	osThreadCreate(&os_thread_def_main, NULL);
 	osKernelStart();
@@ -530,8 +530,8 @@ extern int main(void);
 #define MAIN_ENTRY_FUNC		main
 #endif
 
-#if defined(CMSIS_RTOS_ENABLE)
-osThreadDef_t os_thread_def_main = {(os_pthread)MAIN_ENTRY_FUNC, osPriorityNormal, 1, 4*200 };
+#if defined(CFG_CMSIS_RTOS)
+extern osThreadDef_t os_thread_def_main;
 #endif
 //*****************************************************************************
 //
@@ -685,7 +685,7 @@ ResetISR(void) {
 	__libc_init_array();
 #endif
 
-#if defined(CMSIS_RTOS_ENABLE)
+#if defined(CFG_CMSIS_RTOS)
 	osKernelInitialize();
 	osThreadCreate(&os_thread_def_main, NULL);
 	osKernelStart();
