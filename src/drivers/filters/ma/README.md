@@ -34,7 +34,7 @@ There are advantages and tradeoffs to both of these implementations that you sho
 ### 1. Allocate Memory for the Window Buffer ###
 The moving average filter requires a buffer to store the 'windowed' data, so before we can do anything with this filter, we need to set a chunk of SRAM aside for the filter to work with behind the scenes.  We do this by declaring an array with the right type and ^2 in length (meaning that the array must be 2, 4, 8, 16, 32, etc. values wide).
 
-The following code will create the fifo, configuring it as a 'circular buffer' 5 samples wide, and using floating point data (meaning 20 bytes of memory will be used, since a single float takes 4 bytes, multiplied by our window size of 5 samples):
+The following code will create an 8 sample buffer using floating point data (meaning 32 bytes of memory will be used, since a single float takes 4 bytes, multiplied by our window size of 8 samples):
 ```
   // Create a buffer named 'bufsma' 8 float values wide
   float bufsma[8];
