@@ -233,7 +233,7 @@
             <Ra2Chk>0</Ra2Chk>
             <Ra3Chk>0</Ra3Chk>
             <Im1Chk>1</Im1Chk>
-            <Im2Chk>0</Im2Chk>
+            <Im2Chk>1</Im2Chk>
             <OnChipMemories>
               <Ocm1>
                 <Type>0</Type>
@@ -327,7 +327,7 @@
               </OCR_RVCT9>
               <OCR_RVCT10>
                 <Type>0</Type>
-                <StartAddress>0x20000000</StartAddress>
+                <StartAddress>0x20004000</StartAddress>
                 <Size>0x800</Size>
               </OCR_RVCT10>
             </OnChipMemories>
@@ -349,7 +349,7 @@
             <uSurpInc>0</uSurpInc>
             <VariousControls>
               <MiscControls>--gnu --c99</MiscControls>
-              <Define>CFG_BRD_RF1GHZNODE</Define>
+              <Define>CFG_BRD_LPCXPRESSO_LPC1347</Define>
               <Undefine></Undefine>
               <IncludePath>./cmsis;src;src/cli;..\cmsis_rtos_rtx\INC</IncludePath>
             </VariousControls>
@@ -398,9 +398,9 @@
               <FilePath>./cmsis/system_LPC13Uxx.c</FilePath>
             </File>
             <File>
-              <FileName>startup_LPC13Uxx_arm.s</FileName>
+              <FileName>startup_LPC13Uxx_keil.s</FileName>
               <FileType>2</FileType>
-              <FilePath>.\cmsis\startup_LPC13Uxx_arm.s</FilePath>
+              <FilePath>.\cmsis\startup_LPC13Uxx_keil.s</FilePath>
             </File>
           </Files>
         </Group>
@@ -1224,9 +1224,9 @@
           <GroupName>RTXlib</GroupName>
           <Files>
             <File>
-              <FileName>RTX_Conf_CM.c</FileName>
+              <FileName>board_lpcxpresso1347_rtxconf.c</FileName>
               <FileType>1</FileType>
-              <FilePath>.\src\boards\rf1ghznode\RTX_Conf_CM.c</FilePath>
+              <FilePath>.\src\boards\lpcxpresso1347\board_lpcxpresso1347_rtxconf.c</FilePath>
             </File>
             <File>
               <FileName>RTX_CM3.lib</FileName>

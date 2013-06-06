@@ -531,7 +531,9 @@ extern int main(void);
 #endif
 
 #if defined(CFG_CMSIS_RTOS)
-extern osThreadDef_t os_thread_def_main;
+//extern osThreadDef_t os_thread_def_main;
+osThreadDef_t os_thread_def_main2 = {(os_pthread)MAIN_ENTRY_FUNC, osPriorityNormal, 1, 4*200 };
+
 #endif
 //*****************************************************************************
 //
@@ -687,7 +689,7 @@ ResetISR(void) {
 
 #if defined(CFG_CMSIS_RTOS)
 	osKernelInitialize();
-	osThreadCreate(&os_thread_def_main, NULL);
+	osThreadCreate(&os_thread_def_main2, NULL);
 	osKernelStart();
 #else
 #if defined (__REDLIB__)
