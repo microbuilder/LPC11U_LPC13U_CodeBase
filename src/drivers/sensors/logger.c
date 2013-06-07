@@ -40,8 +40,8 @@
 #include "logger.h"
 #include "core/delay/delay.h"
 
-#define LOGGER_LOCALFILE (0)
-#define LOGGER_FATFSFILE (1)
+#define LOGGER_LOCALFILE (1)
+#define LOGGER_FATFSFILE (0)
 
 // Write local files using crossworks debug library (CW Debug only)
 #if LOGGER_LOCALFILE
@@ -63,7 +63,12 @@ static bool loggerInitialised = FALSE;
 
 /**************************************************************************/
 /*!
+    @code
 
+    loggerInit("capture.txt");
+    loggerWrite(buffer, len);
+
+    @endcode
 */
 /**************************************************************************/
 logger_error_t loggerWrite(const uint8_t * buffer, uint32_t len)
