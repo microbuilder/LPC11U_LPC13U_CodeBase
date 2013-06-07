@@ -212,10 +212,9 @@
             <file file_name="src/drivers/filters/iir/iir_i.c"/>
           </folder>
           <folder Name="ma" file_name="">
-            <file file_name="src/drivers/filters/ma/ma_f.c"/>
-            <file file_name="src/drivers/filters/ma/ma_i.c"/>
-            <file file_name="src/drivers/filters/ma/ma_u16.c"/>
+            <file file_name="src/drivers/filters/ma/sma_f.c"/>
             <file file_name="src/drivers/filters/ma/sma_i.c"/>
+            <file file_name="src/drivers/filters/ma/sma_u16.c"/>
           </folder>
           <file file_name="src/drivers/filters/ringbuffer.h"/>
         </folder>
