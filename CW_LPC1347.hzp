@@ -158,7 +158,7 @@
             </folder>
           </folder>
         </folder>
-        <folder Name="storage">
+        <folder Name="storage" file_name="">
           <folder Name="fatfs">
             <file file_name="src/drivers/storage/fatfs/ccsbcs.c">
               <configuration Name="THUMB Flash Release" build_exclude_from_build="Yes"/>
@@ -170,6 +170,7 @@
             <file file_name="src/drivers/storage/fatfs/ffconf.h"/>
             <file file_name="src/drivers/storage/fatfs/diskio.h"/>
           </folder>
+          <file file_name="src/drivers/storage/logger.c"/>
         </folder>
         <folder Name="sensors" file_name="">
           <folder Name="accelerometers" file_name="">
@@ -194,7 +195,6 @@
             <file file_name="src/drivers/sensors/magnetometers/lsm303mag.c"/>
           </folder>
           <file file_name="src/drivers/sensors/sensors.c"/>
-          <file file_name="src/drivers/sensors/logger.c"/>
         </folder>
         <folder Name="rtc">
           <file file_name="src/drivers/rtc/rtc.c"/>
@@ -337,6 +337,6 @@
   <configuration Name="Debug" c_preprocessor_definitions="DEBUG" gcc_debugging_level="Level 2" gcc_optimization_level="None" hidden="Yes"/>
   <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
   <configuration Name="Release" c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET" gcc_debugging_level="Level 1" gcc_optimization_level="Optimize For Size" hidden="Yes"/>
-  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_LPCXPRESSO_LPC1347;ARM_MATH_CM3" c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
+  <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" arm_linker_heap_size="0" c_preprocessor_definitions="CFG_BRD_SIMULATOR;ARM_MATH_CM3" c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/"/>
   <configuration Name="Test" c_preprocessor_definitions="_TEST_" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
 </solution>

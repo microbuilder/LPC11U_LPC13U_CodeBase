@@ -251,6 +251,9 @@ OBJS  += $(OBJ_PATH)/ma_i.o
 OBJS  += $(OBJ_PATH)/ma_u16.o
 OBJS  += $(OBJ_PATH)/sma_i.o
 
+VPATH += src/drivers/storage
+OBJS  += $(OBJ_PATH)/logger.o 
+
 VPATH += src/drivers/storage/fatfs
 OBJS  += $(OBJ_PATH)/ff.o 
 OBJS  += $(OBJ_PATH)/mmc.o

@@ -167,6 +167,7 @@
             <file file_name="src/drivers/storage/fatfs/ffconf.h"/>
             <file file_name="src/drivers/storage/fatfs/diskio.h"/>
           </folder>
+          <file file_name="src/drivers/storage/logger.c"/>
         </folder>
         <folder Name="sensors" file_name="">
           <folder Name="accelerometers" file_name="">

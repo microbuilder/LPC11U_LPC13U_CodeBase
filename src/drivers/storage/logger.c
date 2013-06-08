@@ -65,51 +65,7 @@ static bool loggerInitialised = FALSE;
 
 /**************************************************************************/
 /*!
-    @code
-
-    loggerInit("capture.txt");
-    loggerWrite(buffer, len);
-
-    @endcode
-*/
-/**************************************************************************/
-error_t loggerWrite(const uint8_t * buffer, uint32_t len)
-{
-    if (!loggerInitialised)
-    {
-      return ERROR_DEVICENOTINITIALISED;
-    }
-
-    #if LOGGER_LOCALFILE
-      #ifdef __CROSSWORKS_ARM
-        // Open file for text append
-        loggerLocalFile = debug_fopen(loggerFName, "at");
-        debug_fwrite(buffer, len, 1, loggerLocalFile);
-        debug_fclose(loggerLocalFile);
-      #endif
-    #endif
-
-    #if defined CFG_SDCARD && LOGGER_FATFSFILE
-      // Open file
-      if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_OPEN_EXISTING)!=FR_OK)
-      {
-        return ERROR_FATFS_UNABLETOOPENFILE;
-      }
-      // Move to end of the file to append data
-      f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
-      // Write data
-      unsigned int bytesWritten;
-      f_write(&loggerSDFile, buffer, len, &bytesWritten);
-      f_sync(&loggerSDFile);
-      f_close(&loggerSDFile);
-    #endif
-
-    return ERROR_NONE;
-}
-
-/**************************************************************************/
-/*!
-    @brief Initialises a new libpcap binary file and writes the header
+    @brief Initialises a new text file for data logging
 */
 /**************************************************************************/
 error_t loggerInit(char *filename)
@@ -169,4 +125,44 @@ error_t loggerInit(char *filename)
 
   loggerInitialised = TRUE;
   return ERROR_NONE;
+}
+
+/**************************************************************************/
+/*!
+    @brief Appends the supplied buffer to the log file created in
+           loggerInit()
+*/
+/**************************************************************************/
+error_t loggerWrite(const uint8_t * buffer, uint32_t len)
+{
+    if (!loggerInitialised)
+    {
+      return ERROR_DEVICENOTINITIALISED;
+    }
+
+    #if LOGGER_LOCALFILE
+      #ifdef __CROSSWORKS_ARM
+        // Open file for text append
+        loggerLocalFile = debug_fopen(loggerFName, "at");
+        debug_fwrite(buffer, len, 1, loggerLocalFile);
+        debug_fclose(loggerLocalFile);
+      #endif
+    #endif
+
+    #if defined CFG_SDCARD && LOGGER_FATFSFILE
+      // Open file
+      if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_OPEN_EXISTING)!=FR_OK)
+      {
+        return ERROR_FATFS_UNABLETOOPENFILE;
+      }
+      // Move to end of the file to append data
+      f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
+      // Write data
+      unsigned int bytesWritten;
+      f_write(&loggerSDFile, buffer, len, &bytesWritten);
+      f_sync(&loggerSDFile);
+      f_close(&loggerSDFile);
+    #endif
+
+    return ERROR_NONE;
 }
