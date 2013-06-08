@@ -68,7 +68,7 @@ extern "C" {
                                        DWT->CTRL = DWT->CTRL | 1 ; } while(0)
 
 /* Inline Functions */
-static INLINE void dwtDelay(uint32_t ticks);
+static INLINE void dwtDelay(uint32_t ticks) INLINE_POST;
 
 /**************************************************************************/
 /*!
@@ -114,6 +114,6 @@ static INLINE void dwtDelay(uint32_t ticks)
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
