@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     sma_i.h
+    @file     wma_f.h
     @author   Nguyen Quang Huy, Nguyen Thien Tin
 
     @section LICENSE
@@ -33,8 +33,8 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef __SMA_I_H__
-#define __SMA_I_H__
+#ifndef __WMA_F_H__
+#define __WMA_F_H__
 
 #ifdef __cplusplus
 extern "C" {
@@ -42,21 +42,21 @@ extern "C" {
 
 #include "projectconfig.h"
 
-typedef struct sma_i_s
+typedef struct wma_f_s
 {
   uint32_t        k;            /**< Total number of samples processed so far                           */
   uint16_t const  size;         /**< Window size (number of samples to average)                         */
-  int32_t         avg;          /**< Current average                                                    */
-  uint16_t        exponent;     /**< Exponential number (size=window)                                   */
-  int32_t        *buffer;       /**< Pointer to the input data buffer (size=window)                     */
-  int64_t         total;        /**< Total value of current window (use int64 for overflow prevention)  */
-} sma_i_t;
+  float           avg;          /**< Current average                                                    */
+  float          *weight;       /**< Pointer to a weighted array of each sample                         */
+  float           sum_weight;   /**< The sum of the individual weights                                  */
+  float          *buffer;       /**< Pointer to the input data buffer (size=window)                     */
+} wma_f_t;
 
-error_t sma_i_init ( sma_i_t *sma );
-void    sma_i_add  ( sma_i_t *sma, int32_t x );
+error_t wma_f_init ( wma_f_t *wma );
+void    wma_f_add  ( wma_f_t *wma, float x );
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif /* __SMA_I_H__ */
+#endif /* __WMA_F_H__ */
