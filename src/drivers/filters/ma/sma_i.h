@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     ringbuffer.h
+    @file     sma_i.h
     @author   Nguyen Quang Huy, Nguyen Thien Tin
 
     @section LICENSE
