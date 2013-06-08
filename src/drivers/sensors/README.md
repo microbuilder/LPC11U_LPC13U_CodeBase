@@ -125,7 +125,7 @@ A key part of the abstraction layer is the standardisation of values on SI units
 - **current**: values are in **milliamps** (mA)
 - **voltage**: values are in **volts** (V)
 
-## Adding Support for the Abstraction Layer to a Sensor Driver ##
+## Adding sensors.c Support to an Existing Sensor Driver ##
 
 Sensor drivers should still be written in the traditional way, using efficient fixed-point math and the native units of the sensor.  
 
@@ -138,35 +138,35 @@ You need to create a function that populates a **sensor\_t** object, and that ac
 ```
 /**************************************************************************/
 /*!
-    @brief  Provides the sensor\_t data for this sensor
+    @brief  Provides the sensor_t data for this sensor
 */
 /**************************************************************************/
-void l3gd20GetSensor(sensor\_t *sensor)
+void l3gd20GetSensor(sensor_t *sensor)
 {
-  memset(sensor, 0, sizeof(sensor\_t));
+  memset(sensor, 0, sizeof(sensor_t));
 
   /* Insert the sensor name in the fixed length char array */
   strncpy (sensor->name, "L3GD20", sizeof(sensor->name) - 1);
   sensor->name[sizeof(sensor->name)- 1] = 0;
   sensor->version     = 1;
-  sensor->sensor\_id   = _l3gd20SensorID;
-  sensor->type        = SENSOR\_TYPE\_GYROSCOPE;
-  sensor->min\_delay   = 0;
+  sensor->sensor_id   = _l3gd20SensorID;
+  sensor->type        = SENSOR_TYPE_GYROSCOPE;
+  sensor->min_delay   = 0;
 
   /* We need to do some calculations to determine resolution and maxRange in rad/s */
-  sensor->max\_value   = \_l3gd20MeasurementRange * SENSORS\_DPS\_TO\_RADS;
-  sensor->min\_value   = 0;
-  switch (\_l3gd20MeasurementRange)
+  sensor->max_value   = _l3gd20MeasurementRange * SENSORS_DPS_TO_RADS;
+  sensor->min_value   = 0;
+  switch (_l3gd20MeasurementRange)
   {
     case 2000:
-      sensor->resolution  = (\_l3gd20MeasurementRange / 32767.0F) * L3GD20\_SENSITIVITY\_2000DPS * SENSORS\_DPS\_TO\_RADS;
+      sensor->resolution  = (_l3gd20MeasurementRange / 32767.0F) * L3GD20_SENSITIVITY_2000DPS * SENSORS_DPS_TO_RADS;
       break;
     case 500:
-      sensor->resolution  = (\_l3gd20MeasurementRange / 32767.0F) * L3GD20\_SENSITIVITY\_500DPS * SENSORS\_DPS\_TO\_RADS;
+      sensor->resolution  = (_l3gd20MeasurementRange / 32767.0F) * L3GD20_SENSITIVITY_500DPS * SENSORS_DPS_TO_RADS;
       break;
     case 250:
     default:
-      sensor->resolution  = (\_l3gd20MeasurementRange / 32767.0F) * L3GD20\_SENSITIVITY\_250DPS * SENSORS\_DPS\_TO\_RADS;
+      sensor->resolution  = (_l3gd20MeasurementRange / 32767.0F) * L3GD20_SENSITIVITY_250DPS * SENSORS_DPS_TO_RADS;
       break;
   }
 }
@@ -181,49 +181,49 @@ Another example using the l3gd20 gyroscope can be seen below, where the raw DPS 
 ```
 /**************************************************************************/
 /*!
-    @brief  Reads the sensor and returns the data as a sensors\_event\_t
+    @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error\_t l3gd20GetSensorEvent(sensors\_event\_t *event)
+error_t l3gd20GetSensorEvent(sensors_event_t *event)
 {
-  l3gd20Data\_t data;
+  l3gd20Data_t data;
 
   /* Clear the event */
-  memset(event, 0, sizeof(sensors\_event\_t));
+  memset(event, 0, sizeof(sensors_event_t));
 
-  event->version   = sizeof(sensors\_event\_t);
-  event->sensor_id = \_l3gd20SensorID;
-  event->type      = SENSOR\_TYPE\_GYROSCOPE;
+  event->version   = sizeof(sensors_event_t);
+  event->sensor_id = _l3gd20SensorID;
+  event->type      = SENSOR_TYPE_GYROSCOPE;
   event->timestamp = delayGetTicks();
 
   /* Retrieve values from the sensor */
-  ASSERT\_STATUS(l3gd20Poll(&data));
+  ASSERT_STATUS(l3gd20Poll(&data));
 
   /* The L3GD20 returns degrees per second, adjusted by sensitivity which
    * is shown as mdps/digit in the datasheet.  To convert this to proper
    * degrees/s multiply by the appropriate sensitivity value and then
    * convert it to the rad/s value that sensors_event_t is expecting. */
-  switch (\_l3gd20MeasurementRange)
+  switch (_l3gd20MeasurementRange)
   {
     case (2000):
-      event->gyro.x = data.x * L3GD20\_SENSITIVITY\_2000DPS * SENSORS\_DPS\_TO\_RADS;
-      event->gyro.y = data.y * L3GD20\_SENSITIVITY\_2000DPS * SENSORS\_DPS\_TO\_RADS;
-      event->gyro.z = data.z * L3GD20\_SENSITIVITY\_2000DPS * SENSORS\_DPS\_TO\_RADS;
+      event->gyro.x = data.x * L3GD20_SENSITIVITY_2000DPS * SENSORS_DPS_TO_RADS;
+      event->gyro.y = data.y * L3GD20_SENSITIVITY_2000DPS * SENSORS_DPS_TO_RADS;
+      event->gyro.z = data.z * L3GD20_SENSITIVITY_2000DPS * SENSORS_DPS_TO_RADS;
       break;
     case (500):
-      event->gyro.x = data.x * L3GD20\_SENSITIVITY\_500DPS * SENSORS\_DPS\_TO\_RADS;
-      event->gyro.y = data.y * L3GD20\_SENSITIVITY\_500DPS * SENSORS\_DPS\_TO\_RADS;
-      event->gyro.z = data.z * L3GD20\_SENSITIVITY\_500DPS * SENSORS\_DPS\_TO\_RADS;
+      event->gyro.x = data.x * L3GD20_SENSITIVITY_500DPS * SENSORS_DPS_TO_RADS;
+      event->gyro.y = data.y * L3GD20_SENSITIVITY_500DPS * SENSORS_DPS_TO_RADS;
+      event->gyro.z = data.z * L3GD20_SENSITIVITY_500DPS * SENSORS_DPS_TO_RADS;
       break;
     case (250):
     default:
-      event->gyro.x = data.x * L3GD20\_SENSITIVITY\_250DPS * SENSORS\_DPS\_TO\_RADS;
-      event->gyro.y = data.y * L3GD20\_SENSITIVITY\_250DPS * SENSORS\_DPS\_TO\_RADS;
-      event->gyro.z = data.z * L3GD20\_SENSITIVITY\_250DPS * SENSORS\_DPS\_TO\_RADS;
+      event->gyro.x = data.x * L3GD20_SENSITIVITY_250DPS * SENSORS_DPS_TO_RADS;
+      event->gyro.y = data.y * L3GD20_SENSITIVITY_250DPS * SENSORS_DPS_TO_RADS;
+      event->gyro.z = data.z * L3GD20_SENSITIVITY_250DPS * SENSORS_DPS_TO_RADS;
       break;
   }
 
-  return ERROR\_NONE;
+  return ERROR_NONE;
 }
 ```
 
@@ -236,8 +236,8 @@ Every compliant sensor can now be read using a single, well-known 'type' (sensor
 An example of reading the l3gd20 gyroscope above can be seen below:
 
 ```
-error\_t error;
-sensors\_event\_t event;
+error_t error;
+sensors_event_t event;
 
 error = l3gd20GetSensorEvent(&event);
 if (!error)
@@ -253,13 +253,13 @@ if (!error)
 Similarly, we can get the basic technical capabilities of this sensor with the following code:
 
 ```
-sensor\_t sensor;
+sensor_t sensor;
 
 // Get the sensor_t data
 l3gd20GetSensor(&sensor);
 
 // Display the resolution of this sensor
-printf("Gyroscope: %s %s", sensor.name, CFG\_PRINTF\_NEWLINE);
-printf("Resolution: %f rad/s %s", sensor.resolution, CFG\_PRINTF\_NEWLINE); 
+printf("Gyroscope: %s %s", sensor.name, CFG_PRINTF_NEWLINE);
+printf("Resolution: %f rad/s %s", sensor.resolution, CFG_PRINTF_NEWLINE); 
 
 ```
