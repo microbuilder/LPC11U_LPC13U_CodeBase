@@ -141,7 +141,6 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
       // Write data
       unsigned int bytesWritten;
       f_write(&loggerSDFile, buffer, len, &bytesWritten);
-      f_sync(&loggerSDFile);
     #endif
 
     return ERROR_NONE;
@@ -161,6 +160,7 @@ error_t loggerClose(void)
   #endif
 
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
+    f_sync(&loggerSDFile);
     f_close(&loggerSDFile);
     f_mount(0, 0);
   #endif
