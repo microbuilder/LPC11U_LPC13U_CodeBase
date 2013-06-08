@@ -8,9 +8,10 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added core/delay
 - Removed core/systick and changed all systick* calls to delay* (for RTOS compatability)
 - Added flow control to uart.c
-- Added faster simple moving average filter (drivers/filters/ma/sma\_i.c), removed old version
-- Renamed CMSIS startup_* file to be clearer
-- Added drivers/storage/logger.c to log data to an SD card or a local file (local file logging only supported in Crossworks via the native debug_* API)
+- Added faster simple moving average filter (drivers/filters/ma/sma\_*), removed old versions
+- Added weighted moving average filter (/drivers/filters/ma/wma\_*)
+- Renamed CMSIS startup_* files to be clearer
+- Added drivers/storage/logger.c to log data to an SD card or a local file (local file is Crossworks only)
 
 ## 0.8.5 [21 May 2013] ##
 

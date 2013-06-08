@@ -246,10 +246,12 @@ OBJS  += $(OBJ_PATH)/iir_f.o
 OBJS  += $(OBJ_PATH)/iir_i.o
 
 VPATH += src/drivers/filters/ma
-OBJS  += $(OBJ_PATH)/ma_f.o 
-OBJS  += $(OBJ_PATH)/ma_i.o 
-OBJS  += $(OBJ_PATH)/ma_u16.o
-OBJS  += $(OBJ_PATH)/sma_i.o
+OBJS  += $(OBJ_PATH)/sma_f.o 
+OBJS  += $(OBJ_PATH)/sma_i.o 
+OBJS  += $(OBJ_PATH)/sma_u16.o
+OBJS  += $(OBJ_PATH)/wma_f.o 
+OBJS  += $(OBJ_PATH)/wma_i.o 
+OBJS  += $(OBJ_PATH)/wma_u16.o
 
 VPATH += src/drivers/storage
 OBJS  += $(OBJ_PATH)/logger.o 
