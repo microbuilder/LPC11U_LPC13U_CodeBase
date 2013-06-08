@@ -39,8 +39,8 @@
 #include <string.h>
 #include "logger.h"
 
-#define LOGGER_LOCALFILE (1)
-#define LOGGER_FATFSFILE (0)
+#define LOGGER_LOCALFILE (0)
+#define LOGGER_FATFSFILE (1)
 
 // Write local files using crossworks debug library (CW Debug only)
 #if LOGGER_LOCALFILE
@@ -54,7 +54,6 @@
 #if defined CFG_SDCARD
   #include "drivers/storage/fatfs/diskio.h"
   #include "drivers/storage/fatfs/ff.h"
-  static FILINFO Finfo;
   static FATFS Fatfs[1];
   static FIL loggerSDFile;
 #endif
@@ -136,11 +135,7 @@ error_t loggerInit(char *filename)
     if (stat == 0)
     {
       // SD card sucessfully initialised
-      DSTATUS stat;
-      DWORD p2;
-      WORD w1;
-      BYTE res, b1;
-      DIR dir;
+      BYTE res;
       // Try to mount drive
       res = f_mount(0, &Fatfs[0]);
       if (res != FR_OK)
