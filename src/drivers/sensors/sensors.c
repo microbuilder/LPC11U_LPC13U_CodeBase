@@ -192,11 +192,15 @@ size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor)
             error = loggerWrite(buffer, len);
             if (error)
             {
+              loggerClose();
               // ToDo: Do something with the error message
             }
           }
         }
       }
+
+      // Make sure the file is closed
+      loggerClose();
     }
 
     while(1)

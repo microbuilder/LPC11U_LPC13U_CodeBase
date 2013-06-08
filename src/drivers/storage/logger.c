@@ -75,7 +75,7 @@ error_t loggerInit(char *filename)
   // Create a new file
   #if LOGGER_LOCALFILE
     #ifdef __CROSSWORKS_ARM
-      loggerLocalFile = debug_fopen(loggerFName, "wt");
+      loggerLocalFile = debug_fopen(loggerFName, "wt"); // Use "at" to append data
     #endif
   #endif
 
@@ -107,19 +107,10 @@ error_t loggerInit(char *filename)
         {
           return ERROR_FATFS_UNABLETOCREATEFILE;
         }
+        // Move to end of the file to append data
+        f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
       }
     }
-  #endif
-
-  // Close the file (not a great idea to keep it open permanently)
-  #if LOGGER_LOCALFILE
-    #ifdef __CROSSWORKS_ARM
-      debug_fclose(loggerLocalFile);
-    #endif
-  #endif
-
-  #if defined CFG_SDCARD && LOGGER_FATFSFILE
-    f_close(&loggerSDFile);
   #endif
 
   loggerInitialised = TRUE;
@@ -142,25 +133,15 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
     #if LOGGER_LOCALFILE
       #ifdef __CROSSWORKS_ARM
         // Open file for text append
-        loggerLocalFile = debug_fopen(loggerFName, "at");
         debug_fwrite(buffer, len, 1, loggerLocalFile);
-        debug_fclose(loggerLocalFile);
       #endif
     #endif
 
     #if defined CFG_SDCARD && LOGGER_FATFSFILE
-      // Open file
-      if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_OPEN_EXISTING)!=FR_OK)
-      {
-        return ERROR_FATFS_UNABLETOOPENFILE;
-      }
-      // Move to end of the file to append data
-      f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
       // Write data
       unsigned int bytesWritten;
       f_write(&loggerSDFile, buffer, len, &bytesWritten);
       f_sync(&loggerSDFile);
-      f_close(&loggerSDFile);
     #endif
 
     return ERROR_NONE;
@@ -168,14 +149,19 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
 
 /**************************************************************************/
 /*!
-    @brief Appends the supplied buffer to the log file created in
-           loggerInit()
+    @brief Closes the file and if necessary unmounts the drive
 */
 /**************************************************************************/
-error_t loggerUnmount(void)
+error_t loggerClose(void)
 {
+  #if LOGGER_LOCALFILE
+    #ifdef __CROSSWORKS_ARM
+      debug_fclose(loggerLocalFile);
+    #endif
+  #endif
+
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
-    // Unmount the drive for FatFS
+    f_close(&loggerSDFile);
     f_mount(0, 0);
   #endif
 
