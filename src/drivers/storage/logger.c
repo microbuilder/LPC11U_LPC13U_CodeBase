@@ -36,11 +36,13 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+#include "projectconfig.h"
+
 #include <string.h>
 #include "logger.h"
 
-#define LOGGER_LOCALFILE (0)
-#define LOGGER_FATFSFILE (1)
+#define LOGGER_LOCALFILE (0) /* Create a file on the HD via the J-Link */
+#define LOGGER_FATFSFILE (1) /* Store a file on the SD card via FatFS  */
 
 // Write local files using crossworks debug library (CW Debug only)
 #if LOGGER_LOCALFILE
@@ -51,7 +53,7 @@
 #endif
 
 // Write files to SD using FatFS
-#if defined CFG_SDCARD
+#if defined CFG_SDCARD && LOGGER_FATFSFILE
   #include "drivers/storage/fatfs/diskio.h"
   #include "drivers/storage/fatfs/ff.h"
   static FATFS Fatfs[1];
