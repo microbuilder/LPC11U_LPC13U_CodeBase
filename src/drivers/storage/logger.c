@@ -125,25 +125,34 @@ error_t loggerInit(char *filename)
 /**************************************************************************/
 error_t loggerWrite(const uint8_t * buffer, uint32_t len)
 {
-    if (!loggerInitialised)
+  if (!loggerInitialised)
+  {
+    return ERROR_DEVICENOTINITIALISED;
+  }
+
+  #if LOGGER_LOCALFILE
+    #ifdef __CROSSWORKS_ARM
+      int written;
+      // Open file for text append
+      written = debug_fwrite(buffer, len, 1, loggerLocalFile);
+      if (written != len)
+      {
+        return ERROR_FATFS_WRITEFAILED;
+      }
+    #endif
+  #endif
+
+  #if defined CFG_SDCARD && LOGGER_FATFSFILE
+    BYTE res;
+    unsigned int bytesWritten;
+    res = f_write(&loggerSDFile, buffer, len, &bytesWritten);
+    if (res != FR_OK)
     {
-      return ERROR_DEVICENOTINITIALISED;
+      return ERROR_FATFS_WRITEFAILED;
     }
+  #endif
 
-    #if LOGGER_LOCALFILE
-      #ifdef __CROSSWORKS_ARM
-        // Open file for text append
-        debug_fwrite(buffer, len, 1, loggerLocalFile);
-      #endif
-    #endif
-
-    #if defined CFG_SDCARD && LOGGER_FATFSFILE
-      // Write data
-      unsigned int bytesWritten;
-      f_write(&loggerSDFile, buffer, len, &bytesWritten);
-    #endif
-
-    return ERROR_NONE;
+  return ERROR_NONE;
 }
 
 /**************************************************************************/
