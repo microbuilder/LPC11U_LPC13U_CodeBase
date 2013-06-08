@@ -66,23 +66,28 @@ extern "C" {
 /**************************************************************************/
 typedef enum
 {
-  ERROR_NONE                    = 0x0,      /**< Indicates no error occurred */
-  ERROR_OPERATIONTIMEDOUT       = 0x1,      /**< Operation timed out before completion */
-  ERROR_ADDRESSOUTOFRANGE       = 0x2,      /**< The supplied address is out of range */
-  ERROR_BUFFEROVERFLOW          = 0x3,      /**< The proposed action will cause a buffer overflow */
-  ERROR_INVALIDPARAMETER        = 0x4,      /**< An invalid parameter value was provided */
-  ERROR_DEVICENOTINITIALISED    = 0x5,      /**< Attempting to execute a function on an uninitialised peripheral */
-  ERROR_UNEXPECTEDVALUE         = 0x6,      /**< An unexpected value was found inside a function */
-  ERROR_I2C_DEVICENOTFOUND      = 0x100,    /**< Device didn't ACK after an I2C transfer */
-  ERROR_I2C_NOACK               = 0x101,    /**< No ACK signal received during an I2C transfer */
-  ERROR_I2C_TIMEOUT             = 0x102,    /**< Device timed out waiting for response (missing pullups?) */
-  ERROR_CHIBI_NOACK             = 0x110,    /**< No ACK from destination node (bad address or offline?) */
-  ERROR_CHIBI_CHANACCESSFAILURE = 0x111,    /**< Channel access failure */
-  ERROR_CHIBI_PAYLOADOVERFLOW   = 0x112,    /**< Payload exceeds buffer size */
-  ERROR_RTC_OUTOFEPOCHRANGE     = 0x140,    /**< RTC time must be kept in epoch range */
-  ERROR_TIMESPAN_OUTOFRANGE     = 0x150,    /**< timespan_t must be kept within int64_t nanosecond range */
-  ERROR_PROT_UNKNOWN_COMMAND    = 0x200,    /**< No command corresponding to the supplied CMD ID */
-  ERROR_PROT_INVALID_PARAM      = 0x201     /**< Invalid parameter in the message/command */
+  ERROR_NONE                      = 0x0,      /**< Indicates no error occurred */
+  ERROR_OPERATIONTIMEDOUT         = 0x1,      /**< Operation timed out before completion */
+  ERROR_ADDRESSOUTOFRANGE         = 0x2,      /**< The supplied address is out of range */
+  ERROR_BUFFEROVERFLOW            = 0x3,      /**< The proposed action will cause a buffer overflow */
+  ERROR_INVALIDPARAMETER          = 0x4,      /**< An invalid parameter value was provided */
+  ERROR_DEVICENOTINITIALISED      = 0x5,      /**< Attempting to execute a function on an uninitialised peripheral */
+  ERROR_UNEXPECTEDVALUE           = 0x6,      /**< An unexpected value was found inside a function */
+  ERROR_I2C_DEVICENOTFOUND        = 0x100,    /**< Device didn't ACK after an I2C transfer */
+  ERROR_I2C_NOACK                 = 0x101,    /**< No ACK signal received during an I2C transfer */
+  ERROR_I2C_TIMEOUT               = 0x102,    /**< Device timed out waiting for response (missing pullups?) */
+  ERROR_CHIBI_NOACK               = 0x110,    /**< No ACK from destination node (bad address or offline?) */
+  ERROR_CHIBI_CHANACCESSFAILURE   = 0x111,    /**< Channel access failure */
+  ERROR_CHIBI_PAYLOADOVERFLOW     = 0x112,    /**< Payload exceeds buffer size */
+  ERROR_RTC_OUTOFEPOCHRANGE       = 0x140,    /**< RTC time must be kept in epoch range */
+  ERROR_TIMESPAN_OUTOFRANGE       = 0x150,    /**< timespan_t must be kept within int64_t nanosecond range */
+  ERROR_PROT_UNKNOWN_COMMAND      = 0x200,    /**< No command corresponding to the supplied CMD ID */
+  ERROR_PROT_INVALID_PARAM        = 0x201,    /**< Invalid parameter in the message/command */
+  ERROR_FATFS_NODISK              = 0x301,
+  ERROR_FATFS_INITFAILED          = 0x302,
+  ERROR_FATFS_FAILEDTOMOUNTDRIVE  = 0x303,
+  ERROR_FATFS_UNABLETOCREATEFILE  = 0x304,
+  ERROR_FATFS_UNABLETOOPENFILE    = 0x305
 } error_t;
 
 #ifdef __cplusplus

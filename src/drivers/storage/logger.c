@@ -38,15 +38,16 @@
 /**************************************************************************/
 #include <string.h>
 #include "logger.h"
-#include "core/delay/delay.h"
 
 #define LOGGER_LOCALFILE (1)
 #define LOGGER_FATFSFILE (0)
 
 // Write local files using crossworks debug library (CW Debug only)
 #if LOGGER_LOCALFILE
-  #include <cross_studio_io.h>
-  DEBUG_FILE * loggerLocalFile;
+  #ifdef __CROSSWORKS_ARM
+    #include <cross_studio_io.h>
+    DEBUG_FILE * loggerLocalFile;
+  #endif
 #endif
 
 // Write files to SD using FatFS
@@ -71,25 +72,27 @@ static bool loggerInitialised = FALSE;
     @endcode
 */
 /**************************************************************************/
-logger_error_t loggerWrite(const uint8_t * buffer, uint32_t len)
+error_t loggerWrite(const uint8_t * buffer, uint32_t len)
 {
     if (!loggerInitialised)
     {
-      return LOGGER_ERROR_NOTINITIALISED;
+      return ERROR_DEVICENOTINITIALISED;
     }
 
     #if LOGGER_LOCALFILE
-      // Open file for text append
-      loggerLocalFile = debug_fopen(loggerFName, "at");
-      debug_fwrite(buffer, len, 1, loggerLocalFile);
-      debug_fclose(loggerLocalFile);
+      #ifdef __CROSSWORKS_ARM
+        // Open file for text append
+        loggerLocalFile = debug_fopen(loggerFName, "at");
+        debug_fwrite(buffer, len, 1, loggerLocalFile);
+        debug_fclose(loggerLocalFile);
+      #endif
     #endif
 
     #if defined CFG_SDCARD && LOGGER_FATFSFILE
       // Open file
       if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_OPEN_EXISTING)!=FR_OK)
       {
-        return LOGGER_ERROR_FATFS_UNABLETOOPENFILE;
+        return ERROR_FATFS_UNABLETOOPENFILE;
       }
       // Move to end of the file to append data
       f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
@@ -100,7 +103,7 @@ logger_error_t loggerWrite(const uint8_t * buffer, uint32_t len)
       f_close(&loggerSDFile);
     #endif
 
-    return LOGGER_OK;
+    return ERROR_NONE;
 }
 
 /**************************************************************************/
@@ -108,24 +111,27 @@ logger_error_t loggerWrite(const uint8_t * buffer, uint32_t len)
     @brief Initialises a new libpcap binary file and writes the header
 */
 /**************************************************************************/
-logger_error_t loggerInit(char *filename)
+error_t loggerInit(char *filename)
 {
   loggerFName = filename;
 
   // Create a new file
   #if LOGGER_LOCALFILE
-    loggerLocalFile = debug_fopen(loggerFName, "wt");
+    #ifdef __CROSSWORKS_ARM
+      loggerLocalFile = debug_fopen(loggerFName, "wt");
+    #endif
   #endif
+
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
     DSTATUS stat;
     stat = disk_initialize(0);
     if (stat & STA_NOINIT)
     {
-      return LOGGER_ERROR_FATFS_INITFAILED;
+      return ERROR_FATFS_INITFAILED;
     }
     if (stat & STA_NODISK)
     {
-      return LOGGER_ERROR_FATFS_NODISK;
+      return ERROR_FATFS_NODISK;
     }
     if (stat == 0)
     {
@@ -139,14 +145,14 @@ logger_error_t loggerInit(char *filename)
       res = f_mount(0, &Fatfs[0]);
       if (res != FR_OK)
       {
-        return LOGGER_ERROR_FATFS_FAILEDTOMOUNTDRIVE;
+        return ERROR_FATFS_FAILEDTOMOUNTDRIVE;
       }
       if (res == FR_OK)
       {
         // Create a file (overwriting any existing file!)
         if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_CREATE_ALWAYS)!=FR_OK)
         {
-          return LOGGER_ERROR_FATFS_UNABLETOCREATEFILE;
+          return ERROR_FATFS_UNABLETOCREATEFILE;
         }
       }
     }
@@ -154,13 +160,16 @@ logger_error_t loggerInit(char *filename)
 
   // Close the file (not a great idea to keep it open permanently)
   #if LOGGER_LOCALFILE
-    debug_fclose(loggerLocalFile);
+    #ifdef __CROSSWORKS_ARM
+      debug_fclose(loggerLocalFile);
+    #endif
   #endif
+
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
     f_close(&loggerSDFile);
     // ToDo: This will leave the driver mounted ... when to call "f_mount(0,0)"?
   #endif
 
   loggerInitialised = TRUE;
-  return LOGGER_OK;
+  return ERROR_NONE;
 }

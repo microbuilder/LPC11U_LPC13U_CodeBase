@@ -38,18 +38,7 @@
 
 #include "projectconfig.h"
 
-typedef enum logger_error
-{
-  LOGGER_OK = 0,
-  LOGGER_ERROR_NOTINITIALISED = 1,
-  LOGGER_ERROR_FATFS_NODISK = 10,
-  LOGGER_ERROR_FATFS_INITFAILED = 11,
-  LOGGER_ERROR_FATFS_FAILEDTOMOUNTDRIVE = 12,
-  LOGGER_ERROR_FATFS_UNABLETOCREATEFILE = 13,
-  LOGGER_ERROR_FATFS_UNABLETOOPENFILE = 14
-} logger_error_t;
-
-logger_error_t loggerInit(char *filename);
-logger_error_t loggerWrite(const uint8_t * buffer, uint32_t len);
+error_t loggerInit(char *filename);
+error_t loggerWrite(const uint8_t * buffer, uint32_t len);
 
 #endif

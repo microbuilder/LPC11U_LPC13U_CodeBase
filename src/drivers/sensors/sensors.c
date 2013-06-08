@@ -158,6 +158,37 @@ size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor)
 /**************************************************************************/
 /*!
     Places the sensor event in a text buffer for data logging purposes
+
+    @code
+
+    error_t error;
+    sensors_event_t event;
+    char buffer[128];
+    size_t len;
+
+    // Get some sample sensor data
+    error = mpl115a2GetSensorEvent(&event);
+
+    // Log the data to disk using logger.c
+    if (!error)
+    {
+      // Fill 'buffer' with the log data, returning the string length
+      len = sensorsLogSensorsEvent(buffer, 128, &event);
+
+      // Initialise the logger using the file 'capture.txt'
+      error = loggerInit("capture.txt");
+      if (!error)
+      {
+        // Write the buffer out to the log file
+        error = loggerWrite(buffer, len);
+        if (error)
+        {
+          // ToDo: Do something with the error message
+        }
+      }
+    }
+
+    @endcode
 */
 /**************************************************************************/
 size_t sensorsLogSensorsEvent(char *buffer, const size_t len,
