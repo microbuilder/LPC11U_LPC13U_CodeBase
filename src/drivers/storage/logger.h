@@ -40,5 +40,6 @@
 
 error_t loggerInit(char *filename);
 error_t loggerWrite(const uint8_t * buffer, uint32_t len);
+error_t loggerUnmount(void);
 
 #endif

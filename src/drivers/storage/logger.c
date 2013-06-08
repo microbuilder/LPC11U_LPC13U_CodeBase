@@ -120,7 +120,6 @@ error_t loggerInit(char *filename)
 
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
     f_close(&loggerSDFile);
-    // ToDo: This will leave the driver mounted ... when to call "f_mount(0,0)"?
   #endif
 
   loggerInitialised = TRUE;
@@ -165,4 +164,20 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
     #endif
 
     return ERROR_NONE;
+}
+
+/**************************************************************************/
+/*!
+    @brief Appends the supplied buffer to the log file created in
+           loggerInit()
+*/
+/**************************************************************************/
+error_t loggerUnmount(void)
+{
+  #if defined CFG_SDCARD && LOGGER_FATFSFILE
+    // Unmount the drive for FatFS
+    f_mount(0, 0);
+  #endif
+
+  return ERROR_NONE;
 }
