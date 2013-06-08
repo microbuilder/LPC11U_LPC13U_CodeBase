@@ -157,59 +157,61 @@ size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor)
 
 /**************************************************************************/
 /*!
-    Places the sensor event in a text buffer for data logging purposes
+    @brief  Places the sensor event in a text buffer for data logging
+            purposes, with the following comma-separated format:
+            SENSOR ID, SENSOR TYPE, TIMESTAMP (ms), D0, D1, D2, D3
 
     @code
+
+    // Read 1000 samples from an accelerometer and log them to an SD card
+    // using 'drivers/storage/logger.c' (CFG_SDCARD must be enabled)
 
     error_t error;
     sensors_event_t event;
     char buffer[128];
     size_t len;
+    volatile size_t count = 0;
 
     // Initialise the accelerometer
     error = lsm303accelInit();
 
     if (!error)
     {
-      // Initialise the logger using the file 'capture.txt'
+      // Initialise the logger using the file 'sensors.txt'
       error = loggerInit("sensors.txt");
 
       if (!error)
       {
-        // Continuously read sensor data and log it
-        while(1)
+        // Read 1000 sensor events and log them to the SD card
+        while(count < 1000)
         {
-          // Get some sample sensor data
+          // Increment the sample counter
+          count++;
+
+          // Get fresh sensor data to log
           error = lsm303accelGetSensorEvent(&event);
 
-          // Log the data to disk using logger.c
+          // Try to log the data to disk
           if (!error)
           {
-            // Fill 'buffer' with the log data, returning the string length
+            // Fill 'buffer' with the data, returning the string length
             len = sensorsLogSensorsEvent(buffer, 128, &event);
 
             // Write the buffer out to the log file
             error = loggerWrite(buffer, len);
             if (error)
             {
-              loggerClose();
-              // ToDo: Do something with the error message
+              // Something went wrong writing to the file ...
+              // This will cause us to exit the loop, and the file
+              // will be closed further down
+              count = 1000;
             }
           }
         }
       }
 
-      // Make sure the file is closed
+      // Make sure the file is closed and we unmount the drive
       loggerClose();
-    }
-
-    while(1)
-    {
-      // Error blinky
-      boardLED(CFG_LED_ON);
-      delay(100);
-      boardLED(CFG_LED_OFF);
-      delay(100);
     }
 
     @endcode
