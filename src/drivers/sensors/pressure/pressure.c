@@ -38,6 +38,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 
+#include <math.h>
 #include "drivers/sensors/sensors.h"
 #include "pressure.h"
 
