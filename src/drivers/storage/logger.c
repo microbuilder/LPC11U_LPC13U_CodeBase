@@ -81,18 +81,27 @@ error_t loggerInit(char *filename)
 
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
     DSTATUS stat;
-    stat = disk_initialize(0);
-    if (stat & STA_NOINIT)
-    {
-      return ERROR_FATFS_INITFAILED;
-    }
+    stat = disk_status(0);
+
+    // Make sure an SD card is present
     if (stat & STA_NODISK)
     {
       return ERROR_FATFS_NODISK;
     }
+
+    // Check if the SD card has already been initialised
+    if (stat & STA_NOINIT)
+    {
+      // Try to initialise it here
+      if(disk_initialize(0) & (STA_NOINIT | STA_NODISK))
+      {
+        return ERROR_FATFS_INITFAILED;
+      }
+    }
+
+    // SD card successfully initialised
     if (stat == 0)
     {
-      // SD card sucessfully initialised
       BYTE res;
       // Try to mount drive
       res = f_mount(0, &Fatfs[0]);
@@ -145,6 +154,15 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
     BYTE res;
     unsigned int bytesWritten;
+    DSTATUS stat = disk_status(0);
+
+    // Make sure the SD card is still present
+    if(stat & STA_NODISK)
+    {
+      return ERROR_FATFS_NODISK;
+    }
+
+    // Write the data to the log file
     res = f_write(&loggerSDFile, buffer, len, &bytesWritten);
     if (res != FR_OK)
     {
@@ -157,7 +175,7 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
 
 /**************************************************************************/
 /*!
-    @brief Closes the file and if necessary unmounts the drive
+    @brief Writes an uncommitted data and closes the file
 */
 /**************************************************************************/
 error_t loggerClose(void)
@@ -171,7 +189,6 @@ error_t loggerClose(void)
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
     f_sync(&loggerSDFile);
     f_close(&loggerSDFile);
-    f_mount(0, 0);
   #endif
 
   return ERROR_NONE;
