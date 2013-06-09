@@ -237,15 +237,3 @@ size_t sensorsLogSensorsEvent(char *buffer, const size_t len,
 
   return written;
 }
-
-/**************************************************************************/
-/*!
-    Converts pressure in hPa to altitude in meters
-*/
-/**************************************************************************/
-float sensorsPressureToAltitude(float pressure_hPa)
-{
-  return (pressure_hPa
-      / (float) pow(1.0F - (SENSORS_PRESSURE_SEALEVELHPA / 44330.0f), 5.255f))
-      / 10;
-}
