@@ -187,6 +187,7 @@
           <folder Name="pressure" file_name="">
             <file file_name="src/drivers/sensors/pressure/mpl115a2.c"/>
             <file file_name="src/drivers/sensors/pressure/bmp085.c"/>
+            <file file_name="src/drivers/sensors/pressure/pressure.c"/>
           </folder>
           <folder Name="temperature" file_name="">
             <file file_name="src/drivers/sensors/temperature/lm75b.c"/>

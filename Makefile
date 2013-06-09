@@ -237,6 +237,7 @@ OBJS  += $(OBJ_PATH)/lsm303mag.o
 VPATH += src/drivers/sensors/pressure
 OBJS  += $(OBJ_PATH)/bmp085.o
 OBJS  += $(OBJ_PATH)/mpl115a2.o
+OBJS  += $(OBJ_PATH)/pressure.o
 
 VPATH += src/drivers/sensors/temperature
 OBJS  += $(OBJ_PATH)/lm75b.o
