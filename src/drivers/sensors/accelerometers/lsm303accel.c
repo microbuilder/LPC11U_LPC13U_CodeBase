@@ -139,7 +139,9 @@ error_t lsm303accelInit(void)
   ASSERT(i2cCheckAddress(LSM303_ADDRESS_ACCEL), ERROR_I2C_DEVICENOTFOUND);
 
   /* Enable the accelerometer (10Hz) */
-  ASSERT_STATUS(lsm303accelWrite8(LSM303_ADDRESS_ACCEL, LSM303_REGISTER_ACCEL_CTRL_REG1_A, 0x27));
+  // ASSERT_STATUS(lsm303accelWrite8(LSM303_ADDRESS_ACCEL, LSM303_REGISTER_ACCEL_CTRL_REG1_A, 0x27));
+  /* Enable the accelerometer (100Hz) */
+  ASSERT_STATUS(lsm303accelWrite8(LSM303_ADDRESS_ACCEL, LSM303_REGISTER_ACCEL_CTRL_REG1_A, 0x57));
 
   _lsm303accelInitialised = true;
 
