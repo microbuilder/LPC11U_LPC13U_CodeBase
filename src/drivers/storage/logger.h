@@ -38,7 +38,13 @@
 
 #include "projectconfig.h"
 
-error_t loggerInit(char *filename);
+typedef enum
+{
+  LOGGER_FILEACTION_APPEND       = 0, /**< Creates a new file if it doesn't exist or appends to an existing file */
+  LOGGER_FILEACTION_ALWAYSCREATE = 1  /**< Always creates a new file, overwriting any older existing file        */
+} logger_fileaction_t;
+
+error_t loggerInit(char *filename, logger_fileaction_t action);
 error_t loggerWrite(const uint8_t * buffer, uint32_t len);
 error_t loggerClose(void);
 

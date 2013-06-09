@@ -68,20 +68,28 @@ static bool loggerInitialised = FALSE;
     @brief Initialises a new text file for data logging
 */
 /**************************************************************************/
-error_t loggerInit(char *filename)
+error_t loggerInit(char *filename, logger_fileaction_t action)
 {
   loggerFName = filename;
 
-  // Create a new file
   #if LOGGER_LOCALFILE
     #ifdef __CROSSWORKS_ARM
-      loggerLocalFile = debug_fopen(loggerFName, "wt"); // Use "at" to append data
+      switch (action)
+      {
+        case (LOGGER_FILEACTION_ALWAYSCREATE):
+          // Always create a new file
+          loggerLocalFile = debug_fopen(loggerFName, "wt");
+          break;
+        default:
+          // Append data to existing files
+          loggerLocalFile = debug_fopen(loggerFName, "at");
+          break;
+      }
     #endif
   #endif
 
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
-    DSTATUS stat;
-    stat = disk_status(0);
+    DSTATUS stat = disk_status(0);
 
     // Make sure an SD card is present
     if (stat & STA_NODISK)
@@ -103,7 +111,7 @@ error_t loggerInit(char *filename)
     if (stat == 0)
     {
       BYTE res;
-      // Try to mount drive
+      // Try to mount the fat file system
       res = f_mount(0, &Fatfs[0]);
       if (res != FR_OK)
       {
@@ -111,13 +119,25 @@ error_t loggerInit(char *filename)
       }
       if (res == FR_OK)
       {
-        // Create a file (overwriting any existing file!)
-        if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_CREATE_ALWAYS)!=FR_OK)
+        switch (action)
         {
-          return ERROR_FATFS_UNABLETOCREATEFILE;
+          case (LOGGER_FILEACTION_ALWAYSCREATE):
+            // Create a file (overwriting any existing file!)
+            if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_CREATE_ALWAYS)!=FR_OK)
+            {
+              return ERROR_FATFS_UNABLETOCREATEFILE;
+            }
+            break;
+          default:
+            // Append to an existing file is present, otherwise create one
+            if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_OPEN_ALWAYS)!=FR_OK)
+            {
+              return ERROR_FATFS_UNABLETOCREATEFILE;
+            }
+            // Move to end of the file if we are appending data
+            f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
+            break;
         }
-        // Move to end of the file to append data
-        f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
       }
     }
   #endif
@@ -187,8 +207,9 @@ error_t loggerClose(void)
   #endif
 
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
-    f_sync(&loggerSDFile);
-    f_close(&loggerSDFile);
+    f_sync(&loggerSDFile);    // Sync any uncommitted data
+    f_close(&loggerSDFile);   // Close the file
+    f_mount(0, 0);            // Unmount the file system
   #endif
 
   return ERROR_NONE;

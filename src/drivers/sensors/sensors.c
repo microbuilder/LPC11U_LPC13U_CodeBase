@@ -178,7 +178,7 @@ size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor)
     if (!error)
     {
       // Initialise the logger using the file 'sensors.txt'
-      error = loggerInit("sensors.txt");
+      error = loggerInit("sensors.txt", LOGGER_FILEACTION_ALWAYSCREATE);
 
       if (!error)
       {
