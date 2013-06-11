@@ -36,7 +36,7 @@
 #include "delay.h"
 
 /* Set this to 1 to use TIMER16[0] instead of systick */
-#define DELAY_USE_TIMER16_0      (0)
+#define DELAY_USE_TIMER16_0      (1)
 
 #ifdef CFG_SDCARD
 #include "drivers/storage/fatfs/diskio.h"
