@@ -5,7 +5,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 ## 0.8.6 [Ongoing] ##
 
 - Added core/timer16
-- Added core/delay
+- Added core/delay (abstraction layer to use systick or timer16[0] for 1ms delays)
 - Removed core/systick and changed all systick* calls to delay* (for RTOS compatability)
 - Added flow control to uart.c
 - Added faster simple moving average filter (drivers/filters/ma/sma\_*), removed old versions
