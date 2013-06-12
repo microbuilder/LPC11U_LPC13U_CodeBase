@@ -178,7 +178,7 @@ size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor)
     if (!error)
     {
       // Initialise the logger using the file 'sensors.txt'
-      error = loggerInit("sensors.txt");
+      error = loggerInit("sensors.txt", LOGGER_FILEACTION_ALWAYSCREATE);
 
       if (!error)
       {
@@ -236,16 +236,4 @@ size_t sensorsLogSensorsEvent(char *buffer, const size_t len,
     CFG_PRINTF_NEWLINE);
 
   return written;
-}
-
-/**************************************************************************/
-/*!
-    Converts pressure in hPa to altitude in meters
-*/
-/**************************************************************************/
-float sensorsPressureToAltitude(float pressure_hPa)
-{
-  return (pressure_hPa
-      / (float) pow(1.0F - (SENSORS_PRESSURE_SEALEVELHPA / 44330.0f), 5.255f))
-      / 10;
 }

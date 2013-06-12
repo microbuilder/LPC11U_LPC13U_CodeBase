@@ -68,33 +68,50 @@ static bool loggerInitialised = FALSE;
     @brief Initialises a new text file for data logging
 */
 /**************************************************************************/
-error_t loggerInit(char *filename)
+error_t loggerInit(char *filename, logger_fileaction_t action)
 {
   loggerFName = filename;
 
-  // Create a new file
   #if LOGGER_LOCALFILE
     #ifdef __CROSSWORKS_ARM
-      loggerLocalFile = debug_fopen(loggerFName, "wt"); // Use "at" to append data
+      switch (action)
+      {
+        case (LOGGER_FILEACTION_ALWAYSCREATE):
+          // Always create a new file
+          loggerLocalFile = debug_fopen(loggerFName, "wt");
+          break;
+        default:
+          // Append data to existing files
+          loggerLocalFile = debug_fopen(loggerFName, "at");
+          break;
+      }
     #endif
   #endif
 
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
-    DSTATUS stat;
-    stat = disk_initialize(0);
-    if (stat & STA_NOINIT)
-    {
-      return ERROR_FATFS_INITFAILED;
-    }
+    DSTATUS stat = disk_status(0);
+
+    // Make sure an SD card is present
     if (stat & STA_NODISK)
     {
       return ERROR_FATFS_NODISK;
     }
+
+    // Check if the SD card has already been initialised
+    if (stat & STA_NOINIT)
+    {
+      // Try to initialise it here
+      if(disk_initialize(0) & (STA_NOINIT | STA_NODISK))
+      {
+        return ERROR_FATFS_INITFAILED;
+      }
+    }
+
+    // SD card successfully initialised
     if (stat == 0)
     {
-      // SD card sucessfully initialised
       BYTE res;
-      // Try to mount drive
+      // Try to mount the fat file system
       res = f_mount(0, &Fatfs[0]);
       if (res != FR_OK)
       {
@@ -102,13 +119,25 @@ error_t loggerInit(char *filename)
       }
       if (res == FR_OK)
       {
-        // Create a file (overwriting any existing file!)
-        if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_CREATE_ALWAYS)!=FR_OK)
+        switch (action)
         {
-          return ERROR_FATFS_UNABLETOCREATEFILE;
+          case (LOGGER_FILEACTION_ALWAYSCREATE):
+            // Create a file (overwriting any existing file!)
+            if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_CREATE_ALWAYS)!=FR_OK)
+            {
+              return ERROR_FATFS_UNABLETOCREATEFILE;
+            }
+            break;
+          default:
+            // Append to an existing file is present, otherwise create one
+            if(f_open(&loggerSDFile, loggerFName, FA_READ | FA_WRITE | FA_OPEN_ALWAYS)!=FR_OK)
+            {
+              return ERROR_FATFS_UNABLETOCREATEFILE;
+            }
+            // Move to end of the file if we are appending data
+            f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
+            break;
         }
-        // Move to end of the file to append data
-        f_lseek(&loggerSDFile, (&loggerSDFile)->fsize);
       }
     }
   #endif
@@ -145,6 +174,15 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
     BYTE res;
     unsigned int bytesWritten;
+    DSTATUS stat = disk_status(0);
+
+    // Make sure the SD card is still present
+    if(stat & STA_NODISK)
+    {
+      return ERROR_FATFS_NODISK;
+    }
+
+    // Write the data to the log file
     res = f_write(&loggerSDFile, buffer, len, &bytesWritten);
     if (res != FR_OK)
     {
@@ -157,7 +195,7 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
 
 /**************************************************************************/
 /*!
-    @brief Closes the file and if necessary unmounts the drive
+    @brief Writes an uncommitted data and closes the file
 */
 /**************************************************************************/
 error_t loggerClose(void)
@@ -169,9 +207,9 @@ error_t loggerClose(void)
   #endif
 
   #if defined CFG_SDCARD && LOGGER_FATFSFILE
-    f_sync(&loggerSDFile);
-    f_close(&loggerSDFile);
-    f_mount(0, 0);
+    f_sync(&loggerSDFile);    // Sync any uncommitted data
+    f_close(&loggerSDFile);   // Close the file
+    f_mount(0, 0);            // Unmount the file system
   #endif
 
   return ERROR_NONE;

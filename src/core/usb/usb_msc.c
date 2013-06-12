@@ -85,7 +85,6 @@ void MSC_Write(uint32_t offset, uint8_t **src, uint32_t length)
 
   if ( cache_count == CACHE_SIZE) // not enough to write, continue caching
   {
-//    _PRINTF("writing sector %d\n", cache_count, cache_sector);
     ASSERT( disk_write(0, cache_data, cache_sector, 1) == RES_OK, (void) 0 );
     cache_count = 0;
   }
@@ -107,9 +106,7 @@ void MSC_Read(uint32_t offset, uint8_t **dst, uint32_t length)
   if ( cache_sector != (offset / CACHE_SIZE) ) // new block
   {
     cache_sector = (offset / CACHE_SIZE);
-//    _PRINTF("reading sector %d\n", cache_sector);
     ASSERT( disk_read(0, cache_data, cache_sector, 1) == RES_OK, (void) 0 );
-//    print_cache(cache_data);
   }
 
   memcpy(*dst, cache_data + (offset%CACHE_SIZE), length);
@@ -148,7 +145,11 @@ ErrorCode_t usb_msc_init(USBD_HANDLE_T hUsb, USB_INTERFACE_DESCRIPTOR const * co
 
   ASSERT( pInterface, ERR_FAILED);
 
-//  ASSERT( !(disk_initialize(0) & (STA_NOINIT | STA_NODISK) ), ERR_FAILED);
+  if (disk_status(0) & STA_NOINIT)
+  {
+    ASSERT( !(disk_initialize(0) & (STA_NOINIT | STA_NODISK) ), ERR_FAILED);
+  }
+
   ASSERT ( disk_ioctl(0, GET_SECTOR_SIZE , &sector_size)  == RES_OK, ERR_FAILED);
   ASSERT ( disk_ioctl(0, GET_SECTOR_COUNT, &sector_count) == RES_OK, ERR_FAILED);
 
