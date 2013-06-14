@@ -43,7 +43,8 @@ extern "C" {
 #include "projectconfig.h"
 #include "romdriver/mw_usbd_rom_api.h"
 
-#define CDC_BUFFER_SIZE (2*CDC_DATA_EP_MAXPACKET_SIZE)
+// #define CDC_BUFFER_SIZE (2*CDC_DATA_EP_MAXPACKET_SIZE)
+#define CDC_BUFFER_SIZE (4*CDC_DATA_EP_MAXPACKET_SIZE)
 
 bool usb_cdc_putc(uint8_t c);
 bool usb_cdc_getc(uint8_t *c);
