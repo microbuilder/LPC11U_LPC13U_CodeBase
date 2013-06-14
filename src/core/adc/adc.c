@@ -83,19 +83,28 @@ void adcInit(void)
   // LPC_IOCON->PIO0_23       &= ~0x9F;
   // LPC_IOCON->PIO0_23       |= 0x01;
 
-  /* Setup the ADC clock, conversion mode, etc. */
-  LPC_ADC->CR = (0x01 << 0)                            |
-                ((SystemCoreClock / ADC_CLK - 1) << 8) |  /* CLKDIV = Fpclk / 1000000 - 1 */
-                (0 << 16)                              |  /* BURST = 0, no BURST, software controlled */
-                (0 << 17)                              |  /* CLKS = 0, 11 clocks/10 bits */
-                #if ADC_MODE_LOWPOWER
-                (1 << 22)                              |  /* Low-power mode */
-                #endif
-                #if ADC_MODE_10BIT
-                (1 << 23)                              |  /* 10-bit mode */
-                #endif
-                (0 << 24)                              |  /* START = 0 A/D conversion stops */
-                (0 << 27);                                /* EDGE = 0 (CAP/MAT rising edge, trigger A/D conversion) */
+  #if defined CFG_MCU_FAMILY_LPC11UXX
+    /* Setup the ADC clock, conversion mode, etc. */
+    LPC_ADC->CR = (0x01 << 0)                            |
+                  ((SystemCoreClock / ADC_CLK - 1) << 8) |  /* CLKDIV = Fpclk / 1000000 - 1 */
+                  (0 << 16)                              |  /* BURST = 0, no BURST, software controlled */
+                  (0 << 24)                              |  /* START = 0 A/D conversion stops */
+                  (0 << 27);                                /* EDGE = 0 (CAP/MAT rising edge, trigger A/D conversion) */
+  #elif defined CFG_MCU_FAMILY_LPC13UXX
+    /* Setup the ADC clock, conversion mode, etc. */
+    LPC_ADC->CR = (0x01 << 0)                            |
+                  ((SystemCoreClock / ADC_CLK - 1) << 8) |  /* CLKDIV = Fpclk / 1000000 - 1 */
+                  (0 << 16)                              |  /* BURST = 0, no BURST, software controlled */
+                  (0 << 17)                              |  /* CLKS = 0, 11 clocks/10 bits */
+                  #if CFG_ADC_MODE_LOWPOWER
+                  (1 << 22)                              |  /* Low-power mode */
+                  #endif
+                  #if CFG_ADC_MODE_10BIT
+                  (1 << 23)                              |  /* 10-bit mode */
+                  #endif
+                  (0 << 24)                              |  /* START = 0 A/D conversion stops */
+                  (0 << 27);                                /* EDGE = 0 (CAP/MAT rising edge, trigger A/D conversion) */
+  #endif
 }
 
 /**************************************************************************/
@@ -123,7 +132,7 @@ uint32_t adcRead(uint8_t channelNum)
   /* Wait until the conversion is complete */
   while (1)
   {
-    regVal = *(volatile unsigned long *)(LPC_ADC_BASE + ADC_OFFSET + ADC_INDEX * channelNum);
+    regVal = LPC_ADC->DR[channelNum];
     if ( regVal & ADC_DONE )
     {
       break;
@@ -133,9 +142,13 @@ uint32_t adcRead(uint8_t channelNum)
   /* Stop the ADC */
   LPC_ADC->CR &= 0xF8FFFFFF;
 
-  #if ADC_MODE_10BIT
-    return ( regVal >> 6 ) & 0x3FF;
-  #else
-    return ( regVal >> 4 ) & 0xFFF;
+  #if defined CFG_MCU_FAMILY_LPC11UXX
+      return ( regVal >> 6 ) & 0x3FF;
+  #elif defined CFG_MCU_FAMILY_LPC13UXX
+    #if CFG_ADC_MODE_10BIT
+      return ( regVal >> 6 ) & 0x3FF;
+    #else
+      return ( regVal >> 4 ) & 0xFFF;
+    #endif
   #endif
 }

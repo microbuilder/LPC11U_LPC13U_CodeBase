@@ -12,6 +12,8 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added weighted moving average filter (/drivers/filters/ma/wma\_*)
 - Renamed CMSIS startup_* files to be clearer
 - Added drivers/storage/logger.c to log data to an SD card or a local file (local file is Crossworks only)
+- Updated adc.c for differences between LPC11U and LPC1347
+- Moved low power and 10-bit ADC mode settings to board config file
 
 ## 0.8.5 [21 May 2013] ##
 

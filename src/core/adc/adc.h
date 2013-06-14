@@ -41,13 +41,6 @@ extern "C" {
 
 #include "projectconfig.h"
 
-/* Enable low-power mode */
-/* Warning ... this seems to be buggy, avoid for now! */
-#define ADC_MODE_LOWPOWER     (0)
-
-/* Enable 10-bit mode */
-#define ADC_MODE_10BIT        (0)
-
 #define ADC_OFFSET            (0x10)
 #define ADC_INDEX             (4)
 #define ADC_DONE              (0x80000000)
