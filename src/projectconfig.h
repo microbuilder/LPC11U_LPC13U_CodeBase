@@ -69,7 +69,7 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_CODEBASE_VERSION_MAJOR      (0)
     #define CFG_CODEBASE_VERSION_MINOR      (8)
-    #define CFG_CODEBASE_VERSION_REVISION   (6)
+    #define CFG_CODEBASE_VERSION_REVISION   (7)
 /*=========================================================================*/
 
 

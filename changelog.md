@@ -2,6 +2,10 @@
 
 Major changes in the LPC11U/LPC13U code base by code base version number.
 
+## 0.8.7 [ongoing] ##
+
+- In progress
+
 ## 0.8.6 [14 June 2013] ##
 
 - Added core/timer16
