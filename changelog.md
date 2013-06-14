@@ -14,6 +14,9 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added drivers/storage/logger.c to log data to an SD card or a local file (local file is Crossworks only)
 - Updated adc.c for differences between LPC11U and LPC1347
 - Moved low power and 10-bit ADC mode settings to board config file
+- Added custom M3 RTX library (canned M3 RTX lib from ARM generated hardfault)
+- **KNOWN ISSUE**: CDC still sometimes fails with heavy traffic ... active debugging in progress
+- **KNOWN ISSUE**: RTX tested under LPCXpresso, but not working under CW since startup code needs to be modified so license issues need to be resolved with Rowley
 
 ## 0.8.5 [21 May 2013] ##
 
