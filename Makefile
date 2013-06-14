@@ -224,6 +224,7 @@ VPATH += src/drivers/sensors/accelerometers
 OBJS  += $(OBJ_PATH)/adxl345.o
 OBJS  += $(OBJ_PATH)/lis3dh.o
 OBJS  += $(OBJ_PATH)/lsm303accel.o
+OBJS  += $(OBJ_PATH)/accelerometers.o
 
 VPATH += src/drivers/sensors/gyroscopes
 OBJS  += $(OBJ_PATH)/l3gd20.o
