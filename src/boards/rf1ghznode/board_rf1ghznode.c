@@ -437,18 +437,14 @@ int main(void)
 
   boardInit();
 
-#if defined CFG_CMSIS_RTOS
- tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
- tid_mainthread = osThreadGetId();
- for (;;)
- {
-   osDelay(1000);
-   boardLED((currentSecond++) & 1);
- }
-#endif
-
-  #ifdef CFG_CHIBI
-    // lsm303accelInit();
+  #if defined CFG_CMSIS_RTOS
+    tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
+    tid_mainthread = osThreadGetId();
+    for (;;)
+    {
+      osDelay(1000);
+      boardLED((currentSecond++) & 1);
+    }
   #endif
 
   while (1)
@@ -476,12 +472,6 @@ int main(void)
     /* Check for incoming wireless messages */
     #ifdef CFG_CHIBI
       checkForMessages();
-    #endif
-
-    /* Send some sensor data over the air */
-    #ifdef CFG_CHIBI
-      // sendSensorEvent();
-      // delay(100);
     #endif
   }
 }

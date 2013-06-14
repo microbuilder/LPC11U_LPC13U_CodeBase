@@ -37,13 +37,8 @@
 
 #include "delay.h"
 
-#ifdef CFG_CMSIS_RTOS
-  /* The RTOS uses systick so we need to use TIMER16[0] instead */
-  #define DELAY_USE_TIMER16_0      (1)
-#else
-  /* No RTOS so we can use the systick timer for less overall power */
-  #define DELAY_USE_TIMER16_0      (0)
-#endif
+/* RTX claims systick so we need to use TIMER16[0] instead */
+#define DELAY_USE_TIMER16_0      (1)
 
 #ifdef CFG_SDCARD
 #include "drivers/storage/fatfs/diskio.h"
