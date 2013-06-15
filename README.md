@@ -12,6 +12,7 @@ It includes the following key features, which can be easily enabled or disabled 
 - Basic [localisation support](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/src/localisation), allowing multiple languages to be used in the same application
 - Graphics sub-system including support for multiple font types (bitmap or anti-aliased), basic drawing functions, and a simple HW abstraction mechanism
 - FAT16/32 file system support for SD cards including the option to use long names (via FatFS)
+- Numerous wireless stacks, including NFC (based on the PN532) and 802.15.4 (based on the AT86RF212).
 - A basic [unit testing framework](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/tests) suitable for embedded systems (Unity)
 
 ## Supported MCUs ##
@@ -28,32 +29,31 @@ In an attempt to make the code base relevant in a variety of situations, there i
 
 The target board in indicated in the shared **projectconfig.h** file, which in turn  references the board-specific config and initialization code in the **'boards/'** subfolder.
 
-## Additional Drivers/Stacks ##
-
-In addition to the sensors supported by the sensor abstraction layer, the following drivers and stacks are also included in the code base:
-
-- **PN532/NFC Stack** - A basic stack for 13.56MHz RFID or NFC using NXP's PN532 IC. UART or I2C can be used to communicate with the PN532, and basic helper functions are included for Mifare Classic and Mifare Ultralight cards.
-- **Chibi** - A light-weight 802.15.4 wireless stack, with support for the 868/915MHz AT86RF212 transceiver, as well as a simple messaging framework (messages.c).
-
 ## Supported IDEs/Toolchains ##
 
 The code base contains a few dependencies on GCC extensions (notably in the localisation system), and has not been tested with any non-GCC toolchain.
 
 At the moment the following IDEs are supported by the code base, and this list may be extended in the future:
 
-**GCC/Makefile**
+**GCC/Makefile ('Makefile')**
 
 The codebase includes startup code, linker scripts and a makefile to build this codebase with the cross-platform, open-source GNU/GCC toolset.  This gives you the most control over how your project is built, and allows you to build your project on any platform with support for GCC and make (*NIX, Mac OSX, Windows, etc.). [(more)](doc/toolchain_make.md)
 
-**LPCXpresso / Code Red IDE**
+**LPCXpresso / Code Red IDE (.cproject/.project)**
 
 LPCXpresso is a free of charge Eclipse-based IDE based around GCC.  It's based on Code Red's commercial Red Suite IDE, but is provided free of charge by NXP Semiconductors with a debug limit up to 128Kb (you can, however, compile projects larger than this), which is within the limits of all of the chips supported by this code base.  
 
 Inexpensive LPCXpresso development boards are available with integrated SWD debuggers that can be seperated from the MCU part of the board and used to debug any supported MCU or device. [(more)](doc/toolchain_lpcxpresso.md)
 
-**Crossworks for ARM**
+**Crossworks for ARM (CW\_*.hzp)**
 
 Project files are also provided for Rowley Associate's popular Crossworks for ARM IDE, which is GCC based, includes an optimised standard C library, and supports a large variety of HW debuggers (including the popular J-Link from Segger). [(more)](doc/toolchain_crossworks.md)
+
+**Keil uVision (Keil\_*.uvproj)**
+
+An initial attempt was made at adding support for Keil's uVision since a free 32 kB version is available, but this should be considered deprecated and the project files will no longer be maintained.
+
+A conscious choice was made to focus on GCC as a toolchain for this code base.  Commercial tools have their place in the world, but it's a choice based on long term reliability of any firmware built with this code base.  By focusing on GCC, you are certain that you will always be able to rebuild your firmware exactly as it was built 10+ years ago without having to worry about whether a commercial compiler vendor still exists or can activate an old version of their compiler, etc.
 
 ## Current Development Status ##
 
