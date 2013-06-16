@@ -45,7 +45,7 @@
 /**************************************************************************/
 /*!
     Calculates the altitude (in meters) from the specified atmospheric
-    pressure (in hPa), sea-level pressure (in hPa), and temperature (in C)
+    pressure (in hPa), sea-level pressure (in hPa), and temperature (in °C)
 
     @param  seaLevel      Sea-level pressure in hPa
     @param  atmospheric   Atmospheric pressure in hPa
@@ -73,14 +73,14 @@ float pressureToAltitude(float seaLevel, float atmospheric, float temp)
 /*!
     Calculates the sea-level pressure (in hPa) based on the current
     altitude (in meters), atmospheric pressure (in hPa), and temperature
-    (in C)
+    (in °C)
 
     @param  altitude      altitude in meters
     @param  atmospheric   Atmospheric pressure in hPa
     @param  temp          Temperature in degrees Celsius
 */
 /**************************************************************************/
-float pressureSLPFromAltitude(float altitude, float atmospheric, float temp)
+float pressureSeaLevelFromAltitude(float altitude, float atmospheric, float temp)
 {
   /* Sea-level pressure:                        */
   /*                                            */
@@ -97,3 +97,59 @@ float pressureSLPFromAltitude(float altitude, float atmospheric, float temp)
           (temp + 0.0065 * altitude + 273.15F)), -5.257F);
 }
 
+/**************************************************************************/
+/*!
+    Calculates the temperature (in °C) at the destination altitude based
+    on the current seal-level pressure (in hPa), altitude
+    (in meters) and temperature (in C)
+
+    @param  currTemp        Temperature at current altitude (in °C)
+    @param  currAltitude    Current altitude (in meters)
+    @param  destAltitude    Destination altitude (in meters)
+*/
+/**************************************************************************/
+float pressureTempAtDestination(float currTemp, float currAltitude, float destAltitude)
+{
+  /* Temperature at destination:                */
+  /*                                            */
+  /* T = Ta - 0.0065(h - ha)                    */
+  /*                                            */
+  /* where: T   = Temp at destination (in °C)   */
+  /*        Ta  = Temp at current location (°C) */
+  /*        ha  = Current altitude (in meters)  */
+  /*        h   = Target altitude (in meters)   */
+
+  return currTemp - 0.0065F * (destAltitude - currAltitude);
+}
+
+/**************************************************************************/
+/*!
+    Calculates the atmospheric pressure (in hPa) at the destination
+    altitude based on the current seal-level pressure (in hPa), altitude
+    (in meters) and temperature (in C)
+
+    @param  seaLevel        Sea-level pressure (in hPa)
+    @param  destTemp        Temperature at the destination altitude (°C)
+    @param  destAltitude    Destination altitude (in meters)
+
+    @note Normally you will need to calculate the temperature at
+          destination with pressureTempAtDestination() before running
+          this function!
+*/
+/**************************************************************************/
+float pressureAtDestination(float seaLevel, float destTemp, float destAltitude)
+{
+  /* Atmospheric pressure at destination:       */
+  /*                                            */
+  /*                0.0065 * h                  */
+  /* P = P0 (1 - -----------------) ^ 5.257     */
+  /*             T+0.0065*h+273.15              */
+  /*                                            */
+  /* where: P   = Pressure at destination (hPa) */
+  /*        P0  = Sea-level pressure (hPa)      */
+  /*        h   = Destination altitude (meters) */
+  /*        T   = Destination temperature (°C)  */
+
+  return seaLevel * (float)pow(1.0F - (0.0065F * destAltitude) /
+          (destTemp + 0.0065F * destAltitude + 273.15F), 5.257F);
+}

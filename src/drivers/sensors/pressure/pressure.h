@@ -45,6 +45,8 @@ extern "C" {
 
 float pressureToAltitude(float seaLevel, float atmospheric, float temp);
 float pressureSLPFromAltitude(float altitude, float atmospheric, float temp);
+float pressureTempAtDestination(float currTemp, float currAltitude, float destAltitude);
+float pressureAtDestination(float seaLevel, float destTemp, float destAltitude);
 
 #ifdef __cplusplus
 }
