@@ -270,7 +270,5 @@ error_t adxl345GetSensorEvent(sensors_event_t *event)
   event->acceleration.y = y * ADXL345_MG2G_MULTIPLIER * SENSORS_GRAVITY_STANDARD;
   event->acceleration.z = z * ADXL345_MG2G_MULTIPLIER * SENSORS_GRAVITY_STANDARD;
 
-  printf("   %08d    %08d    %08d%s", x, y, z, CFG_PRINTF_NEWLINE);
-
   return ERROR_NONE;
 }
