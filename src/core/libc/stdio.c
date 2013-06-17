@@ -6,6 +6,7 @@
  * All rights reserved.
  *
  * Modified by Roel Verdult, Copyright (c) 2010
+ * Modified by Pito 2013 (%f, %e, %E)
  *
  * Redistribution and use in source and binary forms, with or without
  * modification, are permitted provided that the following conditions are met:
@@ -81,13 +82,13 @@ signed int PutString(char *pStr, char fill, signed int width, const char *pSourc
         num++;
     }
 
-	width -= num;
-	while (width > 0) {
+        width -= num;
+        while (width > 0) {
 
         *pStr++ = fill;
-		num++;
-		width--;
-	}
+                num++;
+                width--;
+        }
 
     return num;
 }
@@ -171,7 +172,7 @@ signed int PutSignedInt(
     if ((absolute / 10) > 0) {
 
         if (value < 0) {
-        
+
             num = PutSignedInt(pStr, fill, width, -(absolute / 10));
         }
         else {
@@ -269,6 +270,181 @@ signed int PutHexa(
     return num;
 }
 
+
+//------------------------------------------------------------------------------
+// Writes a float inside the given string, using the provided fill & width
+// parameters.
+// Returns the size of the written integer.
+// \param pStr Storage string.
+// \param fill Fill character.
+// \param width Minimum width.
+// \param value Float value.
+// Pito 6/2013
+// +nnnnnnn.nnnnnnn, -nnnnnnn.nnnnnnn
+//------------------------------------------------------------------------------
+signed int PutFloat(
+    char *pStr,
+    char fill,
+    signed int width,
+    double value)
+{
+
+    int num = 0;
+    int intpart;
+    int fraction;
+
+    if (value < 0.0f)
+    {
+      num+=append_char(pStr+num, '-');
+      value = -value;
+    }
+
+    intpart = (int)value;
+    fraction = (int)((value - intpart) * 1000000.0f + 0.5f );
+
+    num+=PutUnsignedInt(pStr+num,fill,1,(int)(intpart));
+
+    num+=append_char(pStr+num, '.');
+
+    num+=PutUnsignedInt(pStr+num,'0',6,(int)(fraction));
+
+    return num;
+}
+
+
+//------------------------------------------------------------------------------
+// Writes a SCI notation float inside the given string, using the provided fill & width
+// parameters.
+// Returns the size of the written integer.
+// \param pStr Storage string.
+// \param fill Fill character.
+// \param width Minimum width.
+// \param value Float value.
+// Pito 6/2013
+// n.nnnnnnE+nnn, -n.nnnnnnE-nnn
+//------------------------------------------------------------------------------
+signed int PutFloatE(
+    char *pStr,
+    char fill,
+    signed int width,
+    double value)
+{
+    int num = 0;
+    int exponent = 0;
+    int intpart;
+    int fraction;
+
+    if (value < 0.0f)
+    {
+      num+=append_char(pStr+num, '-');
+      value = -value;
+    }
+
+    while (value >= 10.0f)
+    {
+      value /= 10.0f;
+      exponent++;
+    }
+    if (value != 0.0f)
+    {
+      while (value < 1.0f)
+      {
+        value *= 10.0f;
+        exponent--;
+      }
+    }
+
+    intpart = (int)value;
+    fraction = (int)((value-intpart) * 1000000.0f + 0.5f);
+
+    num+=PutUnsignedInt(pStr+num,fill,1,(int)(intpart));
+    num+=append_char(pStr+num, '.');
+    num+=PutUnsignedInt(pStr+num,'0',6,(int)(fraction));
+    num+=append_char(pStr+num, 'E');
+
+    if (exponent >= 0)
+    {
+      num+=append_char(pStr+num, '+');
+    }
+    else
+    {
+      num+=append_char(pStr+num, '-');
+      exponent = -exponent;
+    }
+
+    num+=PutSignedInt(pStr+num,'0',2,(int)(exponent));
+
+    return num;
+}
+
+
+//------------------------------------------------------------------------------
+// Writes an Engineering notation float inside the given string, using the provided fill & width
+// parameters.
+// Returns the size of the written integer.
+// \param pStr Storage string.
+// \param fill Fill character.
+// \param width Minimum width.
+// \param value Float value.
+// Pito 6/2013
+// nnn.nnnE+mmm, -nnn.nnnE-mmm, mmm is multiply of 3
+//------------------------------------------------------------------------------
+signed int PutFloatEE(
+    char *pStr,
+    char fill,
+    signed int width,
+    double value)
+{
+
+    int num = 0;
+        int exponent = 0;
+    int intpart;
+    int fraction;
+
+    if (value < 0.0f) 
+    {
+      num+=append_char(pStr+num, '-');
+      value = -value;
+    }
+
+    while (value >= 1000.0f)
+    {
+      value /= 1000.0f;
+      exponent += 3;
+    }
+    if (value != 0.0f)
+    {
+      while (value < 1.0f)
+      {
+        value *= 1000.0f;
+        exponent -= 3;
+      }
+    }
+
+    intpart = (int)value;
+    fraction = (int)((value - intpart) * 1000.0f + 0.5f);
+
+    num+=PutUnsignedInt(pStr+num,fill,1,(int)(intpart));
+    num+=append_char(pStr+num, '.');
+    num+=PutUnsignedInt(pStr+num,'0',3,(int)(fraction));
+    num+=append_char(pStr+num, 'E');
+
+    if (exponent >= 0) 
+    {
+      num+=append_char(pStr+num, '+');
+    }
+    else 
+    {
+      num+=append_char(pStr+num, '-');
+      exponent = -exponent;
+    }
+
+    num+=PutSignedInt(pStr+num,'0',2,(int)(exponent));
+
+    return num;
+}
+
+
 //------------------------------------------------------------------------------
 //         Global Functions
 //------------------------------------------------------------------------------
@@ -332,7 +508,7 @@ signed int vsnprintf(char *pStr, size_t length, const char *pFormat, va_list ap)
 
             // Parse width
             while ((*pFormat >= '0') && (*pFormat <= '9')) {
-        
+
                 width = (width*10) + *pFormat-'0';
                 pFormat++;
             }
@@ -342,12 +518,16 @@ signed int vsnprintf(char *pStr, size_t length, const char *pFormat, va_list ap)
 
                 width = length - size;
             }
-        
+
             // Parse type
+            // %f, %e, %E Pito 2013
             switch (*pFormat) {
-            case 'd': 
+            case 'd':
             case 'i': num = PutSignedInt(pStr, fill, width, va_arg(ap, signed int)); break;
             case 'u': num = PutUnsignedInt(pStr, fill, width, va_arg(ap, unsigned int)); break;
+            case 'f': num = PutFloat(pStr, fill, width, va_arg(ap, double)); break;
+            case 'e': num = PutFloatE(pStr, fill, width, va_arg(ap, double)); break;
+            case 'E': num = PutFloatEE(pStr, fill, width, va_arg(ap, double)); break;
             case 'x': num = PutHexa(pStr, fill, width, 0, va_arg(ap, unsigned int)); break;
             case 'X': num = PutHexa(pStr, fill, width, 1, va_arg(ap, unsigned int)); break;
             case 's': num = PutString(pStr, fill, width, va_arg(ap, char *)); break;
@@ -418,14 +598,16 @@ signed int vsprintf(char *pString, const char *pFormat, va_list ap)
 //------------------------------------------------------------------------------
 signed int vprintf(const char *pFormat, va_list ap)
 {
-  char pStr[CFG_PRINTF_MAXSTRINGSIZE];  
+  char pStr[CFG_PRINTF_MAXSTRINGSIZE];
+  char pError[] = "stdio.c: increase CFG_PRINTF_MAXSTRINGSIZE\r\n";
+
   // Write formatted string in buffer
   if (vsprintf(pStr, pFormat, ap) >= CFG_PRINTF_MAXSTRINGSIZE) {
-    char pError[] = "stdio.c: increase CFG_PRINTF_MAXSTRINGSIZE\r\n";
+
     puts(pError);
     while (1); // Increase CFG_PRINTF_MAXSTRINGSIZE
   }
-  
+
   // Display string
   return puts(pStr);
 }
