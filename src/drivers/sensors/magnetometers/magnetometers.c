@@ -161,15 +161,15 @@ void magCalibration(sensors_event_t *event, mag_calib_para_t *mag_calib_para)
 void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_event)
 {
   float t_roll = accel_event->acceleration.x * accel_event->acceleration.x + accel_event->acceleration.z * accel_event->acceleration.z;
-  float rollRadians = atan2(accel_event->acceleration.y, sqrt(t_roll));
+  float rollRadians = (float)atan2(accel_event->acceleration.y, sqrt(t_roll));
 
   float t_pitch = accel_event->acceleration.y * accel_event->acceleration.y + accel_event->acceleration.z * accel_event->acceleration.z;
-  float pitchRadians = atan2(accel_event->acceleration.x, sqrt(t_pitch));
+  float pitchRadians = (float)atan2(accel_event->acceleration.x, sqrt(t_pitch));
 
-  float cosRoll = cos(rollRadians);
-  float sinRoll = sin(rollRadians);
-  float cosPitch = cos(pitchRadians);
-  float sinPitch = sin(pitchRadians);
+  float cosRoll = (float)cos(rollRadians);
+  float sinRoll = (float)sin(rollRadians);
+  float cosPitch = (float)cos(pitchRadians);
+  float sinPitch = (float)sin(pitchRadians);
 
   /* The tilt compensation algorithm                            */
   /* Xh = X.cosPitch + Z.sinPitch                               */
@@ -185,11 +185,11 @@ void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_even
 /**************************************************************************/
 void magGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
 {
-  float const PI = 3.14159265;
+  float const PI = 3.14159265F;
 
   /* heading (0-359°): Angle between the longitudinal axis (the plane body) and magnetic north, measured clockwise when viewing from the top of the device */
   /* heading = atan(y / x) */
-  orientation->heading = atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
+  orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
 
   /* Normalize to 0-360 degree */
   if (orientation->heading < 0)
