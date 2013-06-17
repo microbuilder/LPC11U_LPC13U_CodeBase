@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     accelerometers.h
+    @file     magnetometers.h
     @author   Nguyen Quang Huy, Nguyen Thien Tin
     @ingroup  Sensors
 
@@ -34,8 +34,8 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef _ACCELEROMETERS_H_
-#define _ACCELEROMETERS_H_
+#ifndef _MAGNETOMETERS_H_
+#define _MAGNETOMETERS_H_
 
 #ifdef __cplusplus
 extern "C" {
@@ -46,21 +46,22 @@ extern "C" {
 
 typedef struct
 {
-	float scaleX;     /**< scale factor of X-axis */
-	float offsetX;    /**< offset error of X-axis */
-	float scaleY;     /**< scale factor of Y-axis */
-	float offsetY;    /**< offset error of Y-axis */
-	float scaleZ;     /**< scale factor of Z-axis */
-	float offsetZ;    /**< offset error of Z-axis */
-} accel_calib_para_t;
+	float scaleX;    /**< scale factor of X-axis */
+	float offsetX;   /**< offset error of X-axis */
+	float scaleY;    /**< scale factor of Y-axis */
+	float offsetY;   /**< offset error of Y-axis */
+	float scaleZ;    /**< scale factor of Z-axis */
+	float offsetZ;   /**< offset error of Z-axis */
+} mag_calib_para_t;
 
-void accelGetCalibParameter(accel_calib_para_t *accel_calib_para);
-void accelCalibration(sensors_event_t *event, accel_calib_para_t *accel_calib_para);
-void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation);
+void magGetCalibParameter(mag_calib_para_t *mag_calib_para);
+void magCalibration(sensors_event_t *event, mag_calib_para_t *mag_calib_para);
+void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_event);
+void magGetOrientation(sensors_event_t *event, sensors_vec_t *mag_orientation);
 
 #ifdef __cplusplus
 }
 #endif
 
-#endif // _ACCELEROMETERS_H_
+#endif // _MAGNETOMETERS_H_
 
