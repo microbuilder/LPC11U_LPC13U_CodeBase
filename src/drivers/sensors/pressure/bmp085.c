@@ -322,7 +322,8 @@ error_t bmp085GetPressure(float *pressure)
 /**************************************************************************/
 error_t bmp085GetTemperature(float *temp)
 {
-  int32_t ut, x1, x2;
+  int32_t ut, x1, x2, b5;
+  float t;
 
   if (!_bmp085Initialised)
   {
@@ -331,10 +332,13 @@ error_t bmp085GetTemperature(float *temp)
 
   ASSERT_STATUS(bmp085ReadRawTemperature(&ut));
 
-  x1 = (ut - _bmp085_coeffs.ac6) * _bmp085_coeffs.ac5 >> 15;
-  x2 = (_bmp085_coeffs.mc << 11) / (x1 + _bmp085_coeffs.md);
-  *temp = (x1+x2+8) >> 4;
-  *temp /= 10;
+  x1 = (ut - (int32_t)_bmp085_coeffs.ac6) * ((int32_t)_bmp085_coeffs.ac5) / pow(2,15);
+  x2 = ((int32_t)_bmp085_coeffs.mc * pow(2,11)) / (x1+(int32_t)_bmp085_coeffs.md);
+  b5 = x1 + x2;
+  t = (b5+8)/pow(2,4);
+  t /= 10;
+
+  *temp = t;
 
   return ERROR_NONE;
 }
