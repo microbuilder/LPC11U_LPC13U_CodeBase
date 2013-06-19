@@ -116,13 +116,25 @@ void delayInit (void)
     /* Power up the timer */
     LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 7);
 
-    LPC_CT16B0->TCR  = 0x02;            /* Reset the timer */
-    LPC_CT16B0->PR   = 0x03;            /* Set prescaler to four */
-    LPC_CT16B0->IR   = 0xff;            /* Reset all interrrupts */
-    LPC_CT16B0->PWMC = 0x00;            /* Disable PWM mode */
+    LPC_CT16B0->TCR  = 0x02;            /* Reset the timer                */
+    LPC_CT16B0->PR   = 0x03;            /* Set prescaler to four          */
+    LPC_CT16B0->IR   = 0xff;            /* Reset all interrrupts          */
+    LPC_CT16B0->PWMC = 0x00;            /* Disable PWM mode               */
     LPC_CT16B0->MR0  = (SystemCoreClock / 1000) >> 2; /* 1 ms w/prescalar */
-    LPC_CT16B0->MCR  = (0x3<<0);        /* Interrupt and Reset on MR0 */
+    LPC_CT16B0->MCR  = (0x3<<0);        /* Interrupt and Reset on MR0     */
 
+    /* Make sure the delay timer IRQ has one higher priority than the     *
+     * lowest level to allow for some IRQs to still use delay if          *
+     * absolutely necessary, even if it's not ideal. To allow this, the   *
+     * IRQs calling delay must have the lowest possible priority, which   *
+     * will allow the delay timer to still fire even if we're in the      *
+     * lower priority interrupt handler.                                  */
+    #if defined CFG_MCU_FAMILY_LPC11UXX
+      NVIC_SetPriority(TIMER_16_0_IRQn, (1<<__NVIC_PRIO_BITS) - 2);
+    #elif defined CFG_MCU_FAMILY_LPC13UXX
+      NVIC_SetPriority(CT16B0_IRQn, (1<<__NVIC_PRIO_BITS) - 2);
+    #endif
+    
     /* Enable the interrupt */
     #if defined CFG_MCU_FAMILY_LPC11UXX
     NVIC_EnableIRQ(TIMER_16_0_IRQn);
@@ -143,6 +155,17 @@ void delayInit (void)
     /* Load the systick counter value */
     SysTick->VAL = 0;
 
+    /* Make sure the systick IRQ has one higher priority than the         *
+     * lowest level (to allow for some IRQs to still use delay if         *
+     * absolutely necessary, even if it's not ideal). By default, the     *
+     * CMSIS SysTick_Config function sets the systick IRQ to the lowest   *
+     * priority at startup (see core_cm0/3.h).                            */
+    #if defined CFG_MCU_FAMILY_LPC11UXX
+      NVIC_SetPriority(SysTick_IRQn, (1<<__NVIC_PRIO_BITS) - 2);
+    #elif defined CFG_MCU_FAMILY_LPC13UXX
+      NVIC_SetPriority(SysTick_IRQn, (1<<__NVIC_PRIO_BITS) - 2);
+    #endif
+    
     /* Enable systick IRQ and timer */
     SysTick->CTRL = SYSTICK_STCTRL_CLKSOURCE |
                     SYSTICK_STCTRL_TICKINT |
