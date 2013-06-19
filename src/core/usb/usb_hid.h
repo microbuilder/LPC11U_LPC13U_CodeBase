@@ -53,6 +53,66 @@ ErrorCode_t usb_hid_keyboard_sendKeys(uint8_t modifier, uint8_t keycodes[], uint
 ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel, int8_t pan);
 ErrorCode_t usb_hid_generic_send(uint8_t report_in[], uint32_t length);
 
+/**************************************************************************/
+/*!
+    @brief      Weak ISR handler for HID Generic out reports (PC to LPC).
+
+    @param[in]  report
+                Pointer to the buffer that holds the
+                incoming report data
+
+    @param[in]  length
+                For most of the time it is CFG_USB_HID_GENERIC_REPORT_SIZE
+                except for few time (if any) host sends out short-packet
+
+    @note       Since this is a 'weak' function, to override it you
+                simply need to declare a new function with the same name
+                somewhere else in your code.
+
+    @code
+    // Buffer to hold incoming HID data
+    static uint8_t hid_out_report[CFG_USB_HID_GENERIC_REPORT_SIZE];
+    static bool is_received_report = false;
+
+    int main(void)
+    {
+      ...
+      while(1)
+      {
+        ...
+        #ifdef CFG_USB_HID_GENERIC
+          if(usb_isConfigured())
+          {
+            if(is_received_report)
+            {
+              for (uint32_t i=0; i<CFG_USB_HID_GENERIC_REPORT_SIZE; i++)
+              {
+                // Display incoming HID data with CDC using printf
+                printf("%02x ", hid_out_report.report[i]);
+              }
+              printf(CFG_PRINTF_NEWLINE);
+              is_received_report = false;
+            }
+          }
+        #endif
+      }
+    }
+
+    void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length)
+    {
+      // Copy out_report to a buffer in case new data comes in
+      memcpy(hid_out_report, out_report, length);
+      is_received_report = true;
+    }
+    @endcode
+*/
+/**************************************************************************/
+void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length) __attribute__((weak));
+
+// receive report in request from HOST, but have nothing to report
+bool usb_hid_generic_report_request_isr(uint8_t in_report[]) __attribute__((weak));
+
+
 /** \brief Standard HID Boot Protocol Mouse Report.
  *
  *  Type define for a standard Boot Protocol Mouse report

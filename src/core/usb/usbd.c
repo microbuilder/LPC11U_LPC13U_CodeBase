@@ -226,7 +226,7 @@ ErrorCode_t usb_init(void)
   #endif
 
   #ifdef CFG_USB_CUSTOM_CLASS
-    ASSERT_USB_STATUS( usb_custom_init(g_hUsb) );
+    ASSERT_USB_STATUS( usb_custom_init(g_hUsb, &USB_FsConfigDescriptor.Custom_Interface) );
   #endif
 
   /* Enable the USB interrupt */

@@ -57,6 +57,10 @@ extern "C" {
   #include "usb_msc.h"
 #endif
 
+#ifdef CFG_USB_CUSTOM_CLASS
+  #include "usb_custom_class.h"
+#endif
+
 #define USBD_API     ((*(ROM **)(0x1FFF1FF8))->pUSBD)
 
 ErrorCode_t usb_init(void);

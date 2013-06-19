@@ -55,12 +55,13 @@
 // APPLICATION API
 //--------------------------------------------------------------------+
 void usb_custom_send(void const * p_data, uint16_t length);
-void usb_custom_received(void * p_buffer, uint16_t length);
+void usb_custom_receive(void * p_buffer, uint16_t length);
+void usb_custom_received_isr(void * p_buffer, uint32_t length) __attribute__((weak));
 
 //--------------------------------------------------------------------+
 // USBD-CLASS API
 //--------------------------------------------------------------------+
-ErrorCode_t usb_custom_init(USBD_HANDLE_T husb);
+ErrorCode_t usb_custom_init(USBD_HANDLE_T husb, USB_INTERFACE_DESCRIPTOR const * p_interface);
 ErrorCode_t usb_custom_configured(USBD_HANDLE_T husb);
 
 
