@@ -4,7 +4,10 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 
 ## 0.8.7 [ongoing] ##
 
-- In progress
+- delay.c interrupt priority changed to lowest level - 1 so that other interrupts can potentially be configured to use delay (even if it's a bad idea!) by setting them to the lowest level
+- sensorpoll.c added to poll sensor data at fixed intervals using 16-bit timer 1 (though care needs to be taken using this!)
+- Disabled both generic interrupt handlers in timer16.c since they are both potentially used elsewhere
+- magnetometer.c, accelerometer.c and pressure.c generic helper functions added in the sensor abstraction layer
 
 ## 0.8.6 [14 June 2013] ##
 
