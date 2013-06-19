@@ -54,7 +54,7 @@ typedef struct
 	float offsetZ;    /**< offset error of Z-axis */
 } accel_calib_para_t;
 
-void accelGetCalibParameter(accel_calib_para_t *accel_calib_para);
+void accelGetCalibParameter(accel_calib_para_t *accel_calib_para, error_t (*pGetSensorEvent)(sensors_event_t *));
 void accelCalibration(sensors_event_t *event, accel_calib_para_t *accel_calib_para);
 void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation);
 

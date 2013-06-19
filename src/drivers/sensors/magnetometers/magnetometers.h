@@ -54,7 +54,7 @@ typedef struct
 	float offsetZ;   /**< offset error of Z-axis */
 } mag_calib_para_t;
 
-void magGetCalibParameter(mag_calib_para_t *mag_calib_para);
+void magGetCalibParameter(mag_calib_para_t *mag_calib_para, error_t (*pGetSensorEvent)(sensors_event_t *));
 void magCalibration(sensors_event_t *event, mag_calib_para_t *mag_calib_para);
 void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_event);
 void magGetOrientation(sensors_event_t *event, sensors_vec_t *mag_orientation);

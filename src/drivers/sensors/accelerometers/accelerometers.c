@@ -15,9 +15,9 @@
     // Initialise the accelerometer
     error = lsm303accelInit();
 
-    // Get the calibration parameters
+    // Get the calibration parameters for accelerometer (use "accelGetSensorEvent" function)
     accel_calib_para_t accel_calib_para;
-    accelGetCalibParameter(&accel_calib_para);
+    accelGetCalibParameter(&accel_calib_para, &lsm303accelGetSensorEvent);
 
     while (1)
     {
@@ -27,7 +27,7 @@
         error = lsm303accelGetSensorEvent(&event);
         if (!error)
         {
-          // Calibrate the accelerometer with calibration parameters (optional)
+          // Calibrate the accelerometer with calibration parameters (optional but should be invoked for accurate data)
           accelCalibration(&event, accel_calib_para);
 
           // Calculate the right angle (in degree)
@@ -72,9 +72,8 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "accelerometers.h"
-#include "lsm303accel.h"
+#include "core/delay/delay.h"
 #include <math.h>
-#include <time.h>
 
 /**************************************************************************/
 /*!
@@ -128,11 +127,17 @@ void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
 /*!
     @brief  Determine the calibration parameter (offset and scale factor)
             by recording the absolute minimums and maximums for each axis
+
+    @para   accel_calib_para         Parameters used in calibration process
+    @para   (*pGetSensorEvent)       Pointer to the "GetEvent" function of
+                                     accelerometer sensor
 */
 /**************************************************************************/
-void accelGetCalibParameter(accel_calib_para_t *accel_calib_para)
+void accelGetCalibParameter(accel_calib_para_t *accel_calib_para, error_t (*pGetSensorEvent)(sensors_event_t *))
 {
-  uint8_t const CALIB_TIME = 60;     /**< in seconds and bigger is better */
+  uint16_t const CALIB_TIME = 60000;   /**< Calibration time in miliseconds                        */
+                                       /**< This time should be enough to rotate sensor            */
+                                       /**< multiple times in all 3 axis for accurate calibration  */
   error_t error;
   sensors_event_t event;
 
@@ -144,19 +149,18 @@ void accelGetCalibParameter(accel_calib_para_t *accel_calib_para)
   accelMaxX = accelMaxY = accelMaxZ = -2 * SENSORS_GRAVITY_EARTH;
   accelMinX = accelMinY = accelMinZ = 2 * SENSORS_GRAVITY_EARTH;
 
-  time_t start_time, current_time;
-  time(&start_time);
-  time(&current_time);
+  /* Initialise timer for delay function */
+  delayInit();
 
   /* Calibration process                                                   */
   /* Slowly rotate the accelerometer sensor multiple times in all 3 axis   */
   /*                                                                       */
   /* Be sure to rotate the sensor slowly about its center so that          */
   /* we can eliminate the linearity error                                  */
-  while (difftime(current_time, start_time) < CALIB_TIME)
+  while (delayGetTicks() < CALIB_TIME)
   {
     /* Get accelerometer data */
-    error = lsm303accelGetSensorEvent(&event);
+    error = pGetSensorEvent(&event);
 
     /* Update the maximum and minimum values from accelerometer for each axis */
     if (!error)
@@ -170,7 +174,6 @@ void accelGetCalibParameter(accel_calib_para_t *accel_calib_para)
       if (event.acceleration.z < accelMinZ) accelMinZ = event.acceleration.z;
       if (event.acceleration.z > accelMaxZ) accelMaxZ = event.acceleration.z;
     }
-    time(&current_time);
   }
 
   /* Calculate scale factor and offset in each axis */

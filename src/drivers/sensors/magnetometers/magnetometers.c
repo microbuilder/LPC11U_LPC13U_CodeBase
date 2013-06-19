@@ -17,7 +17,7 @@
 
     // Get the calibration parameters
     mag_calib_para_t mag_calib_para;
-    magGetCalibParameter(&mag_calib_para);
+    magGetCalibParameter(&mag_calib_para, &lsm303magGetSensorEvent);
 
     while (1)
     {
@@ -27,7 +27,7 @@
         error = lsm303magGetSensorEvent(&mag_event);
         if (!error)
         {
-          // Calibrate the magnetometer with calibration parameters (optional)
+          // Calibrate the magnetometer with calibration parameters (optional optional but should be invoked for accurate data)
           magCalibration(&mag_event, mag_calib_para);
 
           // Tilt Compensation (optional)
@@ -80,40 +80,42 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "magnetometers.h"
-#include "lsm303mag.h"
+#include "core/delay/delay.h"
 #include <math.h>
-#include <time.h>
 
 /**************************************************************************/
 /*!
     @brief  Determine the calibration parameter (offset and scale factor)
             by recording the absolute minimums and maximums for each axis
+
+    @para   mag_calib_para          Parameters used in calibration process
+    @para   (*pGetSensorEvent)      Pointer to the "GetEvent" function of
+                                    magnetometer sensor
 */
 /**************************************************************************/
-void magGetCalibParameter(mag_calib_para_t *mag_calib_para)
+void magGetCalibParameter(mag_calib_para_t *mag_calib_para, error_t (*pGetSensorEvent)(sensors_event_t *))
 {
-  uint8_t const CALIB_TIME = 60;	/**< in seconds */
+	uint16_t const CALIB_TIME = 60000;	/**< in miliseconds                                                                 */
+	                                    /**< This time should be enough to rotate sensor full 360° for accurate calibration */
   error_t error;
   sensors_event_t event;
 
   float magMinX, magMaxX;
   float magMinY, magMaxY;
-  float magMinZ, magMaxZ;
 
   /* Initialise the maximum and minimum magnetic values for each axis */
-  magMaxX = magMaxY = magMaxZ = -10000;
-  magMinX = magMinY = magMinZ = 10000;
+  magMaxX = magMaxY = -3.4e38F;   /**< Min float */
+  magMinX = magMinY = 3.4e38F;    /**< Max float */
 
-  time_t start_time, current_time;
-  time(&start_time);
-  time(&current_time);
+  /* Initialise timer for delay function */
+  delayInit();
 
   /* Calibration process                                            */
   /* Data is collected as the magnetometer sensor is rotated 360°   */
-  while (difftime(current_time, start_time) < CALIB_TIME)
+  while (delayGetTicks() < CALIB_TIME)
   {
     /* Get magnetic data */
-    error = lsm303magGetSensorEvent(&event);
+    error = pGetSensorEvent(&event);
 
     /* Update the maximum and minimum magnetic values for each axis */
     if (!error)
@@ -124,16 +126,23 @@ void magGetCalibParameter(mag_calib_para_t *mag_calib_para)
       if (event.magnetic.y < magMinY) magMinY = event.magnetic.y;
       if (event.magnetic.y > magMaxY) magMaxY = event.magnetic.y;
     }
-    time(&current_time);
   }
 
-  /* Calculate scale factor and offset in each axis        */
+  /* Calculate scale factor and offset in each axis                                   */
 
-  /* We set scale factor of X-axis to one (normalized)     */
-  mag_calib_para->scaleX = 1.0;
+  /* We set scale factor of X-axis to one (normalized)                                */
+  /*                                                           (maxX + minX)          */
+  /*   scaleX = 1                      offsetX = -scaleX  x   ---------------         */
+  /*                                                                 2                */
+  /*                                                                                  */
+  mag_calib_para->scaleX = 1.0F;
   mag_calib_para->offsetX = (-1) * mag_calib_para->scaleX * ((magMaxX + magMinX) / 2);
 
-  /* Scale factor of Y-axis is calculated accordingly */
+  /* Scale factor of Y-axis is calculated accordingly to scale factor of X-axis       */
+  /*              maxX - minX                                  (maxY + minY)          */
+  /*   scaleY =  -------------         offsetY = -scaleY  x   ---------------         */
+  /*              maxY - minY                                        2                */
+  /*                                                                                  */
   mag_calib_para->scaleY = (magMaxX - magMinX) / (magMaxY - magMinY);
   mag_calib_para->offsetY = (-1) * mag_calib_para->scaleY * ((magMaxY + magMinY) / 2);
 }
@@ -149,7 +158,6 @@ void magCalibration(sensors_event_t *event, mag_calib_para_t *mag_calib_para)
   /* Calculate slope and offset in each axis */
   event->magnetic.x = event->magnetic.x * mag_calib_para->scaleX + mag_calib_para->offsetX;
   event->magnetic.y = event->magnetic.y * mag_calib_para->scaleY + mag_calib_para->offsetY;
-  event->magnetic.z = event->magnetic.z * mag_calib_para->scaleZ + mag_calib_para->offsetZ;
 }
 
 /**************************************************************************/
@@ -188,7 +196,7 @@ void magGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   float const PI = 3.14159265F;
 
   /* heading (0-359°): Angle between the longitudinal axis (the plane body) and magnetic north, measured clockwise when viewing from the top of the device */
-  /* heading = atan(y / x) */
+  /* heading = atan(My / Mx) */
   orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
 
   /* Normalize to 0-360 degree */
