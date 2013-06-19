@@ -40,6 +40,49 @@ volatile uint32_t sensorpoll_capture[4] = {0,0,0,0};
 
 /**************************************************************************/
 /*!
+    @brief      Weak ISR handler for timer tick event.
+
+    @note       Since this is a 'weak' function, to override it you
+                simply need to declare a new function with the same name
+                somewhere else in your code.
+
+    @code
+    #include "drivers/sensors/sensorpoll.h"
+    
+    volatile uint32_t counter;
+    
+    int main(void)
+    {
+      boardInit();
+      sensorpollInit();
+      sensorpollEnable();
+      
+      while(1)
+      {
+        // ... do something, enter WFI mode, etc. ...
+        // With a 5ms sensorpoll delay this should increment 200 every second
+        printf("%d\r\n", counter);
+        delay(1000);
+      }
+    }
+
+    // This function will fire every 5ms via the sensorpoll timer ISR
+    void sensorpoll_tick_isr(void)
+    {
+      // Retrieve the sensor data here or do something inside the tick,
+      // but be sure that you finish the processing before the next tick,
+      // which is 5ms by default!
+      
+      // For now, just increment a counter to prove the callback works
+      counter++;
+    }
+    @endcode
+*/
+/**************************************************************************/
+void sensorpoll_tick_isr(void) __attribute__((weak));
+
+/**************************************************************************/
+/*!
     @brief Interrupt handler for 16-bit timer 1
 
     @desc  This interrupt handler can be used to schedule sensor reads at
@@ -69,13 +112,22 @@ void CT16B1_IRQHandler(void)
   #error "sensorpoll.c: No MCU defined"
 #endif
 {
-  /* Handle match event (only MAT0 is handled here!) */
+  /* ToDo: Add DWT check on M3 to make sure we don't exceed the 5ms *
+   * timer delay, and increment a counter if we ran over!           */
+   
+  /* Handle MAT0 event (MAT0 controls the tick period) */
   if (LPC_CT16B1->IR & (0x01 << 0))
   {
+    /* Clear the interrupt flag */
     LPC_CT16B1->IR = 0x1 << 0;
+    
+    /* Increment the sensorpoll tick counter */
     sensorpoll_counter++;
-    /* ToDo: capture your sensor data here, or setup a callback that
-     * will capture the data for you, keeping in mind the 5ms limit */
+    
+    /* Call the sensorpoll_tick_isr callback so that we can pull    *
+     * our sensor data and do something with it elsewhere rather    *
+     * than putting board or project specific code here.            */
+    sensorpoll_tick_isr();
   }
 
   /* Handle capture events, which you might want to use to capture
