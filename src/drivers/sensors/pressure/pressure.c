@@ -153,3 +153,6 @@ float pressureAtDestination(float seaLevel, float destTemp, float destAltitude)
   return seaLevel * (float)pow(1.0F - (0.0065F * destAltitude) /
           (destTemp + 0.0065F * destAltitude + 273.15F), 5.257F);
 }
+
+// ToDo: Calculate vertical speed over fixed delay
+// float vertical_speed = ( pressureToAltitude(sea level pressure, pressure at t0, temp) – pressureToAltitude(sea level pressure, pressure at t1, temp) / ( t1 – t0 );
