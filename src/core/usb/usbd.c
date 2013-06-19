@@ -104,6 +104,10 @@ ErrorCode_t USB_Configure_Event (USBD_HANDLE_T hUsb)
     #ifdef CFG_USB_MSC
     ASSERT_USB_STATUS( usb_msc_configured(hUsb));
     #endif
+
+    #ifdef CFG_USB_CUSTOM_CLASS
+    ASSERT_USB_STATUS( usb_custom_configured(hUsb) );
+    #endif
   }
 
   isConfigured = true;
@@ -219,6 +223,10 @@ ErrorCode_t usb_init(void)
     {
       _PRINTF("MSC class fails to init\n");
     }
+  #endif
+
+  #ifdef CFG_USB_CUSTOM_CLASS
+    ASSERT_USB_STATUS( usb_custom_init(g_hUsb) );
   #endif
 
   /* Enable the USB interrupt */

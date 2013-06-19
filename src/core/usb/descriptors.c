@@ -486,6 +486,39 @@ ALIGNED(4) const USB_FS_CONFIGURATION_DESCRIPTOR USB_FsConfigDescriptor =
     },
     #endif
 
+    #ifdef CFG_USB_CUSTOM_CLASS
+    .Custom_Interface =
+    {
+        .bLength            = sizeof(USB_INTERFACE_DESCRIPTOR),
+        .bDescriptorType    = USB_INTERFACE_DESCRIPTOR_TYPE,
+        .bInterfaceNumber   = INTERFACE_INDEX_CUSTOM,
+        .bAlternateSetting  = 0x00,
+        .bNumEndpoints      = 2,
+        .bInterfaceClass    = USB_DEVICE_CLASS_VENDOR_SPECIFIC,
+        .bInterfaceSubClass = 0xff,
+        .bInterfaceProtocol = 0xff,
+        .iInterface         = 0x00
+    },
+
+    .Custom_BulkIN =
+    {
+        .bLength          = sizeof(USB_ENDPOINT_DESCRIPTOR),
+        .bDescriptorType  = USB_ENDPOINT_DESCRIPTOR_TYPE,
+        .bEndpointAddress = CUSTOM_EP_IN,
+        .bmAttributes     = USB_ENDPOINT_TYPE_BULK,
+        .wMaxPacketSize   = 64,
+    },
+
+    .Custom_BulkOUT =
+    {
+        .bLength          = sizeof(USB_ENDPOINT_DESCRIPTOR),
+        .bDescriptorType  = USB_ENDPOINT_DESCRIPTOR_TYPE,
+        .bEndpointAddress = CUSTOM_EP_OUT,
+        .bmAttributes     = USB_ENDPOINT_TYPE_BULK,
+        .wMaxPacketSize   = 64,
+    },
+    #endif
+
     .ConfigDescTermination = 0,
 };
 

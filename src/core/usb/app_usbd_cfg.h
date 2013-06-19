@@ -73,6 +73,7 @@ extern "C" {
   #define INTERFACES_OF_HID_MOUSE           (0)
 #endif
 
+
 #ifdef CFG_USB_HID_GENERIC
   #define INTERFACES_OF_HID_GENERIC         (1)
 #else
@@ -85,13 +86,21 @@ extern "C" {
   #define INTERFACES_OF_MSC                 (0)
 #endif
 
+#ifdef CFG_USB_CUSTOM_CLASS
+  #define INTERFACES_OF_CUSTOM              (1)
+#else
+  #define INTERFACES_OF_CUSTOM              (0)
+#endif
+
 #define INTERFACE_INDEX_CDC                 (0)
 #define INTERFACE_INDEX_HID_KEYBOARD        (INTERFACE_INDEX_CDC          + INTERFACES_OF_CDC          )
 #define INTERFACE_INDEX_HID_MOUSE           (INTERFACE_INDEX_HID_KEYBOARD + INTERFACES_OF_HID_KEYBOARD )
 #define INTERFACE_INDEX_HID_GENERIC         (INTERFACE_INDEX_HID_MOUSE    + INTERFACES_OF_HID_MOUSE    )
 #define INTERFACE_INDEX_MSC                 (INTERFACE_INDEX_HID_GENERIC  + INTERFACES_OF_HID_GENERIC  )
+#define INTERFACE_INDEX_CUSTOM              (INTERFACE_INDEX_MSC          + INTERFACES_OF_MSC          )
 
-#define TOTAL_INTEFACES                     (INTERFACES_OF_CDC + INTERFACES_OF_HID_KEYBOARD + INTERFACES_OF_HID_MOUSE + INTERFACES_OF_HID_GENERIC + INTERFACES_OF_MSC)
+#define TOTAL_INTEFACES                     (INTERFACES_OF_CDC + INTERFACES_OF_HID_KEYBOARD + INTERFACES_OF_HID_MOUSE +\
+    INTERFACES_OF_HID_GENERIC + INTERFACES_OF_MSC + INTERFACES_OF_CUSTOM)
 
 // Number of Endpoint IN used by CDC, HID is equal to the number of its interface, here we used INTERFACES_OF_CLASS as EP_IN_USED_BY_CLASS
 #define  CDC_NUMBER_OF_EP_IN                (INTERFACES_OF_CDC)
@@ -99,8 +108,10 @@ extern "C" {
 #define  HID_MOUSE_NUMBER_OF_EP_IN          (INTERFACES_OF_HID_MOUSE)
 #define  HID_GENERIC_NUMBER_OF_EP_IN        (INTERFACES_OF_HID_GENERIC)
 #define  MSC_NUMBER_OF_EP_IN                (INTERFACES_OF_MSC)
+#define  CUSTOM_NUMBER_OF_EP_IN             (INTERFACES_OF_CUSTOM)
 
-#define  EP_IN_TOTAL  (CDC_NUMBER_OF_EP_IN + HID_KEYBOARD_NUMBER_OF_EP_IN + HID_MOUSE_NUMBER_OF_EP_IN + HID_GENERIC_NUMBER_OF_EP_IN + MSC_NUMBER_OF_EP_IN)
+#define  EP_IN_TOTAL                        (CDC_NUMBER_OF_EP_IN + HID_KEYBOARD_NUMBER_OF_EP_IN + HID_MOUSE_NUMBER_OF_EP_IN+\
+    HID_GENERIC_NUMBER_OF_EP_IN + MSC_NUMBER_OF_EP_IN + CUSTOM_NUMBER_OF_EP_IN)
 
 /* CDC Endpoint Address */
 #define  CDC_NOTIFICATION_EP                (USB_ENDPOINT_IN(1))
@@ -118,6 +129,10 @@ extern "C" {
 //       MSC                                Enpoint               Address
 #define  MSC_EP_IN                          (HID_GENERIC_EP_IN    + HID_GENERIC_NUMBER_OF_EP_IN)
 #define  MSC_EP_OUT                         (USB_ENDPOINT_OUT(3))
+
+// CUSTOM CLASS
+#define  CUSTOM_EP_IN                       (MSC_EP_IN + MSC_NUMBER_OF_EP_IN)
+#define  CUSTOM_EP_OUT                      (USB_ENDPOINT_OUT(4))
 
 #if (EP_IN_TOTAL > 4)
   #error lpc11uxx and lpc13uxx only has up to 4 IN endpoints

@@ -152,6 +152,12 @@ typedef struct
   USB_ENDPOINT_DESCRIPTOR                     MSC_BulkOUT;
 #endif
 
+#ifdef CFG_USB_CUSTOM_CLASS
+  USB_INTERFACE_DESCRIPTOR                    Custom_Interface;
+  USB_ENDPOINT_DESCRIPTOR                     Custom_BulkIN;
+  USB_ENDPOINT_DESCRIPTOR                     Custom_BulkOUT;
+#endif
+
   unsigned char                               ConfigDescTermination;
 } USB_FS_CONFIGURATION_DESCRIPTOR;
 
