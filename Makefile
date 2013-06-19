@@ -219,12 +219,13 @@ OBJS  += $(OBJ_PATH)/pcf2129.o
 
 VPATH += src/drivers/sensors
 OBJS  += $(OBJ_PATH)/sensors.o
+OBJS  += $(OBJ_PATH)/sensorpoll.o
 
 VPATH += src/drivers/sensors/accelerometers
+OBJS  += $(OBJ_PATH)/accelerometers.o
 OBJS  += $(OBJ_PATH)/adxl345.o
 OBJS  += $(OBJ_PATH)/lis3dh.o
 OBJS  += $(OBJ_PATH)/lsm303accel.o
-OBJS  += $(OBJ_PATH)/accelerometers.o
 
 VPATH += src/drivers/sensors/gyroscopes
 OBJS  += $(OBJ_PATH)/l3gd20.o
@@ -233,12 +234,13 @@ VPATH += src/drivers/sensors/light
 OBJS  += $(OBJ_PATH)/tsl2561.o
 
 VPATH += src/drivers/sensors/magnetometers
+OBJS  += $(OBJ_PATH)/magnetometers.o
 OBJS  += $(OBJ_PATH)/lsm303mag.o
 
 VPATH += src/drivers/sensors/pressure
+OBJS  += $(OBJ_PATH)/pressure.o
 OBJS  += $(OBJ_PATH)/bmp085.o
 OBJS  += $(OBJ_PATH)/mpl115a2.o
-OBJS  += $(OBJ_PATH)/pressure.o
 
 VPATH += src/drivers/sensors/temperature
 OBJS  += $(OBJ_PATH)/lm75b.o

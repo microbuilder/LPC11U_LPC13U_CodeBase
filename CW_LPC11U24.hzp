@@ -192,8 +192,10 @@
           </folder>
           <folder Name="magnetometers" file_name="">
             <file file_name="src/drivers/sensors/magnetometers/lsm303mag.c"/>
+            <file file_name="src/drivers/sensors/magnetometers/magnetometers.c"/>
           </folder>
           <file file_name="src/drivers/sensors/sensors.c"/>
+          <file file_name="src/drivers/sensors/sensorpoll.c"/>
         </folder>
         <folder Name="rtc">
           <file file_name="src/drivers/rtc/rtc.c"/>

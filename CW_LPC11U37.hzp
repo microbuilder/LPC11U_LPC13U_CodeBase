@@ -192,8 +192,10 @@
           </folder>
           <folder Name="magnetometers" file_name="">
             <file file_name="src/drivers/sensors/magnetometers/lsm303mag.c"/>
+            <file file_name="src/drivers/sensors/magnetometers/magnetometers.c"/>
           </folder>
           <file file_name="src/drivers/sensors/sensors.c"/>
+          <file file_name="src/drivers/sensors/sensorpoll.c"/>
         </folder>
         <folder Name="rtc">
           <file file_name="src/drivers/rtc/rtc.c"/>
@@ -253,7 +255,6 @@
         <file file_name="src/cli/cli.c"/>
       </folder>
       <file file_name="src/projectconfig.h"/>
-      <file file_name="src/messages.c"/>
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
       <folder Name="localisation" file_name="">
@@ -269,6 +270,7 @@
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
+          <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347_rtxconf.c"/>
         </folder>
         <folder Name="rf1ghzusb" file_name="">
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
@@ -329,6 +331,7 @@
       <file file_name="tests/test_timespan.c"/>
       <file file_name="tests/test_fixed.c"/>
       <file file_name="tests/test_iir.c"/>
+      <file file_name="tests/test_sma.c"/>
     </folder>
   </project>
   <configuration Name="THUMB Flash Debug" inherited_configurations="THUMB;Flash;Debug"/>
