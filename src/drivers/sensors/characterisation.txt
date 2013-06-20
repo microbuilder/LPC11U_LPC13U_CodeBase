@@ -1,6 +1,31 @@
 Driver Characterisation Results
 -------------------------------
 
+Basic tests results for various drivers and the sensor API to determine the
+real-world sampling rate of different sensors, and to identify where
+development effort should be spent to improve existing drivers.
+
+Comparing Raw Data Reads (Native Units) and GetSensorEvent
+----------------------------------------------------------
+
+To get an idea of the overhead of the sensor abstraction layer (since it
+does use some floating point calculations, and the SI unit conversion has
+some overhead), the raw data reads were compared with GetSensorEvent, with
+the following results.
+
+The lsm303accel.c driver was using in the following test, which uses int16_t
+for the native types (returned via ReadRaw):
+
+|---------------------+-----------+---------+---------+---------+------------|
+| Function            | Code Base |   Avg   |   Min   |   Max   |   Notes    |
+|                     |  Version  |  Ticks  |  Ticks  |  Ticks  |            |
+|---------------------+-----------+---------+---------+---------+------------|
+| GetSensorEvent      |   0.8.7   |   20256 |   20230 |   20387 | -o0        |
+| ReadRaw             |   0.8.7   |   19136 |   19019 |   20410 | -o0        |
+|---------------------|-----------|---------|---------|---------|------------|
+| Difference          |           |    1120 |    1211 |     -23 |            |
+|---------------------+-----------+---------+---------+---------+------------|
+
 GetSensorEvent Performance Tests
 --------------------------------
 
