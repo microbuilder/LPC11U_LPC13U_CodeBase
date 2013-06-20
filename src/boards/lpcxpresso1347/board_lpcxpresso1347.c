@@ -177,7 +177,7 @@ void boardInit(void)
    {
      /* Pass control to other tasks for 1s */
      osDelay(1000);
-     debug_printf ("Thread 1\n");
+     printf ("Thread 1\n");
    }
   }
 
