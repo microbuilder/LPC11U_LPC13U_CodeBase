@@ -83,6 +83,8 @@
 #endif
 
 #if defined CFG_CMSIS_RTOS
+#include "RTX_CM_lib.h"
+
 /* Thread IDs */
 osThreadId tid_mainthread;               /* assigned ID for main thread            */
 osThreadId tid_blinkthread;               /* assigned ID for blink thread           */
@@ -100,8 +102,29 @@ void blink_thread (void const *argument)
  }
 }
 
+int main_thread(void const *argument);
+
 /* Thread definitions */
 osThreadDef(blink_thread, osPriorityHigh,   1, 0);
+osThreadDef(main_thread, osPriorityNormal,   1, 4*OS_MAINSTKSIZE);
+
+void boardInit(void);
+
+/* RTX main entry */
+int main(void)
+{
+	/* Configure the HW */
+	boardInit();
+	osKernelInitialize();
+	tid_mainthread = osThreadCreate(osThread(main_thread), NULL);
+	tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
+	osKernelStart();
+
+	/* No return */
+	while(1);
+
+	return 1;
+}
 #endif
 
 #ifdef CFG_SDCARD
@@ -188,17 +211,21 @@ void boardInit(void)
 */
 /**************************************************************************/
 #ifndef _TEST_
+#if defined CFG_CMSIS_RTOS
+int main_thread(void const *argument)
+#else
 int main(void)
+#endif
 {
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
 
+#if !defined CFG_CMSIS_RTOS
   /* Configure the HW */
   boardInit();
+#endif
 
 #if defined CFG_CMSIS_RTOS
- tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
- tid_mainthread = osThreadGetId();
  for (;;)
  {
 	 osDelay(1000);

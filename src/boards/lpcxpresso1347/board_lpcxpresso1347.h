@@ -193,7 +193,11 @@ extern "C" {
     ENABLE CMSIS-RTOS
 
     -----------------------------------------------------------------------*/
-     // #define CFG_CMSIS_RTOS
+    #define CFG_CMSIS_RTOS
+
+	#if defined CFG_CMSIS_RTOS
+		#include "board_lpcxpresso1347_rtxconf.h"
+	#endif
 /*=========================================================================*/
 
 
