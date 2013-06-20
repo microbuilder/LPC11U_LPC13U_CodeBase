@@ -78,53 +78,8 @@
   #include "core/uart/uart.h"
 #endif
 
-#ifdef CFG_CC3000
-  // ToDo: Figure out which headers are required
-#endif
-
-#if defined CFG_CMSIS_RTOS
-#include "RTX_CM_lib.h"
-
-/* Thread IDs */
-osThreadId tid_mainthread;               /* assigned ID for main thread            */
-osThreadId tid_blinkthread;               /* assigned ID for blink thread           */
-
-/*----------------------------------------------------------------------------
-*   Blink Thread - High Priority - Active every 3ms
-*---------------------------------------------------------------------------*/
-void blink_thread (void const *argument)
-{
- while (1)
- {
-   /* Pass control to other tasks for 1s */
-   osDelay(1000);
-   printf ("Thread 1\n");
- }
-}
-
-int main_thread(void const *argument);
-
-/* Thread definitions */
-osThreadDef(blink_thread, osPriorityHigh,   1, 0);
-osThreadDef(main_thread, osPriorityNormal,   1, 4*OS_MAINSTKSIZE);
-
-void boardInit(void);
-
-/* RTX main entry */
-int main(void)
-{
-	/* Configure the HW */
-	boardInit();
-	osKernelInitialize();
-	tid_mainthread = osThreadCreate(osThread(main_thread), NULL);
-	tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
-	osKernelStart();
-
-	/* No return */
-	while(1);
-
-	return 1;
-}
+#ifdef CFG_CMSIS_RTOS
+  #include "RTX_CM_lib.h"
 #endif
 
 #ifdef CFG_SDCARD
@@ -194,52 +149,103 @@ void boardInit(void)
     cliInit();
   #endif
 
-  /* Start CC3000 WiFi Module */
-  #ifdef CFG_CC3000
-    // ToDo: Make sure CC3000 pins are multiplexed to the correct function
-    //       since the init code only sets gpio dir, etc.
-    // ToDo: Init anything else required for the CC3000!
-  #endif
-
   /* Turn the user LED on after init to indicate that everything is OK */
   boardLED(CFG_LED_ON);
 }
 
+#if defined CFG_CMSIS_RTOS
+  /* Thread IDs */
+  osThreadId tid_mainthread;      /* ID for main thread   */
+  osThreadId tid_blinkythread;    /* ID for blinky thread */
+
+  /* Function prototypes */
+  int main_thread(void const *argument);
+  void blinky_thread (void const *argument);
+
+  /* Thread definitions */
+  osThreadDef(blinky_thread, osPriorityHigh, 1, 0);
+  osThreadDef(main_thread, osPriorityNormal, 1, 4 * OS_MAINSTKSIZE);
+
+  /**************************************************************************/
+  /*!
+      @brief Blinky thread, high priority, active very 3ms
+  */
+  /**************************************************************************/
+  void blinky_thread (void const *argument)
+  {
+   while (1)
+   {
+     /* Pass control to other tasks for 1s */
+     osDelay(1000);
+     debug_printf ("Thread 1\n");
+   }
+  }
+
+  /**************************************************************************/
+  /*!
+      @brief Main thread, normal priority
+  */
+  /**************************************************************************/
+  int main_thread(void const *argument)
+  {
+    uint32_t currentSecond, lastSecond;
+    currentSecond = lastSecond = 0;
+
+    for (;;)
+    {
+       osDelay(1000);
+       boardLED((currentSecond++) & 1);
+    }
+  }
+
+  /**************************************************************************/
+  /*!
+      @brief RTX code entry point (replaces non-RTOS main further down!)
+  */
+  /**************************************************************************/
+  int main(void)
+  {
+    /* Initiaise the HW */
+    boardInit();
+
+    /* Initialise the RTX kernel */
+    osKernelInitialize();
+
+    /* Create out threads */
+    tid_mainthread = osThreadCreate(osThread(main_thread), NULL);
+    tid_blinkythread = osThreadCreate(osThread(blinky_thread), NULL);
+
+    /* Start the kernel and then go into an endless loop */
+    osKernelStart();
+
+    /* No return */
+    while(1);
+
+    return 1;
+  }
+#endif
+
 /**************************************************************************/
 /*!
-    @brief Primary entry point for this project.
+    @brief Primary (non-RTOS!) entry point for this project.
 */
 /**************************************************************************/
 #ifndef _TEST_
-#if defined CFG_CMSIS_RTOS
-int main_thread(void const *argument)
-#else
+#ifndef CFG_CMSIS_RTOS
 int main(void)
-#endif
 {
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
 
-#if !defined CFG_CMSIS_RTOS
   /* Configure the HW */
   boardInit();
-#endif
 
-#if defined CFG_CMSIS_RTOS
- for (;;)
- {
-	 osDelay(1000);
-	 boardLED((currentSecond++) & 1);
- }
-#endif
-	
   while (1)
   {
     currentSecond = delayGetSecondsActive();
     if (currentSecond != lastSecond)
     {
       lastSecond = currentSecond;
-      /* Blinky */
       boardLED(lastSecond % 2);
     }
 
@@ -249,6 +255,7 @@ int main(void)
     #endif
   }
 }
+#endif
 #endif
 
 /**************************************************************************/

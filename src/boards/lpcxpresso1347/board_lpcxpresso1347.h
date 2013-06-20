@@ -195,9 +195,9 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_CMSIS_RTOS
 
-	#if defined CFG_CMSIS_RTOS
-		#include "board_lpcxpresso1347_rtxconf.h"
-	#endif
+    #if defined CFG_CMSIS_RTOS
+      #include "board_lpcxpresso1347_rtxconf.h"
+    #endif
 /*=========================================================================*/
 
 
