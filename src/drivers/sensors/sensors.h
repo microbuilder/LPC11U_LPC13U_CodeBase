@@ -129,6 +129,14 @@ typedef struct {
     uint8_t reserved[3];
 } sensors_vec_t;
 
+/** Sensor axis */
+typedef enum
+{
+  SENSOR_AXIS_X  = (1),
+  SENSOR_AXIS_Y  = (2),
+  SENSOR_AXIS_Z  = (3)
+} sensors_axis_t;
+
 /** struct sensors_color_s is used to return color data in a common format. */
 typedef struct {
     union {
