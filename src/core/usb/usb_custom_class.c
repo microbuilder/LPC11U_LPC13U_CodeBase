@@ -60,6 +60,15 @@ static ErrorCode_t endpoint_bulk_in_isr (USBD_HANDLE_T hUsb, void* data, uint32_
 //  {
 //    usb_custom_received_isr()
 //  }
+
+  if (USB_EVT_IN == event)
+  {
+    static uint32_t magic_number = 0;
+    magic_number++;
+    uint32_t buffer[16] = { magic_number }; // size is 64
+    USBD_API->hw->WriteEP(hUsb, CUSTOM_EP_IN, (uint8_t*) buffer, 64); // write data to EP
+  }
+
   return LPC_OK;
 }
 

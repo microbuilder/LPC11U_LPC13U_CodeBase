@@ -340,8 +340,8 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_PRINTF_MAXSTRINGSIZE    (255)
     // #define CFG_PRINTF_UART
-    #define CFG_PRINTF_USBCDC
-    // #define CFG_PRINTF_DEBUG
+//    #define CFG_PRINTF_USBCDC
+     #define CFG_PRINTF_DEBUG
 
     #ifdef CFG_PRINTF_DEBUG
       #define CFG_PRINTF_NEWLINE          "\n"
@@ -404,7 +404,7 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-    #define CFG_INTERFACE
+//    #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE    (256)
     #define CFG_INTERFACE_PROMPT        "LPC1347 >> "
     #define CFG_INTERFACE_SILENTMODE    (0)
@@ -425,7 +425,7 @@ extern "C" {
     CFG_PROTOCOL             If this field is defined the binary command
                               parser will be included
     -----------------------------------------------------------------------*/
-    #define CFG_PROTOCOL
+//    #define CFG_PROTOCOL
 /*=========================================================================*/
 
 
@@ -662,18 +662,19 @@ extern "C" {
       #define CFG_USB_STRING_PRODUCT            "LPC1347 LPCXpresso"
       #define CFG_USB_VENDORID                  (0x1FC9)
 
-      #define CFG_USB_CDC
+//      #define CFG_USB_CDC
 
-      // #define CFG_USB_HID_KEYBOARD
-      // #define CFG_USB_HID_MOUSE
+//       #define CFG_USB_HID_KEYBOARD
+//       #define CFG_USB_HID_MOUSE
       // #define CFG_USB_HID_GENERIC
       // #define CFG_USB_HID_GENERIC_REPORT_SIZE (64)
 
-      // #define CFG_USB_MSC
+//       #define CFG_USB_MSC
+      #define CFG_USB_CUSTOM_CLASS
 
       #if (defined(CFG_USB_CDC)       || defined(CFG_USB_HID_KEYBOARD) || \
            defined(CFG_USB_HID_MOUSE) || defined(CFG_USB_HID_GENERIC)  || \
-           defined(CFG_USB_MSC))
+           defined(CFG_USB_MSC)       || defined(CFG_USB_CUSTOM_CLASS))
         #define CFG_USB
         #if defined(CFG_USB_HID_KEYBOARD) || defined(CFG_USB_HID_MOUSE) || defined(CFG_USB_HID_GENERIC)
           #define CFG_USB_HID
