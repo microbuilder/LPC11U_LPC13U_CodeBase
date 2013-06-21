@@ -48,21 +48,19 @@ typedef struct
 {
   float scale;   /**< scale factor */
   float offset;  /**< offset error */
-} accel_calib_para_t;
+} accel_cal_params_t;
 
 typedef struct
 {
-  accel_calib_para_t X_axis;
-  accel_calib_para_t Y_axis;
-  accel_calib_para_t Z_axis;
-} accel_calib_para_list_t;
+  accel_cal_params_t X_axis;
+  accel_cal_params_t Y_axis;
+  accel_cal_params_t Z_axis;
+} accel_cal_params_list_t;
 
-void accelGetCalibParaForAxis(sensors_axis_t axis,
-                              accel_calib_para_t *mag_calib_para,
+void accelGetCalParamsForAxis(sensors_axis_t axis,
+                              accel_cal_params_t *accel_cal_params,
                               error_t (*pGetSensorEvent)(sensors_event_t *));
-void accelGetCalibParameter(accel_calib_para_list_t *accel_calib_para_list,
-                            error_t (*pGetSensorEvent)(sensors_event_t *));
-void accelCalibration(sensors_event_t *event, accel_calib_para_list_t *accel_calib_para_list);
+void accelCalibrateEvent(sensors_event_t *event, accel_cal_params_list_t *accel_cal_params_list);
 void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation);
 
 #ifdef __cplusplus

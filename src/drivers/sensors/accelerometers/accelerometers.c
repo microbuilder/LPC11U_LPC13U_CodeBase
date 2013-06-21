@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
     @file     accelerometers.c
-    @author   Nguyen Quang Huy, Nguyen Thien Tin
+    @author   Nguyen Quang Huy, Nguyen Thien Tin, K. Townsend
     @ingroup  Sensors
 
     @brief    Helper functions for accelerometers
@@ -11,18 +11,18 @@
     error_t error;
     sensors_event_t event;
     sensors_vec_t orientation;
+    accel_cal_params_list_t accel_cal_params_list;
 
     // Initialise the accelerometer
     error = lsm303accelInit();
 
-    // Get the calibration parameters for accelerometer (use "accelGetSensorEvent" function)
-    accel_calib_para_list_t accel_calib_para_list;
-    accelGetCalibParameter(&accel_calib_para_list, &lsm303accelGetSensorEvent);
-
-    // or
-    //accelGetCalibParaForAxis(SENSOR_AXIS_X, &(accel_calib_para_list->X_axis), pGetSensorEvent);
-    //accelGetCalibParaForAxis(SENSOR_AXIS_Y, &(accel_calib_para_list->Y_axis), pGetSensorEvent);
-    //accelGetCalibParaForAxis(SENSOR_AXIS_Z, &(accel_calib_para_list->Z_axis), pGetSensorEvent);
+    // Optional: This normally only needs to be done once per sensor!
+    // Determine the calibration parameters for this accelerometer, passing
+    // in a reference to the sensor's "GetSensorEvent" function to retrieve
+    // the sensor data during calibration
+    accelGetCalParamsForAxis(SENSOR_AXIS_X, &(accel_cal_params_list.X_axis), &lsm303accelGetSensorEvent);
+    accelGetCalParamsForAxis(SENSOR_AXIS_Y, &(accel_cal_params_list.Y_axis), &lsm303accelGetSensorEvent);
+    accelGetCalParamsForAxis(SENSOR_AXIS_Z, &(accel_cal_params_list.Z_axis), &lsm303accelGetSensorEvent);
 
     while (1)
     {
@@ -32,13 +32,21 @@
         error = lsm303accelGetSensorEvent(&event);
         if (!error)
         {
-          // Calibrate the accelerometer with calibration parameters (optional but should be invoked for accurate data)
-          accelCalibration(&event, accel_calib_para_list);
+          // Optional: Apply the calibration data to the accelerometer event
+          accelCalibrateEvent(&event, &accel_cal_params_list);
 
-          // Calculate the right angle (in degree)
+          // Optional: Calculate the correct angle/orientation values in
+          //           degrees, placing the calculated data in the
+          //          .pitch and .roll fields of our sensors_vec_t variable
           accelGetOrientation(&event, &orientation);
 
-          // Do something with orientation data
+          // Do something with orientation data (event.*)
+          debug_printf("X: %f, Y: %f, Z: %f, Pitch: %d, Roll: %d\r\n",
+            event.acceleration.x,
+            event.acceleration.y,
+            event.acceleration.z,
+            (int)orientation.pitch,
+            (int)orientation.roll);
         }
       }
     }
@@ -83,24 +91,26 @@
 /**************************************************************************/
 /*!
     @brief  Determine the calibration parameters (offset and scale factor)
-            for given axis by recording the absolute minimums and maximums
+            for given axis by recording the absolute min and max values
 
-    @para   axis                     The given axis (SENSOR_AXIS_X/Y/Z)
-    @para   accel_calib_para         The returned parameter for given axis
-    @para   (*pGetSensorEvent)       Pointer to the "GetEvent" function of
-                                       accelerometer sensor
+    @param  axis                     The given axis (SENSOR_AXIS_X/Y/Z)
+    @param  accel_cal_params         The calib parameter placeholder
+    @param  (*pGetSensorEvent)       Pointer to the "GetEvent" function of
+                                     accelerometer sensor to calibrate
 
-    @note   The calibration is performed at 6 stationary positions:
-              - At X down/up positions: max and min values for 'X-axis'
-              - At Y down/up positions: max and min values for 'Y-axis'
-              - At Z down/up positions: max and min values for 'Z-axis'
+    @note   The calibration is performed at 6 stationary positions, which
+            need to be covered over a 30 second calibration period:
 
-            The sensor is also rotated slowly about each stationary position
-            for error elimination
+            - X down/up positions: max and min values for 'X-axis'
+            - Y down/up positions: max and min values for 'Y-axis'
+            - Z down/up positions: max and min values for 'Z-axis'
+
+            The sensor is also rotated slowly about each stationary
+            position for error elimination
 */
 /**************************************************************************/
-void accelGetCalibParaForAxis(sensors_axis_t axis,
-                              accel_calib_para_t *accel_calib_para,
+void accelGetCalParamsForAxis(sensors_axis_t axis,
+                              accel_cal_params_t *accel_cal_params,
                               error_t (*pGetSensorEvent)(sensors_event_t *))
 {
   uint16_t const CALIB_TIME = 30;  /**< in seconds */
@@ -110,7 +120,7 @@ void accelGetCalibParaForAxis(sensors_axis_t axis,
 
   float accelMin, accelMax;
 
-  /* Initialise the maximum and minimum accelerometer values */
+  /* Initialise the minimum and maximum accelerometer values */
   accelMin = 2 * SENSORS_GRAVITY_EARTH;
   accelMax = -2 * SENSORS_GRAVITY_EARTH;
 
@@ -157,43 +167,22 @@ void accelGetCalibParaForAxis(sensors_axis_t axis,
   /*   scale = ---------------------------          offset = -scale  x   -------------       */
   /*                   max - min                                               2             */
   /*                                                                                         */
-  accel_calib_para->scale = 2 * SENSORS_GRAVITY_EARTH / (accelMax - accelMin);
-  accel_calib_para->offset = (-1) * accel_calib_para->scale * ((accelMax + accelMin) / 2);
+  accel_cal_params->scale = 2 * SENSORS_GRAVITY_EARTH / (accelMax - accelMin);
+  accel_cal_params->offset = (-1) * accel_cal_params->scale * ((accelMax + accelMin) / 2);
 }
 
 /**************************************************************************/
 /*!
-    @brief  Determine the calibration parameters for each axis
-
-    @para   accel_calib_para_list  Parameters used in calibration process
-                                     which contains parameters for 3-axis
-    @para   (*pGetSensorEvent)     Pointer to the "GetEvent" function of
-                                     accelerometer sensor
-*/
-/**************************************************************************/
-void accelGetCalibParameter(accel_calib_para_list_t *accel_calib_para_list,
-                            error_t (*pGetSensorEvent)(sensors_event_t *))
-{
-  /* Get the calibration parameters for X axis */
-  accelGetCalibParaForAxis(SENSOR_AXIS_X, &(accel_calib_para_list->X_axis), pGetSensorEvent);
-  /* Get the calibration parameters for Y axis */
-  accelGetCalibParaForAxis(SENSOR_AXIS_Y, &(accel_calib_para_list->Y_axis), pGetSensorEvent);
-  /* Get the calibration parameters for Z axis */
-  accelGetCalibParaForAxis(SENSOR_AXIS_Z, &(accel_calib_para_list->Z_axis), pGetSensorEvent);
-}
-
-/**************************************************************************/
-/*!
-    @brief  Re-scale the output of the sensor with the calibration parameter
+    @brief  Re-scale the sensor event data with the calibration parameter
 
             calib_output = sensor_output * scale_factor + offset
 */
 /**************************************************************************/
-void accelCalibration(sensors_event_t *event, accel_calib_para_list_t *accel_calib_para_list)
+void accelCalibrateEvent(sensors_event_t *event, accel_cal_params_list_t *accel_cal_params_list)
 {
-  event->acceleration.x = event->acceleration.x * accel_calib_para_list->X_axis.scale + accel_calib_para_list->X_axis.offset;
-  event->acceleration.y = event->acceleration.y * accel_calib_para_list->Y_axis.scale + accel_calib_para_list->Y_axis.offset;
-  event->acceleration.z = event->acceleration.z * accel_calib_para_list->Z_axis.scale + accel_calib_para_list->Z_axis.offset;
+  event->acceleration.x = event->acceleration.x * accel_cal_params_list->X_axis.scale + accel_cal_params_list->X_axis.offset;
+  event->acceleration.y = event->acceleration.y * accel_cal_params_list->Y_axis.scale + accel_cal_params_list->Y_axis.offset;
+  event->acceleration.z = event->acceleration.z * accel_cal_params_list->Z_axis.scale + accel_cal_params_list->Z_axis.offset;
 }
 
 /**************************************************************************/
