@@ -208,6 +208,32 @@ error_t lsm303magSetGain(lsm303MagGain_t gain)
     @brief  Reads the current magnetometer values
 */
 /**************************************************************************/
+error_t  lsm303magReadRaw(int16_t *x, int16_t *y, int16_t *z)
+{
+  uint8_t buffer[6] = { 0, 0, 0, 0, 0, 0 };
+
+  if (!_lsm303magInitialised)
+  {
+    ASSERT_STATUS(lsm303magInit());
+  }
+
+  /* Read the magnetometer */
+  ASSERT_STATUS(lsm303magRead48(LSM303_ADDRESS_MAG, LSM303_REGISTER_MAG_OUT_X_H_M, buffer));
+
+  /* Shift values to create properly formed integer (low byte first) */
+  /* Note: Magnetometer is X/Z/Y, high byte then low */
+  *x = (int16_t)(buffer[1] | (buffer[0] << 8));
+  *z = (int16_t)(buffer[3] | (buffer[2] << 8));
+  *y = (int16_t)(buffer[5] | (buffer[4] << 8));
+
+  return ERROR_NONE;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Reads the current magnetometer values
+*/
+/**************************************************************************/
 error_t lsm303magRead(void)
 {
   uint8_t buffer[6] = { 0, 0, 0, 0, 0, 0 };
@@ -225,9 +251,6 @@ error_t lsm303magRead(void)
   _lsm303magData.x = (int16_t)(buffer[1] | (buffer[0] << 8));
   _lsm303magData.z = (int16_t)(buffer[3] | (buffer[2] << 8));
   _lsm303magData.y = (int16_t)(buffer[5] | (buffer[4] << 8));
-
-  /* ToDo: Calculate orientation */
-  _lsm303magData.orientation = 0.0;
 
   return ERROR_NONE;
 }

@@ -1,0 +1,93 @@
+Driver Characterisation Results
+-------------------------------
+
+Basic tests results for various drivers and the sensor API to determine the
+real-world sampling rate of different sensors, and to identify where
+development effort should be spent to improve existing drivers.
+
+Comparing Raw Data Reads (Native Units) and GetSensorEvent
+----------------------------------------------------------
+
+To get an idea of the overhead of the sensor abstraction layer (since it
+does use some floating point calculations, and the SI unit conversion has
+some overhead), the raw data reads were compared with GetSensorEvent, with
+the following results.
+
+The lsm303accel.c driver was using in the following test, which uses int16_t
+for the native types (returned via ReadRaw):
+
+|---------------------+-----------+---------+---------+---------+------------|
+| Function            | Code Base |   Avg   |   Min   |   Max   |   Notes    |
+|                     |  Version  |  Ticks  |  Ticks  |  Ticks  |            |
+|---------------------+-----------+---------+---------+---------+------------|
+| GetSensorEvent      |   0.8.7   |   20256 |   20230 |   20387 | -o0        |
+| ReadRaw             |   0.8.7   |   19136 |   19019 |   20410 | -o0        |
+|---------------------|-----------|---------|---------|---------|------------|
+| Difference          |           |    1120 |    1211 |     -23 |            |
+|---------------------+-----------+---------+---------+---------+------------|
+
+GetSensorEvent Performance Tests
+--------------------------------
+
+The following tests results show the average number of ticks required to run
+*GetSensorEvent over 1,000 samples, as well as the min and max tick count.
+
+The code base version is included to take into account future improvements to
+the drivers, and put the performance numbers in historical perspective.
+
+|---------------------+-----------+---------+---------+---------+------------|
+| Sensor Driver       | Code Base |   Avg   |   Min   |   Max   |   Notes    |
+|                     |  Version  |  Ticks  |  Ticks  |  Ticks  |            |
+|---------------------+-----------+---------+---------+---------+------------|
+| bmp085.c (LOWPOWER) |   0.8.7   |  719963 |  718978 |  722893 | -o0        |
+| bmp085.c (STANDARD) |   0.8.7   |  935976 |  934972 |  938757 | -o0        |
+| bmp085.c (HIGHRES)  |   0.8.7   | 1367998 | 1367023 | 1370931 | -o0        |
+| bmp085.c (UHIGHRES) |   0.8.7   | 2232047 | 2230899 | 2234985 | -o0        |
+| mpl115a2.c          |   0.8.7   |  287882 |  241913 |  288924 | -o0        |
+| lsm303accel.c       |   0.8.7   |   20256 |   20230 |   20387 | -o0        |
+| lsm303mag.c         |   0.8.7   |   20420 |   20397 |   22068 | -o0        |
+|---------------------+-----------+---------+---------+---------+------------|
+
+The following test code was used on a Cortex M3 LPC1347 processor at 72MHz to
+generate these test results (bmp085 used an example here):
+
+  error_t error;
+  sensors_event_t event;
+
+  error = bmp085Init(BMP085_MODE_ULTRALOWPOWER);
+
+  if (!error)
+  {
+    uint32_t min, max, cur, avg, errors;
+    uint64_t total = 0;
+    uint32_t i = 0;
+    min = max = cur = avg = errors = 0;
+    printf("Collecting 1000 samples from the sensor %s", CFG_PRINTF_NEWLINE);
+    for (i=0;i<1000;i++)
+    {
+      DWT_RESET_CYCLECOUNTER;
+      error = bmp085GetSensorEvent(&event);
+      cur = DWT->CYCCNT;
+      if (min == 0) min = cur;
+      if (error)
+      {
+        errors++;
+      }
+      else
+      {
+        if (cur < min) min = cur;
+        if (cur > max) max = cur;
+        total+=cur;
+      }
+    }
+    avg = total/1000;
+    printf("Min: %d, Max: %d, Avg: %d, Errors: %d %s", 
+            min, max, avg, errors, CFG_PRINTF_NEWLINE);
+  }
+  else
+  {
+    while(1)
+    {
+      __NOP();
+    }
+  }

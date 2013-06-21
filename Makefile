@@ -84,6 +84,9 @@ OBJS  += $(OBJ_PATH)/adc.o
 VPATH += src/core/delay
 OBJS  += $(OBJ_PATH)/delay.o
 
+VPATH += src/core/debug
+OBJS  += $(OBJ_PATH)/debug.o
+
 VPATH += src/core/eeprom
 OBJS  += $(OBJ_PATH)/eeprom.o
 

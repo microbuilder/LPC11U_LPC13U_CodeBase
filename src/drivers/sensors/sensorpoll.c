@@ -35,8 +35,14 @@
 /**************************************************************************/
 #include "sensorpoll.h"
 
+#if defined CFG_MCU_FAMILY_LPC13UXX
+#include "core/dwt/dwt.h"
+volatile uint32_t sensorpoll_overruns = 0;
+#endif
+
 volatile uint32_t sensorpoll_counter = 0;
 volatile uint32_t sensorpoll_capture[4] = {0,0,0,0};
+
 
 /**************************************************************************/
 /*!
@@ -48,15 +54,15 @@ volatile uint32_t sensorpoll_capture[4] = {0,0,0,0};
 
     @code
     #include "drivers/sensors/sensorpoll.h"
-    
+
     volatile uint32_t counter;
-    
+
     int main(void)
     {
       boardInit();
       sensorpollInit();
       sensorpollEnable();
-      
+
       while(1)
       {
         // ... do something, enter WFI mode, etc. ...
@@ -72,7 +78,7 @@ volatile uint32_t sensorpoll_capture[4] = {0,0,0,0};
       // Retrieve the sensor data here or do something inside the tick,
       // but be sure that you finish the processing before the next tick,
       // which is 5ms by default!
-      
+
       // For now, just increment a counter to prove the callback works
       counter++;
     }
@@ -112,18 +118,20 @@ void CT16B1_IRQHandler(void)
   #error "sensorpoll.c: No MCU defined"
 #endif
 {
-  /* ToDo: Add DWT check on M3 to make sure we don't exceed the 5ms *
-   * timer delay, and increment a counter if we ran over!           */
-   
+  #if defined CFG_MCU_FAMILY_LPC13UXX
+    /* Use the DWT timer to make sure we don't exceed the 5ms delay */
+    DWT_RESET_CYCLECOUNTER;
+  #endif
+
   /* Handle MAT0 event (MAT0 controls the tick period) */
   if (LPC_CT16B1->IR & (0x01 << 0))
   {
     /* Clear the interrupt flag */
     LPC_CT16B1->IR = 0x1 << 0;
-    
+
     /* Increment the sensorpoll tick counter */
     sensorpoll_counter++;
-    
+
     /* Call the sensorpoll_tick_isr callback so that we can pull    *
      * our sensor data and do something with it elsewhere rather    *
      * than putting board or project specific code here.            */
@@ -131,7 +139,7 @@ void CT16B1_IRQHandler(void)
   }
 
   /* Handle capture events, which you might want to use to capture
-   * sensor data only when a specific CAP event/pin is triggered */
+   * sensor data only when a specific CAP event/pin is triggered    */
   if (LPC_CT16B1->IR & (0x1 << 4))
   {
     LPC_CT16B1->IR = 0x1 << 4;
@@ -152,6 +160,16 @@ void CT16B1_IRQHandler(void)
     LPC_CT16B1->IR = 0x1 << 7;
     sensorpoll_capture[3]++;
   }
+
+  #if defined CFG_MCU_FAMILY_LPC13UXX
+    /* Check how many clock cycles the ISR actually took */
+    int count = DWT->CYCCNT;
+    if (count >= LPC_CT16B1->MR0 * 8)
+    {
+      /* We overran the timer delay ... increment the overrun counter! */
+      sensorpoll_overruns++;
+    }
+  #endif
 
   return;
 }

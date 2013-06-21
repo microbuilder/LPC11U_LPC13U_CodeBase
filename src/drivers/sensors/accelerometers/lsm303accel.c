@@ -150,6 +150,33 @@ error_t lsm303accelInit(void)
 
 /**************************************************************************/
 /*!
+    @brief  Reads the raw accelerometer values if you want to skip
+            the sensor system abstraction layer and the float overhead
+*/
+/**************************************************************************/
+error_t lsm303accelReadRaw(int16_t *x, int16_t *y, int16_t *z)
+{
+  uint8_t buffer[6] = { 0, 0, 0, 0, 0, 0 };
+
+  if (!_lsm303accelInitialised)
+  {
+    ASSERT_STATUS(lsm303accelInit());
+  }
+
+  /* Read the accelerometer */
+  ASSERT_STATUS(lsm303accelRead48(LSM303_ADDRESS_ACCEL, LSM303_REGISTER_ACCEL_OUT_X_L_A, buffer));
+
+  /* Shift values to create properly formed integer (low byte first) */
+  /* Note: Accelerometer is X/Y/Z, low byte then high */
+  *x = ((int16_t)(buffer[0] | (buffer[1] << 8))) >> 4;
+  *y = ((int16_t)(buffer[2] | (buffer[3] << 8))) >> 4;
+  *z = ((int16_t)(buffer[4] | (buffer[5] << 8))) >> 4;
+
+  return ERROR_NONE;
+}
+
+/**************************************************************************/
+/*!
     @brief  Reads the current accelerometer values
 */
 /**************************************************************************/

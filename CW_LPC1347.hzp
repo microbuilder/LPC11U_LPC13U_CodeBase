@@ -65,6 +65,9 @@
         <folder Name="delay" file_name="">
           <file file_name="src/core/delay/delay.c"/>
         </folder>
+        <folder Name="debug" file_name="">
+          <file file_name="src/core/debug/debug.c"/>
+        </folder>
       </folder>
       <folder Name="drivers">
         <folder Name="displays">
