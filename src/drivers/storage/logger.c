@@ -66,6 +66,36 @@ static bool loggerInitialised = FALSE;
 /**************************************************************************/
 /*!
     @brief Initialises a new text file for data logging
+
+    @param  filename  Full path and filename for the log file
+    @param  action    LOGGER_FILEACTION_APPEND to create a file if it
+                      doesn't already exist or append to an existing file,
+                      or LOGGER_FILEACTION_ALWAYSCREATE to always create
+                      a new file, overwriting any previously existing file
+                      with the same name.
+
+    @note   Possible errors are:
+
+            - ERROR_FATFS_NODISK
+            - ERROR_FATFS_INITFAILED
+            - ERROR_FATFS_FAILEDTOMOUNTDRIVE
+            - ERROR_FATFS_UNABLETOCREATEFILE
+            - ERROR_NONE
+
+    @code
+
+    error_t error;
+    error = loggerInit("/folder/datalog.csv", LOGGER_FILEACTION_APPEND);
+
+    if (!error)
+    {
+      // Start logging data with loggerWrite() ...
+    }
+
+    // Make sure we close the file to commit any unwritten data!
+    loggerClose();
+
+    @endcode
 */
 /**************************************************************************/
 error_t loggerInit(char *filename, logger_fileaction_t action)
