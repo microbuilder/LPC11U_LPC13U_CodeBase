@@ -57,9 +57,9 @@ typedef struct
   accel_cal_params_t Z_axis;
 } accel_cal_params_list_t;
 
-void accelGetCalParamsForAxis(sensors_axis_t axis,
-                              accel_cal_params_t *accel_cal_params,
-                              error_t (*pGetSensorEvent)(sensors_event_t *));
+error_t accelGetCalParamsForAxis(sensors_axis_t axis,
+                                 accel_cal_params_t *accel_cal_params,
+                                 error_t (*pGetSensorEvent)(sensors_event_t *));
 void accelCalibrateEvent(sensors_event_t *event, accel_cal_params_list_t *accel_cal_params_list);
 void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation);
 

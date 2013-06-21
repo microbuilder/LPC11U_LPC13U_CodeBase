@@ -110,28 +110,27 @@
             can be captured.
 */
 /**************************************************************************/
-void magGetCalParamsForAxis(sensors_axis_t axis,
-                            mag_cal_params_t *mag_cal_params,
-                            error_t (*pGetSensorEvent)(sensors_event_t *))
+error_t magGetCalParamsForAxis(sensors_axis_t axis,
+                               mag_cal_params_t *mag_cal_params,
+                               error_t (*pGetSensorEvent)(sensors_event_t *))
 {
   /* The calibration time should be enough to rotate sensor a full 360°   */
-        uint16_t const CALIB_TIME = 30;         /* Seconds */
+  uint16_t const CALIB_TIME = 30;         /* Seconds */
 
-        error_t error;
-        sensors_event_t event;
+  sensors_event_t event;
 
-        float magMin, magMax;
+  float magMin, magMax;
 
-        /* Initialise the maximum and minimum magnetic values */
-        magMax = -3.4e38F;   /* Min float */
-        magMin = 3.4e38F;    /* Max float */
+  /* Initialise the maximum and minimum magnetic values */
+  magMax = -3.4e38F;   /* Min float */
+  magMin = 3.4e38F;    /* Max float */
 
-        /* Calibration process                                            */
-        /* Data is collected as the magnetometer sensor is rotated 360°   */
+  /* Calibration process                                            */
+  /* Data is collected as the magnetometer sensor is rotated 360°   */
 
-        /* Set the magnetometer's values according to the measured axis   */
-        float *mag_value;
-        switch (axis)
+  /* Set the magnetometer's values according to the measured axis   */
+  float *mag_value;
+  switch (axis)
   {
     case SENSOR_AXIS_X:
       mag_value = &(event.magnetic.x);
@@ -147,31 +146,30 @@ void magGetCalParamsForAxis(sensors_axis_t axis,
       break;
   }
 
-        /* Calibration process               */
-        /* Perform an amount of 3D rotations */
-        uint32_t startSec = delayGetSecondsActive();
-        while (delayGetSecondsActive() < CALIB_TIME + startSec)
-        {
-                /* Get magnetic data */
-                error = pGetSensorEvent(&event);
+  /* Calibration process               */
+  /* Perform an amount of 3D rotations */
+  uint32_t startSec = delayGetSecondsActive();
+  while (delayGetSecondsActive() < CALIB_TIME + startSec)
+  {
+    /* Get magnetic data */
+    ASSERT_STATUS(pGetSensorEvent(&event));
 
-                /* Update the maximum and minimum magnetic values for each axis */
-                if (!error)
-                {
-                        if (*mag_value < magMin) magMin = *mag_value;
-                        if (*mag_value > magMax) magMax = *mag_value;
-                }
-        }
+    /* Update the maximum and minimum magnetic values for each axis */
+    if (*mag_value < magMin) magMin = *mag_value;
+    if (*mag_value > magMax) magMax = *mag_value;
+  }
 
-        /* Calculate scale factor and offset                                              */
-        /*                                                                                */
-        /* We normalized magnetometer's returned values to [-1; 1] range                  */
-        /*                2                                         (max + min)           */
-        /*   scale = -----------              offset = -scale  x   -------------          */
-        /*            max - min                                          2                */
-        /*                                                                                */
-        mag_cal_params->scale = 2.0F / (magMax - magMin);
-        mag_cal_params->offset = (-1) * mag_cal_params->scale * ((magMax + magMin) / 2);
+  /* Calculate scale factor and offset                                              */
+  /*                                                                                */
+  /* We normalized magnetometer's returned values to [-1; 1] range                  */
+  /*                2                                         (max + min)           */
+  /*   scale = -----------              offset = -scale  x   -------------          */
+  /*            max - min                                          2                */
+  /*                                                                                */
+  mag_cal_params->scale = 2.0F / (magMax - magMin);
+  mag_cal_params->offset = (-1) * mag_cal_params->scale * ((magMax + magMin) / 2);
+
+  return ERROR_NONE;
 }
 
 /**************************************************************************/

@@ -109,13 +109,12 @@
             position for error elimination
 */
 /**************************************************************************/
-void accelGetCalParamsForAxis(sensors_axis_t axis,
-                              accel_cal_params_t *accel_cal_params,
-                              error_t (*pGetSensorEvent)(sensors_event_t *))
+error_t accelGetCalParamsForAxis(sensors_axis_t axis,
+                                 accel_cal_params_t *accel_cal_params,
+                                 error_t (*pGetSensorEvent)(sensors_event_t *))
 {
   uint16_t const CALIB_TIME = 30;  /**< in seconds */
 
-  error_t error;
   sensors_event_t event;
 
   float accelMin, accelMax;
@@ -151,14 +150,11 @@ void accelGetCalParamsForAxis(sensors_axis_t axis,
   while (delayGetSecondsActive() < CALIB_TIME + startSec)
   {
     /* Get accelerometer sensor data */
-    error = pGetSensorEvent(&event);
+    ASSERT_STATUS(pGetSensorEvent(&event));
 
     /* Update the maximum and minimum accelerometer values for each axis */
-    if (!error)
-    {
-      if (*accel_value < accelMin) accelMin = *accel_value;
-      if (*accel_value > accelMax) accelMax = *accel_value;
-    }
+    if (*accel_value < accelMin) accelMin = *accel_value;
+    if (*accel_value > accelMax) accelMax = *accel_value;
   }
 
   /* Calculate scale factor and offset                                                       */
@@ -169,6 +165,8 @@ void accelGetCalParamsForAxis(sensors_axis_t axis,
   /*                                                                                         */
   accel_cal_params->scale = 2 * SENSORS_GRAVITY_EARTH / (accelMax - accelMin);
   accel_cal_params->offset = (-1) * accel_cal_params->scale * ((accelMax + accelMin) / 2);
+
+  return ERROR_NONE;
 }
 
 /**************************************************************************/
