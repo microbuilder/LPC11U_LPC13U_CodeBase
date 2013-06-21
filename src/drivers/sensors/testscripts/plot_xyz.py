@@ -11,10 +11,24 @@
 
 import numpy as np
 import matplotlib.pyplot as plt
+import Tkinter, tkFileDialog
 
-filename = "C:\Users\Kevin\Desktop\sensors.txt"
+# This program will plot X/Y/Z data logged via drivers/storage/logger.c, and
+# assumes we are getting vector data in CSV format generated using the
+# 'sensorsLogSensorsEvent' helper function in drivers/sensors/sensors.c
+#
+# Data should look similar to the this:
+#
+# 0,1,5714,6.001670,-6.629296,-4.785645,0.000000
+# 0,1,5729,6.001670,-6.629296,-4.785645,0.000000
+# 0,1,5734,5.883990,-6.590069,-4.746419,0.000000
 
 def main():
+    # Request the data file to process
+    root = Tkinter.Tk()
+    root.withdraw()
+    filename = tkFileDialog.askopenfilename()
+
     # Load the CSV file in 'data'
     data = np.genfromtxt(filename,
         delimiter=',',
