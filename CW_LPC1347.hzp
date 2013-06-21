@@ -49,6 +49,7 @@
           <file file_name="src/core/usb/usb_hid.c"/>
           <file file_name="src/core/usb/usbd.c"/>
           <file file_name="src/core/usb/usb_msc.c"/>
+          <file file_name="src/core/usb/usb_custom_class.c"/>
         </folder>
         <folder Name="fifo" file_name="">
           <file file_name="src/core/fifo/fifo.c"/>
