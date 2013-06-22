@@ -277,7 +277,6 @@
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
-          <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347_rtxconf.c"/>
         </folder>
         <folder Name="rf1ghzusb" file_name="">
           <file file_name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
@@ -286,7 +285,6 @@
         <folder Name="rf1ghznode" file_name="">
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
-          <file file_name="src/boards/rf1ghznode/board_rf1ghznode_rtxconf.c"/>
         </folder>
         <folder Name="lpcstepper" file_name="">
           <file file_name="src/boards/lpcstepper/board_lpcstepper.c"/>
@@ -321,6 +319,7 @@
       <file file_name="cmsis/system_LPC13Uxx.c"/>
       <file file_name="cmsis/system_LPC13Uxx.h"/>
       <file file_name="cmsis/math_helper.c"/>
+      <file file_name="cmsis/RTX_hook.c"/>
     </folder>
     <folder Name="Test Files" file_name="">
       <file file_name="tests/test_fifo.c"/>
