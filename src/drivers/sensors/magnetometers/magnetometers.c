@@ -11,21 +11,9 @@
     error_t error;
     sensors_event_t mag_event;
     sensors_vec_t orientation;
-    mag_cal_params_list_t mag_cal_params_list;
 
     // Initialise the magnetometer
     error = lsm303magInit();
-
-    // Optional: Get the calibration parameters
-    if (!error)
-    {
-      printf("Calibrating X (30s)\r\n");
-      magGetCalParamsForAxis(SENSOR_AXIS_X, &(mag_cal_params_list->X_axis), &lsm303magGetSensorEvent);
-      printf("Calibrating Y (30s)\r\n");
-      magGetCalParamsForAxis(SENSOR_AXIS_Y, &(mag_cal_params_list->Y_axis), &lsm303magGetSensorEvent);
-      printf("Calibrating Z (30s)\r\n");
-      magGetCalParamsForAxis(SENSOR_AXIS_Z, &(mag_cal_params_list->Z_axis), &lsm303magGetSensorEvent);
-    }
 
     while (1)
     {
@@ -35,22 +23,18 @@
         error = lsm303magGetSensorEvent(&mag_event);
         if (!error)
         {
-          // Calibrate the magnetometer with calibration parameters (optional optional but should be invoked for accurate data)
-          magCalibrateEvent(&mag_event, mag_cal_params_list);
-
-          // Optional: Tilt Compensation with an accelerometer
-          sensors_event_t accel_event;
-          error = lsm303accelGetSensorEvent(&accel_event);
-          if (!error)
-          {
-            magTiltCompensation(&mag_event, &accel_event);
-          }
-
-          // Calculate the angle (in degrees)
+          // Calculate the heading (in degrees)
           magGetOrientation(&mag_event, &orientation);
 
-          // Do something with the orientation data!
+          // Display the mag and orientation data
+          printf("Mag X: %f, Y: %f, Z: %f, Heading: %d\r\n",
+            magEvent.magnetic.x,
+            magEvent.magnetic.y,
+            magEvent.magnetic.z,
+            (int)orientation.heading);
         }
+        // Wait a bit between sensor updates
+        delay(100);
       }
     }
 
@@ -102,12 +86,37 @@
                                      the magnetometer sensor to calibrate
 
     @note   Because we do not know exactly the direction of the Earth's
-            magnetic field, so an amount of 3D rotations need to be performed
+            magnetic field, an amount of 3D rotation needs to be performed
             for determining the maximum and minimum magnetic values for each
             axis.
 
             The more the sensor is rotated, the more likely absolute peak
-            can be captured.
+            can be captured, but the rotation should be relatively slow
+            for best results.
+
+    @code
+
+    mag_cal_params_list_t mag_cal_params_list;
+
+    // Get the calibration parameters for the X axis (slowly rotating
+    // the sensor 360° around multiple times with X pointing out towards
+    // the horizon)
+    magGetCalParamsForAxis(SENSOR_AXIS_X,
+      &(mag_cal_params_list->X_axis), &lsm303magGetSensorEvent);
+
+    // Get the calibration parameters for the Y axis (slowly rotating
+    // the sensor 360° around multiple times with Y pointing out towards
+    // the horizon)
+    magGetCalParamsForAxis(SENSOR_AXIS_Y,
+      &(mag_cal_params_list->Y_axis), &lsm303magGetSensorEvent);
+
+    // Get the calibration parameters for the Z axis (slowly rotating
+    // the sensor 360° around multiple times with Z pointing out towards
+    // the horizon)
+    magGetCalParamsForAxis(SENSOR_AXIS_Z,
+      &(mag_cal_params_list->Z_axis), &lsm303magGetSensorEvent);
+
+    @endcode
 */
 /**************************************************************************/
 error_t magGetCalParamsForAxis(sensors_axis_t axis,
@@ -176,6 +185,19 @@ error_t magGetCalParamsForAxis(sensors_axis_t axis,
 /*!
     @brief  Re-scale the output of the sensor with the calibration data
             calib_output = sensor_output * scale_factor + offset
+
+    @param  event                 The sensor event with the raw mag data
+    @param  mag_cal_params_list   The cal params (calculated using
+                                  magGetCalParamsForAxis) to use when
+                                  adjusting the values in 'event'
+
+    @code
+
+    // Calibrate the magnetometer with calibration parameters
+    // (optional optional but should be invoked for accurate data)
+    magCalibrateEvent(&mag_event, mag_cal_params_list);
+
+    @endcode
 */
 /**************************************************************************/
 void magCalibrateEvent(sensors_event_t *event, mag_cal_params_list_t *mag_cal_params_list)
@@ -191,6 +213,22 @@ void magCalibrateEvent(sensors_event_t *event, mag_cal_params_list_t *mag_cal_pa
     @brief  Utilize the sensor data from an accelerometer to compensate
             the magnetic sensor measurements when the sensor is tilted
             (the pitch and roll angles are not equal 0°)
+
+    @param  mag_event     The raw magnetometer data to adjust for tilt
+    @param  accel_event   The accelerometer event data to use to determine
+                          the tilt when compensating the mag_event values
+
+    @code
+
+    // Perform tilt compensation with matching accelerometer data
+    sensors_event_t accel_event;
+    error = lsm303accelGetSensorEvent(&accel_event);
+    if (!error)
+    {
+      magTiltCompensation(&mag_event, &accel_event);
+    }
+
+    @endcode
 */
 /**************************************************************************/
 void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_event)
@@ -221,6 +259,17 @@ void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_even
             Heading is the angle between the 'X axis' and magnetic north
             on the horizontal plane (Oxy), measured clockwise when viewing
             from the top of the device
+
+    @param  event         The raw magnetometer sensor data to use when
+                          calculating out heading
+    @param  orientation   The sensors_vec_t object where we will
+                          assign an 'orientation.heading' value
+
+    @code
+
+    magGetOrientation(&mag_event, &orientation);
+
+    @endcode
 */
 /**************************************************************************/
 void magGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
