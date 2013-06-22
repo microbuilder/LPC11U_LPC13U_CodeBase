@@ -102,26 +102,8 @@
 /* VIN resistor divider multiplier is 3.12766 */
 #define RF1GHZNODE_VINADC_MULTIPLIER_FIXED10K (31277)
 
-#if defined CFG_CMSIS_RTOS
-/* Thread IDs */
-osThreadId tid_mainthread;               /* assigned ID for main thread            */
-osThreadId tid_blinkthread;               /* assigned ID for blink thread           */
-
-/*----------------------------------------------------------------------------
-*   Blink Thread - High Priority - Active every 3ms
-*---------------------------------------------------------------------------*/
-void blink_thread (void const *argument)
-{
- while (1)
- {
-   /* Pass control to other tasks for 1s */
-   osDelay(1000);
-   printf ("Thread 1\n");
- }
-}
-
-/* Thread definitions */
-osThreadDef(blink_thread, osPriorityHigh,   1, 0);
+#ifdef CFG_CMSIS_RTOS
+  #include "RTX_CM_lib.h"
 #endif
 
 #ifdef CFG_SDCARD
@@ -424,28 +406,91 @@ void boardInit(void)
   boardLED(CFG_LED_ON);
 }
 
+#if defined CFG_CMSIS_RTOS
+  /* Thread IDs */
+  osThreadId tid_mainthread;      /* ID for main thread   */
+  osThreadId tid_blinkythread;    /* ID for blinky thread */
+
+  /* Function prototypes */
+  void main_thread(void const *argument);
+  void blinky_thread (void const *argument);
+
+  /* Thread definitions */
+  osThreadDef(blinky_thread, osPriorityHigh, 1, 0);
+  osThreadDef(main_thread, osPriorityNormal, 1, 4 * OS_MAINSTKSIZE);
+
+  /**************************************************************************/
+  /*!
+      @brief Blinky thread, high priority, active very 3ms
+  */
+  /**************************************************************************/
+  void blinky_thread (void const *argument)
+  {
+   while (1)
+   {
+     /* Pass control to other tasks for 1s */
+     osDelay(1000);
+     printf ("Thread 1\n");
+   }
+  }
+
+  /**************************************************************************/
+  /*!
+      @brief Main thread, normal priority
+  */
+  /**************************************************************************/
+  void main_thread(void const *argument)
+  {
+    uint32_t currentSecond, lastSecond;
+    currentSecond = lastSecond = 0;
+
+    for (;;)
+    {
+       osDelay(1000);
+       boardLED((currentSecond++) & 1);
+    }
+  }
+
+  /**************************************************************************/
+  /*!
+      @brief RTX code entry point (replaces non-RTOS main further down!)
+  */
+  /**************************************************************************/
+  int main(void)
+  {
+    /* Initiaise the HW */
+    boardInit();
+
+    /* Initialise the RTX kernel */
+    osKernelInitialize();
+
+    /* Create out threads */
+    tid_mainthread = osThreadCreate(osThread(main_thread), NULL);
+    tid_blinkythread = osThreadCreate(osThread(blinky_thread), NULL);
+
+    /* Start the kernel and then go into an endless loop */
+    osKernelStart();
+
+    /* No return */
+    while(1);
+
+    return 1;
+  }
+#endif
+
 /**************************************************************************/
 /*!
     @brief Primary entry point for this project.
 */
 /**************************************************************************/
 #if !defined(_TEST_)
+#ifndef CFG_CMSIS_RTOS
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
   currentSecond = lastSecond = 0;
 
   boardInit();
-
-  #if defined CFG_CMSIS_RTOS
-    tid_blinkthread = osThreadCreate(osThread(blink_thread), NULL);
-    tid_mainthread = osThreadGetId();
-    for (;;)
-    {
-      osDelay(1000);
-      boardLED((currentSecond++) & 1);
-    }
-  #endif
 
   while (1)
   {
@@ -475,6 +520,7 @@ int main(void)
     #endif
   }
 }
+#endif
 #endif
 
 /**************************************************************************/

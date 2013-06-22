@@ -194,7 +194,11 @@ extern "C" {
     ENABLE CMSIS-RTOS
 
     -----------------------------------------------------------------------*/
-    // #define CFG_CMSIS_RTOS
+    #define CFG_CMSIS_RTOS
+
+    #if defined CFG_CMSIS_RTOS
+      #include "board_rf1ghznode_rtxconf.h"
+    #endif
 /*=========================================================================*/
 
 

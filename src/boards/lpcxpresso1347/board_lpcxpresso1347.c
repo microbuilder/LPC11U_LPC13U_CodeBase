@@ -159,7 +159,7 @@ void boardInit(void)
   osThreadId tid_blinkythread;    /* ID for blinky thread */
 
   /* Function prototypes */
-  int main_thread(void const *argument);
+  void main_thread(void const *argument);
   void blinky_thread (void const *argument);
 
   /* Thread definitions */
@@ -186,7 +186,7 @@ void boardInit(void)
       @brief Main thread, normal priority
   */
   /**************************************************************************/
-  int main_thread(void const *argument)
+  void main_thread(void const *argument)
   {
     uint32_t currentSecond, lastSecond;
     currentSecond = lastSecond = 0;
