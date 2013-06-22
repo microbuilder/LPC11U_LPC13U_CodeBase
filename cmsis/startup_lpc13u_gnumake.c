@@ -102,17 +102,12 @@ void USBWakeup_IRQHandler  (void) ALIAS(IntDefaultHandler);
 // main() is the entry point for Newlib based applications
 //
 //*****************************************************************************
-#include "projectconfig.h"
-#include "cmsis_os.h"
 #if defined (__REDLIB__)
 extern void __main(void);
 #else
 extern int main(void);
 #endif
 
-#if defined(CFG_CMSIS_RTOS)
-extern osThreadDef_t os_thread_def_main;
-#endif
 //*****************************************************************************
 #if defined (__cplusplus)
 } // extern "C"
@@ -215,24 +210,18 @@ void Reset_Handler(void)
   __libc_init_array();
 #endif
 
-#if defined(CFG_CMSIS_RTOS)
-	osKernelInitialize();
-	osThreadCreate(&os_thread_def_main, NULL);
-	osKernelStart();
-#else
 #if defined (__REDLIB__)
   // Call the Redlib library, which in turn calls main()
   __main() ;
 #else
   main();
 #endif
-#endif
-  //
-  // main() shouldn't return, but if it does, we'll just enter an infinite loop
-  //
-  while (1)
-  {
-  }
+	//
+	// main() shouldn't return, but if it does, we'll just enter an infinite loop
+	//
+	while (1) {
+		;
+	}
 }
 
 //*****************************************************************************

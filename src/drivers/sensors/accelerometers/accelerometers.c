@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
     @file     accelerometers.c
-    @author   Nguyen Quang Huy, Nguyen Thien Tin
+    @author   Nguyen Quang Huy, Nguyen Thien Tin, K. Townsend
     @ingroup  Sensors
 
     @brief    Helper functions for accelerometers
@@ -11,13 +11,18 @@
     error_t error;
     sensors_event_t event;
     sensors_vec_t orientation;
+    accel_cal_params_list_t accel_cal_params_list;
 
     // Initialise the accelerometer
     error = lsm303accelInit();
 
-    // Get the calibration parameters for accelerometer (use "accelGetSensorEvent" function)
-    accel_calib_para_t accel_calib_para;
-    accelGetCalibParameter(&accel_calib_para, &lsm303accelGetSensorEvent);
+    // Optional: This normally only needs to be done once per sensor!
+    // Determine the calibration parameters for this accelerometer, passing
+    // in a reference to the sensor's "GetSensorEvent" function to retrieve
+    // the sensor data during calibration
+    accelGetCalParamsForAxis(SENSOR_AXIS_X, &(accel_cal_params_list.X_axis), &lsm303accelGetSensorEvent);
+    accelGetCalParamsForAxis(SENSOR_AXIS_Y, &(accel_cal_params_list.Y_axis), &lsm303accelGetSensorEvent);
+    accelGetCalParamsForAxis(SENSOR_AXIS_Z, &(accel_cal_params_list.Z_axis), &lsm303accelGetSensorEvent);
 
     while (1)
     {
@@ -27,13 +32,21 @@
         error = lsm303accelGetSensorEvent(&event);
         if (!error)
         {
-          // Calibrate the accelerometer with calibration parameters (optional but should be invoked for accurate data)
-          accelCalibration(&event, accel_calib_para);
+          // Optional: Apply the calibration data to the accelerometer event
+          accelCalibrateEvent(&event, &accel_cal_params_list);
 
-          // Calculate the right angle (in degree)
+          // Optional: Calculate the correct angle/orientation values in
+          //           degrees, placing the calculated data in the
+          //          .pitch and .roll fields of our sensors_vec_t variable
           accelGetOrientation(&event, &orientation);
 
-          // Do something with orientation data
+          // Do something with orientation data (event.*)
+          debug_printf("X: %f, Y: %f, Z: %f, Pitch: %d, Roll: %d\r\n",
+            event.acceleration.x,
+            event.acceleration.y,
+            event.acceleration.z,
+            (int)orientation.pitch,
+            (int)orientation.roll);
         }
       }
     }
@@ -77,6 +90,101 @@
 
 /**************************************************************************/
 /*!
+    @brief  Determine the calibration parameters (offset and scale factor)
+            for given axis by recording the absolute min and max values
+
+    @param  axis                     The given axis (SENSOR_AXIS_X/Y/Z)
+    @param  accel_cal_params         The calib parameter placeholder
+    @param  (*pGetSensorEvent)       Pointer to the "GetEvent" function of
+                                     accelerometer sensor to calibrate
+
+    @note   The calibration is performed at 6 stationary positions, which
+            need to be covered over a 30 second calibration period:
+
+            - X down/up positions: max and min values for 'X-axis'
+            - Y down/up positions: max and min values for 'Y-axis'
+            - Z down/up positions: max and min values for 'Z-axis'
+
+            The sensor is also rotated slowly about each stationary
+            position for error elimination
+*/
+/**************************************************************************/
+error_t accelGetCalParamsForAxis(sensors_axis_t axis,
+                                 accel_cal_params_t *accel_cal_params,
+                                 error_t (*pGetSensorEvent)(sensors_event_t *))
+{
+  uint16_t const CALIB_TIME = 30;  /**< in seconds */
+
+  sensors_event_t event;
+
+  float accelMin, accelMax;
+
+  /* Initialise the minimum and maximum accelerometer values */
+  accelMin = 2 * SENSORS_GRAVITY_EARTH;
+  accelMax = -2 * SENSORS_GRAVITY_EARTH;
+
+  /* Calibration process                                             */
+  /* Data is collected as the accelerometer sensor is rotated 360°   */
+
+  /* Set the accelerometer's values according to the measured axis   */
+  float *accel_value;
+  switch (axis)
+  {
+    case SENSOR_AXIS_X:
+      accel_value = &(event.acceleration.x);
+      break;
+    case SENSOR_AXIS_Y:
+      accel_value = &(event.acceleration.y);
+      break;
+    case SENSOR_AXIS_Z:
+      accel_value = &(event.acceleration.z);
+      break;
+    default:
+      accel_value = &(event.acceleration.x);
+      break;
+  }
+
+  /* Calibration process                                                                                */
+  /* Be sure to rotate the sensor slowly about its center so that we can eliminate the linearity error  */
+  uint32_t startSec = delayGetSecondsActive();
+  while (delayGetSecondsActive() < CALIB_TIME + startSec)
+  {
+    /* Get accelerometer sensor data */
+    ASSERT_STATUS(pGetSensorEvent(&event));
+
+    /* Update the maximum and minimum accelerometer values for each axis */
+    if (*accel_value < accelMin) accelMin = *accel_value;
+    if (*accel_value > accelMax) accelMax = *accel_value;
+  }
+
+  /* Calculate scale factor and offset                                                       */
+  /*                                                                                         */
+  /*            2 x SENSORS_GRAVITY_EARTH                                 (max + min)        */
+  /*   scale = ---------------------------          offset = -scale  x   -------------       */
+  /*                   max - min                                               2             */
+  /*                                                                                         */
+  accel_cal_params->scale = 2 * SENSORS_GRAVITY_EARTH / (accelMax - accelMin);
+  accel_cal_params->offset = (-1) * accel_cal_params->scale * ((accelMax + accelMin) / 2);
+
+  return ERROR_NONE;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Re-scale the sensor event data with the calibration parameter
+
+            calib_output = sensor_output * scale_factor + offset
+*/
+/**************************************************************************/
+void accelCalibrateEvent(sensors_event_t *event, accel_cal_params_list_t *accel_cal_params_list)
+{
+  event->acceleration.x = event->acceleration.x * accel_cal_params_list->X_axis.scale + accel_cal_params_list->X_axis.offset;
+  event->acceleration.y = event->acceleration.y * accel_cal_params_list->Y_axis.scale + accel_cal_params_list->Y_axis.offset;
+  event->acceleration.z = event->acceleration.z * accel_cal_params_list->Z_axis.scale + accel_cal_params_list->Z_axis.offset;
+}
+
+/**************************************************************************/
+/*!
     @brief  Populates the .pitch/.roll fields in the sensors_vec_t struct
             with the right angular data (in degree)
 */
@@ -89,7 +197,9 @@ void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   /* roll: Rotation around the longitudinal axis (the plane body, 'X axis'). -180<=roll<=180  */
   /* roll is positive and increasing when moving downward                                     */
   /*                                                                                          */
-  /*             roll = atan(y / sqrt(x*x + z*z))                                             */
+  /*                                 y                                                        */
+  /*             roll = atan(-----------------)                                               */
+  /*                          sqrt(x^2 + z^2)                                                 */
   /* where:  x, y, z are returned value from accelerometer sensor                             */
 
   t_roll = event->acceleration.x * event->acceleration.x + event->acceleration.z * event->acceleration.z;
@@ -107,13 +217,15 @@ void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   /* pitch: Rotation around the lateral axis (the wing span, 'Y axis'). -180<=pitch<=180)     */
   /* pitch is positive and increasing when moving upwards                                     */
   /*                                                                                          */
-  /*             pitch = atan(x / sqrt(y*y + z*z))                                            */
+  /*                                 x                                                        */
+  /*             roll = atan(-----------------)                                               */
+  /*                          sqrt(y^2 + z^2)                                                 */
   /* where:  x, y, z are returned value from accelerometer sensor                             */
 
   t_pitch = event->acceleration.y * event->acceleration.y + event->acceleration.z * event->acceleration.z;
   orientation->pitch = (float)atan2(event->acceleration.x, sqrt(t_pitch)) * 180 / PI;
 
-  /* scale the angle of pitch in the range [-180, 180] */
+  /* scale the angle of Pitch in the range [-180, 180] */
   if (event->acceleration.z < 0)
   {
     if (event->acceleration.x > 0)
@@ -121,81 +233,4 @@ void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
     else
       orientation->pitch = -180 - orientation->pitch ;
   }
-}
-
-/**************************************************************************/
-/*!
-    @brief  Determine the calibration parameter (offset and scale factor)
-            by recording the absolute minimums and maximums for each axis
-
-    @para   accel_calib_para         Parameters used in calibration process
-    @para   (*pGetSensorEvent)       Pointer to the "GetEvent" function of
-                                     accelerometer sensor
-*/
-/**************************************************************************/
-void accelGetCalibParameter(accel_calib_para_t *accel_calib_para, error_t (*pGetSensorEvent)(sensors_event_t *))
-{
-  uint16_t const CALIB_TIME = 60000;   /**< Calibration time in miliseconds                        */
-                                       /**< This time should be enough to rotate sensor            */
-                                       /**< multiple times in all 3 axis for accurate calibration  */
-  error_t error;
-  sensors_event_t event;
-
-  float accelMinX, accelMaxX;
-  float accelMinY, accelMaxY;
-  float accelMinZ, accelMaxZ;
-
-  /* Initialise the Max, Min accel values for each axis */
-  accelMaxX = accelMaxY = accelMaxZ = -2 * SENSORS_GRAVITY_EARTH;
-  accelMinX = accelMinY = accelMinZ = 2 * SENSORS_GRAVITY_EARTH;
-
-  /* Initialise timer for delay function */
-  delayInit();
-
-  /* Calibration process                                                   */
-  /* Slowly rotate the accelerometer sensor multiple times in all 3 axis   */
-  /*                                                                       */
-  /* Be sure to rotate the sensor slowly about its center so that          */
-  /* we can eliminate the linearity error                                  */
-  while (delayGetTicks() < CALIB_TIME)
-  {
-    /* Get accelerometer data */
-    error = pGetSensorEvent(&event);
-
-    /* Update the maximum and minimum values from accelerometer for each axis */
-    if (!error)
-    {
-      if (event.acceleration.x < accelMinX) accelMinX = event.acceleration.x;
-      if (event.acceleration.x > accelMaxX) accelMaxX = event.acceleration.x;
-
-      if (event.acceleration.y < accelMinY) accelMinY = event.acceleration.y;
-      if (event.acceleration.y > accelMaxY) accelMaxY = event.acceleration.y;
-
-      if (event.acceleration.z < accelMinZ) accelMinZ = event.acceleration.z;
-      if (event.acceleration.z > accelMaxZ) accelMaxZ = event.acceleration.z;
-    }
-  }
-
-  /* Calculate scale factor and offset in each axis */
-  accel_calib_para->scaleX = 2 * SENSORS_GRAVITY_EARTH / (accelMaxX - accelMinX);
-  accel_calib_para->offsetX = -(accelMaxX + accelMinX) / (accelMaxX - accelMinX);
-
-  accel_calib_para->scaleY = 2 * SENSORS_GRAVITY_EARTH / (accelMaxY - accelMinY);
-  accel_calib_para->offsetY = -(accelMaxY + accelMinY) / (accelMaxY - accelMinY);
-
-  accel_calib_para->scaleZ = 2 * SENSORS_GRAVITY_EARTH / (accelMaxZ - accelMinZ);
-  accel_calib_para->offsetZ = -(accelMaxZ + accelMinZ) / (accelMaxZ - accelMinZ);
-}
-
-/**************************************************************************/
-/*!
-    @brief  Re-scale the output of the sensor with the calibration parameter
-*/
-/**************************************************************************/
-void accelCalibration(sensors_event_t *event, accel_calib_para_t *accel_calib_para)
-{
-  /* calib_output = sensor_output * scale_factor + offset */
-  event->acceleration.x = event->acceleration.x * accel_calib_para->scaleX + accel_calib_para->offsetX;
-  event->acceleration.y = event->acceleration.y * accel_calib_para->scaleY + accel_calib_para->offsetY;
-  event->acceleration.z = event->acceleration.z * accel_calib_para->scaleZ + accel_calib_para->offsetZ;
 }

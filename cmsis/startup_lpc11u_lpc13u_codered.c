@@ -123,18 +123,12 @@ void USBWakeup_IRQHandler (void) ALIAS(IntDefaultHandler);
 // main() is the entry point for Newlib based applications
 //
 //*****************************************************************************
-#include "cmsis_os.h"
 #if defined (__REDLIB__)
 extern void __main(void);
-#define MAIN_ENTRY_FUNC		__main
 #else
 extern int main(void);
-#define MAIN_ENTRY_FUNC		main
 #endif
 
-#if defined(CFG_CMSIS_RTOS)
-extern osThreadDef_t os_thread_def_main;
-#endif
 //*****************************************************************************
 //
 // External declaration for the pointer to the stack top from the Linker Script
@@ -324,17 +318,11 @@ ResetISR(void) {
 	__libc_init_array();
 #endif
 
-#if defined(CFG_CMSIS_RTOS)
-	osKernelInitialize();
-	osThreadCreate(&os_thread_def_main, NULL);
-	osKernelStart();
-#else
 #if defined (__REDLIB__)
 	// Call the Redlib library, which in turn calls main()
 __main() ;
 #else
 	main();
-#endif
 #endif
 	//
 	// main() shouldn't return, but if it does, we'll just enter an infinite loop
@@ -521,20 +509,12 @@ void USBWakeup_IRQHandler(void) ALIAS(IntDefaultHandler);
 // main() is the entry point for Newlib based applications
 //
 //*****************************************************************************
-#include "cmsis_os.h"
 #if defined (__REDLIB__)
 extern void __main(void);
-#define MAIN_ENTRY_FUNC		__main
 #else
 extern int main(void);
-#define MAIN_ENTRY_FUNC		main
 #endif
 
-#if defined(CFG_CMSIS_RTOS)
-//extern osThreadDef_t os_thread_def_main;
-osThreadDef_t os_thread_def_main2 = {(os_pthread)MAIN_ENTRY_FUNC, osPriorityNormal, 1, 4*200 };
-
-#endif
 //*****************************************************************************
 //
 // External declaration for the pointer to the stack top from the Linker Script
@@ -687,17 +667,11 @@ ResetISR(void) {
 	__libc_init_array();
 #endif
 
-#if defined(CFG_CMSIS_RTOS)
-	osKernelInitialize();
-	osThreadCreate(&os_thread_def_main2, NULL);
-	osKernelStart();
-#else
 #if defined (__REDLIB__)
 	// Call the Redlib library, which in turn calls main()
 __main() ;
 #else
 	main();
-#endif
 #endif
 	//
 	// main() shouldn't return, but if it does, we'll just enter an infinite loop

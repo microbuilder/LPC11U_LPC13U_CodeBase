@@ -41,8 +41,6 @@ volatile uint32_t sensorpoll_overruns = 0;
 #endif
 
 volatile uint32_t sensorpoll_counter = 0;
-volatile uint32_t sensorpoll_capture[4] = {0,0,0,0};
-
 
 /**************************************************************************/
 /*!
@@ -138,28 +136,9 @@ void CT16B1_IRQHandler(void)
     sensorpoll_tick_isr();
   }
 
-  /* Handle capture events, which you might want to use to capture
-   * sensor data only when a specific CAP event/pin is triggered    */
-  if (LPC_CT16B1->IR & (0x1 << 4))
-  {
-    LPC_CT16B1->IR = 0x1 << 4;
-    sensorpoll_capture[0]++;
-  }
-  if (LPC_CT16B1->IR & (0x1 << 5))
-  {
-    LPC_CT16B1->IR = 0x1 << 5;
-    sensorpoll_capture[1]++;
-  }
-  if (LPC_CT16B1->IR & (0x1 << 6))
-  {
-    LPC_CT16B1->IR = 0x1 << 6;
-    sensorpoll_capture[2]++;
-  }
-  if (LPC_CT16B1->IR & (0x1 << 7))
-  {
-    LPC_CT16B1->IR = 0x1 << 7;
-    sensorpoll_capture[3]++;
-  }
+  /* ToDo: Handle capture events, which you might want to use to    *
+   * capture sensor data only when a specific CAP event/pin is      *
+   * triggered                                                      */
 
   #if defined CFG_MCU_FAMILY_LPC13UXX
     /* Check how many clock cycles the ISR actually took */
@@ -199,18 +178,13 @@ void CT16B1_IRQHandler(void)
 /**************************************************************************/
 void sensorpollInit()
 {
-  uint32_t i;
-
   /* Initialise 16-bit timer 1 */
   LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 8);
 
   /* Reset the counter variables */
   sensorpoll_counter = 0;
-  for ( i = 0; i < 4; i++ )
-  {
-    sensorpoll_capture[i] = 0;
-  }
 
+  /* Configure the timer */
   LPC_CT16B1->TCR  = 0x02;            /* Reset the timer               */
   LPC_CT16B1->PR   = 0x07;            /* Set prescaler to eight        */
   LPC_CT16B1->IR   = 0xff;            /* Reset all interrrupts         */

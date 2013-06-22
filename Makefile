@@ -5,8 +5,8 @@
 PROJECT=firmware
 
 # See projectconfig.h for a list of valid board options!
-BOARD=CFG_BRD_LPCXPRESSO_LPC1347
-TARGET = lpc13u
+BOARD=CFG_BRD_RF1GHZNODE
+TARGET = lpc11u
 
 ifeq (lpc11u,$(TARGET))
   CORE = cortex-m0
@@ -31,13 +31,14 @@ OBJ_PATH = bin/obj
 
 VPATH = cmsis
 ifeq (lpc11u,$(TARGET))
-  OBJS   = $(OBJ_PATH)/startup_lpc11u_gnimake.o 
+  OBJS   = $(OBJ_PATH)/startup_lpc11u_gnumake.o 
   OBJS  += $(OBJ_PATH)/system_LPC11Uxx.o
 else
   OBJS   = $(OBJ_PATH)/startup_lpc13u_gnumake.o 
   OBJS  += $(OBJ_PATH)/system_LPC13Uxx.o
 endif
 OBJS  += $(OBJ_PATH)/math_helper.o
+OBJS  += $(OBJ_PATH)/RTX_hook.o
 
 VPATH += src
 OBJS  += $(OBJ_PATH)/printf-retarget.o
@@ -47,14 +48,12 @@ OBJS  += $(OBJ_PATH)/board_lpcnfc.o
 
 VPATH += src/boards/lpcxpresso1347
 OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
-OBJS  += $(OBJ_PATH)/board_lpcxpresso1347_rtxconf.o
 
 VPATH += src/boards/rf1ghzusb
 OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
 
 VPATH += src/boards/rf1ghznode
 OBJS  += $(OBJ_PATH)/board_rf1ghznode.o
-OBJS  += $(OBJ_PATH)/board_rf1ghznode_rtxconf.o
 
 VPATH += src/cli
 OBJS  += $(OBJ_PATH)/cli.o 
@@ -127,6 +126,7 @@ OBJS  += $(OBJ_PATH)/uart_buf.o
 
 VPATH += src/core/usb
 OBJS  += $(OBJ_PATH)/descriptors.o 
+OBJS  += $(OBJ_PATH)/usb_custom_class.o
 OBJS  += $(OBJ_PATH)/usb_cdc.o 
 OBJS  += $(OBJ_PATH)/usb_hid.o 
 OBJS  += $(OBJ_PATH)/usb_msc.o 

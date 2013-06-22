@@ -129,6 +129,14 @@ typedef struct {
     uint8_t reserved[3];
 } sensors_vec_t;
 
+/** Sensor axis */
+typedef enum
+{
+  SENSOR_AXIS_X  = (1),
+  SENSOR_AXIS_Y  = (2),
+  SENSOR_AXIS_Z  = (3)
+} sensors_axis_t;
+
 /** struct sensors_color_s is used to return color data in a common format. */
 typedef struct {
     union {
@@ -188,7 +196,6 @@ size_t sensorsSerializeSensor(uint8_t *buffer, const sensor_t *sensor);
 size_t sensorsSerializeSensorsEvent(uint8_t *buffer, const sensors_event_t *event);
 size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor);
 size_t sensorsLogSensorsEvent(char *buffer, const size_t len, const sensors_event_t *event);
-float  sensorsPressureToAltitude(float pressure_hPa);
 
 #ifdef __cplusplus
 }

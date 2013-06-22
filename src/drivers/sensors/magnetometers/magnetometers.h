@@ -46,16 +46,21 @@ extern "C" {
 
 typedef struct
 {
-	float scaleX;    /**< scale factor of X-axis */
-	float offsetX;   /**< offset error of X-axis */
-	float scaleY;    /**< scale factor of Y-axis */
-	float offsetY;   /**< offset error of Y-axis */
-	float scaleZ;    /**< scale factor of Z-axis */
-	float offsetZ;   /**< offset error of Z-axis */
-} mag_calib_para_t;
+	float scale;   /**< scale factor */
+	float offset;  /**< offset error */
+} mag_cal_params_t;
 
-void magGetCalibParameter(mag_calib_para_t *mag_calib_para, error_t (*pGetSensorEvent)(sensors_event_t *));
-void magCalibration(sensors_event_t *event, mag_calib_para_t *mag_calib_para);
+typedef struct
+{
+	mag_cal_params_t X_axis;
+	mag_cal_params_t Y_axis;
+	mag_cal_params_t Z_axis;
+} mag_cal_params_list_t;
+
+error_t magGetCalParamsForAxis(sensors_axis_t axis,
+                               mag_cal_params_t *mag_calib_para,
+                               error_t (*pGetSensorEvent)(sensors_event_t *));
+void magCalibrateEvent(sensors_event_t *event, mag_cal_params_list_t *mag_cal_params_list);
 void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_event);
 void magGetOrientation(sensors_event_t *event, sensors_vec_t *mag_orientation);
 
