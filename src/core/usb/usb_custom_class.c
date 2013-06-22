@@ -54,7 +54,7 @@
 //  return LPC_OK;
 //}
 
-static ErrorCode_t endpoint_bulk_in_isr (USBD_HANDLE_T hUsb, void* data, uint32_t event)
+static ErrorCode_t endpoint_bulk_in_isr (USBD_HANDLE_T husb, void* data, uint32_t event)
 {
 //  if (usb_custom_received_isr)
 //  {
@@ -64,16 +64,21 @@ static ErrorCode_t endpoint_bulk_in_isr (USBD_HANDLE_T hUsb, void* data, uint32_
   if (USB_EVT_IN == event)
   {
     static uint32_t magic_number = 0;
-    magic_number++;
+    magic_number += 2;
     uint32_t buffer[16] = { magic_number }; // size is 64
-    USBD_API->hw->WriteEP(hUsb, CUSTOM_EP_IN, (uint8_t*) buffer, 64); // write data to EP
+    USBD_API->hw->WriteEP(husb, CUSTOM_EP_IN, (uint8_t*) buffer, 64); // write data to EP
   }
 
   return LPC_OK;
 }
 
-static ErrorCode_t endpoint_bulk_out_isr (USBD_HANDLE_T hUsb, void* data, uint32_t event)
+static ErrorCode_t endpoint_bulk_out_isr (USBD_HANDLE_T husb, void* data, uint32_t event)
 {
+  if (USB_EVT_OUT == event)
+  {
+    uint8_t buffer[64] = { 0 }; // size is 64
+    USBD_API->hw->ReadEP(husb, CUSTOM_EP_OUT, buffer);
+  }
   return LPC_OK;
 }
 
