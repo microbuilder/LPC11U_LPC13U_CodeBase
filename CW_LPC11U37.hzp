@@ -277,7 +277,6 @@
         <folder Name="rf1ghznode" file_name="">
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
-          <file file_name="src/boards/rf1ghznode/board_rf1ghznode_rtxconf.c"/>
         </folder>
         <folder Name="lpcstepper" file_name="">
           <file file_name="src/boards/lpcstepper/board_lpcstepper.c"/>
@@ -312,6 +311,7 @@
       <file file_name="cmsis/math_helper.c"/>
       <file file_name="cmsis/system_LPC11Uxx.c"/>
       <file file_name="cmsis/system_LPC11Uxx.h"/>
+      <file file_name="cmsis/RTX_hook.c"/>
     </folder>
     <folder Name="Test Files" file_name="">
       <file file_name="tests/test_fifo.c"/>
