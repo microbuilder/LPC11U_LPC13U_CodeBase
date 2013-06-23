@@ -141,15 +141,13 @@ error_t magGetCalParamsForAxis(sensors_axis_t axis,
   float *mag_value;
   switch (axis)
   {
-    case SENSOR_AXIS_X:
-      mag_value = &(event.magnetic.x);
-      break;
     case SENSOR_AXIS_Y:
       mag_value = &(event.magnetic.y);
       break;
     case SENSOR_AXIS_Z:
       mag_value = &(event.magnetic.z);
       break;
+    case SENSOR_AXIS_X:
     default:
       mag_value = &(event.magnetic.x);
       break;
@@ -243,16 +241,6 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
 
   switch (axis)
   {
-    case SENSOR_AXIS_Z:
-      /* The Z-axis is parallel to the gravity */
-      accel_X = accel_event->acceleration.x;
-      accel_Y = accel_event->acceleration.y;
-      accel_Z = accel_event->acceleration.z;
-      mag_X = &(mag_event->magnetic.x);
-      mag_Y = &(mag_event->magnetic.y);
-      mag_Z = &(mag_event->magnetic.z);
-      break;
-
     case SENSOR_AXIS_X:
       /* The X-axis is parallel to the gravity */
       accel_X = accel_event->acceleration.y;
@@ -273,6 +261,7 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
       mag_Z = &(mag_event->magnetic.y);
       break;
 
+    case SENSOR_AXIS_Z:
     default:
       /* The Z-axis is parallel to the gravity */
       accel_X = accel_event->acceleration.x;
@@ -331,12 +320,6 @@ void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_
 
   switch (axis)
   {
-    case SENSOR_AXIS_Z:
-      /* Sensor rotates around Z-axis                                                                 */
-      /* "heading" is the angle between the 'X axis' and magnetic north on the horizontal plane (Oxy) */
-      /* heading = atan(My / Mx)                                                                      */
-      orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
-      break;
     case SENSOR_AXIS_X:
       /* Sensor rotates around X-axis                                                                 */
       /* "heading" is the angle between the 'Y axis' and magnetic north on the horizontal plane (Oyz) */
@@ -349,8 +332,11 @@ void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_
       /* heading = atan(Mx / Mz)                                                                      */
       orientation->heading = (float)atan2(event->magnetic.x, event->magnetic.z) * 180 / PI;
       break;
+    case SENSOR_AXIS_Z:
     default:
-      /* Z-axis is selected by default */
+      /* Sensor rotates around Z-axis                                                                 */
+      /* "heading" is the angle between the 'X axis' and magnetic north on the horizontal plane (Oxy) */
+      /* heading = atan(My / Mx)                                                                      */
       orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
       break;
     }

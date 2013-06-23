@@ -142,15 +142,13 @@ error_t accelGetCalParamsForAxis(sensors_axis_t axis,
   float *accel_value;
   switch (axis)
   {
-    case SENSOR_AXIS_X:
-      accel_value = &(event.acceleration.x);
-      break;
     case SENSOR_AXIS_Y:
       accel_value = &(event.acceleration.y);
       break;
     case SENSOR_AXIS_Z:
       accel_value = &(event.acceleration.z);
       break;
+    case SENSOR_AXIS_X:
     default:
       accel_value = &(event.acceleration.x);
       break;
