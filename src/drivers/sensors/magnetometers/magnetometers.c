@@ -187,6 +187,7 @@ error_t magGetCalParamsForAxis(sensors_axis_t axis,
             calib_output = sensor_output * scale_factor + offset
 
     @param  event                 The sensor event with the raw mag data
+
     @param  mag_cal_params_list   The cal params (calculated using
                                   magGetCalParamsForAxis) to use when
                                   adjusting the values in 'event'
@@ -214,7 +215,11 @@ void magCalibrateEvent(sensors_event_t *event, mag_cal_params_list_t *mag_cal_pa
             the magnetic sensor measurements when the sensor is tilted
             (the pitch and roll angles are not equal 0°)
 
+    @param  axis          The given axis (SENSOR_AXIS_X/Y/Z) that is
+                          parallel to the gravity of the Earth
+
     @param  mag_event     The raw magnetometer data to adjust for tilt
+
     @param  accel_event   The accelerometer event data to use to determine
                           the tilt when compensating the mag_event values
 
@@ -225,19 +230,65 @@ void magCalibrateEvent(sensors_event_t *event, mag_cal_params_list_t *mag_cal_pa
     error = lsm303accelGetSensorEvent(&accel_event);
     if (!error)
     {
-      magTiltCompensation(&mag_event, &accel_event);
+      magTiltCompensation(SENSOR_AXIS_Z, &mag_event, &accel_event);
     }
 
     @endcode
 */
 /**************************************************************************/
-void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_event)
+void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event)
 {
-  float t_roll = accel_event->acceleration.x * accel_event->acceleration.x + accel_event->acceleration.z * accel_event->acceleration.z;
-  float rollRadians = (float)atan2(accel_event->acceleration.y, sqrt(t_roll));
+  float accel_X, accel_Y, accel_Z;
+  float *mag_X, *mag_Y, *mag_Z;
 
-  float t_pitch = accel_event->acceleration.y * accel_event->acceleration.y + accel_event->acceleration.z * accel_event->acceleration.z;
-  float pitchRadians = (float)atan2(accel_event->acceleration.x, sqrt(t_pitch));
+  switch (axis)
+  {
+    case SENSOR_AXIS_Z:
+      /* The Z-axis is parallel to the gravity */
+      accel_X = accel_event->acceleration.x;
+      accel_Y = accel_event->acceleration.y;
+      accel_Z = accel_event->acceleration.z;
+      mag_X = &(mag_event->magnetic.x);
+      mag_Y = &(mag_event->magnetic.y);
+      mag_Z = &(mag_event->magnetic.z);
+      break;
+
+    case SENSOR_AXIS_X:
+      /* The X-axis is parallel to the gravity */
+      accel_X = accel_event->acceleration.y;
+      accel_Y = accel_event->acceleration.z;
+      accel_Z = accel_event->acceleration.x;
+      mag_X = &(mag_event->magnetic.y);
+      mag_Y = &(mag_event->magnetic.z);
+      mag_Z = &(mag_event->magnetic.x);
+      break;
+
+    case SENSOR_AXIS_Y:
+      /* The Y-axis is parallel to the gravity */
+      accel_X = accel_event->acceleration.z;
+      accel_Y = accel_event->acceleration.x;
+      accel_Z = accel_event->acceleration.y;
+      mag_X = &(mag_event->magnetic.z);
+      mag_Y = &(mag_event->magnetic.x);
+      mag_Z = &(mag_event->magnetic.y);
+      break;
+
+    default:
+      /* The Z-axis is parallel to the gravity */
+      accel_X = accel_event->acceleration.x;
+      accel_Y = accel_event->acceleration.y;
+      accel_Z = accel_event->acceleration.z;
+      mag_X = &(mag_event->magnetic.x);
+      mag_Y = &(mag_event->magnetic.y);
+      mag_Z = &(mag_event->magnetic.z);
+      break;
+  }
+
+  float t_roll = accel_X * accel_X + accel_Z * accel_Z;
+  float rollRadians = (float)atan2(accel_Y, sqrt(t_roll));
+
+  float t_pitch = accel_Y * accel_Y + accel_Z * accel_Z;
+  float pitchRadians = (float)atan2(accel_X, sqrt(t_pitch));
 
   float cosRoll = (float)cos(rollRadians);
   float sinRoll = (float)sin(rollRadians);
@@ -247,37 +298,62 @@ void magTiltCompensation(sensors_event_t *mag_event, sensors_event_t *accel_even
   /* The tilt compensation algorithm                            */
   /* Xh = X.cosPitch + Z.sinPitch                               */
   /* Yh = X.sinRoll.sinPitch + Y.cosRoll - Z.sinRoll.cosPitch   */
-  mag_event->magnetic.x = mag_event->magnetic.x * cosPitch + mag_event->magnetic.z * sinPitch;
-  mag_event->magnetic.y = mag_event->magnetic.x * sinRoll * sinPitch + mag_event->magnetic.y * cosRoll - mag_event->magnetic.z * sinRoll * cosPitch;
+  *mag_X = (*mag_X) * cosPitch + (*mag_Z) * sinPitch;
+  *mag_Y = (*mag_X) * sinRoll * sinPitch + (*mag_Y) * cosRoll - (*mag_Z) * sinRoll * cosPitch;
 }
 
 /**************************************************************************/
 /*!
     @brief  Populates the .heading fields in the sensors_vec_t
-            struct with the right angular data (in degree)
+            struct with the right angular data (0-359°)
 
-            Heading is the angle between the 'X axis' and magnetic north
-            on the horizontal plane (Oxy), measured clockwise when viewing
-            from the top of the device
+            Heading increases when measuring clockwise
+
+    @param  axis          The given axis (SENSOR_AXIS_X/Y/Z) that is
+                          parallel to the gravity of the Earth
 
     @param  event         The raw magnetometer sensor data to use when
                           calculating out heading
+
     @param  orientation   The sensors_vec_t object where we will
                           assign an 'orientation.heading' value
 
     @code
 
-    magGetOrientation(&mag_event, &orientation);
+    magGetOrientation(SENSOR_AXIS_Z, &mag_event, &orientation);
 
     @endcode
 */
 /**************************************************************************/
-void magGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
+void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *orientation)
 {
   float const PI = 3.14159265F;
 
-  /* heading = atan(My / Mx)                                                                               */
-  orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
+  switch (axis)
+  {
+    case SENSOR_AXIS_Z:
+      /* Sensor rotates around Z-axis                                                                 */
+      /* "heading" is the angle between the 'X axis' and magnetic north on the horizontal plane (Oxy) */
+      /* heading = atan(My / Mx)                                                                      */
+      orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
+      break;
+    case SENSOR_AXIS_X:
+      /* Sensor rotates around X-axis                                                                 */
+      /* "heading" is the angle between the 'Y axis' and magnetic north on the horizontal plane (Oyz) */
+      /* heading = atan(Mz / My)                                                                      */
+      orientation->heading = (float)atan2(event->magnetic.z, event->magnetic.y) * 180 / PI;
+      break;
+    case SENSOR_AXIS_Y:
+      /* Sensor rotates around Y-axis                                                                 */
+      /* "heading" is the angle between the 'Z axis' and magnetic north on the horizontal plane (Ozx) */
+      /* heading = atan(Mx / Mz)                                                                      */
+      orientation->heading = (float)atan2(event->magnetic.x, event->magnetic.z) * 180 / PI;
+      break;
+    default:
+      /* Z-axis is selected by default */
+      orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
+      break;
+    }
 
   /* Normalize to 0-359° */
   if (orientation->heading < 0)
