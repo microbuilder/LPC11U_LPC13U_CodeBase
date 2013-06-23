@@ -2,14 +2,14 @@ CC     = gcc
 CFLAGS = -Wall -O2 -std=c99 -I. -L./mingw32
 LIBS   = -lusb-1.0
 DEPS   = libusb.h
-OBJ    = listdevs.o
+OBJ    = bulktest.o
 
 %.o: %.c $(DEPS)
 	$(CC) -c -o $@ $< $(CFLAGS) $(LIBS)
 
-listdevs: $(OBJ)
+bulktest: $(OBJ)
 	gcc -o $@ $^ $(CFLAGS) $(LIBS)
   
 clean: 
-	rm -f listdevs.exe
+	rm -f bulktest.exe
 	rm -f $(OBJ)
