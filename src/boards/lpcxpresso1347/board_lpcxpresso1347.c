@@ -249,6 +249,16 @@ int main(void)
       boardLED(lastSecond % 2);
     }
 
+    if ( usb_custom_is_ready_to_send() )
+    {
+      static uint32_t magic_number = 0;
+      uint32_t buffer[16] = { magic_number } ; // 64 byte in size
+
+      usb_custom_send(buffer, 64);
+
+      magic_number += 2;
+    }
+
     /* Poll for CLI input if CFG_INTERFACE is enabled */
     #ifdef CFG_INTERFACE
       cliPoll();

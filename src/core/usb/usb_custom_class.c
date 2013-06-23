@@ -49,6 +49,35 @@
 //--------------------------------------------------------------------+
 // INTERNAL OBJECT & FUNCTION DECLARATION
 //--------------------------------------------------------------------+
+static volatile bool is_bulk_in_ready = false;
+
+//--------------------------------------------------------------------+
+// APPLICATION API (parameter validation required)
+//--------------------------------------------------------------------+
+bool usb_custom_is_ready_to_send(void)
+{
+  return is_bulk_in_ready;
+}
+
+bool usb_custom_send(void const * p_data, uint16_t length)
+{
+  ASSERT(p_data != NULL && length != 0 && length <= 64, false );
+
+  if (!is_bulk_in_ready)
+  {
+    return false;
+  }
+
+  USBD_API->hw->WriteEP(g_hUsb, CUSTOM_EP_IN, (uint8_t*) p_data, length); // write data to EP
+  is_bulk_in_ready = false;
+
+  return true;
+}
+
+//--------------------------------------------------------------------+
+// IMPLEMENTATION
+//--------------------------------------------------------------------+
+
 //static ErrorCode_t endpoint_control_isr(USBD_HANDLE_T hUsb, void* data, uint32_t event)
 //{
 //  return LPC_OK;
@@ -56,17 +85,9 @@
 
 static ErrorCode_t endpoint_bulk_in_isr (USBD_HANDLE_T husb, void* data, uint32_t event)
 {
-//  if (usb_custom_received_isr)
-//  {
-//    usb_custom_received_isr()
-//  }
-
   if (USB_EVT_IN == event)
   {
-    static uint32_t magic_number = 0;
-    magic_number += 2;
-    uint32_t buffer[16] = { magic_number }; // size is 64
-    USBD_API->hw->WriteEP(husb, CUSTOM_EP_IN, (uint8_t*) buffer, 64); // write data to EP
+    is_bulk_in_ready = true;
   }
 
   return LPC_OK;
@@ -82,9 +103,6 @@ static ErrorCode_t endpoint_bulk_out_isr (USBD_HANDLE_T husb, void* data, uint32
   return LPC_OK;
 }
 
-//--------------------------------------------------------------------+
-// IMPLEMENTATION
-//--------------------------------------------------------------------+
 ErrorCode_t usb_custom_init (USBD_HANDLE_T husb, USB_INTERFACE_DESCRIPTOR const * p_interface)
 {
   (void) p_interface;
@@ -98,8 +116,11 @@ ErrorCode_t usb_custom_init (USBD_HANDLE_T husb, USB_INTERFACE_DESCRIPTOR const 
 
 ErrorCode_t usb_custom_configured (USBD_HANDLE_T husb)
 {
-  uint8_t dummy;
-  USBD_API->hw->WriteEP(husb , CUSTOM_EP_IN , &dummy , 1); // initial packet for IN endpoint , will not work if omitted
+//  uint8_t dummy;
+//  USBD_API->hw->WriteEP(husb , CUSTOM_EP_IN , &dummy , 1); // initial packet for IN endpoint , will not work if omitted
+
+  is_bulk_in_ready = true;
+
   return LPC_OK;
 }
 
