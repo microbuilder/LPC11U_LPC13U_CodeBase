@@ -93,7 +93,8 @@ def main():
             mavals.append(avg);
 
     # Display the results
-    plt.title("sensors_event_t Data")
+    plt.title("SMA Filtered sensors_event_t Data (X/Y/Z + Magnitude)\nSMA Window Size = %d Samples"
+        % (windowsize))
     plt.xlabel('Timestamp (ms)')
     plt.ylabel('Value')
     plt.xlim(data['timestamp'].min(), data['timestamp'].max()*1.1)
