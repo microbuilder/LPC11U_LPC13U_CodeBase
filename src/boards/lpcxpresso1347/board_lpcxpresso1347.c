@@ -260,11 +260,9 @@ int main(void)
     {
       static uint32_t magic_number = 0;
       uint32_t buffer[2][16];  // 2x64 byte in size
-      buffer[0][0]  = magic_number;
-      buffer[1][0] = magic_number+2;
+      buffer[0][0] = magic_number++;
+      buffer[1][0] = magic_number++;
       usb_custom_send(buffer, 64*2);
-
-      magic_number += 4;
     }
 
     if (custom_recv_magic_number != 0)
