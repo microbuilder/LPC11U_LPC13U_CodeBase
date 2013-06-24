@@ -161,7 +161,10 @@ ErrorCode_t HID_SetReport( USBD_HANDLE_T hHid, USB_SETUP_PACKET* pSetup, uint8_t
 #ifdef CFG_USB_HID_GENERIC
       if (pHidCtrl->epout_adr == HID_GENERIC_EP_OUT)
       {
-        usb_hid_generic_recv_isr( (*pBuffer), (uint32_t) length );
+        if ( usb_hid_generic_recv_isr )
+        {
+          usb_hid_generic_recv_isr( (*pBuffer), (uint32_t) length );
+        }
       }
 #endif
     break;
@@ -245,7 +248,10 @@ ErrorCode_t HID_EpOut_Hdlr (USBD_HANDLE_T hUsb, void* data, uint32_t event)
 
       length = USBD_API->hw->ReadEP(hUsb, pHidCtrl->epout_adr, out_report);
 
-      usb_hid_generic_recv_isr(out_report, length);
+      if (usb_hid_generic_recv_isr)
+      {
+        usb_hid_generic_recv_isr(out_report, length);
+      }
     }
 #endif
   }

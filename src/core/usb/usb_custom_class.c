@@ -59,7 +59,7 @@ bool usb_custom_is_ready_to_send(void)
   return usb_isConfigured() && is_bulk_in_ready;
 }
 
-bool usb_custom_send(void const * p_data, uint16_t length)
+bool usb_custom_send(void const * p_data, uint32_t length)
 {
   ASSERT(p_data != NULL && length != 0 && usb_custom_is_ready_to_send(), false );
 
@@ -96,7 +96,11 @@ static ErrorCode_t endpoint_bulk_out_isr (USBD_HANDLE_T husb, void* data, uint32
   if (USB_EVT_OUT == event)
   {
     uint8_t buffer[64] = { 0 }; // size is 64
-    USBD_API->hw->ReadEP(husb, CUSTOM_EP_OUT, buffer);
+    uint32_t length = USBD_API->hw->ReadEP(husb, CUSTOM_EP_OUT, buffer);
+    if (usb_custom_received_isr)
+    {
+      usb_custom_received_isr( buffer, length);
+    }
   }
   return LPC_OK;
 }
