@@ -31,6 +31,7 @@ int main(void)
   libusb_device_handle *lpcdevice;
   unsigned char buffer[64];
   int transferred = 0;
+  int bulk_out_magic_number = 0;
 
   /* Initialise libusbx */
   if(libusb_init(NULL))
@@ -99,6 +100,16 @@ int main(void)
     {
       printf("\nReceived %d bytes\n", transferred);    
       printf("%d", buffer[0]);
+    }
+    
+    memset(buffer, 0, sizeof(buffer));
+    buffer[0] = bulk_out_magic_number++;
+    if(libusb_bulk_transfer(lpcdevice, 0x04, buffer, 64, &transferred, 0))
+    {
+      printf("\nError in sending! sent = %d\n", transferred);
+    }else
+    {
+      printf("\nSent %d bytes, 1st byte = %d\n", transferred, buffer[0]);    
     }
   }
 

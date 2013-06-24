@@ -232,6 +232,13 @@ void boardInit(void)
 /**************************************************************************/
 #ifndef _TEST_
 #ifndef CFG_CMSIS_RTOS
+
+volatile uint8_t custom_recv_magic_number = 0;
+void usb_custom_received_isr(void * p_buffer, uint32_t length)
+{
+  custom_recv_magic_number = *((uint8_t*) p_buffer);
+}
+
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
@@ -258,6 +265,12 @@ int main(void)
       usb_custom_send(buffer, 64*2);
 
       magic_number += 4;
+    }
+
+    if (custom_recv_magic_number != 0)
+    {
+      printf("%d\n", custom_recv_magic_number);
+      custom_recv_magic_number = 0;
     }
 
     /* Poll for CLI input if CFG_INTERFACE is enabled */
