@@ -252,11 +252,12 @@ int main(void)
     if ( usb_custom_is_ready_to_send() )
     {
       static uint32_t magic_number = 0;
-      uint32_t buffer[16] = { magic_number } ; // 64 byte in size
+      uint32_t buffer[2][16];  // 2x64 byte in size
+      buffer[0][0]  = magic_number;
+      buffer[1][0] = magic_number+2;
+      usb_custom_send(buffer, 64*2);
 
-      usb_custom_send(buffer, 64);
-
-      magic_number += 2;
+      magic_number += 4;
     }
 
     /* Poll for CLI input if CFG_INTERFACE is enabled */

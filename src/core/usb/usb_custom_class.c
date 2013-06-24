@@ -56,21 +56,19 @@ static volatile bool is_bulk_in_ready = false;
 //--------------------------------------------------------------------+
 bool usb_custom_is_ready_to_send(void)
 {
-  return is_bulk_in_ready;
+  return usb_isConfigured() && is_bulk_in_ready;
 }
 
 bool usb_custom_send(void const * p_data, uint16_t length)
 {
-  ASSERT(p_data != NULL && length != 0 && length <= 64, false );
+  ASSERT(p_data != NULL && length != 0 && usb_custom_is_ready_to_send(), false );
 
-  if (!is_bulk_in_ready)
+  uint32_t written_length = USBD_API->hw->WriteEP(g_hUsb, CUSTOM_EP_IN, (uint8_t*) p_data, length);
+  if ( written_length != length)
   {
     return false;
   }
-
-  USBD_API->hw->WriteEP(g_hUsb, CUSTOM_EP_IN, (uint8_t*) p_data, length); // write data to EP
   is_bulk_in_ready = false;
-
   return true;
 }
 
@@ -116,9 +114,6 @@ ErrorCode_t usb_custom_init (USBD_HANDLE_T husb, USB_INTERFACE_DESCRIPTOR const 
 
 ErrorCode_t usb_custom_configured (USBD_HANDLE_T husb)
 {
-//  uint8_t dummy;
-//  USBD_API->hw->WriteEP(husb , CUSTOM_EP_IN , &dummy , 1); // initial packet for IN endpoint , will not work if omitted
-
   is_bulk_in_ready = true;
 
   return LPC_OK;
