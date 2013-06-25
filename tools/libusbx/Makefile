@@ -9,7 +9,11 @@ OBJ    = bulktest.o
 
 bulktest: $(OBJ)
 	gcc -o $@ $^ $(CFLAGS) $(LIBS)
+
+protocoltest: protocoltest.o
+	gcc -o $@ $^ $(CFLAGS) $(LIBS)
   
 clean: 
 	rm -f bulktest.exe
-	rm -f $(OBJ)
+	rm -f protocoltest.exe
+	rm -f *.o

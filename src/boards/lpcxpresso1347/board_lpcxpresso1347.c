@@ -59,11 +59,6 @@
   #ifdef CFG_USB_CDC
     #include "core/usb/usb_cdc.h"
   #endif
-  #ifdef CFG_USB_HID_GENERIC
-    /* Buffer to hold incoming HID data */
-    static USB_HID_GenericReport_t hid_out_report;
-    static bool is_received_report = false;
-  #endif
 #endif
 
 #ifdef CFG_TFTLCD
@@ -72,6 +67,10 @@
 
 #ifdef CFG_INTERFACE
   #include "cli/cli.h"
+#endif
+
+#ifdef CFG_PROTOCOL
+  #include "protocol/protocol.h"
 #endif
 
 #ifdef CFG_ENABLE_UART
@@ -233,12 +232,6 @@ void boardInit(void)
 #ifndef _TEST_
 #ifndef CFG_CMSIS_RTOS
 
-volatile uint8_t custom_recv_magic_number = 0;
-void usb_custom_received_isr(void * p_buffer, uint32_t length)
-{
-  custom_recv_magic_number = *((uint8_t*) p_buffer);
-}
-
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
@@ -249,32 +242,36 @@ int main(void)
 
   while (1)
   {
-    currentSecond = delayGetSecondsActive();
-    if (currentSecond != lastSecond)
-    {
-      lastSecond = currentSecond;
-      boardLED(lastSecond % 2);
-    }
+    #ifdef CFG_PROTOCOL
+      prot_task(NULL);
+    #endif
 
-    if ( usb_custom_is_ready_to_send() )
-    {
-      static uint32_t magic_number = 0;
-      uint32_t buffer[2][16];  // 2x64 byte in size
-      buffer[0][0] = magic_number++;
-      buffer[1][0] = magic_number++;
-      usb_custom_send(buffer, 64*2);
-    }
-
-    if (custom_recv_magic_number != 0)
-    {
-      printf("%d\n", custom_recv_magic_number);
-      custom_recv_magic_number = 0;
-    }
+//    if ( usb_custom_is_ready_to_send() )
+//    {
+//      static uint32_t magic_number = 0;
+//      uint32_t buffer[2][16];  // 2x64 byte in size
+//      buffer[0][0] = magic_number++;
+//      buffer[1][0] = magic_number++;
+//      usb_custom_send(buffer, 64*2);
+//    }
+//
+//    if (custom_recv_magic_number != 0)
+//    {
+//      printf("%d\n", custom_recv_magic_number);
+//      custom_recv_magic_number = 0;
+//    }
 
     /* Poll for CLI input if CFG_INTERFACE is enabled */
     #ifdef CFG_INTERFACE
       cliPoll();
     #endif
+
+//    currentSecond = delayGetSecondsActive();
+//    if (currentSecond != lastSecond)
+//    {
+//      lastSecond = currentSecond;
+//      boardLED(lastSecond % 2);
+//    }
   }
 }
 #endif

@@ -44,6 +44,13 @@
 #include "protocol.h"
 #include "core/fifo/fifo.h"
 
+#if defined(CFG_PROTOCOL_VIA_HID)
+  #define command_received_isr usb_hid_generic_recv_isr
+  #define command_send         usb_hid_generic_send
+#elif defined(CFG_PROTOCOL_VIA_BULK)
+  #define command_received_isr usb_custom_received_isr
+  #define command_send         usb_custom_send
+#endif
 /**************************************************************************/
 /*!
     @brief standard function type for a protocol command
@@ -133,7 +140,7 @@ void prot_task(void * p_para)
       {
         prot_cmd_executed_cb(&message_reponse);
       }
-      usb_hid_generic_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
+      command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
     }else
     {
       protMsgError_t message_error =
@@ -146,22 +153,20 @@ void prot_task(void * p_para)
       {
         prot_cmd_error_cb(&message_error);
       }
-      usb_hid_generic_send( (uint8_t*) &message_error, sizeof(protMsgError_t));
+      command_send( (uint8_t*) &message_error, sizeof(protMsgError_t));
     }
   }
 }
 
-#ifdef CFG_USB_HID_GENERIC
 /**************************************************************************/
 /*!
     USB HID Generic callback (captures incoming commands)
 */
 /**************************************************************************/
-void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length)
+void command_received_isr(uint8_t p_data[], uint32_t length)
 {
   (void) length; // for simplicity, always write fixed size to fifo even if host sends out short packet
-  fifo_write(&ff_command, out_report);
+  fifo_write(&ff_command, p_data);
 }
-#endif
 
 #endif

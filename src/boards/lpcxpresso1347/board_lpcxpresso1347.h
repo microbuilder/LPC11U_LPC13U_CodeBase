@@ -343,9 +343,9 @@ extern "C" {
     output will be ignored.
     -----------------------------------------------------------------------*/
     #define CFG_PRINTF_MAXSTRINGSIZE    (255)
-    // #define CFG_PRINTF_UART
+     #define CFG_PRINTF_UART
 //    #define CFG_PRINTF_USBCDC
-     #define CFG_PRINTF_DEBUG
+//     #define CFG_PRINTF_DEBUG
 
     #ifdef CFG_PRINTF_DEBUG
       #define CFG_PRINTF_NEWLINE          "\n"
@@ -429,7 +429,14 @@ extern "C" {
     CFG_PROTOCOL             If this field is defined the binary command
                               parser will be included
     -----------------------------------------------------------------------*/
-//    #define CFG_PROTOCOL
+    #define CFG_PROTOCOL
+
+//    #define CFG_PROTOCOL_VIA_HID
+    #define CFG_PROTOCOL_VIA_BULK
+
+    #if defined(CFG_PROTOCOL) && !defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_PROTOCOL_VIA_BULK)
+        #error CFG_PROTOCOL must be enabled with either CFG_PROTOCOL_VIA_HID or CFG_PROTOCOL_VIA_BULK
+    #endif
 /*=========================================================================*/
 
 
@@ -670,8 +677,8 @@ extern "C" {
 
 //       #define CFG_USB_HID_KEYBOARD
 //       #define CFG_USB_HID_MOUSE
-      // #define CFG_USB_HID_GENERIC
-      // #define CFG_USB_HID_GENERIC_REPORT_SIZE (64)
+//       #define CFG_USB_HID_GENERIC
+       #define CFG_USB_HID_GENERIC_REPORT_SIZE (64)
 
 //       #define CFG_USB_MSC
       #define CFG_USB_CUSTOM_CLASS
@@ -713,6 +720,17 @@ extern "C" {
     #if defined(CFG_USB_MSC) && !defined(CFG_SDCARD)
       #error "CFG_USB_MSC must be defined with CFG_SDCARD"
     #endif
+
+    #if defined(CFG_PROTOCOL)
+      #if defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_USB_HID_GENERIC)
+        #error CFG_PROTOCOL_VIA_HID requires CFG_USB_HID_GENERIC to be defined
+      #endif
+
+      #if defined(CFG_PROTOCOL_VIA_BULK) && !defined(CFG_USB_CUSTOM_CLASS)
+        #error CFG_PROTOCOL_VIA_BULK requires CFG_USB_CUSTOM_CLASS to be defined
+      #endif
+    #endif
+
 /*=========================================================================*/
 
 #ifdef __cplusplus
