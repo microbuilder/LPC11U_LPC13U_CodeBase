@@ -51,6 +51,7 @@
   #define command_received_isr usb_custom_received_isr
   #define command_send         usb_custom_send
 #endif
+
 /**************************************************************************/
 /*!
     @brief standard function type for a protocol command
@@ -106,7 +107,7 @@ void prot_task(void * p_para)
   {
     error_t error;
 
-    //------------- command phase -------------//
+    //------------- command received -------------//
     protMsgCommand_t message_cmd = { 0 };
     protMsgResponse_t message_reponse = {0};
     uint16_t command_id;
@@ -124,13 +125,12 @@ void prot_task(void * p_para)
     message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
 
     // invoke callback before executing command
-
     if (prot_cmd_received_cb)
     {
       prot_cmd_received_cb(&message_cmd);
     }
 
-    /* Call the command handler associated with command_id */
+    //------------- command executed: invoke the command handler associated with command_id-------------//
     error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
 
     //------------- response phase -------------//

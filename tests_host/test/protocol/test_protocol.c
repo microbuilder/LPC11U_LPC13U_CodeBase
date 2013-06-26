@@ -40,11 +40,15 @@
 #include "protocol_cmd_led.h"
 
 #include "mock_usb_hid.h"
+#include "mock_usb_custom_class.h"
 #include "mock_board.h"
 #include "mock_protocol_callback.h"
 
 extern fifo_t ff_command; // fifo_command in protocol.c
 static protMsgCommand_t message_cmd;
+
+#define U16_HIGH_U8(u16) ((uint8_t) (((u16) >> 8) & 0x00FF))
+#define U16_LOW_U8(u16) ( (uint8_t) ( (u16)& 0x00FF) )
 
 void setUp(void)
 {
@@ -56,6 +60,18 @@ void tearDown(void)
 {
 
 }
+
+#ifdef CFG_PROTOCOL
+
+#if defined(CFG_PROTOCOL_VIA_HID)
+  #define command_received_isr usb_hid_generic_recv_isr
+  #define command_send         usb_hid_generic_send
+#elif defined(CFG_PROTOCOL_VIA_BULK)
+  #define command_received_isr usb_custom_received_isr
+  #define command_send         usb_custom_send
+#endif
+
+#define MOCK_PROT(func, behavior)   XSTRING_CONCAT(func, behavior)
 
 //--------------------------------------------------------------------+
 // COMMON
@@ -85,9 +101,6 @@ void test_invalid_command(void)
   // early return, nothing to expect or check
 }
 
-#define U16_HIGH_U8(u16) ((uint8_t) (((u16) >> 8) & 0x00FF))
-#define U16_LOW_U8(u16) ( (uint8_t) ( (u16)& 0x00FF) )
-
 void cmd_err_stub(protMsgError_t const * p_mess_err, int num_call)
 {
   TEST_ASSERT_NOT_NULL(p_mess_err);
@@ -97,7 +110,6 @@ void cmd_err_stub(protMsgError_t const * p_mess_err, int num_call)
 //--------------------------------------------------------------------+
 // LED COMMAND
 //--------------------------------------------------------------------+
-
 void test_cmd_led_invalid_length(void)
 {
   message_cmd = (protMsgCommand_t)
@@ -112,7 +124,7 @@ void test_cmd_led_invalid_length(void)
 
   prot_cmd_received_cb_Expect(&message_cmd);
   prot_cmd_error_cb_StubWithCallback(cmd_err_stub);
-  usb_hid_generic_send_IgnoreAndReturn(LPC_OK);
+  MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   //------------- Code Under Test -------------//
   prot_task(NULL);
@@ -138,7 +150,7 @@ void test_cmd_led_on(void)
   prot_cmd_received_cb_Ignore();
   boardLED_Expect(CFG_LED_ON);
   prot_cmd_executed_cb_Ignore();
-  usb_hid_generic_send_IgnoreAndReturn(LPC_OK);
+  MOCK_PROT(command_send, _IgnoreAndReturn) (LPC_OK);
 
   //------------- CUT -------------//
   prot_task(NULL);
@@ -159,8 +171,10 @@ void test_cmd_led_off(void)
   prot_cmd_received_cb_Ignore();
   boardLED_Expect(CFG_LED_OFF);
   prot_cmd_executed_cb_Ignore();
-  usb_hid_generic_send_IgnoreAndReturn(LPC_OK);
+  MOCK_PROT(command_send, _IgnoreAndReturn) (LPC_OK);
 
   //------------- CUT -------------//
   prot_task(NULL);
 }
+
+#endif

@@ -41,7 +41,7 @@
   :commmon: &common_defines 
     - __CODE_RED -std=gnu99 
     - _TEST_ 
-    - CFG_BRD_RF1GHZNODE
+    - CFG_BRD_LPCXPRESSO_LPC1347
     - __USE_CMSIS=CMSISv2p10_LPC13Uxx
   :test:
     - *common_defines
