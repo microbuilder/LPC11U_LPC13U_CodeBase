@@ -122,8 +122,9 @@ void test_cmd_led_invalid_length(void)
 
   fifo_write(&ff_command, &message_cmd);
 
-  prot_cmd_received_cb_Expect(&message_cmd);
   prot_cmd_error_cb_StubWithCallback(cmd_err_stub);
+
+  prot_cmd_received_cb_Expect(&message_cmd);
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   //------------- Code Under Test -------------//
