@@ -52,6 +52,9 @@
   #define command_send         usb_custom_send
 #endif
 
+#define U16_HIGH_U8(u16) ((uint8_t) (((u16) >> 8) & 0x00FF))
+#define U16_LOW_U8(u16) ( (uint8_t) ( (u16)& 0x00FF) )
+
 /**************************************************************************/
 /*!
     @brief standard function type for a protocol command
@@ -113,25 +116,31 @@ void prot_task(void * p_para)
     uint16_t command_id;
 
     fifo_read(&ff_command, &message_cmd);
-    ASSERT( PROT_MSGTYPE_COMMAND == message_cmd.msg_type, (void) 0);
 
     // command_id is at odd address, directly use the value in message_cmd can lead to alignment issue on M0
     command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
-    ASSERT( 0 < command_id && command_id < PROT_CMDTYPE_COUNT &&
-            message_cmd.length <= (PROT_MAX_MSG_SIZE-4), (void) 0);
 
-    message_reponse.msg_type    = PROT_MSGTYPE_RESPONSE;
-    message_reponse.cmd_id_high = message_cmd.cmd_id_high;
-    message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
-
-    // invoke callback before executing command
-    if (prot_cmd_received_cb)
+    if ( !(PROT_MSGTYPE_COMMAND == message_cmd.msg_type && 0 < command_id && command_id < PROT_CMDTYPE_COUNT) )
     {
-      prot_cmd_received_cb(&message_cmd);
-    }
+      error = ERROR_PROT_UNKNOWN_COMMAND;
+    }else if (message_cmd.length > (PROT_MAX_MSG_SIZE-4))
+    {
+      error = ERROR_PROT_INVALID_PARAM;
+    } else
+    {
+      message_reponse.msg_type    = PROT_MSGTYPE_RESPONSE;
+      message_reponse.cmd_id_high = message_cmd.cmd_id_high;
+      message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
 
-    //------------- command executed: invoke the command handler associated with command_id-------------//
-    error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
+      // invoke callback before executing command
+      if (prot_cmd_received_cb)
+      {
+        prot_cmd_received_cb(&message_cmd);
+      }
+
+      //------------- command executed: invoke the command handler associated with command_id-------------//
+      error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
+    }
 
     //------------- response phase -------------//
     if (error == ERROR_NONE)
@@ -146,9 +155,10 @@ void prot_task(void * p_para)
       protMsgError_t message_error =
       {
           .msg_type      = PROT_MSGTYPE_ERROR,
-          .error_id_high = (uint8_t)((error >> 8) & 0x00FF),
-          .error_id_low  = (uint8_t)(error & 0x00FF)
+          .error_id_high = U16_HIGH_U8(error),
+          .error_id_low  = U16_LOW_U8 (error)
       };
+
       if (prot_cmd_error_cb)
       {
         prot_cmd_error_cb(&message_error);

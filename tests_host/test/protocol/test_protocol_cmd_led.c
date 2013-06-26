@@ -60,7 +60,7 @@ void tearDown(void)
 }
 
 
-void cmd_err_stub(protMsgError_t const * p_mess_err, int num_call)
+static void cmd_err_stub(protMsgError_t const * p_mess_err, int num_call)
 {
   TEST_ASSERT_NOT_NULL(p_mess_err);
   TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_mess_err->msg_type);

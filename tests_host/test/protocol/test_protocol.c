@@ -61,6 +61,22 @@ void tearDown(void)
 
 #ifdef CFG_PROTOCOL
 
+static void stub_cmd_err_cb(protMsgError_t const * p_mess_err, int num_call)
+{
+  TEST_ASSERT_NOT_NULL(p_mess_err);
+  TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_mess_err->msg_type);
+  TEST_ASSERT_EQUAL(ERROR_PROT_UNKNOWN_COMMAND, p_mess_err->error_id);
+}
+
+static bool stub_command_send(void const * p_data, uint32_t length, int num_call)
+{
+  protMsgError_t *p_error = (protMsgError_t *) p_data;
+  TEST_ASSERT_NOT_NULL(p_error);
+  TEST_ASSERT_EQUAL(3, length);
+  TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_error->msg_type);
+  TEST_ASSERT_EQUAL(ERROR_PROT_UNKNOWN_COMMAND, p_error->error_id);
+}
+
 //--------------------------------------------------------------------+
 // COMMON
 //--------------------------------------------------------------------+
@@ -95,10 +111,12 @@ void test_invalid_message_type(void)
 
   fifo_write(&ff_command, &message_cmd);
 
+  prot_cmd_error_cb_StubWithCallback( stub_cmd_err_cb );
+  MOCK_PROT(command_send, _StubWithCallback) ( stub_command_send );
+
   //------------- Code Under Test -------------//
   prot_task(NULL);
 
-  // early return, nothing to expect or check
 }
 
 void test_invalid_command(void)
@@ -108,10 +126,12 @@ void test_invalid_command(void)
 
   fifo_write(&ff_command, &message_cmd);
 
+  prot_cmd_error_cb_StubWithCallback( stub_cmd_err_cb );
+  MOCK_PROT(command_send, _StubWithCallback) ( stub_command_send );
+
   //------------- Code Under Test -------------//
   prot_task(NULL);
 
-  // early return, nothing to expect or check
 }
 
 #endif
