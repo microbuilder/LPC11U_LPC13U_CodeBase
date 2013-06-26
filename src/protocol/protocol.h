@@ -69,11 +69,18 @@ typedef enum
 /**************************************************************************/
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
-  uint8_t cmd_id_low;     // Little-endian encoding
-  uint8_t cmd_id_high;
+  union {
+    uint16_t cmd_id;
+    struct {
+      uint8_t cmd_id_low;     // Little-endian encoding
+      uint8_t cmd_id_high;
+    };
+  };
   uint8_t length;
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
 } protMsgCommand_t;
+
+//STATIC_ASSERT(sizeof(protMsgCommand_t) == 64);
 
 /**************************************************************************/
 /*!
@@ -96,8 +103,13 @@ typedef protMsgCommand_t protMsgAlert_t;
 /**************************************************************************/
 typedef PRE_PACK struct POST_PACK {
   uint8_t msg_type;
-  uint8_t error_id_low;   // Little-endian encoding
-  uint8_t error_id_high;
+  union {
+    uint16_t error_id;
+    struct {
+      uint8_t error_id_low;   // Little-endian encoding
+      uint8_t error_id_high;
+    };
+  };
 } protMsgError_t;
 
 

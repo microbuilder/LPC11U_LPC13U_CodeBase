@@ -64,6 +64,12 @@ void cmd_err_stub(protMsgError_t const * p_mess_err, int num_call)
 {
   TEST_ASSERT_NOT_NULL(p_mess_err);
   TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_mess_err->msg_type);
+//  ERROR_PROT_INVALID_PARAM
+}
+
+ErrorCode_t hid_send_stub(uint8_t report_in[], uint32_t length, int num_call)
+{
+
 }
 
 //--------------------------------------------------------------------+
@@ -74,8 +80,7 @@ void test_cmd_led_invalid_length(void)
   message_cmd = (protMsgCommand_t)
   {
     .msg_type    = PROT_MSGTYPE_COMMAND,
-    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
-    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .cmd_id      = PROT_CMDTYPE_LED,
     .length      = 10
   };
 
@@ -90,18 +95,12 @@ void test_cmd_led_invalid_length(void)
   prot_task(NULL);
 }
 
-ErrorCode_t hid_send_stub(uint8_t report_in[], uint32_t length, int num_call)
-{
-
-}
-
 void test_cmd_led_on(void)
 {
   message_cmd = (protMsgCommand_t)
   {
     .msg_type    = PROT_MSGTYPE_COMMAND,
-    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
-    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .cmd_id      = PROT_CMDTYPE_LED,
     .length      = 1,
     .payload[0]  = 1
   };
@@ -121,8 +120,7 @@ void test_cmd_led_off(void)
   message_cmd = (protMsgCommand_t)
   {
     .msg_type    = PROT_MSGTYPE_COMMAND,
-    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
-    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .cmd_id      = PROT_CMDTYPE_LED,
     .length      = 1,
     .payload[0]  = 0
   };

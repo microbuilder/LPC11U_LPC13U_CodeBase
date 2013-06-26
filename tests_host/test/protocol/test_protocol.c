@@ -34,6 +34,7 @@
 */
 /**************************************************************************/
 #include <string.h>
+#include <stddef.h>
 #include "unity.h"
 #include "fifo.h"
 #include "protocol.h"
@@ -63,6 +64,31 @@ void tearDown(void)
 //--------------------------------------------------------------------+
 // COMMON
 //--------------------------------------------------------------------+
+void test_message_structure(void)
+{
+  TEST_ASSERT_EQUAL(0, offsetof(protMsgCommand_t, msg_type) );
+
+  TEST_ASSERT_EQUAL(1, offsetof(protMsgCommand_t, cmd_id) );
+  TEST_ASSERT_EQUAL(1, offsetof(protMsgCommand_t, cmd_id_low) );
+  TEST_ASSERT_EQUAL(2, offsetof(protMsgCommand_t, cmd_id_high) );
+
+  TEST_ASSERT_EQUAL(3, offsetof(protMsgCommand_t, length) );
+  TEST_ASSERT_EQUAL(4, offsetof(protMsgCommand_t, payload) );
+
+  TEST_ASSERT_EQUAL(64, sizeof(protMsgCommand_t));
+}
+
+void test_error_structure(void)
+{
+  TEST_ASSERT_EQUAL(0, offsetof(protMsgError_t, msg_type) );
+
+  TEST_ASSERT_EQUAL(1, offsetof(protMsgError_t, error_id) );
+  TEST_ASSERT_EQUAL(1, offsetof(protMsgError_t, error_id_low) );
+  TEST_ASSERT_EQUAL(2, offsetof(protMsgError_t, error_id_high) );
+
+  TEST_ASSERT_EQUAL(3, sizeof(protMsgError_t));
+}
+
 void test_invalid_message_type(void)
 {
   message_cmd.msg_type = 0;
@@ -78,7 +104,7 @@ void test_invalid_message_type(void)
 void test_invalid_command(void)
 {
   message_cmd.msg_type = PROT_MSGTYPE_COMMAND;
-  message_cmd.cmd_id_high = message_cmd.cmd_id_low = 0;
+  message_cmd.cmd_id   = 0;
 
   fifo_write(&ff_command, &message_cmd);
 

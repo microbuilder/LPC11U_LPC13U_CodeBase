@@ -40,8 +40,6 @@
 #include "protocol.h"
 
 extern fifo_t ff_command; // fifo_command in protocol.c
-#define U16_HIGH_U8(u16) ((uint8_t) (((u16) >> 8) & 0x00FF))
-#define U16_LOW_U8(u16) ( (uint8_t) ( (u16)& 0x00FF) )
 
 #if defined(CFG_PROTOCOL_VIA_HID)
   #define command_received_isr usb_hid_generic_recv_isr
