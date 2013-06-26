@@ -51,7 +51,7 @@ ErrorCode_t usb_hid_configured(USBD_HANDLE_T hUsb);
 
 ErrorCode_t usb_hid_keyboard_sendKeys(uint8_t modifier, uint8_t keycodes[], uint8_t numkey);
 ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel, int8_t pan);
-ErrorCode_t usb_hid_generic_send(uint8_t report_in[], uint32_t length);
+ErrorCode_t usb_hid_generic_send(void const* p_report_in, uint32_t length);
 
 /**************************************************************************/
 /*!
@@ -107,7 +107,7 @@ ErrorCode_t usb_hid_generic_send(uint8_t report_in[], uint32_t length);
     @endcode
 */
 /**************************************************************************/
-void usb_hid_generic_recv_isr(uint8_t out_report[], uint32_t length) __attribute__((weak));
+void usb_hid_generic_recv_isr(void * p_buffer, uint32_t length) __attribute__((weak));
 
 // receive report in request from HOST, but have nothing to report
 bool usb_hid_generic_report_request_isr(uint8_t in_report[]) __attribute__((weak));

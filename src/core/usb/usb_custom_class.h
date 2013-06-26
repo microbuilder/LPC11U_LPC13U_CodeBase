@@ -55,7 +55,7 @@
 // APPLICATION API
 //--------------------------------------------------------------------+
 bool usb_custom_is_ready_to_send(void);
-bool usb_custom_send(void const * p_data, uint32_t length);
+ErrorCode_t usb_custom_send(void const * p_data, uint32_t length);
 
 //void usb_custom_receive(void * p_buffer, uint16_t length);
 void usb_custom_received_isr(void * p_buffer, uint32_t length) __attribute__((weak));

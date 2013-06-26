@@ -149,7 +149,7 @@ void prot_task(void * p_para)
       {
         prot_cmd_executed_cb(&message_reponse);
       }
-      command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
+      command_send( &message_reponse, sizeof(protMsgResponse_t));
     }else
     {
       protMsgError_t message_error =
@@ -163,7 +163,7 @@ void prot_task(void * p_para)
       {
         prot_cmd_error_cb(&message_error);
       }
-      command_send( (uint8_t*) &message_error, sizeof(protMsgError_t));
+      command_send( &message_error, sizeof(protMsgError_t));
     }
   }
 }
@@ -173,7 +173,7 @@ void prot_task(void * p_para)
     USB HID Generic callback (captures incoming commands)
 */
 /**************************************************************************/
-void command_received_isr(uint8_t p_data[], uint32_t length)
+void command_received_isr(void * p_data, uint32_t length)
 {
   (void) length; // for simplicity, always write fixed size to fifo even if host sends out short packet
   fifo_write(&ff_command, p_data);

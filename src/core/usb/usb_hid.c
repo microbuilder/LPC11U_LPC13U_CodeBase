@@ -448,18 +448,18 @@ ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel
     @endcode
 */
 /**************************************************************************/
-ErrorCode_t usb_hid_generic_send(uint8_t report_in[], uint32_t length)
+ErrorCode_t usb_hid_generic_send(void const* p_report_in, uint32_t length)
 {
   uint32_t start_time = delayGetSecondsActive();
 
-  ASSERT(report_in && length <= CFG_USB_HID_GENERIC_REPORT_SIZE, ERR_FAILED);
+  ASSERT(p_report_in && length <= CFG_USB_HID_GENERIC_REPORT_SIZE, ERR_FAILED);
   while (bGenericChanged) // TODO Block while previous key hasn't been sent - can use fifo to improve this
   {
     ASSERT_MESSAGE(delayGetSecondsActive() - start_time < 5, ERR_FAILED, "HID Generic Timeout");
   }
 
   memset(&hid_generic_report_in, 0, CFG_USB_HID_GENERIC_REPORT_SIZE);
-  memcpy(&hid_generic_report_in, report_in, length);
+  memcpy(&hid_generic_report_in, p_report_in, length);
   bGenericChanged = true;
 
   return LPC_OK;

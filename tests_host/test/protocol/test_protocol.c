@@ -68,7 +68,7 @@ static void stub_cmd_err_cb(protMsgError_t const * p_mess_err, int num_call)
   TEST_ASSERT_EQUAL(ERROR_PROT_UNKNOWN_COMMAND, p_mess_err->error_id);
 }
 
-static bool stub_command_send(void const * p_data, uint32_t length, int num_call)
+static ErrorCode_t stub_command_send(void const * p_data, uint32_t length, int num_call)
 {
   protMsgError_t *p_error = (protMsgError_t *) p_data;
   TEST_ASSERT_NOT_NULL(p_error);

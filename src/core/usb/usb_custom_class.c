@@ -59,17 +59,18 @@ bool usb_custom_is_ready_to_send(void)
   return usb_isConfigured() && is_bulk_in_ready;
 }
 
-bool usb_custom_send(void const * p_data, uint32_t length)
+ErrorCode_t usb_custom_send(void const * p_data, uint32_t length)
 {
-  ASSERT(p_data != NULL && length != 0 && usb_custom_is_ready_to_send(), false );
+  ASSERT(p_data != NULL && length != 0 && usb_custom_is_ready_to_send(), ERR_FAILED );
 
   uint32_t written_length = USBD_API->hw->WriteEP(g_hUsb, CUSTOM_EP_IN, (uint8_t*) p_data, length);
   if ( written_length != length)
   {
-    return false;
+    return ERR_FAILED;
   }
   is_bulk_in_ready = false;
-  return true;
+
+  return LPC_OK;
 }
 
 //--------------------------------------------------------------------+
