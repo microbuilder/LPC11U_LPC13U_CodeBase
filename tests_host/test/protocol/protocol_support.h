@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     test_fifo.c
+    @file     protocol_support.h
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
@@ -33,59 +33,24 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#include <string.h>
-#include "unity.h"
-#include "fifo.h"
+
+#ifndef _PROTOCOL_SUPPORT_H_
+#define _PROTOCOL_SUPPORT_H_
+
 #include "protocol.h"
-#include "protocol_support.h"
-#include "protocol_cmd_led.h"
 
-#include "mock_usb_hid.h"
-#include "mock_usb_custom_class.h"
-#include "mock_board.h"
-#include "mock_protocol_callback.h"
+extern fifo_t ff_command; // fifo_command in protocol.c
+#define U16_HIGH_U8(u16) ((uint8_t) (((u16) >> 8) & 0x00FF))
+#define U16_LOW_U8(u16) ( (uint8_t) ( (u16)& 0x00FF) )
 
-static protMsgCommand_t message_cmd;
+#if defined(CFG_PROTOCOL_VIA_HID)
+  #define command_received_isr usb_hid_generic_recv_isr
+  #define command_send         usb_hid_generic_send
+#elif defined(CFG_PROTOCOL_VIA_BULK)
+  #define command_received_isr usb_custom_received_isr
+  #define command_send         usb_custom_send
+#endif
 
-void setUp(void)
-{
-  prot_init();
-  memset(&message_cmd, 0, sizeof(protMsgCommand_t) );
-}
-
-void tearDown(void)
-{
-
-}
-
-#ifdef CFG_PROTOCOL
-
-//--------------------------------------------------------------------+
-// COMMON
-//--------------------------------------------------------------------+
-void test_invalid_message_type(void)
-{
-  message_cmd.msg_type = 0;
-
-  fifo_write(&ff_command, &message_cmd);
-
-  //------------- Code Under Test -------------//
-  prot_task(NULL);
-
-  // early return, nothing to expect or check
-}
-
-void test_invalid_command(void)
-{
-  message_cmd.msg_type = PROT_MSGTYPE_COMMAND;
-  message_cmd.cmd_id_high = message_cmd.cmd_id_low = 0;
-
-  fifo_write(&ff_command, &message_cmd);
-
-  //------------- Code Under Test -------------//
-  prot_task(NULL);
-
-  // early return, nothing to expect or check
-}
+#define MOCK_PROT(func, behavior)   XSTRING_CONCAT(func, behavior)
 
 #endif

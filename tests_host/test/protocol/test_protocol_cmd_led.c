@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     test_fifo.c
+    @file     test_protocol_cmd_led.c
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
@@ -33,12 +33,13 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+
 #include <string.h>
 #include "unity.h"
 #include "fifo.h"
 #include "protocol.h"
-#include "protocol_support.h"
 #include "protocol_cmd_led.h"
+#include "protocol_support.h"
 
 #include "mock_usb_hid.h"
 #include "mock_usb_custom_class.h"
@@ -58,34 +59,80 @@ void tearDown(void)
 
 }
 
-#ifdef CFG_PROTOCOL
+
+void cmd_err_stub(protMsgError_t const * p_mess_err, int num_call)
+{
+  TEST_ASSERT_NOT_NULL(p_mess_err);
+  TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_mess_err->msg_type);
+}
 
 //--------------------------------------------------------------------+
-// COMMON
+// LED COMMAND
 //--------------------------------------------------------------------+
-void test_invalid_message_type(void)
+void test_cmd_led_invalid_length(void)
 {
-  message_cmd.msg_type = 0;
+  message_cmd = (protMsgCommand_t)
+  {
+    .msg_type    = PROT_MSGTYPE_COMMAND,
+    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
+    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .length      = 10
+  };
 
   fifo_write(&ff_command, &message_cmd);
 
+  prot_cmd_error_cb_StubWithCallback(cmd_err_stub);
+
+  prot_cmd_received_cb_Expect(&message_cmd);
+  MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
+
   //------------- Code Under Test -------------//
   prot_task(NULL);
-
-  // early return, nothing to expect or check
 }
 
-void test_invalid_command(void)
+ErrorCode_t hid_send_stub(uint8_t report_in[], uint32_t length, int num_call)
 {
-  message_cmd.msg_type = PROT_MSGTYPE_COMMAND;
-  message_cmd.cmd_id_high = message_cmd.cmd_id_low = 0;
 
+}
+
+void test_cmd_led_on(void)
+{
+  message_cmd = (protMsgCommand_t)
+  {
+    .msg_type    = PROT_MSGTYPE_COMMAND,
+    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
+    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .length      = 1,
+    .payload[0]  = 1
+  };
   fifo_write(&ff_command, &message_cmd);
 
-  //------------- Code Under Test -------------//
-  prot_task(NULL);
+  prot_cmd_received_cb_Ignore();
+  boardLED_Expect(CFG_LED_ON);
+  prot_cmd_executed_cb_Ignore();
+  MOCK_PROT(command_send, _IgnoreAndReturn) (LPC_OK);
 
-  // early return, nothing to expect or check
+  //------------- CUT -------------//
+  prot_task(NULL);
 }
 
-#endif
+void test_cmd_led_off(void)
+{
+  message_cmd = (protMsgCommand_t)
+  {
+    .msg_type    = PROT_MSGTYPE_COMMAND,
+    .cmd_id_high = U16_HIGH_U8(PROT_CMDTYPE_LED),
+    .cmd_id_low  = U16_LOW_U8(PROT_CMDTYPE_LED),
+    .length      = 1,
+    .payload[0]  = 0
+  };
+  fifo_write(&ff_command, &message_cmd);
+
+  prot_cmd_received_cb_Ignore();
+  boardLED_Expect(CFG_LED_OFF);
+  prot_cmd_executed_cb_Ignore();
+  MOCK_PROT(command_send, _IgnoreAndReturn) (LPC_OK);
+
+  //------------- CUT -------------//
+  prot_task(NULL);
+}

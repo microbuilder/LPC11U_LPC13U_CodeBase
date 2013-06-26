@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     protocol_callback.c
+    @file     protocol_callback.h
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE

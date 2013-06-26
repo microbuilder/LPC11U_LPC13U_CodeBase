@@ -38,6 +38,8 @@
 #include "boards/board.h"
 #include "../protocol.h"
 
+#ifdef CFG_PROTOCOL
+
 // turn on  10 01 00 01 01
 // turn off 10 01 00 01 00
 /**************************************************************************/
@@ -53,3 +55,5 @@ error_t protcmd_led(uint8_t length, uint8_t const payload[], protMsgResponse_t* 
 
   return ERROR_NONE;
 }
+
+#endif
