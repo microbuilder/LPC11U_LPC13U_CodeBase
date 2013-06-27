@@ -38,45 +38,45 @@
 
 #ifdef CFG_PROTOCOL
 
-//--------------------------------------------------------------------+
-// INCLUDE & DECLARATION
-//--------------------------------------------------------------------+
 #include "protocol.h"
 #include "core/fifo/fifo.h"
 
 #if defined(CFG_PROTOCOL_VIA_HID)
-  #define command_received_isr usb_hid_generic_recv_isr
-  #define command_send         usb_hid_generic_send
+  #define command_received_isr  usb_hid_generic_recv_isr
+  #define command_send          usb_hid_generic_send
 #elif defined(CFG_PROTOCOL_VIA_BULK)
-  #define command_received_isr usb_custom_received_isr
-  #define command_send         usb_custom_send
+  #define command_received_isr  usb_custom_received_isr
+  #define command_send          usb_custom_send
 #endif
 
-#define U16_HIGH_U8(u16) ((uint8_t) (((u16) >> 8) & 0x00FF))
-#define U16_LOW_U8(u16) ( (uint8_t) ( (u16)& 0x00FF) )
+#define U16_HIGH_U8(u16)  ((uint8_t) (((u16) >> 8) & 0x00FF))
+#define U16_LOW_U8(u16)   ((uint8_t) ((u16) & 0x00FF))
 
 /**************************************************************************/
 /*!
-    @brief standard function type for a protocol command
+    @brief      The standard function prototype for protocol commands (all
+                commnands need to implement the same signature)
 
-    @param[in]  payload's length
+    @param[in]  Payload length (normally max 64 bytes)
 
-    @param[in]  payload's content
+    @param[in]  Payload contents
 
-    @param[out] response message, already filled with msg type & command id
+    @param[out] Response message, already filled with msg type and cmd id
 
-    @returns  error code if there is, otherwise ERROR_NONE
+    @returns    Error code if there is an error, otherwise ERROR_NONE
 */
 /**************************************************************************/
 typedef error_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
 
-//------------- command prototype -------------//
+/* Command prototype */
+
 #define CMD_PROTOTYPE_EXPAND(command, function) \
   error_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
 
+/* Command lookup table macros */
+
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
-//------------- command lookup table -------------//
 #define CMD_LOOKUP_EXPAND(command, function)\
   [command] = function,\
 
@@ -85,6 +85,7 @@ static protCmdFunc_t protocol_cmd_tbl[] =
   PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
 };
 
+/* FIFO buffer to store command data */
 
 #define CMD_FIFO_DEPTH 4
 
@@ -96,62 +97,79 @@ static protCmdFunc_t protocol_cmd_tbl[] =
   #error __FILE__ No MCU defined
 #endif
 
-//--------------------------------------------------------------------+
-// Public API
-//--------------------------------------------------------------------+
+/**************************************************************************/
+/*!
+    @brief      Initialises the simple binary protocol (FIFO init, etc.)
+*/
+/**************************************************************************/
 void prot_init(void)
 {
   fifo_clear(&ff_command);
 }
 
+/**************************************************************************/
+/*!
+    @brief      Checks if there are any commands for the simple binary
+                protocol to process in the FIFO, and hands them off to the
+                command parser if anything was found
+*/
+/**************************************************************************/
 void prot_task(void * p_para)
 {
   if ( !fifo_isEmpty(&ff_command) )
   {
     error_t error;
 
-    //------------- command received -------------//
+    /* If we get here, it means a command was received */
     protMsgCommand_t message_cmd = { 0 };
     protMsgResponse_t message_reponse = {0};
     uint16_t command_id;
 
+    /* COMMAND PHASE */
     fifo_read(&ff_command, &message_cmd);
 
-    // command_id is at odd address, directly use the value in message_cmd can lead to alignment issue on M0
+    /* Command_id is at an odd address ... directly using the value in *
+     * message_cmd can lead to alignment issues on the M0              */
     command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
 
     if ( !(PROT_MSGTYPE_COMMAND == message_cmd.msg_type && 0 < command_id && command_id < PROT_CMDTYPE_COUNT) )
     {
       error = ERROR_PROT_UNKNOWN_COMMAND;
-    }else if (message_cmd.length > (PROT_MAX_MSG_SIZE-4))
+    }
+    else if (message_cmd.length > (PROT_MAX_MSG_SIZE-4))
     {
       error = ERROR_PROT_INVALID_PARAM;
-    } else
+    }
+    else
     {
       message_reponse.msg_type    = PROT_MSGTYPE_RESPONSE;
       message_reponse.cmd_id_high = message_cmd.cmd_id_high;
       message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
 
-      // invoke callback before executing command
+      /* Invoke 'cmd_received' callback before executing command */
       if (prot_cmd_received_cb)
       {
         prot_cmd_received_cb(&message_cmd);
       }
 
-      //------------- command executed: invoke the command handler associated with command_id-------------//
+      /* Fire the appropriate handler based on the command ID */
       error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
     }
 
-    //------------- response phase -------------//
+    /* RESPONSE PHASE */
     if (error == ERROR_NONE)
     {
+      /* Invoke the 'cmd_executed' calback */
       if (prot_cmd_executed_cb)
       {
         prot_cmd_executed_cb(&message_reponse);
       }
+      /* Send the mandatory response message */
       command_send( &message_reponse, sizeof(protMsgResponse_t));
-    }else
+    }
+    else
     {
+      /* Something went wrong ... parse the error ID */
       protMsgError_t message_error =
       {
           .msg_type      = PROT_MSGTYPE_ERROR,
@@ -159,10 +177,12 @@ void prot_task(void * p_para)
           .error_id_low  = U16_LOW_U8 (error)
       };
 
+      /* Invoke the 'cmd_error' callback */
       if (prot_cmd_error_cb)
       {
         prot_cmd_error_cb(&message_error);
       }
+      /* Send the mandatory error message */
       command_send( &message_error, sizeof(protMsgError_t));
     }
   }
@@ -175,7 +195,7 @@ void prot_task(void * p_para)
 /**************************************************************************/
 void command_received_isr(void * p_data, uint32_t length)
 {
-  (void) length; // for simplicity, always write fixed size to fifo even if host sends out short packet
+  (void) length; /* for simplicity, always write fixed size to fifo even if host sends out short packets */
   fifo_write(&ff_command, p_data);
 }
 
