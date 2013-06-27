@@ -83,7 +83,6 @@ typedef enum
   ERROR_TIMESPAN_OUTOFRANGE       = 0x150,    /**< timespan_t must be kept within int64_t nanosecond range */
   ERROR_PROT_INVALIDMSGTYPE       = 0x200,    /**< Unexpected msg type encountered */
   ERROR_PROT_INVALIDCOMMANDID     = 0x201,    /**< Unknown or out of range command ID */
-  ERROR_PROT_INVALIDPARAM         = 0x202,    /**< Invalid parameter in the message/command */
   ERROR_FATFS_NODISK              = 0x301,
   ERROR_FATFS_INITFAILED          = 0x302,
   ERROR_FATFS_FAILEDTOMOUNTDRIVE  = 0x303,

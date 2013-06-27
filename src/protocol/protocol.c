@@ -161,10 +161,11 @@ void prot_task(void * p_para)
     }
     else if (message_cmd.length > (PROT_MAX_MSG_SIZE-4))
     {
-      error = ERROR_PROT_INVALIDPARAM;
+      error = ERROR_INVALIDPARAMETER;
     }
     else
     {
+      /* Keep track of the command ID for the response message */
       message_reponse.msg_type    = PROT_MSGTYPE_RESPONSE;
       message_reponse.cmd_id_high = message_cmd.cmd_id_high;
       message_reponse.cmd_id_low  = message_cmd.cmd_id_low;
@@ -182,12 +183,13 @@ void prot_task(void * p_para)
     /* RESPONSE PHASE */
     if (error == ERROR_NONE)
     {
-      /* Invoke the 'cmd_executed' calback */
+      /* Invoke the 'cmd_executed' callback */
       if (prot_cmd_executed_cb)
       {
         prot_cmd_executed_cb(&message_reponse);
       }
-      /* Send the mandatory response message */
+
+      /* Send the response message (cmd successfully executed) */
       command_send( &message_reponse, sizeof(protMsgResponse_t));
     }
     else
@@ -195,9 +197,9 @@ void prot_task(void * p_para)
       /* Something went wrong ... parse the error ID */
       protMsgError_t message_error =
       {
-          .msg_type      = PROT_MSGTYPE_ERROR,
-          .error_id_high = U16_HIGH_U8(error),
-          .error_id_low  = U16_LOW_U8 (error)
+        .msg_type      = PROT_MSGTYPE_ERROR,
+        .error_id_high = U16_HIGH_U8(error),
+        .error_id_low  = U16_LOW_U8 (error)
       };
 
       /* Invoke the 'cmd_error' callback */
@@ -205,7 +207,8 @@ void prot_task(void * p_para)
       {
         prot_cmd_error_cb(&message_error);
       }
-      /* Send the mandatory error message */
+
+      /* Send back a mandatory error message */
       command_send( &message_error, sizeof(protMsgError_t));
     }
   }
@@ -215,12 +218,15 @@ void prot_task(void * p_para)
 /*!
     USB callback for incoming commands (the exact callback function
     depends on the interface used by the simple binary protocol, and is
-    defined in a macro in this file).
+    defined in a macro at the top of this file).
+
+    This callback will write the incoming command into the FIFO for
+    processing by prot_task when there is enough bandwidth to run
+    the command parser.
 */
 /**************************************************************************/
 void command_received_isr(void * p_data, uint32_t length)
 {
-  (void) length; /* for simplicity, always write fixed size to fifo even if host sends out short packets */
   fifo_write(&ff_command, p_data);
 }
 
