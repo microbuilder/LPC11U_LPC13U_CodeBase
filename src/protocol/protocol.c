@@ -41,6 +41,7 @@
 #include "protocol.h"
 #include "core/fifo/fifo.h"
 
+/* Callback functions to let us know when new data arrives via USB, etc. */
 #if defined(CFG_PROTOCOL_VIA_HID)
   #define command_received_isr  usb_hid_generic_recv_isr
   #define command_send          usb_hid_generic_send
@@ -112,6 +113,24 @@ void prot_init(void)
     @brief      Checks if there are any commands for the simple binary
                 protocol to process in the FIFO, and hands them off to the
                 command parser if anything was found
+
+    @code
+
+    // Note: Assumes CFG_PROTOCOL is defined in the board config file!
+
+    prot_init();
+
+    // Commands will be added to the protocol FIFO as they arrive via
+    // the command_received_isr callback further down in this file
+
+    while(1)
+    {
+      // Constantly check for incoming messages (this can of course be
+      // handled more efficiently depending on your requirements)
+      prot_task(NULL);
+    }
+
+    @endcode
 */
 /**************************************************************************/
 void prot_task(void * p_para)
@@ -190,7 +209,9 @@ void prot_task(void * p_para)
 
 /**************************************************************************/
 /*!
-    USB HID Generic callback (captures incoming commands)
+    USB callback for incoming commands (the exact callback function
+    depends on the interface used by the simple binary protocol, and is
+    defined in a macro in this file).
 */
 /**************************************************************************/
 void command_received_isr(void * p_data, uint32_t length)
