@@ -304,6 +304,7 @@
         <folder Name="commands" file_name="">
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
         </folder>
+        <file file_name="src/protocol/prot_cmdtable.h"/>
       </folder>
       <file file_name="src/fixed.h"/>
     </folder>

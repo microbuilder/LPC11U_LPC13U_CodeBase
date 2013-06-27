@@ -137,12 +137,11 @@ void prot_task(void * p_para)
 {
   if ( !fifo_isEmpty(&ff_command) )
   {
-    error_t error;
-
     /* If we get here, it means a command was received */
-    protMsgCommand_t message_cmd = { 0 };
-    protMsgResponse_t message_reponse = {0};
-    uint16_t command_id;
+    protMsgCommand_t  message_cmd     = { 0 };
+    protMsgResponse_t message_reponse = { 0 };
+    uint16_t          command_id;
+    error_t           error;
 
     /* COMMAND PHASE */
     fifo_read(&ff_command, &message_cmd);
@@ -151,13 +150,18 @@ void prot_task(void * p_para)
      * message_cmd can lead to alignment issues on the M0              */
     command_id = (message_cmd.cmd_id_high << 8) + message_cmd.cmd_id_low;
 
-    if ( !(PROT_MSGTYPE_COMMAND == message_cmd.msg_type && 0 < command_id && command_id < PROT_CMDTYPE_COUNT) )
+    /* Make sure we have a command with a valid ID */
+    if ( !(PROT_MSGTYPE_COMMAND == message_cmd.msg_type) )
     {
-      error = ERROR_PROT_UNKNOWN_COMMAND;
+      error = ERROR_PROT_INVALIDMSGTYPE;
+    }
+    else if ( !(0 < command_id && command_id < PROT_CMDTYPE_COUNT) )
+    {
+      error = ERROR_PROT_INVALIDCOMMANDID;
     }
     else if (message_cmd.length > (PROT_MAX_MSG_SIZE-4))
     {
-      error = ERROR_PROT_INVALID_PARAM;
+      error = ERROR_PROT_INVALIDPARAM;
     }
     else
     {

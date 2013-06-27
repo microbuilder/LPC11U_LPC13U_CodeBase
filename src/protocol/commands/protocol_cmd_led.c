@@ -49,7 +49,7 @@
 /**************************************************************************/
 error_t protcmd_led(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
-  ASSERT( 1 == length, ERROR_PROT_INVALID_PARAM);
+  ASSERT( 1 == length, ERROR_PROT_INVALIDPARAM);
 
   boardLED(payload[0] ? CFG_LED_ON : CFG_LED_OFF);
 
