@@ -41,30 +41,26 @@
  extern "C" {
 #endif
 
+/**************************************************************************/
+/*!
+    This enumeration is used to make sure that each command has a unique
+    ID, and is used to create the command lookup table enum further down
+*/
+/**************************************************************************/
 typedef enum {
-  PROT_CMDTYPE_LED = 0x0001,
-  PROT_CMDTYPE_COUNT /**< Number of commands */
-}protCmdType_t;
+  PROT_CMDTYPE_LED      = 0x0001, /**< Enables/disables the on board LED */
+  PROT_CMDTYPE_COUNT              /**< Total number of commands */
+} protCmdType_t;
 
-//------------- X macros for create consistent command enum, function prototyp & cmd table -------------//
-// This table serves as a central database where each entry is consisted of all information of a command.
-// Define your own 'Expansion Macro' and expand the table to form a specific list/table. The following example
-// example defines a macro that make each ENTRY of PROTOCOL_COMMAND_TABLE become an assignment with ',' ending.
-// Putting that in the enum declaration will form a enumeration of command type.
+/**************************************************************************/
 /*
-#define CMDTYPE_EXPAND(command, id, function) \
-  command = id,\
-
-typedef enum {
-  PROTOCOL_COMMAND_TABLE(CMDTYPE_EXPAND)
-  PROT_CMDTYPE_COUNT
-}protCmdType_t; */
-
-// command enum, command id, command function
+    The command lookup table is constructed based on this macro containing
+    the command ID (as defined in protCmdType_t) and the actual callback
+    function to associate with it (in the format defined by protCmdFunc_t)
+*/
+/**************************************************************************/
 #define PROTOCOL_COMMAND_TABLE(ENTRY) \
     ENTRY(PROT_CMDTYPE_LED, protcmd_led)\
-
-
 
 #ifdef __cplusplus
  }
