@@ -94,24 +94,34 @@ void test_error_structure(void)
 //--------------------------------------------------------------------+
 void test_invalid_message_type(void)
 {
+  // Setup the test input (message_cmd)
   message_cmd.msg_type = 0;
 
+  // Add the faulty message to the FIFO
   fifo_write(&ff_command, &message_cmd);
 
+  // Setup the expected output for comparison purposes
   protMsgError_t invalid_msg_type_error =
   {
     .msg_type = PROT_MSGTYPE_ERROR,
     .error_id = ERROR_PROT_INVALIDMSGTYPE
   };
 
+  // Ensure that 'prot_cmd_error_cb' was invoked, expecting
+  // the results we defined above in 'invalid_msg_type_error'
   prot_cmd_error_cb_Expect(&invalid_msg_type_error);
+  
+  // Ensure that 'command_send' was invoked (this is a macro that 
+  // abstract the actual 'usb_xxx_send' call), stating the results
+  // we expect: LPC_OK will be returned, but a protMsgError_t array
+  // will be created
   MOCK_PROT(command_send, _ExpectWithArrayAndReturn) (
       (uint8_t *) &invalid_msg_type_error, sizeof(protMsgError_t),
       sizeof(protMsgError_t), LPC_OK);
 
   //------------- Code Under Test -------------//
+  // Process the FIFO contents and run the test code
   prot_task(NULL);
-
 }
 
 void test_invalid_command(void)
