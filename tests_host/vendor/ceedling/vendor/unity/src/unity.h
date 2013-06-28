@@ -8,7 +8,7 @@
 #define UNITY_FRAMEWORK_H
 
 #define UNITY
-#define UNITY_EXCLUDE_FLOAT
+// #define UNITY_EXCLUDE_FLOAT
 #define UNITY_EXCLUDE_DOUBLE
 
 #include "unity_internals.h"
