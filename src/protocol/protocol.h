@@ -39,6 +39,7 @@
 #include "projectconfig.h"
 #include "prot_cmdtable.h"
 #include "core/usb/usb_hid.h"
+#include "core/usb/usb_custom_class.h"
 
 #ifdef __cplusplus
 extern "C" {
@@ -80,7 +81,7 @@ typedef PRE_PACK struct POST_PACK {
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
 } protMsgCommand_t;
 
-//STATIC_ASSERT(sizeof(protMsgCommand_t) == 64);
+STATIC_ASSERT(sizeof(protMsgCommand_t) == 64);
 
 /**************************************************************************/
 /*!
@@ -112,7 +113,7 @@ typedef PRE_PACK struct POST_PACK {
   };
 } protMsgError_t;
 
-
+STATIC_ASSERT(sizeof(protMsgError_t) == 3);
 
 //--------------------------------------------------------------------+
 // PUBLIC API

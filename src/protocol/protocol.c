@@ -195,7 +195,7 @@ void prot_task(void * p_para)
       }
 
       /* Send the response message (cmd successfully executed) */
-      command_send( &message_reponse, sizeof(protMsgResponse_t));
+      command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
     }
     else
     {
@@ -203,9 +203,11 @@ void prot_task(void * p_para)
       protMsgError_t message_error =
       {
         .msg_type      = PROT_MSGTYPE_ERROR,
-        .error_id_high = U16_HIGH_U8(error),
-        .error_id_low  = U16_LOW_U8 (error)
+//        .error_id_high = U16_HIGH_U8(error), TODO has problem with lpcxpresso's gcc
+//        .error_id_low  = U16_LOW_U8 (error)
       };
+      message_error.error_id_high = U16_HIGH_U8(error);
+      message_error.error_id_low  = U16_LOW_U8 (error);
 
       /* Invoke the 'cmd_error' callback */
       if (prot_cmd_error_cb)
@@ -214,7 +216,7 @@ void prot_task(void * p_para)
       }
 
       /* Send back a mandatory error message */
-      command_send( &message_error, sizeof(protMsgError_t));
+      command_send( (uint8_t*)  &message_error, sizeof(protMsgError_t));
     }
   }
 }

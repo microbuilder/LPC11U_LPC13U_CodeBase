@@ -61,24 +61,8 @@ void tearDown(void)
 
 #ifdef CFG_PROTOCOL
 
-static void stub_cmd_err_cb(protMsgError_t const * p_mess_err, int num_call)
-{
-  TEST_ASSERT_NOT_NULL(p_mess_err);
-  TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_mess_err->msg_type);
-  TEST_ASSERT_EQUAL(ERROR_PROT_INVALIDCOMMANDID, p_mess_err->error_id);
-}
-
-static ErrorCode_t stub_command_send(void const * p_data, uint32_t length, int num_call)
-{
-  protMsgError_t *p_error = (protMsgError_t *) p_data;
-  TEST_ASSERT_NOT_NULL(p_error);
-  TEST_ASSERT_EQUAL(3, length);
-  TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_error->msg_type);
-  TEST_ASSERT_EQUAL(ERROR_PROT_INVALIDCOMMANDID, p_error->error_id);
-}
-
 //--------------------------------------------------------------------+
-// COMMON
+// Message Layout
 //--------------------------------------------------------------------+
 void test_message_structure(void)
 {
@@ -105,14 +89,25 @@ void test_error_structure(void)
   TEST_ASSERT_EQUAL(3, sizeof(protMsgError_t));
 }
 
+//--------------------------------------------------------------------+
+// INVALID PARAMETER
+//--------------------------------------------------------------------+
 void test_invalid_message_type(void)
 {
   message_cmd.msg_type = 0;
 
   fifo_write(&ff_command, &message_cmd);
 
-  prot_cmd_error_cb_StubWithCallback( stub_cmd_err_cb );
-  MOCK_PROT(command_send, _StubWithCallback) ( stub_command_send );
+  protMsgError_t invalid_msg_type_error =
+  {
+    .msg_type = PROT_MSGTYPE_ERROR,
+    .error_id = ERROR_PROT_INVALIDMSGTYPE
+  };
+
+  prot_cmd_error_cb_Expect(&invalid_msg_type_error);
+  MOCK_PROT(command_send, _ExpectWithArrayAndReturn) (
+      (uint8_t *) &invalid_msg_type_error, sizeof(protMsgError_t),
+      sizeof(protMsgError_t), LPC_OK);
 
   //------------- Code Under Test -------------//
   prot_task(NULL);
@@ -126,8 +121,16 @@ void test_invalid_command(void)
 
   fifo_write(&ff_command, &message_cmd);
 
-  prot_cmd_error_cb_StubWithCallback( stub_cmd_err_cb );
-  MOCK_PROT(command_send, _StubWithCallback) ( stub_command_send );
+  protMsgError_t invalid_cmd_error =
+  {
+    .msg_type = PROT_MSGTYPE_ERROR,
+    .error_id = ERROR_PROT_INVALIDCOMMANDID
+  };
+
+  prot_cmd_error_cb_Expect(&invalid_cmd_error);
+  MOCK_PROT(command_send, _ExpectWithArrayAndReturn) (
+      (uint8_t *) &invalid_cmd_error, sizeof(protMsgError_t),
+      sizeof(protMsgError_t), LPC_OK);
 
   //------------- Code Under Test -------------//
   prot_task(NULL);

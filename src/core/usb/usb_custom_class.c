@@ -59,7 +59,7 @@ bool usb_custom_is_ready_to_send(void)
   return usb_isConfigured() && is_bulk_in_ready;
 }
 
-ErrorCode_t usb_custom_send(void const * p_data, uint32_t length)
+ErrorCode_t usb_custom_send(uint8_t const * p_data, uint32_t length)
 {
   ASSERT(p_data != NULL && length != 0 && usb_custom_is_ready_to_send(), ERR_FAILED );
 

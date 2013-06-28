@@ -448,7 +448,7 @@ ErrorCode_t usb_hid_mouse_send(uint8_t buttons, int8_t x, int8_t y, int8_t wheel
     @endcode
 */
 /**************************************************************************/
-ErrorCode_t usb_hid_generic_send(void const* p_report_in, uint32_t length)
+ErrorCode_t usb_hid_generic_send(uint8_t const* p_report_in, uint32_t length)
 {
   uint32_t start_time = delayGetSecondsActive();
 
