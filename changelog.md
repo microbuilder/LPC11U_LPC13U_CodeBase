@@ -13,6 +13,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added basic USB custom class support (fast bulk transfers)
 - USB HID now shares the same API as USB custom class calls to make it easier to switch
 - Various improvements to the simple binary protocol
+- Removed unity tests (/tests) to make room for ceedling native tests (/tests_host)
 
 ## 0.8.6 [14 June 2013] ##
 

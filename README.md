@@ -13,7 +13,7 @@ It includes the following key features, which can be easily enabled or disabled 
 - Graphics sub-system including support for multiple font types (bitmap or anti-aliased), basic drawing functions, and a simple HW abstraction mechanism
 - FAT16/32 file system support for SD cards including the option to use long names (via FatFS)
 - Numerous wireless stacks, including NFC (based on the PN532) and 802.15.4 (based on the AT86RF212).
-- A basic [unit testing framework](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/tests) suitable for embedded systems (Unity)
+- A basic [unit testing framework](https://github.com/microbuilder/LPC11U_LPC13U_Codebase/tree/master/tests_host) suitable for embedded systems (Unity)
 
 ## Supported MCUs ##
   
