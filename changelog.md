@@ -4,11 +4,15 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 
 ## 0.8.7 [ongoing] ##
 
-- delay.c interrupt priority changed to lowest level - 1 so that other interrupts can potentially be configured to use delay (even if it's a bad idea!) by setting them to the lowest level
+- delay.c interrupt priority changed to be one higher than the lowest level so that other interrupts can potentially be configured to use delay by setting them to the lowest level
 - sensorpoll.c added to poll sensor data at fixed intervals using 16-bit timer 1 (though care needs to be taken using this!)
 - Disabled both generic interrupt handlers in timer16.c since they are both potentially used elsewhere
 - magnetometer.c, accelerometer.c and pressure.c generic helper functions added in the sensor abstraction layer
 - Added debug.c to help with debugging in the field
+- Merged CMSIS-RTOS (RTX) updates from RTX branch ... basic test works on M3 and M0, but further testing needed
+- Added basic USB custom class support (fast bulk transfers)
+- USB HID now shares the same API as USB custom class calls to make it easier to switch
+- Various improvements to the simple binary protocol
 
 ## 0.8.6 [14 June 2013] ##
 
