@@ -49,12 +49,6 @@ Inexpensive LPCXpresso development boards are available with integrated SWD debu
 
 Project files are also provided for Rowley Associate's popular Crossworks for ARM IDE, which is GCC based, includes an optimised standard C library, and supports a large variety of HW debuggers (including the popular J-Link from Segger). [(more)](doc/toolchain_crossworks.md)
 
-**Keil uVision (Keil\_*.uvproj)**
-
-An initial attempt was made at adding support for Keil's uVision since a free 32 kB version is available, but this should be considered deprecated and the project files will no longer be maintained.
-
-A conscious choice was made to focus on GCC as a toolchain for this code base.  Commercial tools have their place in the world, but it's a choice based on long term reliability of any firmware built with this code base.  By focusing on GCC, you are certain that you will always be able to rebuild your firmware exactly as it was built 10+ years ago without having to worry about whether a commercial compiler vendor still exists or can activate an old version of their compiler, etc.
-
 ## Current Development Status ##
 
 This code base is still in active development, and there are almost certainly a number of improvements that can be made to it, bugs that will need to be worked out, and pieces of code that could be better organized or rewritten entirely.
