@@ -94,7 +94,7 @@
 ***************************************************************************/
 #include "projectconfig.h"
 
-#ifdef CFG_PN532
+//#ifdef CFG_PN532
 
 #include "pn532_ndef.h"
 #include "../mem_allocator/pn532_mem.h"
@@ -1184,4 +1184,4 @@ pn532_error_t pn532_ndef_createTextPayload(char *isoCode, char *text,
   return PN532_ERROR_NONE;
 }
 
-#endif  // #ifdef CFG_PN532
+//#endif  // #ifdef CFG_PN532

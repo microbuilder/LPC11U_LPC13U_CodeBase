@@ -39,7 +39,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 
-#ifdef CFG_PN532
+// #ifdef CFG_PN532
 
 #include "../pn532.h"
 #include "pn532_mem.h"
@@ -145,4 +145,4 @@ void pn532_mem_free(void* mem)
   return;
 }
 
-#endif  // #ifdef CFG_PN532
+// #endif  // #ifdef CFG_PN532
