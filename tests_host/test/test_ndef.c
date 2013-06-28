@@ -647,7 +647,7 @@ void test_ndef_getNextRecord(void)
 
   /* Intentionally throw some errors! */
   /* Check return of pn532_ndef_getNextRecord(NULL), should be NULL  */
-  TEST_ASSERT_EQUAL_UINT32(NULL, pn532_ndef_getNextRecord(NULL));
+  TEST_ASSERT_EQUAL(NULL, pn532_ndef_getNextRecord(NULL));
 
   /* Free up some memory */
   pn532_ndef_destroy(rec);
@@ -736,7 +736,7 @@ void text_ndef_getRecord(void)
 
   /* Intentionally throw some errors! */
   /* Check get third record ... should be NULL! */
-  TEST_ASSERT_EQUAL_UINT32(NULL, pn532_ndef_getRecord(rec, 2));
+  TEST_ASSERT_EQUAL(NULL, pn532_ndef_getRecord(rec, 2));
 
   /* Free up some memory */
   pn532_ndef_destroy(rec);
