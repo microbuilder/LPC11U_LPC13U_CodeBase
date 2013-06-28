@@ -65,7 +65,7 @@ static void stub_cmd_err_cb(protMsgError_t const * p_mess_err, int num_call)
 {
   TEST_ASSERT_NOT_NULL(p_mess_err);
   TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_mess_err->msg_type);
-  TEST_ASSERT_EQUAL(ERROR_PROT_INVALIDCOMMANDID, p_mess_err->error_id);
+  TEST_ASSERT_EQUAL(ERROR_PROT_INVALIDMSGTYPE, p_mess_err->error_id);
 }
 
 static ErrorCode_t stub_command_send(void const * p_data, uint32_t length, int num_call)
@@ -74,7 +74,7 @@ static ErrorCode_t stub_command_send(void const * p_data, uint32_t length, int n
   TEST_ASSERT_NOT_NULL(p_error);
   TEST_ASSERT_EQUAL(3, length);
   TEST_ASSERT_EQUAL(PROT_MSGTYPE_ERROR, p_error->msg_type);
-  TEST_ASSERT_EQUAL(ERROR_PROT_INVALIDMSGTYPE, p_error->error_id);
+  TEST_ASSERT_EQUAL(ERROR_PROT_INVALIDCOMMANDID, p_error->error_id);
 }
 
 //--------------------------------------------------------------------+
