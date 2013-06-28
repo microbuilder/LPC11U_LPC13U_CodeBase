@@ -143,6 +143,11 @@ void prot_task(void * p_para)
     }
 
     //------------- response phase -------------//
+//    uint32_t start_time = delayGetSecondsActive();
+//    while (  )
+    // TODO make sure usb command is ready to send
+    // in case there are a bunch of cmd queued in fifo
+
     if (error == ERROR_NONE)
     {
       if (prot_cmd_executed_cb)
