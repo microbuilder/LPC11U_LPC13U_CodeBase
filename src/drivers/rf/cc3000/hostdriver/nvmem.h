@@ -78,6 +78,8 @@ extern "C" {
 /* NVMEM file ID - user files*/
 #define NVMEM_AES128_KEY_FILEID	 					(12)
 #define NVMEM_SHARED_MEM_FILEID	 					(13)
+#define NVMEM_USER_FILE_1_FILEID					(14)
+#define NVMEM_VERSION_LENGTH						(5)
 
 /*  max entry in order to invalid nvmem              */
 #define NVMEM_MAX_ENTRY                              (16)

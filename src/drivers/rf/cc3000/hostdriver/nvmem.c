@@ -32,6 +32,9 @@
 *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 *****************************************************************************/
+#include "projectconfig.h"
+
+#ifdef CFG_CC3000
 
 //*****************************************************************************
 //
@@ -337,4 +340,4 @@ nvmem_create_entry(unsigned long ulFileId, unsigned long ulNewLen)
 //! @}
 //
 //*****************************************************************************
-
+#endif

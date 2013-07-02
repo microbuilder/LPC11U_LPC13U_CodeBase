@@ -36,11 +36,10 @@
 
 #ifdef CFG_CC3000
 
+#include "spi.h"
 #include "hostdriver/hci.h"
 #include "hostdriver/evnt_handler.h"
-#include "spi.h"
 #include "core/gpio/gpio.h"
-#include "core/dwt/dwt.h"
 #include "core/delay/delay.h"
 
 #if CFG_CC3000_SPI_PORT == 1
@@ -85,32 +84,22 @@ tSpiInformation sSpiInformation;
 /* Static buffer for 5 bytes of SPI HEADER */
 unsigned char tSpiReadHeader[] = {READ, 0, 0, 0, 0};
 
+/* Function prototypes for private functions */
 void SpiWriteDataSynchronous(unsigned char *data, unsigned short size);
 void SpiWriteAsync(const unsigned char *data, unsigned short size);
 void SpiPauseSpi(void);
 void SpiResumeSpi(void);
 void SSIContReadOperation(void);
 
-// The magic number that resides at the end of the TX/RX buffer (1 byte after the allocated size)
-// for the purpose of detection of the overrun. The location of the memory where the magic number
-// resides shall never be written. In case it is written - the overrun occured and either recevie function
-// or send function will stuck forever.
+/* The magic number that resides at the end of the TX/RX buffer (1 byte after
+ * the allocated size) for the purpose of detection of the overrun. The
+ * location of the memory where the magic number resides shall never be
+ * written. In case it is written - an overrun occured and either receive
+ * function or send function will be stuck forever. */
 #define CC3000_BUFFER_MAGIC_NUMBER (0xDE)
 
-char spi_buffer[CC3000_RX_BUFFER_SIZE];
+char          spi_buffer[CC3000_RX_BUFFER_SIZE];
 unsigned char wlan_tx_buffer[CC3000_TX_BUFFER_SIZE];
-
-/* Mandatory functions are:
-    - SpiOpen
-    - SpiWrite
-    - SpiRead
-    - SpiClose
-    - SpiResumeSpi
-    - sReadWlanInterruptPin
-    - sWlanInterruptEnable
-    - sWlanInterruptDisable
-    - sWriteWlanPin
- */
 
 /**************************************************************************/
 /*!
@@ -140,12 +129,12 @@ void SpiOpen(gcSpiHandleRx pfRxHandler)
   memset(spi_buffer, 0, sizeof(spi_buffer));
   memset(wlan_tx_buffer, 0, sizeof(spi_buffer));
 
-  sSpiInformation.SPIRxHandler = pfRxHandler;
-  sSpiInformation.usTxPacketLength = 0;
-  sSpiInformation.pTxPacket = NULL;
-  sSpiInformation.pRxPacket = (unsigned char *)spi_buffer;
-  sSpiInformation.usRxPacketLength = 0;
-  spi_buffer[CC3000_RX_BUFFER_SIZE - 1] = CC3000_BUFFER_MAGIC_NUMBER;
+  sSpiInformation.SPIRxHandler              = pfRxHandler;
+  sSpiInformation.usTxPacketLength          = 0;
+  sSpiInformation.pTxPacket                 = NULL;
+  sSpiInformation.pRxPacket                 = (unsigned char *)spi_buffer;
+  sSpiInformation.usRxPacketLength          = 0;
+  spi_buffer[CC3000_RX_BUFFER_SIZE - 1]     = CC3000_BUFFER_MAGIC_NUMBER;
   wlan_tx_buffer[CC3000_TX_BUFFER_SIZE - 1] = CC3000_BUFFER_MAGIC_NUMBER;
 
   /* Enable interrupt on the GPIO pin of WLAN IRQ */
@@ -165,23 +154,21 @@ int init_spi(void)
     ssp0Init();
   #endif
 
-  /* Set VBAT EN pin to output */
+  /* Set POWER_EN pin to output */
   LPC_GPIO->DIR[CFG_CC3000_EN_PORT] |= (1 << CFG_CC3000_EN_PIN);
-  LPC_GPIO->SET[CFG_CC3000_EN_PORT]  = (1 << CFG_CC3000_EN_PIN);
+  LPC_GPIO->CLR[CFG_CC3000_EN_PORT]  = (1 << CFG_CC3000_EN_PIN);
   delay(100);
 
   /* Set CS pin to output */
   LPC_GPIO->DIR[CFG_CC3000_CS_PORT] |= (1 << CFG_CC3000_CS_PIN);
   CC3000_DEASSERT_CS;
 
-  /* Set interrupt/gpio pin to input */
-  LPC_GPIO->DIR[CFG_CC3000_IRQ_PORT]  &= ~(1 << CFG_CC3000_IRQ_PIN);
-
+  /* Setup the interrupt pin */
+  LPC_GPIO->DIR[CFG_CC3000_IRQ_PORT] &= ~(1 << CFG_CC3000_IRQ_PIN);
   /* Channel 2, sense (0=edge, 1=level), polarity (0=low/falling, 1=high/rising) */
-  GPIOSetPinInterrupt( 2, CFG_CC3000_IRQ_PORT, CFG_CC3000_IRQ_PIN, 0, 1 );
-
-  /* Enable interrupt 2 on falling edge */
-  GPIOPinIntEnable( 2, 0 );
+  GPIOSetPinInterrupt( 2, CFG_CC3000_IRQ_PORT, CFG_CC3000_IRQ_PIN, 0, 0 );
+  /* Disable interrupt 2 on falling edge */
+  GPIOPinIntDisable(2, 0);
 
   return(ESUCCESS);
 }
@@ -196,13 +183,10 @@ long SpiFirstWrite(unsigned char *ucBuf, unsigned short usLength)
   /* Workaround for the first transaction */
   CC3000_ASSERT_CS;
 
-  /* Delay (stay low) for ~50us */
-  dwtDelay((SystemCoreClock / 1000000) * 50);
-
   /* SPI writes first 4 bytes of data */
+  delay(1);
   SpiWriteDataSynchronous(ucBuf, 4);
-
-  dwtDelay((SystemCoreClock / 1000000) * 50);
+  delay(1);
 
   SpiWriteDataSynchronous(ucBuf + 4, usLength - 4);
 
@@ -223,7 +207,8 @@ long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength)
 {
   unsigned char ucPad = 0;
 
-  /* Figure out the total length of the packet in order to figure out if there is padding or not */
+  /* Figure out the total length of the packet in order to figure out if
+   * there is padding or not */
   if(!(usLength & 0x0001))
   {
     ucPad++;
@@ -237,9 +222,11 @@ long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength)
 
   usLength += (SPI_HEADER_SIZE + ucPad);
 
-  /* The magic number that resides at the end of the TX/RX buffer (1 byte after the allocated size)
-   * for the purpose of overrun detection. If the magic number is overwritten - buffer overrun
-   * occurred - and we will be stuck here forever! */
+/* The magic number that resides at the end of the TX/RX buffer (1 byte after
+ * the allocated size) for the purpose of detection of the overrun. The
+ * location of the memory where the magic number resides shall never be
+ * written. In case it is written - an overrun occured and either receive
+ * function or send function will be stuck forever. */
   if (wlan_tx_buffer[CC3000_TX_BUFFER_SIZE - 1] != CC3000_BUFFER_MAGIC_NUMBER)
   {
     while (1);
@@ -252,13 +239,15 @@ long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength)
 
   if (sSpiInformation.ulSpiState == eSPI_STATE_INITIALIZED)
   {
-    /* This is time for first TX/RX transactions over SPI: the IRQ is down - so need to send read buffer size command */
+    /* This is time for first TX/RX transactions over SPI: the IRQ is down
+     * - so we need to send read buffer size command */
     SpiFirstWrite(pUserBuffer, usLength);
   }
   else
   {
-    /* We need to prevent here race that can occur in case two back to back packets are sent to the
-     * device, so the state will move to IDLE and once again to not IDLE due to IRQ */
+    /* We need to prevent a race condition here that can occur in case two
+     * back to back packets are senr to the device, so the state will move
+     * to IDLE and once again to not IDLE due to IRQ */
     tSLInformation.WlanInterruptDisable();
 
     while (sSpiInformation.ulSpiState != eSPI_STATE_IDLE);
@@ -267,13 +256,15 @@ long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength)
     sSpiInformation.pTxPacket = pUserBuffer;
     sSpiInformation.usTxPacketLength = usLength;
 
-    /* Assert the CS line and wait till SSI IRQ line is active and then initialize write operation */
+    /* Assert the CS line and wait till SSI IRQ line is active and then
+     * initialize write operation */
     CC3000_ASSERT_CS;
 
     /* Re-enable IRQ - if it was not disabled - this is not a problem... */
     tSLInformation.WlanInterruptEnable();
 
-    /* Check for a missing interrupt between the CS assertion and enabling back the interrupts */
+    /* Check for a missing interrupt between the CS assertion and re-enabling
+     * the interrupts */
     if (tSLInformation.ReadWlanInterruptPin() == 0)
     {
       SpiWriteDataSynchronous(sSpiInformation.pTxPacket, sSpiInformation.usTxPacketLength);
@@ -298,8 +289,7 @@ long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength)
 /**************************************************************************/
 void SpiWriteDataSynchronous(unsigned char *data, unsigned short size)
 {
-  unsigned char dummy;
-
+  unsigned char dummy = dummy;
   while (size)
   {
     /* TX */
@@ -317,7 +307,7 @@ void SpiWriteDataSynchronous(unsigned char *data, unsigned short size)
       LPC_SSP1->DR = dummy;
     #else
       while ( (LPC_SSP0->SR & (SSP0_SR_BSY_BUSY|SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
-      LPC_SSP0->DR = dummy;
+      dummy = LPC_SSP0->DR ;
     #endif
 
     size --;
@@ -386,7 +376,7 @@ long SpiReadDataCont(void)
   {
     case HCI_TYPE_DATA:
       {
-        /* We need to read the rest of data.. */
+        /* We need to read the rest of the data.. */
         STREAM_TO_UINT16((char *)(evnt_buff + SPI_HEADER_SIZE), HCI_DATA_LENGTH_OFFSET, data_to_recv);
         if (!((HEADERS_SIZE_EVNT + data_to_recv) & 1))
         {
@@ -401,7 +391,7 @@ long SpiReadDataCont(void)
       }
     case HCI_TYPE_EVNT:
       {
-        /* Calculate the rest length of the data */
+        /* Calculate the length of the data */
         STREAM_TO_UINT8((char *)(evnt_buff + SPI_HEADER_SIZE), HCI_EVENT_LENGTH_OFFSET, data_to_recv);
         data_to_recv -= 1;
 
@@ -455,9 +445,11 @@ void SpiTriggerRxProcessing(void)
   SpiPauseSpi();
   CC3000_DEASSERT_CS;
 
-  /* The magic number that resides at the end of the TX/RX buffer (1 byte after the allocated size)
-   * for the purpose of detection of the overrun. If the magic number is overriten - buffer overrun
-   * occurred - and we will stuck here forever! */
+  /* The magic number that resides at the end of the TX/RX buffer (1 byte after
+   * the allocated size) for the purpose of detection of the overrun. The
+   * location of the memory where the magic number resides shall never be
+   * written. In case it is written - an overrun occured and either receive
+   * function or send function will be stuck forever. */
   if (sSpiInformation.pRxPacket[CC3000_RX_BUFFER_SIZE - 1] != CC3000_BUFFER_MAGIC_NUMBER)
   {
     /* You've got problems if you're here! */
@@ -475,11 +467,11 @@ void SpiTriggerRxProcessing(void)
 /**************************************************************************/
 void SSIContReadOperation(void)
 {
-  /* The header was read - continue with  the payload read */
+  /* The header was read - continue with the payload read */
   if (!SpiReadDataCont())
   {
-    /* All the data was read - finalize handling by switching to teh task
-     *  and calling from task Event Handler */
+    /* All the data was read - finalize handling by switching to the task
+     *  and calling from task event handler */
     SpiTriggerRxProcessing();
   }
 }
@@ -520,7 +512,7 @@ void PIN_INT2_IRQHandler(void)
         /* IRQ line goes down - start reception */
         CC3000_ASSERT_CS;
 
-        // Wait for TX/RX Compete which will come as DMA interrupt
+        /* Wait for TX/RX Compete which will come as DMA interrupt */
         SpiReadHeader();
 
         sSpiInformation.ulSpiState = eSPI_STATE_READ_EOT;
@@ -542,5 +534,7 @@ void PIN_INT2_IRQHandler(void)
   }
   return;
 }
+
+
 
 #endif

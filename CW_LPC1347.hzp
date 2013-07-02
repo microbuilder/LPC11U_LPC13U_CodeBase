@@ -161,6 +161,20 @@
               <file file_name="src/drivers/rf/pn532/mem_allocator/pn532_mem.c"/>
             </folder>
           </folder>
+          <folder Name="cc3000" file_name="">
+            <folder Name="hostdriver" file_name="">
+              <file file_name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/security.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
+            </folder>
+            <file file_name="src/drivers/rf/cc3000/spi.c"/>
+            <file file_name="src/drivers/rf/cc3000/wifi.c"/>
+          </folder>
         </folder>
         <folder Name="storage" file_name="">
           <folder Name="fatfs">
@@ -254,6 +268,7 @@
           <file file_name="src/cli/commands/cmd_rtc_read.c"/>
           <file file_name="src/cli/commands/cmd_rtc_write.c"/>
           <file file_name="src/cli/commands/cmd_nfc_mfc_ndef.c"/>
+          <file file_name="src/cli/commands/cmd_wifi.c"/>
         </folder>
         <file file_name="src/cli/cli_tbl.h"/>
         <file file_name="src/cli/commands.c"/>

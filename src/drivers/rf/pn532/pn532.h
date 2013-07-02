@@ -180,7 +180,7 @@ pn532_state_t;
 /* PN532 Protocol control block */
 typedef struct
 {
-  BOOL                initialised;
+  bool                initialised;
   pn532_state_t       state;
   pn532_modulation_t  modulation;
   uint32_t            lastCommand;

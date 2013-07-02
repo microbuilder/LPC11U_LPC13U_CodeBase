@@ -32,6 +32,9 @@
 *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 *****************************************************************************/
+#include "projectconfig.h"
+
+#ifdef CFG_CC3000
 
 //*****************************************************************************
 //
@@ -596,8 +599,8 @@ connect(long sd, const sockaddr *addr, long addrlen)
 //*****************************************************************************
 
 int
-select(long nfds, fd_set *readsds, fd_set *writesds, fd_set *exceptsds, 
-       struct timeval *timeout)
+select(long nfds, cc3000_fd_set *readsds, cc3000_fd_set *writesds,
+       cc3000_fd_set *exceptsds, struct timeval *timeout)
 {
 	unsigned char *ptr, *args;
 	tBsdSelectRecvParams tParams;
@@ -985,6 +988,7 @@ simple_link_send(long sd, const void *buf, long len, long flags,
 	unsigned char *ptr, *pDataPtr, *args;
 	unsigned long addr_offset;
 	int res;
+        tBsdReadReturnParams tSocketSendEvent;
 	
 	// Check the bsd_arguments
 	if (0 != (res = HostFlowControlConsumeBuff(sd)))
@@ -1049,6 +1053,11 @@ simple_link_send(long sd, const void *buf, long len, long flags,
 	
 	// Initiate a HCI command
 	hci_data_send(opcode, ptr, uArgSize, len,(unsigned char*)to, tolen);
+        
+         if (opcode == HCI_CMND_SENDTO)
+            SimpleLinkWaitEvent(HCI_EVNT_SENDTO, &tSocketSendEvent);
+         else
+            SimpleLinkWaitEvent(HCI_EVNT_SEND, &tSocketSendEvent);
 	
 	return	(len);
 }
@@ -1161,3 +1170,4 @@ mdnsAdvertiser(unsigned short mdnsEnabled, char * deviceServiceName, unsigned sh
 	return ret;
 	
 }
+#endif

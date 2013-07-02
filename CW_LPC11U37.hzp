@@ -158,13 +158,26 @@
               <file file_name="src/drivers/rf/pn532/mem_allocator/pn532_mem.c"/>
             </folder>
           </folder>
+          <folder Name="cc3000" file_name="">
+            <folder Name="hostdriver" file_name="">
+              <file file_name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/security.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
+              <file file_name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
+            </folder>
+            <file file_name="src/drivers/rf/cc3000/spi.c"/>
+            <file file_name="src/drivers/rf/cc3000/wifi.c"/>
+          </folder>
         </folder>
         <folder Name="storage">
           <folder Name="fatfs">
             <file file_name="src/drivers/storage/fatfs/ccsbcs.c">
               <configuration Name="THUMB Flash Release" build_exclude_from_build="Yes"/>
               <configuration Name="THUMB Flash Debug" build_exclude_from_build="Yes"/>
-              <configuration Name="Test" build_exclude_from_build="Yes"/>
             </file>
             <file file_name="src/drivers/storage/fatfs/ff.c"/>
             <file file_name="src/drivers/storage/fatfs/mmc.c"/>
@@ -252,6 +265,7 @@
           <file file_name="src/cli/commands/cmd_rtc_read.c"/>
           <file file_name="src/cli/commands/cmd_rtc_write.c"/>
           <file file_name="src/cli/commands/cmd_nfc_mfc_ndef.c"/>
+          <file file_name="src/cli/commands/cmd_wifi.c"/>
         </folder>
         <file file_name="src/cli/cli_tbl.h"/>
         <file file_name="src/cli/commands.c"/>
@@ -301,6 +315,7 @@
         <folder Name="commands" file_name="">
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
         </folder>
+        <file file_name="src/protocol/prot_cmdtable.h"/>
       </folder>
       <file file_name="src/fixed.h"/>
     </folder>
@@ -318,24 +333,6 @@
       <file file_name="cmsis/system_LPC11Uxx.h"/>
       <file file_name="cmsis/RTX_hook.c"/>
     </folder>
-    <folder Name="Test Files" file_name="">
-      <file file_name="tests/test_fifo.c"/>
-      <file file_name="tests/test_main.c"/>
-      <folder Name="unity" file_name="">
-        <file file_name="tests/unity/src/unity.c"/>
-        <file file_name="tests/unity/src/unity.h"/>
-        <file file_name="tests/unity/src/unity_internals.h"/>
-        <file file_name="tests/unity/extras/fixture/src/unity_fixture.c"/>
-      </folder>
-      <configuration Name="THUMB Flash Release" build_exclude_from_build="Yes"/>
-      <configuration Name="THUMB Flash Debug" build_exclude_from_build="Yes"/>
-      <file file_name="tests/test_rtc.c"/>
-      <file file_name="tests/test_ndef.c"/>
-      <file file_name="tests/test_timespan.c"/>
-      <file file_name="tests/test_fixed.c"/>
-      <file file_name="tests/test_iir.c"/>
-      <file file_name="tests/test_sma.c"/>
-    </folder>
   </project>
   <configuration Name="THUMB Flash Debug" inherited_configurations="THUMB;Flash;Debug"/>
   <configuration Name="THUMB" Platform="ARM" arm_instruction_set="THUMB" arm_library_instruction_set="THUMB" c_preprocessor_definitions="__THUMB" hidden="Yes"/>
@@ -344,5 +341,4 @@
   <configuration Name="THUMB Flash Release" inherited_configurations="THUMB;Flash;Release"/>
   <configuration Name="Release" c_preprocessor_definitions="NDEBUG;STARTUP_FROM_RESET" gcc_debugging_level="Level 1" gcc_optimization_level="Optimize For Size" hidden="Yes"/>
   <configuration Name="Common" arm_gcc_target="arm-unknown-eabi" arm_linker_allow_multiple_definition="Yes" c_preprocessor_definitions="CFG_BRD_RF1GHZNODE;ARM_MATH_CM0" c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/" linker_printf_fp_enabled="Yes"/>
-  <configuration Name="Test" c_preprocessor_definitions="_TEST_" c_user_include_directories=".;$(ProjectDir)/tests/unity/extras/fixture/src/;$(ProjectDir)/tests/unity/src/" inherited_configurations="Debug;Flash;THUMB"/>
 </solution>

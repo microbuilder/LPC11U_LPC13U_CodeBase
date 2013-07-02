@@ -17,6 +17,8 @@
           <File Name="src/drivers/storage/fatfs/integer.h"/>
           <File Name="src/drivers/storage/fatfs/mmc.c"/>
         </VirtualDirectory>
+        <File Name="src/drivers/storage/logger.c"/>
+        <File Name="src/drivers/storage/logger.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="sensors">
         <VirtualDirectory Name="accelerometers">
@@ -26,6 +28,8 @@
           <File Name="src/drivers/sensors/accelerometers/lis3dh.h"/>
           <File Name="src/drivers/sensors/accelerometers/lsm303accel.c"/>
           <File Name="src/drivers/sensors/accelerometers/lsm303accel.h"/>
+          <File Name="src/drivers/sensors/accelerometers/accelerometers.c"/>
+          <File Name="src/drivers/sensors/accelerometers/accelerometers.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="gyroscopes">
           <File Name="src/drivers/sensors/gyroscopes/l3gd20.c"/>
@@ -38,6 +42,8 @@
         <VirtualDirectory Name="magnetometers">
           <File Name="src/drivers/sensors/magnetometers/lsm303mag.c"/>
           <File Name="src/drivers/sensors/magnetometers/lsm303mag.h"/>
+          <File Name="src/drivers/sensors/magnetometers/magnetometers.c"/>
+          <File Name="src/drivers/sensors/magnetometers/magnetometers.h"/>
         </VirtualDirectory>
         <VirtualDirectory Name="pressure">
           <File Name="src/drivers/sensors/pressure/bmp085.c"/>
@@ -51,6 +57,8 @@
         </VirtualDirectory>
         <File Name="src/drivers/sensors/sensors.c"/>
         <File Name="src/drivers/sensors/sensors.h"/>
+        <File Name="src/drivers/sensors/sensorpoll.c"/>
+        <File Name="src/drivers/sensors/sensorpoll.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="rtc">
         <VirtualDirectory Name="pcf2129">
@@ -103,6 +111,32 @@
           <File Name="src/drivers/rf/chibi/types.h"/>
           <File Name="src/drivers/rf/chibi/messages.c"/>
           <File Name="src/drivers/rf/chibi/messages.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="cc3000">
+          <VirtualDirectory Name="hostdriver">
+            <File Name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/cc3000_common.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/evnt_handler.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/hci.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/host_driver_version.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/netapp.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/nvmem.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/security.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/security.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/socket.h"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
+            <File Name="src/drivers/rf/cc3000/hostdriver/wlan.h"/>
+          </VirtualDirectory>
+          <File Name="src/drivers/rf/cc3000/spi.c"/>
+          <File Name="src/drivers/rf/cc3000/spi.h"/>
+          <File Name="src/drivers/rf/cc3000/spi_version.h"/>
+          <File Name="src/drivers/rf/cc3000/wifi.c"/>
+          <File Name="src/drivers/rf/cc3000/wifi.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="pwm">
@@ -220,17 +254,27 @@
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="filters">
-        <File Name="src/drivers/filters/avg_d.c"/>
-        <File Name="src/drivers/filters/avg_d.h"/>
-        <File Name="src/drivers/filters/avg_f.c"/>
-        <File Name="src/drivers/filters/avg_f.h"/>
-        <File Name="src/drivers/filters/avg_i.c"/>
-        <File Name="src/drivers/filters/avg_i.h"/>
         <VirtualDirectory Name="iir">
           <File Name="src/drivers/filters/iir/iir_f.c"/>
           <File Name="src/drivers/filters/iir/iir_f.h"/>
           <File Name="src/drivers/filters/iir/iir_i.c"/>
           <File Name="src/drivers/filters/iir/iir_i.h"/>
+          <File Name="src/drivers/filters/iir/iir_u16.c"/>
+          <File Name="src/drivers/filters/iir/iir_u16.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="ma">
+          <File Name="src/drivers/filters/ma/sma_f.c"/>
+          <File Name="src/drivers/filters/ma/sma_f.h"/>
+          <File Name="src/drivers/filters/ma/sma_i.c"/>
+          <File Name="src/drivers/filters/ma/sma_i.h"/>
+          <File Name="src/drivers/filters/ma/sma_u16.c"/>
+          <File Name="src/drivers/filters/ma/sma_u16.h"/>
+          <File Name="src/drivers/filters/ma/wma_f.c"/>
+          <File Name="src/drivers/filters/ma/wma_f.h"/>
+          <File Name="src/drivers/filters/ma/wma_i.c"/>
+          <File Name="src/drivers/filters/ma/wma_i.h"/>
+          <File Name="src/drivers/filters/ma/wma_u16.c"/>
+          <File Name="src/drivers/filters/ma/wma_u16.h"/>
         </VirtualDirectory>
       </VirtualDirectory>
       <File Name="src/drivers/timespan.c"/>
@@ -329,6 +373,10 @@
       <VirtualDirectory Name="iap">
         <File Name="src/core/iap/iap.c"/>
       </VirtualDirectory>
+      <VirtualDirectory Name="debug">
+        <File Name="src/core/debug/debug.c"/>
+        <File Name="src/core/debug/debug.h"/>
+      </VirtualDirectory>
     </VirtualDirectory>
     <VirtualDirectory Name="cli">
       <VirtualDirectory Name="commands">
@@ -347,6 +395,7 @@
         <File Name="src/cli/commands/cmd_rtc_write.c"/>
         <File Name="src/cli/commands/cmd_sd_dir.c"/>
         <File Name="src/cli/commands/cmd_sysinfo.c"/>
+        <File Name="src/cli/commands/cmd_wifi.c"/>
       </VirtualDirectory>
       <File Name="src/cli/ansi.h"/>
       <File Name="src/cli/cli.c"/>
@@ -357,12 +406,28 @@
     </VirtualDirectory>
     <VirtualDirectory Name="boards">
       <File Name="src/boards/board.h"/>
-      <File Name="src/boards/lpcnfc/board_lpcnfc.c"/>
-      <File Name="src/boards/lpcnfc/board_lpcnfc.h"/>
-      <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
-      <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
-      <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
-      <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
+      <VirtualDirectory Name="lpcnfc">
+        <File Name="src/boards/lpcnfc/board_lpcnfc.c"/>
+        <File Name="src/boards/lpcnfc/board_lpcnfc.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="lpcstepper">
+        <File Name="src/boards/lpcstepper/board_lpcstepper.c"/>
+        <File Name="src/boards/lpcstepper/board_lpcstepper.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="lpcxpresso1347">
+        <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
+        <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
+        <File Name="src/boards/lpcxpresso1347/board_lpcxpresso1347_rtxconf.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="rf1ghznode">
+        <File Name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
+        <File Name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
+        <File Name="src/boards/rf1ghznode/board_rf1ghznode_rtxconf.h"/>
+      </VirtualDirectory>
+      <VirtualDirectory Name="rf1ghzusb">
+        <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.c"/>
+        <File Name="src/boards/rf1ghzusb/board_rf1ghzusb.h"/>
+      </VirtualDirectory>
     </VirtualDirectory>
     <VirtualDirectory Name="localisation">
       <File Name="src/localisation/localisation.c"/>

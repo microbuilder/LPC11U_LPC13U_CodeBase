@@ -46,7 +46,7 @@
 
 /* Memory pool for dynamic memory allocator */
 static uint32_t _pn532_mem_pool[CFG_PN532_MEM_POOL_SIZE_BYTES/4];
-static BOOL     _pn532_mem_initialised = FALSE;
+static bool     _pn532_mem_initialised = FALSE;
 
 /**************************************************************************/
 /*!

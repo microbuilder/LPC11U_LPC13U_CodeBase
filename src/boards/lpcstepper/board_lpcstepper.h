@@ -136,6 +136,7 @@ extern "C" {
     #define CFG_ENABLE_I2C
     #define CFG_ENABLE_UART
     #define CFG_ENABLE_USB
+    #define CFG_ENABLE_TIMER32
 /*=========================================================================*/
 
 
@@ -368,6 +369,13 @@ extern "C" {
                               parser will be included
     -----------------------------------------------------------------------*/
     // #define CFG_PROTOCOL
+
+    // #define CFG_PROTOCOL_VIA_HID
+    #define CFG_PROTOCOL_VIA_BULK
+
+    #if defined(CFG_PROTOCOL) && !defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_PROTOCOL_VIA_BULK)
+        #error CFG_PROTOCOL must be enabled with either CFG_PROTOCOL_VIA_HID or CFG_PROTOCOL_VIA_BULK
+    #endif
 /*=========================================================================*/
 
 
@@ -593,14 +601,16 @@ extern "C" {
 
       // #define CFG_USB_MSC
 
+      // #define CFG_USB_CUSTOM_CLASS
+
       #if (defined(CFG_USB_CDC)       || defined(CFG_USB_HID_KEYBOARD) || \
            defined(CFG_USB_HID_MOUSE) || defined(CFG_USB_HID_GENERIC)  || \
-           defined(CFG_USB_MSC))
+           defined(CFG_USB_MSC)       || defined(CFG_USB_CUSTOM_CLASS))
         #define CFG_USB
         #if defined(CFG_USB_HID_KEYBOARD) || defined(CFG_USB_HID_MOUSE) || defined(CFG_USB_HID_GENERIC)
           #define CFG_USB_HID
           #if defined(CFG_USB_HID_GENERIC) && (CFG_USB_HID_GENERIC_REPORT_SIZE > 64)
-            #error "CFG_USB_HID_GENERIC_REPORT_SIZE exceed the maximum value of 64 bytes (based on USB specs 2.0 for FullSpeed Interrupt Endpoint Size)"
+            #error "CFG_USB_HID_GENERIC_REPORT_SIZE exceeds the maximum value of 64 bytes (based on USB specs 2.0 for 'Full Speed Interrupt Endpoint Size')"
           #endif
         #endif
       #endif
@@ -615,7 +625,7 @@ extern "C" {
     enabled at the same time, etc.
 
     -----------------------------------------------------------------------*/
-    #if defined(CFG_INTERFACE) && !( defined CFG_PRINTF_UART || defined CFG_PRINTF_USBCDC || defined CFG_PRINTF_DEBUG )
+    #if defined(CFG_INTERFACE) && !( defined CFG_PRINTF_UART || defined CFG_PRINTF_USBCDC || defined CFG_PRINTF_DEBUG)
       #error "At least one CFG_PRINTF target must be defined with CFG_INTERFACE"
     #endif
 
@@ -629,6 +639,16 @@ extern "C" {
 
     #if defined(CFG_USB_MSC) && !defined(CFG_SDCARD)
       #error "CFG_USB_MSC must be defined with CFG_SDCARD"
+    #endif
+
+    #if defined(CFG_PROTOCOL)
+      #if defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_USB_HID_GENERIC)
+        #error "CFG_PROTOCOL_VIA_HID requires CFG_USB_HID_GENERIC"
+      #endif
+
+      #if defined(CFG_PROTOCOL_VIA_BULK) && !defined(CFG_USB_CUSTOM_CLASS)
+        #error "CFG_PROTOCOL_VIA_BULK requires CFG_USB_CUSTOM_CLASS to be defined"
+      #endif
     #endif
 /*=========================================================================*/
 

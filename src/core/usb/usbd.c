@@ -66,8 +66,7 @@ volatile static bool isConfigured = false;
   /* default memory map so just point to the address for now */
   uint8_t *usb_RomDriver_buffer = (uint8_t*)0x20004800;
 #else
-  /* Use shared 8KB SRAM for now with other toolchains. */
-  uint8_t usb_RomDriver_buffer[USB_ROM_SIZE] ALIGNED(2048);
+  uint8_t *usb_RomDriver_buffer = (uint8_t*)0x20004800;
 #endif
 
 USBD_HANDLE_T g_hUsb;

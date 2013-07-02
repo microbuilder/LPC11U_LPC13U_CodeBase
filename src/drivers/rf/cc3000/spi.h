@@ -32,8 +32,6 @@
 *  OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 *
 *****************************************************************************/
-
-
 #ifndef __SPI_H__
 #define __SPI_H__
 
@@ -50,11 +48,6 @@ typedef void (*gcSpiHandleTx)(void);
 
 extern unsigned char wlan_tx_buffer[];
 
-//*****************************************************************************
-//
-// Prototypes for the APIs.
-//
-//*****************************************************************************
 extern void SpiOpen(gcSpiHandleRx pfRxHandler);
 extern void SpiClose(void);
 extern long SpiWrite(unsigned char *pUserBuffer, unsigned short usLength);
@@ -63,11 +56,7 @@ extern void SpiCleanGPIOISR(void);
 extern int  init_spi(void);
 extern long TXBufferIsEmpty(void);
 extern long RXBufferIsEmpty(void);
-//*****************************************************************************
-//
-// Mark the end of the C bindings section for C++ compilers.
-//
-//*****************************************************************************
+
 #ifdef  __cplusplus
 }
 #endif // __cplusplus

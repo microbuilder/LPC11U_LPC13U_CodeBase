@@ -222,7 +222,7 @@ typedef struct _uart_buffer_t
 // UART Protocol control block
 typedef struct _uart_pcb_t
 {
-  BOOL initialised;
+  bool initialised;
   uint32_t baudrate;
   uint32_t status;
   uint32_t pending_tx_data;

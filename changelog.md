@@ -14,6 +14,12 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - USB HID now shares the same API as USB custom class calls to make it easier to switch
 - Various improvements to the simple binary protocol
 - Removed unity tests (/tests) to make room for ceedling native tests (/tests_host)
+- Removed Keil project files since it's too much of a headache to maintain
+- Reorganised errors.h (certains numeric values were changed)
+- Updated board config files for USB/Protocol additions
+- Added CFG\_ENABLE\_TIMER32 to disable TIMER32 (interrupt handlers use a lot of flash/SRAM)
+- CC3000 support added (experimental, see note below!)
+- **KNOWN ISSUE**: There's a truckload of issues with the CC3000 API from TI!  It can't currently be built using the makefile, and is CW only at the moment. Be sure to disable CFG_CC3000 in our board config file until these issues can all be resolved!
 
 ## 0.8.6 [14 June 2013] ##
 

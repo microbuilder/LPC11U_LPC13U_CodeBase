@@ -2,20 +2,22 @@
 # User configuration and firmware specific object files	
 ##########################################################################
 
-PROJECT=firmware
+FILENAME=firmware
 
-# See projectconfig.h for a list of valid board options!
-BOARD=CFG_BRD_RF1GHZNODE
-TARGET = lpc11u
+# See projectconfig.h for a list of valid BOARD options!
+BOARD=CFG_BRD_LPCXPRESSO_LPC1347
 
+# Set TARGET to 'lpc11u' or 'lpc13u' depending on the target MCU
+TARGET = lpc13u
 ifeq (lpc11u,$(TARGET))
   CORE = cortex-m0
-  LDSCRIPT = cmsis/lpc11U37.ld
+  LDSCRIPT = cmsis/lpc11u37.ld
 else
   CORE = cortex-m3
   LDSCRIPT = cmsis/lpc1347.ld
 endif
 
+# Set OPTIMIZATION to '0', '1', '2', '3' or 's'
 OPTIMIZATION = s
 
 ##########################################################################
@@ -76,6 +78,7 @@ OBJS  += $(OBJ_PATH)/cmd_rtc_read.o
 OBJS  += $(OBJ_PATH)/cmd_rtc_write.o
 OBJS  += $(OBJ_PATH)/cmd_sd_dir.o
 OBJS  += $(OBJ_PATH)/cmd_sysinfo.o
+OBJS  += $(OBJ_PATH)/cmd_wifi.o
 
 VPATH += src/core/adc
 OBJS  += $(OBJ_PATH)/adc.o
@@ -126,8 +129,8 @@ OBJS  += $(OBJ_PATH)/uart_buf.o
 
 VPATH += src/core/usb
 OBJS  += $(OBJ_PATH)/descriptors.o 
-OBJS  += $(OBJ_PATH)/usb_custom_class.o
 OBJS  += $(OBJ_PATH)/usb_cdc.o 
+OBJS  += $(OBJ_PATH)/usb_custom_class.o
 OBJS  += $(OBJ_PATH)/usb_hid.o 
 OBJS  += $(OBJ_PATH)/usb_msc.o 
 OBJS  += $(OBJ_PATH)/usbd.o
@@ -183,11 +186,38 @@ OBJS  += $(OBJ_PATH)/hx8340b.o
 VPATH += src/drivers/displays/segment/ht16k33
 OBJS  += $(OBJ_PATH)/ht16k33.o
 
+VPATH += src/drivers/filters/iir
+OBJS  += $(OBJ_PATH)/iir_f.o
+OBJS  += $(OBJ_PATH)/iir_i.o
+OBJS  += $(OBJ_PATH)/iir_u16.o
+
+VPATH += src/drivers/filters/ma
+OBJS  += $(OBJ_PATH)/sma_f.o 
+OBJS  += $(OBJ_PATH)/sma_i.o 
+OBJS  += $(OBJ_PATH)/sma_u16.o
+OBJS  += $(OBJ_PATH)/wma_f.o 
+OBJS  += $(OBJ_PATH)/wma_i.o 
+OBJS  += $(OBJ_PATH)/wma_u16.o
+
 VPATH += src/drivers/motor/stepper
 OBJS  += $(OBJ_PATH)/stepper.o
 
 VPATH += src/drivers/pwm/pca9685
 OBJS  += $(OBJ_PATH)/pca9685.o
+
+VPATH += src/drivers/rf/cc3000
+OBJS  += $(OBJ_PATH)/spi.o 
+OBJS  += $(OBJ_PATH)/wifi.o 
+
+VPATH += src/drivers/rf/cc3000/hostdriver
+OBJS  += $(OBJ_PATH)/cc3000_common.o 
+OBJS  += $(OBJ_PATH)/evnt_handler.o 
+OBJS  += $(OBJ_PATH)/hci.o 
+OBJS  += $(OBJ_PATH)/netapp.o 
+OBJS  += $(OBJ_PATH)/nvmem.o 
+OBJS  += $(OBJ_PATH)/security.o 
+OBJS  += $(OBJ_PATH)/socket.o 
+OBJS  += $(OBJ_PATH)/wlan.o 
 
 VPATH += src/drivers/rf/chibi
 OBJS  += $(OBJ_PATH)/chb.o 
@@ -248,18 +278,6 @@ OBJS  += $(OBJ_PATH)/mpl115a2.o
 VPATH += src/drivers/sensors/temperature
 OBJS  += $(OBJ_PATH)/lm75b.o
 
-VPATH += src/drivers/filters/iir
-OBJS  += $(OBJ_PATH)/iir_f.o
-OBJS  += $(OBJ_PATH)/iir_i.o
-
-VPATH += src/drivers/filters/ma
-OBJS  += $(OBJ_PATH)/sma_f.o 
-OBJS  += $(OBJ_PATH)/sma_i.o 
-OBJS  += $(OBJ_PATH)/sma_u16.o
-OBJS  += $(OBJ_PATH)/wma_f.o 
-OBJS  += $(OBJ_PATH)/wma_i.o 
-OBJS  += $(OBJ_PATH)/wma_u16.o
-
 VPATH += src/drivers/storage
 OBJS  += $(OBJ_PATH)/logger.o 
 
@@ -290,7 +308,7 @@ INCLUDE_PATHS = -I$(ROOT_PATH) -Icmsis
 # Use the default toolchain (based on the PATH variable, etc.)
 CROSS_COMPILE ?= arm-none-eabi-
 
-# Use a toolchain at a specific location
+# OR ... use a toolchain at a specific location
 # CROSS_COMPILE = C:/code_red/RedSuiteNXP_5.0.12_1048/redsuite/tools/bin/arm-none-eabi-
 # CROSS_COMPILE = C:/arm/gnu4.7.2012.q4/bin/arm-none-eabi-
 
@@ -300,7 +318,7 @@ LD           = $(CROSS_COMPILE)gcc
 SIZE         = $(CROSS_COMPILE)size
 OBJCOPY      = $(CROSS_COMPILE)objcopy
 OBJDUMP      = $(CROSS_COMPILE)objdump
-OUTFILE      = $(BIN_PATH)/$(PROJECT)
+OUTFILE      = $(BIN_PATH)/$(FILENAME)
 LPCRC       ?= tools/lpcrc/lpcrc
 REMOVE       = rm -f
 MOUNT_POINT ?= /media/CRP DISABLD
@@ -390,7 +408,7 @@ $(OBJ_PATH)/%.o : %.s
 firmware: $(OBJS) $(SYS_OBJS)
 	@mkdir -p $(BIN_PATH)
 	-@echo ""
-	-@echo "LINKING $(OUTFILE).elf ($(CORE) -O$(OPTIMIZATION))"
+	-@echo "LINKING $(OUTFILE).elf ($(CORE) -O$(OPTIMIZATION) $(BOARD))"
 	@$(LD) $(LDFLAGS) -o $(OUTFILE).elf $(LDLIBS) $(OBJS) $(LDLIBS)
 	-@echo ""
 	@$(SIZE) $(OUTFILE).elf

@@ -214,8 +214,8 @@ void checkForMessages(void)
       printf("Message received from node 0x%04X (len=%d, dBm=%d):%s", rx_data.src_addr, rx_data.len, dbm, CFG_PRINTF_NEWLINE);
       printf("  Message ID:   0x%04X%s", *(uint16_t*)&rx_data.data[0], CFG_PRINTF_NEWLINE);
       printf("  Message Type: 0x%02X%s", *(uint8_t*)&rx_data.data[2], CFG_PRINTF_NEWLINE);
-      printf("  Timestamp:    %d%s", *(uint32_t*)&rx_data.data[3], CFG_PRINTF_NEWLINE);
-      printf("  Payload:      %d bytes%s", *(uint8_t*)&rx_data.data[8], CFG_PRINTF_NEWLINE);
+      printf("  Timestamp:    %u%s", *(unsigned int*)&rx_data.data[3], CFG_PRINTF_NEWLINE);
+      printf("  Payload:      %u bytes%s", *(uint8_t*)&rx_data.data[8], CFG_PRINTF_NEWLINE);
       if (rx_data.data[8])
       {
         uint8_t i;
@@ -501,7 +501,7 @@ int main(void)
 
       /* Send a test message over the air */
       #ifdef CFG_CHIBI
-        sendMessage();
+        // sendMessage();
       #endif
     }
 
@@ -516,7 +516,7 @@ int main(void)
 
     /* Check for incoming wireless messages */
     #ifdef CFG_CHIBI
-      checkForMessages();
+      // checkForMessages();
     #endif
   }
 }

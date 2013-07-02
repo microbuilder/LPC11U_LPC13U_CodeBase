@@ -40,8 +40,6 @@
 extern "C" {
 #endif
 
-#include "projectconfig.h"
-
 void timer32Init       ( uint8_t timer );
 void timer32Enable     ( uint8_t timer );
 void timer32Disable    ( uint8_t timer );

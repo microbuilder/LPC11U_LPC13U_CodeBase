@@ -33,12 +33,11 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#include "timer32.h"
+#include "projectconfig.h"
 
-volatile uint32_t timer32_0_counter[4] = {0,0,0,0};
-volatile uint32_t timer32_1_counter[4] = {0,0,0,0};
-volatile uint32_t timer32_0_capture[4] = {0,0,0,0};
-volatile uint32_t timer32_1_capture[4] = {0,0,0,0};
+#ifdef CFG_ENABLE_TIMER32
+
+#include "timer32.h"
 
 /**************************************************************************/
 /*!
@@ -57,44 +56,36 @@ void CT32B0_IRQHandler(void)
   if (LPC_CT32B0->IR & (0x01 << 0))
   {
     LPC_CT32B0->IR = 0x1 << 0;
-    timer32_0_counter[0]++;
   }
   if (LPC_CT32B0->IR & (0x01 << 1))
   {
     LPC_CT32B0->IR = 0x1 << 1;
-    timer32_0_counter[1]++;
   }
   if (LPC_CT32B0->IR & (0x01 << 2))
   {
     LPC_CT32B0->IR = 0x1 << 2;
-    timer32_0_counter[2]++;
   }
   if (LPC_CT32B0->IR & (0x01 << 3))
   {
     LPC_CT32B0->IR = 0x1 << 3;
-    timer32_0_counter[3]++;
   }
 
   /* Handle capture events */
   if (LPC_CT32B0->IR & (0x1 << 4))
   {
     LPC_CT32B0->IR = 0x1 << 4;
-    timer32_0_capture[0]++;
   }
   if (LPC_CT32B0->IR & (0x1 << 5))
   {
     LPC_CT32B0->IR = 0x1 << 5;
-    timer32_0_capture[1]++;
   }
   if (LPC_CT32B0->IR & (0x1 << 6))
   {
     LPC_CT32B0->IR = 0x1 << 6;
-    timer32_0_capture[2]++;
   }
   if (LPC_CT32B0->IR & (0x1 << 7))
   {
     LPC_CT32B0->IR = 0x1 << 7;
-    timer32_0_capture[3]++;
   }
 
   return;
@@ -117,44 +108,36 @@ void CT32B1_IRQHandler(void)
   if (LPC_CT32B1->IR & (0x01 << 0))
   {
     LPC_CT32B1->IR = 0x1 << 0;
-    timer32_1_counter[0]++;
   }
   if (LPC_CT32B1->IR & (0x01 << 1))
   {
     LPC_CT32B1->IR = 0x1 << 1;
-    timer32_1_counter[1]++;
   }
   if (LPC_CT32B1->IR & (0x01 << 2))
   {
     LPC_CT32B1->IR = 0x1 << 2;
-    timer32_1_counter[2]++;
   }
   if (LPC_CT32B1->IR & (0x01 << 3))
   {
     LPC_CT32B1->IR = 0x1 << 3;
-    timer32_1_counter[3]++;
   }
 
   /* Handle capture events */
   if (LPC_CT32B1->IR & (0x1 << 4))
   {
     LPC_CT32B1->IR = 0x1 << 4;
-    timer32_1_capture[0]++;
   }
   if (LPC_CT32B1->IR & (0x1 << 5))
   {
     LPC_CT32B1->IR = 0x1 << 5;
-    timer32_1_capture[1]++;
   }
   if (LPC_CT32B1->IR & (0x1 << 6))
   {
     LPC_CT32B1->IR = 0x1 << 6;
-    timer32_1_capture[2]++;
   }
   if (LPC_CT32B1->IR & (0x1 << 7))
   {
     LPC_CT32B1->IR = 0x1 << 7;
-    timer32_1_capture[3]++;
   }
 
   return;
@@ -175,11 +158,6 @@ void timer32Init(uint8_t timer)
   if ( timer == 0 )
   {
     LPC_SYSCON->SYSAHBCLKCTRL |= (1<<9);
-    for ( i = 0; i < 4; i++ )
-    {
-      timer32_0_counter[i] = 0;
-      timer32_0_capture[i] = 0;
-    }
     #if defined CFG_MCU_FAMILY_LPC11UXX
     NVIC_EnableIRQ(TIMER_32_0_IRQn);
     #elif defined CFG_MCU_FAMILY_LPC13UXX
@@ -189,11 +167,6 @@ void timer32Init(uint8_t timer)
   else if ( timer == 1 )
   {
     LPC_SYSCON->SYSAHBCLKCTRL |= (1<<10);
-    for ( i = 0; i < 4; i++ )
-    {
-      timer32_1_counter[i] = 0;
-      timer32_1_capture[i] = 0;
-    }
     #if defined CFG_MCU_FAMILY_LPC11UXX
     NVIC_EnableIRQ(TIMER_32_1_IRQn);
     #elif defined CFG_MCU_FAMILY_LPC13UXX
@@ -474,3 +447,5 @@ void timer32SetPWM0(uint32_t period)
   /* Reset on MR0 */
   LPC_CT32B0->MCR = 1 << 1;
 }
+
+#endif

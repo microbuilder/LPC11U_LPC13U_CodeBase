@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     sysdefs.h
+    @file     wifi.h
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
@@ -33,68 +33,38 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef _SYSDEFS_H_
-#define _SYSDEFS_H_
+#ifndef _WIFI_APPLICATION_BASIC_H_
+#define _WIFI_APPLICATION_BASIC_H_
 
-#ifdef __cplusplus
-extern "C" {
-#endif
+#include "projectconfig.h"
 
-#include <stdio.h>
 #include <stdint.h>
-#include <stdbool.h>
 
-typedef unsigned char byte_t;
+#pragma pack(1)
+/**! Stores the results of SSID scans  */
+typedef struct Result_Struct
+{
+  uint32_t  num_networks;
+  uint32_t  scan_status;
+  uint8_t   rssiByte;
+  uint8_t   Sec_ssidLen;
+  uint16_t  time;
+  uint8_t   ssid_name[32];
+  uint8_t   bssid[6];
+} ResultStruct_t;
 
-#ifndef TRUE
-  #define TRUE true
-#endif
-
-#ifndef FALSE
-  #define FALSE false
-#endif
-
-/* ASM and inline function placeholders */
-#ifndef ASM
-  #define ASM __asm volatile
-#endif
-
-#ifndef INLINE
-  #if __GNUC__ && !__GNUC_STDC_INLINE__
-    #define INLINE extern inline
-  #else
-    #define INLINE inline
-  #endif
-#endif
-
-/* GCC does not inline any functions when not optimizing unless you specify
-   the 'always_inline' attribute for the function */
-#ifndef INLINE_POST
-  #define INLINE_POST __attribute__((always_inline))
-#endif
-
-/* SRAM placement for critical functions depends on the linker script */
-#ifdef __GNUC__
-  #ifdef __CROSSWORKS_ARM
-    #define RAMFUNC __attribute__ ((long_call, section (".fast")))
-  #else
-    /* ToDo: Throws 'ignoring changed section attributes for .data' */
-    // #define RAMFUNC __attribute__ ((long_call, section (".data")))
-    /* Hmm ... not working from the makefile ... need to debug! */
-    /* Leave it blank for now unless we're in Crossworks */
-    #define RAMFUNC
-  #endif
-#else
-  #error "No section defined for RAMFUNC in sysdefs.h"
-#endif
-
-/* NULL placeholder */
-#ifndef NULL
-  #define NULL ((void *) 0)
-#endif
-
-#ifdef __cplusplus
-}
-#endif
+error_t  wifi_init(unsigned short cRequestPatch);
+error_t  wifi_getFirmwareVersion(uint8_t *major, uint8_t *minor);
+error_t  wifi_getMacAddress(uint8_t macAddress[6]);
+error_t  wifi_setMacAddress(uint8_t macAddress[6]);
+error_t  wifi_ssidScan(uint32_t time);
+error_t  wifi_displaySSIDResults(void);
+error_t  wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen, int8_t *key, int32_t keylen);
+error_t  wifi_disconnect(void);
+error_t  wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4], uint8_t gateway[4], uint8_t dhcpServer[4], uint8_t dnsServer[4]);
+error_t  wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout);
+error_t  wifi_getHostByName(uint8_t *hostName, uint8_t ip[4]);
+bool     wifi_isConnected(void);
+bool     wifi_isDHCPComplete(void);
 
 #endif

@@ -94,6 +94,14 @@ void cmd_rtc_read(uint8_t argc, char **argv);
 void cmd_rtc_write(uint8_t argc, char **argv);
 #endif
 
+#ifdef CFG_CC3000
+void cmd_wifi_ssidscan(uint8_t argc, char **argv);
+void cmd_wifi_connect(uint8_t argc, char **argv);
+void cmd_wifi_disconnect(uint8_t argc, char **argv);
+void cmd_wifi_ping(uint8_t argc, char **argv);
+void cmd_wifi_gethostnameip(uint8_t argc, char **argv);
+#endif
+
 #define CMD_NOPARAMS ( "This command has no parameters" )
 
 /**************************************************************************/
@@ -141,6 +149,13 @@ cli_t cli_tbl[] =
   #ifdef CFG_RTC
   { "tr",           0, 0,  0, cmd_rtc_read                                , "RTC read"                           , CMD_NOPARAMS },
   { "tw",           6, 7,  0, cmd_rtc_write                               , "RTC write"                          , "'tw <yr> <mon> <day> <hr> <min> <sec>'" },
+  #endif
+  #ifdef CFG_CC3000
+  { "ws",           0, 0,  0, cmd_wifi_ssidscan                           , "Wifi SSID scan"                     , CMD_NOPARAMS },
+  { "wc",           2, 3,  0, cmd_wifi_connect                            , "Wifi connect"                       , "'wc <sec> <ssid> <key>'" },
+  { "wd",           0, 0,  0, cmd_wifi_disconnect                         , "Wifi disconnect"                    , CMD_NOPARAMS },
+  { "wp",           1, 1,  0, cmd_wifi_ping                               , "Wifi ping"                          , "'wp <ipaddress>'" },
+  { "wg",           1, 1,  0, cmd_wifi_gethostnameip                      , "Wifi get IP for host name"          , "'wg <hostname>'" },
   #endif
 };
 
