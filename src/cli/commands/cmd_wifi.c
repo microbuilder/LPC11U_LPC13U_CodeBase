@@ -177,7 +177,7 @@ void cmd_wifi_ping(uint8_t argc, char **argv)
 {
   error_t  error;
   uint8_t  pingAttempts = 3;
-  uint16_t pingTimeout  = 1000;  
+  uint16_t pingTimeout  = 1000;
   uint8_t  ip8[4] = { 0, 0, 0, 0 };
   unsigned int ip[4] = { 0, 0, 0, 0 }; /* keep sscanf happy */
 
@@ -189,20 +189,20 @@ void cmd_wifi_ping(uint8_t argc, char **argv)
   {
     printf("Invalid IP address%s", CFG_PRINTF_NEWLINE);
   }
-  
+
   /* Push values in 8-bit buffer */
   ip8[0] = (uint8_t)(ip[0] & 0xFF);
   ip8[1] = (uint8_t)(ip[1] & 0xFF);
   ip8[2] = (uint8_t)(ip[2] & 0xFF);
-  ip8[3] = (uint8_t)(ip[3] & 0xFF);  
+  ip8[3] = (uint8_t)(ip[3] & 0xFF);
 
   /* Send the ping request */
   printf("Pinging %u.%u.%u.%u %u times (%u ms timeout)%s",
-    (unsigned int)(ip[0]), (unsigned int)(ip[1]), 
+    (unsigned int)(ip[0]), (unsigned int)(ip[1]),
     (unsigned int)(ip[2]), (unsigned int)(ip[3]),
-    (unsigned int)pingAttempts, (unsigned int)pingTimeout, 
+    (unsigned int)pingAttempts, (unsigned int)pingTimeout,
     CFG_PRINTF_NEWLINE);
-  error = wifi_ping(ip, pingAttempts, pingTimeout);
+  error = wifi_ping(ip8, pingAttempts, pingTimeout);
   if (error)
   {
     cmd_wifi_helper_error(error);
@@ -221,7 +221,7 @@ void cmd_wifi_gethostnameip(uint8_t argc, char **argv)
   uint8_t lookupIP[4] = { 0, 0, 0, 0 };
 
   error = wifi_getHostByName(argv[0], lookupIP);
-  printf(" %u.%u.%u.%u %s",
+  printf("%s => %u.%u.%u.%u %s", argv[0],
     (unsigned int)(lookupIP[0]), (unsigned int)(lookupIP[1]),
     (unsigned int)(lookupIP[2]), (unsigned int)(lookupIP[3]),
     CFG_PRINTF_NEWLINE);
