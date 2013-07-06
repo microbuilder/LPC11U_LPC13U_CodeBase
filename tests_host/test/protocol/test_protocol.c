@@ -98,7 +98,7 @@ void test_invalid_message_type(void)
   message_cmd.msg_type = 0;
 
   // Add the faulty message to the FIFO
-  fifo_write(&ff_command, &message_cmd);
+  fifo_write(&ff_prot_cmd, &message_cmd);
 
   // Setup the expected output for comparison purposes
   protMsgError_t invalid_msg_type_error =
@@ -129,7 +129,7 @@ void test_invalid_command(void)
   message_cmd.msg_type = PROT_MSGTYPE_COMMAND;
   message_cmd.cmd_id   = 0;
 
-  fifo_write(&ff_command, &message_cmd);
+  fifo_write(&ff_prot_cmd, &message_cmd);
 
   protMsgError_t invalid_cmd_error =
   {
