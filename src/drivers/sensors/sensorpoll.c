@@ -244,6 +244,12 @@ void sensorpollDisable(void)
     // ticks of the system clock since the timer is set to run at 1/8 the
     // speed of the system clock.
     sensorpollSetMatch(12000);
+
+    // Alternatively, we can do the following, but you need to make sure
+    // that the final value is within a 16-bit range (0..65535)
+    // 5ms @ 48MHz = 30,000 ticks / 5ms @ 72MHz = 45,000 ticks, so this
+    // is a safe value on either the LPC11U or LPC13U at maximum speed
+    sensorpollSetMatch((SystemCoreClock / 200) >> 3);
     @endcode
 
     @note Note that by default the 16-bit timer is setup with a prescalar
