@@ -39,7 +39,7 @@
 
 #include "protocol.h"
 
-extern fifo_t ff_command; // fifo_command in protocol.c
+extern fifo_t ff_prot_cmd; // command fifo in protocol.c
 
 #if defined(CFG_PROTOCOL_VIA_HID)
   #define command_received_isr usb_hid_generic_recv_isr
