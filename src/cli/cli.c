@@ -75,8 +75,8 @@
 #define KEY_CODE_ESC        (27)    /* Escape key code */
 #define KEY_CODE_ENTER      (13)    /* Enter key code  */
 
-static uint8_t msg[CFG_INTERFACE_MAXMSGSIZE];
-static uint8_t *msg_ptr;
+static uint8_t cli_buffer[CFG_INTERFACE_MAXMSGSIZE];
+static uint8_t *cli_buffer_ptr;
 
 /**************************************************************************/
 /*!
@@ -166,28 +166,28 @@ void cliRx(uint8_t c)
       break;
       #endif
     case '\n':
-        // terminate the msg and reset the msg ptr. then send
+        // terminate the cli_buffer and reset the cli_buffer ptr. then send
         // it to the handler for processing.
-        *msg_ptr = '\0';
+        *cli_buffer_ptr = '\0';
         #if CFG_INTERFACE_SILENTMODE == 0
         printf("%s", CFG_PRINTF_NEWLINE);
         #endif
-        cliParse((char *)msg);
-        msg_ptr = msg;
+        cliParse((char *)cli_buffer);
+        cli_buffer_ptr = cli_buffer;
         break;
 
     case '\b':
         #if CFG_INTERFACE_SILENTMODE == 0
         printf("%c",c);
         #endif
-        if (msg_ptr == msg)
+        if (cli_buffer_ptr == cli_buffer)
         {
             // Send bell alert and space (to maintain position)
             printf("\a ");
         }
-        else if (msg_ptr > msg)
+        else if (cli_buffer_ptr > cli_buffer)
         {
-            msg_ptr--;
+            cli_buffer_ptr--;
         }
         break;
 
@@ -195,7 +195,7 @@ void cliRx(uint8_t c)
         #if CFG_INTERFACE_SILENTMODE == 0
         printf("%c",c);
         #endif
-        *msg_ptr++ = c;
+        *cli_buffer_ptr++ = c;
         break;
   }
 }
@@ -324,8 +324,8 @@ void cliInit()
     LPC_GPIO->SET[CFG_INTERFACE_IRQPORT] = (1 << CFG_INTERFACE_IRQPIN);
   #endif
 
-  // init the msg ptr
-  msg_ptr = msg;
+  // init the cli_buffer ptr
+  cli_buffer_ptr = cli_buffer;
 
   // Show the menu
   cliMenu();

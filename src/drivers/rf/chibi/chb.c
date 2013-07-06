@@ -42,7 +42,7 @@
 #include "chb_drvr.h"
 #include "chb_buf.h"
 
-static chb_pcb_t pcb;
+static chb_pcb_t chibi_pcb;
 // these are for the duplicate checking and rejection
 static U8 prev_seq = 0xFF;
 static U16 prev_src_addr = 0xFFFE;
@@ -53,8 +53,8 @@ static U16 prev_src_addr = 0xFFFE;
 /**************************************************************************/
 error_t chb_init()
 {
-    memset(&pcb, 0, sizeof(chb_pcb_t));
-    pcb.src_addr = chb_get_short_addr();
+    memset(&chibi_pcb, 0, sizeof(chb_pcb_t));
+    chibi_pcb.src_addr = chb_get_short_addr();
     return chb_drvr_init();
 }
 
@@ -65,7 +65,7 @@ error_t chb_init()
 /**************************************************************************/
 chb_pcb_t *chb_get_pcb()
 {
-    return &pcb;
+    return &chibi_pcb;
 }
 
 /**************************************************************************/
@@ -87,14 +87,14 @@ static U8 chb_gen_hdr(U8 *hdr, U16 addr, U8 len)
     *hdr_ptr++ = CHB_FCF_BYTE_0 | ((addr != 0xFFFF) << CHB_ACK_REQ_POS);
     *hdr_ptr++ = CHB_FCF_BYTE_1;
 
-    *hdr_ptr++ = pcb.seq++;
+    *hdr_ptr++ = chibi_pcb.seq++;
 
     // fill out dest pan ID, dest addr, src addr
     *(U16 *)hdr_ptr = CFG_CHIBI_PANID;
     hdr_ptr += sizeof(U16);
     *(U16 *)hdr_ptr = addr;
     hdr_ptr += sizeof(U16);
-    *(U16 *)hdr_ptr = pcb.src_addr;
+    *(U16 *)hdr_ptr = chibi_pcb.src_addr;
     hdr_ptr += sizeof(U16);
 
     // return the len of the header
@@ -131,15 +131,15 @@ U8 chb_write(U16 addr, U8 *data, U8 len)
             case RADIO_SUCCESS:
                 // fall through
             case CHB_SUCCESS_DATA_PENDING:
-                pcb.txd_success++;
+                chibi_pcb.txd_success++;
                 break;
 
             case CHB_NO_ACK:
-                pcb.txd_noack++;
+                chibi_pcb.txd_noack++;
                 break;
 
             case CHB_CHANNEL_ACCESS_FAILURE:
-                pcb.txd_channel_fail++;
+                chibi_pcb.txd_channel_fail++;
                 break;
 
             default:
@@ -202,7 +202,7 @@ U8 chb_read(chb_rx_data_t *rx)
     // if the data in the rx buf is 0, then clear the rx_flag. otherwise, keep it raised
     if (!chb_buf_get_len())
     {
-        pcb.data_rcv = false;
+        chibi_pcb.data_rcv = false;
     }
 
 #if (CFG_CHIBI_PROMISCUOUS == 1)

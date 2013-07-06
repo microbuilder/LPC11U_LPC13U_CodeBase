@@ -53,7 +53,7 @@
     through 'uartGetPCB()'.
 */
 /**************************************************************************/
-static uart_pcb_t pcb;
+static uart_pcb_t uart_pcb;
 
 /**************************************************************************/
 /*!
@@ -84,7 +84,7 @@ void USART_IRQHandler(void)
     {
       /* There are errors or break interrupt */
       /* Read LSR will clear the interrupt */
-      pcb.status = LSRValue;
+      uart_pcb.status = LSRValue;
       Dummy = LPC_USART->RBR;  /* Dummy read on RX to clear interrupt, then bail out */
       return;
     }
@@ -108,7 +108,7 @@ void USART_IRQHandler(void)
   else if (IIRValue == USART_IIR_IntId_CTI)
   {
     /* Bit 9 as the CTI error */
-    pcb.status |= 0x100;
+    uart_pcb.status |= 0x100;
   }
 
   // 4.) Check THRE (transmit holding register empty)
@@ -118,11 +118,11 @@ void USART_IRQHandler(void)
     LSRValue = LPC_USART->LSR;
     if (LSRValue & USART_LSR_THRE)
     {
-      pcb.pending_tx_data = 0;
+      uart_pcb.pending_tx_data = 0;
     }
     else
     {
-      pcb.pending_tx_data= 1;
+      uart_pcb.pending_tx_data= 1;
     }
   }
   return;
@@ -149,7 +149,7 @@ void USART_IRQHandler(void)
 /**************************************************************************/
 uart_pcb_t *uartGetPCB()
 {
-    return &pcb;
+    return &uart_pcb;
 }
 
 /**************************************************************************/
@@ -172,8 +172,8 @@ void uartInit(uint32_t baudrate)
   #endif
 
   /* Clear protocol control blocks */
-  memset(&pcb, 0, sizeof(uart_pcb_t));
-  pcb.pending_tx_data = 0;
+  memset(&uart_pcb, 0, sizeof(uart_pcb_t));
+  uart_pcb.pending_tx_data = 0;
   uartRxBufferInit();
 
   /* Set 0.18 UART RXD */
@@ -243,8 +243,8 @@ void uartInit(uint32_t baudrate)
   }
 
   /* Set the initialised flag in the protocol control block */
-  pcb.initialised = 1;
-  pcb.baudrate = baudrate;
+  uart_pcb.initialised = 1;
+  uart_pcb.baudrate = baudrate;
 
   /* Enable the UART Interrupt */
   #if defined CFG_MCU_FAMILY_LPC11UXX

@@ -98,7 +98,7 @@ void SSIContReadOperation(void);
  * function or send function will be stuck forever. */
 #define CC3000_BUFFER_MAGIC_NUMBER (0xDE)
 
-char          spi_buffer[CC3000_RX_BUFFER_SIZE];
+char          wlan_rx_buffer[CC3000_RX_BUFFER_SIZE];
 unsigned char wlan_tx_buffer[CC3000_TX_BUFFER_SIZE];
 
 /**************************************************************************/
@@ -126,15 +126,15 @@ void SpiOpen(gcSpiHandleRx pfRxHandler)
 {
   sSpiInformation.ulSpiState = eSPI_STATE_POWERUP;
 
-  memset(spi_buffer, 0, sizeof(spi_buffer));
-  memset(wlan_tx_buffer, 0, sizeof(spi_buffer));
+  memset(wlan_rx_buffer, 0, sizeof(wlan_rx_buffer));
+  memset(wlan_tx_buffer, 0, sizeof(wlan_rx_buffer));
 
   sSpiInformation.SPIRxHandler              = pfRxHandler;
   sSpiInformation.usTxPacketLength          = 0;
   sSpiInformation.pTxPacket                 = NULL;
-  sSpiInformation.pRxPacket                 = (unsigned char *)spi_buffer;
+  sSpiInformation.pRxPacket                 = (unsigned char *)wlan_rx_buffer;
   sSpiInformation.usRxPacketLength          = 0;
-  spi_buffer[CC3000_RX_BUFFER_SIZE - 1]     = CC3000_BUFFER_MAGIC_NUMBER;
+  wlan_rx_buffer[CC3000_RX_BUFFER_SIZE - 1] = CC3000_BUFFER_MAGIC_NUMBER;
   wlan_tx_buffer[CC3000_TX_BUFFER_SIZE - 1] = CC3000_BUFFER_MAGIC_NUMBER;
 
   /* Enable interrupt on the GPIO pin of WLAN IRQ */

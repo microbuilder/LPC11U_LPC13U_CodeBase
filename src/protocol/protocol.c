@@ -91,9 +91,9 @@ static protCmdFunc_t protocol_cmd_tbl[] =
 #define CMD_FIFO_DEPTH 4
 
 #if defined CFG_MCU_FAMILY_LPC11UXX
-  FIFO_DEF(ff_command, CMD_FIFO_DEPTH, protMsgCommand_t, true , USB_IRQn);
+  FIFO_DEF(ff_prot_cmd, CMD_FIFO_DEPTH, protMsgCommand_t, true , USB_IRQn);
 #elif defined CFG_MCU_FAMILY_LPC13UXX
-  FIFO_DEF(ff_command, CMD_FIFO_DEPTH, protMsgCommand_t, true , USB_IRQ_IRQn);
+  FIFO_DEF(ff_prot_cmd, CMD_FIFO_DEPTH, protMsgCommand_t, true , USB_IRQ_IRQn);
 #else
   #error __FILE__ No MCU defined
 #endif
@@ -105,7 +105,7 @@ static protCmdFunc_t protocol_cmd_tbl[] =
 /**************************************************************************/
 void prot_init(void)
 {
-  fifo_clear(&ff_command);
+  fifo_clear(&ff_prot_cmd);
 }
 
 /**************************************************************************/
@@ -135,7 +135,7 @@ void prot_init(void)
 /**************************************************************************/
 void prot_task(void * p_para)
 {
-  if ( !fifo_isEmpty(&ff_command) )
+  if ( !fifo_isEmpty(&ff_prot_cmd) )
   {
     /* If we get here, it means a command was received */
     protMsgCommand_t  message_cmd     = { 0 };
@@ -144,7 +144,7 @@ void prot_task(void * p_para)
     error_t           error;
 
     /* COMMAND PHASE */
-    fifo_read(&ff_command, &message_cmd);
+    fifo_read(&ff_prot_cmd, &message_cmd);
 
     /* Command_id is at an odd address ... directly using the value in *
      * message_cmd can lead to alignment issues on the M0              */
@@ -234,7 +234,7 @@ void prot_task(void * p_para)
 /**************************************************************************/
 void command_received_isr(void * p_data, uint32_t length)
 {
-  fifo_write(&ff_command, p_data);
+  fifo_write(&ff_prot_cmd, p_data);
 }
 
 #endif
