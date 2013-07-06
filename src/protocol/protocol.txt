@@ -1,8 +1,8 @@
 Protocol Description
 --------------------
 
-The basic messaging protocol can be used to send and receive binary messages
-using any binary serial bus (USB HID, SPI, I2C, Wireless, etc.).
+This simple messaging protocol can be used to send and receive binary messages
+using any binary serial bus (USB HID, USB Bulk, SPI, I2C, Wireless, etc.).
 
 The protocol is designed to be flexible and extensible, with the only
 requirement being that individual messages are 64 bytes or smaller,
@@ -60,8 +60,8 @@ Payload Length is set to '0' bytes.  When a message payload is present, it's
 length can be anywhere from 1..60 bytes, to stay within the 64 byte maximum
 message length.
 
-The contents if the payload is user defined, and can change for each command.
-Any payload error checking should be handled by the command interpretter.
+The contents of the payload is user defined, and can change for each command.
+Any payload error checking should be done by the individual command handler.
 
 A sample command message would be:
 
@@ -117,7 +117,7 @@ Byte   0    1  2    3    4
 - The second and third bytes are 0x1234, which is the unique command ID that
   this response is related to.
 - The fourth byte indicates that we have a message payload of 1 byte
-- The fifth bytes is the 1 byte payload: 0xFF
+- The fifth byte is the 1 byte payload: 0xFF
 
 Alert Messages
 --------------
