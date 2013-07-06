@@ -84,7 +84,7 @@ void test_cmd_led_invalid_length(void)
     .length      = 10
   };
 
-  fifo_write(&ff_command, &message_cmd);
+  fifo_write(&ff_prot_cmd, &message_cmd);
 
   prot_cmd_error_cb_StubWithCallback(cmd_err_stub);
 
@@ -104,7 +104,7 @@ void test_cmd_led_on(void)
     .length      = 1,
     .payload[0]  = 1
   };
-  fifo_write(&ff_command, &message_cmd);
+  fifo_write(&ff_prot_cmd, &message_cmd);
 
   prot_cmd_received_cb_Ignore();
   boardLED_Expect(CFG_LED_ON);
@@ -124,7 +124,7 @@ void test_cmd_led_off(void)
     .length      = 1,
     .payload[0]  = 0
   };
-  fifo_write(&ff_command, &message_cmd);
+  fifo_write(&ff_prot_cmd, &message_cmd);
 
   prot_cmd_received_cb_Ignore();
   boardLED_Expect(CFG_LED_OFF);
