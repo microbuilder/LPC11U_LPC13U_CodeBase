@@ -46,6 +46,9 @@ extern "C" {
 
 typedef unsigned char byte_t;
 
+/* Stay compatible with ugly "windows" style for bool */
+#define BOOL bool
+
 #ifndef TRUE
   #define TRUE true
 #endif
