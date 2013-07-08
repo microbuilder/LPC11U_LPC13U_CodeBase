@@ -247,7 +247,7 @@ void prot_task(void * p_para)
     the command parser.
 */
 /**************************************************************************/
-void command_received_isr(void * p_data, uint32_t length)
+void command_received_isr(uint8_t * p_data, uint32_t length)
 {
   fifo_write(&ff_prot_cmd, p_data);
 }
