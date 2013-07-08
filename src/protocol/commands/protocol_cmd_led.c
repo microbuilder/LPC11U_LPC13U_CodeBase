@@ -33,12 +33,12 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-
 #include "projectconfig.h"
-#include "boards/board.h"
-#include "../protocol.h"
 
 #ifdef CFG_PROTOCOL
+
+#include "boards/board.h"
+#include "../protocol.h"
 
 // turn on  10 01 00 01 01
 // turn off 10 01 00 01 00

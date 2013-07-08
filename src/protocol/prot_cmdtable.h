@@ -49,6 +49,7 @@
 /**************************************************************************/
 typedef enum {
   PROT_CMDTYPE_LED      = 0x0001, /**< Enables/disables the on board LED */
+  PROT_CMDTYPE_SYSINFO  = 0x0002, /**< Gets system properties */
   PROT_CMDTYPE_COUNT              /**< Total number of commands */
 } protCmdType_t;
 
@@ -59,8 +60,9 @@ typedef enum {
     function to associate with it (in the format defined by protCmdFunc_t)
 */
 /**************************************************************************/
-#define PROTOCOL_COMMAND_TABLE(ENTRY) \
-    ENTRY(PROT_CMDTYPE_LED, protcmd_led)\
+#define PROTOCOL_COMMAND_TABLE(ENTRY)            \
+    ENTRY(PROT_CMDTYPE_LED, protcmd_led)         \
+    ENTRY(PROT_CMDTYPE_SYSINFO, protcmd_sysinfo) \
 
 #ifdef __cplusplus
  }
