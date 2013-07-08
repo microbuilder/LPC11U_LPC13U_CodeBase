@@ -106,7 +106,7 @@ ErrorCode_t usb_hid_generic_send(uint8_t const* p_report_in, uint32_t length);
     @endcode
 */
 /**************************************************************************/
-void usb_hid_generic_recv_isr(void * p_buffer, uint32_t length) __attribute__((weak));
+void usb_hid_generic_recv_isr(uint8_t * p_buffer, uint32_t length) __attribute__((weak));
 
 // receive report in request from HOST, but have nothing to report
 bool usb_hid_generic_report_request_isr(uint8_t in_report[]) __attribute__((weak));

@@ -56,7 +56,7 @@
 //--------------------------------------------------------------------+
 bool usb_custom_is_ready_to_send(void);
 ErrorCode_t usb_custom_send(uint8_t const * p_data, uint32_t length);
-void usb_custom_received_isr(void * p_buffer, uint32_t length) __attribute__((weak));
+void usb_custom_received_isr(uint8_t * p_buffer, uint32_t length) __attribute__((weak));
 
 //--------------------------------------------------------------------+
 // USBD-CLASS API
