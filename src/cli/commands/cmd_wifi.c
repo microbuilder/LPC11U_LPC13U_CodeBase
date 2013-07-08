@@ -129,7 +129,7 @@ void cmd_wifi_connect(uint8_t argc, char **argv)
 
   /* Try to connect to the AP */
   printf("Connecting to %s (30s timeout) ...%s", argv[1], CFG_PRINTF_NEWLINE);
-  error = wifi_connectSecure(sec, argv[1], strlen(argv[1]), argv[2], strlen(argv[2]));
+  error = wifi_connectSecure(sec, argv[1], (int32_t)strlen(argv[1]), argv[2], (int32_t)strlen(argv[2]));
   if(error)
   {
     cmd_wifi_helper_error(error);
@@ -221,10 +221,13 @@ void cmd_wifi_gethostnameip(uint8_t argc, char **argv)
   uint8_t lookupIP[4] = { 0, 0, 0, 0 };
 
   error = wifi_getHostByName(argv[0], lookupIP);
-  printf("%s => %u.%u.%u.%u %s", argv[0],
-    (unsigned int)(lookupIP[0]), (unsigned int)(lookupIP[1]),
-    (unsigned int)(lookupIP[2]), (unsigned int)(lookupIP[3]),
-    CFG_PRINTF_NEWLINE);
+  if (!error)
+  {
+    printf("%s => %u.%u.%u.%u %s", argv[0],
+      (unsigned int)(lookupIP[0]), (unsigned int)(lookupIP[1]),
+      (unsigned int)(lookupIP[2]), (unsigned int)(lookupIP[3]),
+      CFG_PRINTF_NEWLINE);
+  }
 }
 
 #endif /* CFG_CC3000 */

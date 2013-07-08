@@ -153,8 +153,6 @@ void CT32B1_IRQHandler(void)
 /**************************************************************************/
 void timer32Init(uint8_t timer)
 {
-  uint32_t i;
-
   if ( timer == 0 )
   {
     LPC_SYSCON->SYSAHBCLKCTRL |= (1<<9);

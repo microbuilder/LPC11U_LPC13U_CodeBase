@@ -736,7 +736,6 @@ error_t wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4],
                                   uint8_t dnsServer[4])
 {
   tNetappIpconfigRetArgs ipconfig;
-  uint16_t i;
 
   WIFI_CHECK_INIT();
 
@@ -865,7 +864,7 @@ error_t wifi_getHostByName(uint8_t *hostName, uint8_t ip[4])
   WIFI_CHECK_INIT();
 
   /* gethostbyname returns a positive number is successful */
-  ASSERT_MESSAGE(gethostbyname(hostName, strlen(hostName), &revIP) > 0,
+  ASSERT_MESSAGE(gethostbyname(hostName, (unsigned short int)strlen(hostName), &revIP) > 0,
                  ERROR_CC3000_SOCKET_GETHOSTBYNAME,
                  "Host name lookup failed");
 
