@@ -69,25 +69,43 @@
 /**************************************************************************/
 typedef error_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
 
-/* Command prototype */
-
+/**************************************************************************/
+/*
+    Expands the function to have the standard function signature
+*/
+/**************************************************************************/
 #define CMD_PROTOTYPE_EXPAND(command, function) \
   error_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
 
-/* Command lookup table macros */
-
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
+/**************************************************************************/
+/*
+    Expands the command/function combination to something that we can
+    insert into the command lookup table (functions are expanded to have
+    the full function signature)
+*/
+/**************************************************************************/
 #define CMD_LOOKUP_EXPAND(command, function)\
   [command] = function,\
 
+/**************************************************************************/
+/*!
+    The command lookup table implementation, which is based on the
+    commmands and implementation functions defined in prot_cmdtable.h.
+
+    The actual command/function pairs are broken off into a separate
+    header file so that you can more easily change the support command
+    list from project to project without changing the underlying
+    protocol code and files.
+*/
+/**************************************************************************/
 static protCmdFunc_t protocol_cmd_tbl[] =
 {
   PROTOCOL_COMMAND_TABLE(CMD_LOOKUP_EXPAND)
 };
 
-/* FIFO buffer to store command data */
-
+/* FIFO buffer for incoming commands (Note: 64 bytes per command) */
 #define CMD_FIFO_DEPTH 4
 
 #if defined CFG_MCU_FAMILY_LPC11UXX
@@ -181,10 +199,9 @@ void prot_task(void * p_para)
     }
 
     /* RESPONSE PHASE */
-//    uint32_t start_time = delayGetSecondsActive();
-//    while (  )
-    // TODO make sure usb command is ready to send
-    // in case there are a bunch of cmd queued in fifo
+
+    // TODO:  Make sure the usb command is ready to send
+    // in case there are a bunch of cmds queued in FIFO
 
     if (error == ERROR_NONE)
     {
@@ -203,8 +220,6 @@ void prot_task(void * p_para)
       protMsgError_t message_error =
       {
         .msg_type      = PROT_MSGTYPE_ERROR,
-//        .error_id_high = U16_HIGH_U8(error), TODO has problem with lpcxpresso's gcc
-//        .error_id_low  = U16_LOW_U8 (error)
       };
       message_error.error_id_high = U16_HIGH_U8(error);
       message_error.error_id_low  = U16_LOW_U8 (error);
