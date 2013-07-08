@@ -40,6 +40,7 @@
 #include "protocol.h"
 #include "protocol_support.h"
 #include "protocol_cmd_led.h"
+#include "protocol_cmd_sysinfo.h"
 
 #include "mock_usb_hid.h"
 #include "mock_usb_custom_class.h"
