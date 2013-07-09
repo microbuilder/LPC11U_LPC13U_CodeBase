@@ -41,6 +41,7 @@
 #include <string.h>
 #include "boards/board.h"
 #include "../protocol.h"
+#include "core/iap/iap.h"
 
 /**************************************************************************/
 /*!
@@ -49,20 +50,19 @@
 /**************************************************************************/
 typedef enum
 {
-  PROT_CMD_SYSINFO_KEY_FIRST                    = 0x0000,
-  PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION         = 0x0001,
-  PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION         = 0x0002,
-  PROT_CMD_SYSINFO_KEY_MCU_STRING               = 0x0003,
-  PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER            = 0x0004,
-  PROT_CMD_SYSINFO_KEY_CLOCKSPEED               = 0x0005,
-  PROT_CMD_SYSINFO_KEY_EEPROMSIZE               = 0x0006,
+  PROT_CMD_SYSINFO_KEY_FIRST                = 0x0000,
+  PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION     = 0x0001,   /**< 3 bytes      */
+  PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION     = 0x0002,   /**< 3 bytes      */
+  PROT_CMD_SYSINFO_KEY_MCU_STRING           = 0x0003,   /**< String       */
+  PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER        = 0x0004,   /**< uint32_t[4]  */
+  PROT_CMD_SYSINFO_KEY_CLOCKSPEED           = 0x0005,   /**< uint32_t     */
+  PROT_CMD_SYSINFO_KEY_EEPROMSIZE           = 0x0006,   /**< uint32_t     */
   PROT_CMD_SYSINFO_KEY_LAST
 } prot_cmd_sysinfo_key_t;
 
 /**************************************************************************/
 /*!
-    Returns specific system information for this board, based on the
-    specific 16-bit key
+    Returns system information for this board based on a 16-bit key
 */
 /**************************************************************************/
 error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
@@ -105,14 +105,21 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
       break;
 
     case (PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER):
+      mess_response->payload[3] = 16;
+      uint32_t uid[4];
+      iapReadUID(uid);
+      memcpy(&mess_response->payload[4], uid, 16);
       break;
 
     case (PROT_CMD_SYSINFO_KEY_CLOCKSPEED):
+      mess_response->payload[3] = 4;
+      uint32_t speed = (uint32_t)SystemCoreClock;
+      memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
       break;
 
     case (PROT_CMD_SYSINFO_KEY_EEPROMSIZE):
       mess_response->payload[3] = 4;
-      uint32_t eepromSize= (uint32_t)CFG_EEPROM_SIZE;
+      uint32_t eepromSize = (uint32_t)CFG_EEPROM_SIZE;
       memcpy(&mess_response->payload[4], &eepromSize, sizeof(uint32_t));
       break;
 
