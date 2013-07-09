@@ -3,6 +3,11 @@
     @file     protocol_cmd_sysinfo.c
     @author   K. Townsend (microBuilder.eu)
 
+    This command can be used to read system information based on a pre-
+    defined key value. For example, sending the SYSINFO command with
+    PROT_CMD_SYSINFO_KEY_EEPROMSIZE (0x0006) for the key will return the
+    size of the onboard/onchip EEPROM if any is present.
+
     @section LICENSE
 
     Software License Agreement (BSD License)
@@ -51,12 +56,12 @@
 typedef enum
 {
   PROT_CMD_SYSINFO_KEY_FIRST                = 0x0000,
-  PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION     = 0x0001,   /**< 3 bytes      */
-  PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION     = 0x0002,   /**< 3 bytes      */
-  PROT_CMD_SYSINFO_KEY_MCU_STRING           = 0x0003,   /**< String       */
-  PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER        = 0x0004,   /**< uint32_t[4]  */
-  PROT_CMD_SYSINFO_KEY_CLOCKSPEED           = 0x0005,   /**< uint32_t     */
-  PROT_CMD_SYSINFO_KEY_EEPROMSIZE           = 0x0006,   /**< uint32_t     */
+  PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION     = 0x0001,   /**< Code base version (3*U8) */
+  PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION     = 0x0002,   /**< Firmware version (3*U8) */
+  PROT_CMD_SYSINFO_KEY_MCU_STRING           = 0x0003,   /**< MCU model (string) */
+  PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER        = 0x0004,   /**< Unique on-chip serial number (4*U32) */
+  PROT_CMD_SYSINFO_KEY_CLOCKSPEED           = 0x0005,   /**< Core clock speed in Hz (U32) */
+  PROT_CMD_SYSINFO_KEY_EEPROMSIZE           = 0x0006,   /**< EEPROM size in bytes (U32) */
   PROT_CMD_SYSINFO_KEY_LAST
 } prot_cmd_sysinfo_key_t;
 
@@ -76,13 +81,35 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
   switch(key)
   {
     case (PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION):
-      mess_response->payload[3] = (uint8_t)3;
+    /* ====================================================================
+        PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION                   KEY: 0x0001
+        -------------------------------------------------------------------
+        Returns the parent code base version ID (see projectconfig.h)
+
+        REQUEST:  Payload length      0
+        RESPONSE: Payload Length      3
+                  mess_response[4]    Major version number
+                  mess_response[5]    Minor version number
+                  mess_response[6]    Revision number
+       ====================================================================*/
+      mess_response->payload[3] = 3;
       mess_response->payload[4] = (uint8_t)CFG_CODEBASE_VERSION_MAJOR & 0xFF;
       mess_response->payload[5] = (uint8_t)CFG_CODEBASE_VERSION_MINOR & 0xFF;
       mess_response->payload[6] = (uint8_t)CFG_CODEBASE_VERSION_REVISION & 0xFF;
       break;
 
     case (PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION):
+    /* ====================================================================
+        PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION                   Key: 0x0002
+        -------------------------------------------------------------------
+        Returns the board-specific firmware version (defined in board_*.h)
+
+        REQUEST:  Payload length      0
+        RESPONSE: Payload Length      3
+                  mess_response[4]    Major version number
+                  mess_response[5]    Minor version number
+                  mess_response[6]    Revision number
+       ====================================================================*/
       mess_response->payload[3] = 3;
       mess_response->payload[4] = (uint8_t)CFG_FIRMWARE_VERSION_MAJOR & 0xFF;
       mess_response->payload[5] = (uint8_t)CFG_FIRMWARE_VERSION_MINOR & 0xFF;
@@ -90,6 +117,15 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
       break;
 
     case (PROT_CMD_SYSINFO_KEY_MCU_STRING):
+    /* ====================================================================
+        PROT_CMD_SYSINFO_KEY_MCU_STRING                         Key: 0x0003
+        -------------------------------------------------------------------
+        Returns a string describing the MCU used on the board
+
+        REQUEST:  Payload length      0
+        RESPONSE: Payload Length      variable (0..60 bytes)
+                  mess_response[4]    Start of MCU string
+       ====================================================================*/
       #ifdef CFG_MCU_LPC11U24FBD48_401
         mess_response->payload[3] = (uint8_t)strlen("LPC11U24FBD48/401");
         memcpy(&mess_response->payload[4], "LPC11U24FBD48/401", strlen("LPC11U24FBD48/401"));
@@ -105,19 +141,51 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
       break;
 
     case (PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER):
-//      mess_response->payload[3] = 16;
-//      uint32_t uid[4];
-//      iapReadUID(uid);
-//      memcpy(&mess_response->payload[4], uid, 16);
+    /* ====================================================================
+        PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER                      Key: 0x0004
+        -------------------------------------------------------------------
+        Returns the uniaue four word serial number of the LPC chip
+
+        REQUEST:  Payload length      0
+        RESPONSE: Payload Length      16 bytes
+                  mess_response[4]    ID 3 (uint32_t)
+                  mess_response[8]    ID 2 (uint32_t)
+                  mess_response[12]   ID 1 (uint32_t)
+                  mess_response[16]   ID 0 (uint32_t)
+       ====================================================================*/
+      // mess_response->payload[3] = 16;
+      // uint32_t uid[4];
+      // iapReadUID(uid);
+      // memcpy(&mess_response->payload[4], uid, 16);
       break;
 
     case (PROT_CMD_SYSINFO_KEY_CLOCKSPEED):
-//      mess_response->payload[3] = 4;
-//      uint32_t speed = (uint32_t)SystemCoreClock;
-//      memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
+    /* ====================================================================
+        PROT_CMD_SYSINFO_KEY_CLOCKSPEED                         Key: 0x0005
+        -------------------------------------------------------------------
+        Returns the core clock speed in Hz
+
+        REQUEST:  Payload length      0
+        RESPONSE: Payload Length      4 bytes
+                  mess_response[4]    Clock speed in Hz (uint32_t)
+       ====================================================================*/
+      // mess_response->payload[3] = 4;
+      // uint32_t speed = (uint32_t)SystemCoreClock;
+      // memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
       break;
 
     case (PROT_CMD_SYSINFO_KEY_EEPROMSIZE):
+    /* ====================================================================
+        PROT_CMD_SYSINFO_KEY_EEPROMSIZE                         Key: 0x0006
+        -------------------------------------------------------------------
+        Returns the size of the on-board or on-chip EEPROM, or 0 if no
+        EEPROM is available
+
+        REQUEST:  Payload length      0
+        RESPONSE: Payload Length      4 bytes
+                  mess_response[4]    EEPROM size in bytes (uint32_t)
+
+       ====================================================================*/
       mess_response->payload[3] = 4;
       uint32_t eepromSize = (uint32_t)CFG_EEPROM_SIZE;
       memcpy(&mess_response->payload[4], &eepromSize, sizeof(uint32_t));
