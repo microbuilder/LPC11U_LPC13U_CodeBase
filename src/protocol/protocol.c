@@ -34,6 +34,187 @@
 */
 /**************************************************************************/
 
+/*  SIMPLE BINARY PROTOCOL DESCRIPTION
+    ==================================
+
+    This simple messaging protocol can be used to send and receive binary
+    messages using any binary serial bus (USB HID, USB Bulk, SPI, I2C,
+    Wireless, etc.).
+
+    The protocol is designed to be flexible and extensible, with the only
+    requirement being that individual messages are 64 bytes or smaller,
+    and that the first byte of every message is a one byte (U8) identifier
+    that indicates the format for the rest of the payload (if there is one).
+
+    IMPLEMENTATION NOTES
+    ====================
+
+    The protocol implementation must be transport mechanism agnostic, and
+    should be able to function with any binary serial bus. The original
+    design goal is a protocol that can function via USB HID, SPI Slave,
+    and I2C Slave modes, but any similar protocol should be able to be
+    added to the implementation (wireless transfers, etc.).
+
+    ENDIANNESS
+    ==========
+
+    All values larger than 8-bits are expected to be little endian, such
+    as the command IDs, and the payload contents.  Any deviation from
+    this rule should be clearly documented.
+
+    MESSAGE TYPES
+    =============
+
+    Each message is preceded by an 8-bit message identifier that indicates
+    the format and content of the rest of the message:
+
+    |-----------------------+---------+--------------------------------------|
+    | Message Type          | ID (U8) | Meaning                              |
+    |-----------------------+---------+--------------------------------------|
+    | Command               | 0x10    |                                      |
+    | Response              | 0x20    |                                      |
+    | Alert                 | 0x40    |                                      |
+    | Error                 | 0x80    |                                      |
+    |-----------------------+---------+--------------------------------------|
+
+    COMMAND MESSAGES
+    ================
+
+    Command messages (Message Type = 0x10) have the following structure:
+
+    |-------------------+----------+-----------------------------------------|
+    | Name              | Type     | Meaning                                 |
+    |-------------------+----------+-----------------------------------------|
+    | Message Type      | U8       | Always '0x10'                           |
+    | Command ID        | U16      | Unique command identifier               |
+    | Payload Length    | U8       | Payload length (0..60)                  |
+    | Payload           | ...      | Optional command payload (params, etc.) |
+    |-------------------+----------+-----------------------------------------|
+
+    'Command ID' (bytes 1-2) and 'Payload Length' (byte 3) are mandatory in
+    any command message.  The message payload is optional, and will be ignored
+    if Payload Length is set to '0' bytes.  When a message payload is present,
+    it's length can be anywhere from 1..60 bytes, to stay within the 64 byte
+    maximum message length.
+
+    The contents of the payload is user defined, and can change for each
+    command. Any payload error checking should be done by the individual
+    command handler.
+
+    A sample command message would be:
+
+    Byte   0    1  2    3    4
+          [10] [34 12] [01] [FF]
+
+    - The first byte is the Message Type (0x10), which identifies this as a
+      command message.
+    - The second and third bytes are 0x1234 (34 12 in little-endian notation),
+      which is the unique command ID that will be parsed to the command lookup
+      function, and redirected to an appropriate command handler function.
+    - The fourth byte indicates that we have a message payload of 1 byte
+    - The fifth bytes is the 1 byte payload: 0xFF
+
+    RESPONSE MESSAGES
+    =================
+
+    Responses messages (Message Type = 0x20) are generated in response to an
+    incoming command, and have the following structure:
+
+    |-------------------+----------+-----------------------------------------|
+    | Name              | Type     | Meaning                                 |
+    |-------------------+----------+-----------------------------------------|
+    | Message Type      | U8       | Always '0x20'                           |
+    | Command ID        | U16      | Command ID of the command this message  |
+    |                   |          | is a response to, to correlate          |
+    |                   |          | Responses and commands                  |
+    | Payload Length    | U8       | Payload length (0..60)                  |
+    | Payload           | ...      | Optional response payload               |
+    |-------------------+----------+-----------------------------------------|
+
+    By including the 'Command ID' that this response message is related to,
+    the recipient can more easily correlate responses and commands.  This is
+    useful in situations where multiple commands are sent, and some commands
+    may take a longer period of time to execute than subsequent commands with
+    a different command ID.
+
+    Response message can only be generates in response to a command message,
+    so the Command ID should always be present.
+
+    If more precise command/response correlation is required, a custom
+    protocol can be developped, where a unique message identifier is included
+    in the payload of each command/response, but this is beyond the scope of
+    this high-level protocol.
+
+    A sample response message would be:
+
+    Byte   0    1  2    3    4
+          [20] [34 12] [01] [FF]
+
+    - The first byte is the Message Type (0x20), which identifies this as a
+      response message.
+    - The second and third bytes are 0x1234, which is the unique command ID
+      that this response is related to.
+    - The fourth byte indicates that we have a message payload of 1 byte
+    - The fifth byte is the 1 byte payload: 0xFF
+
+    ALERT MESSAGES
+    ==============
+
+    Alert messages (Message Type = 0x40) are sent whenever an alert condition
+    is present on the system (low battery, etc.), and have the following
+    structure:
+
+    |-------------------+----------+-----------------------------------------|
+    | Name              | Type     | Meaning                                 |
+    |-------------------+----------+-----------------------------------------|
+    | Message Type      | U8       | Always '0x40'                           |
+    | Alert ID          | U16      | Unique ID for the alert condition       |
+    | Payload Length    | U8       | Payload length (0..60)                  |
+    | Payload           | ...      | Optional response payload               |
+    |-------------------+----------+-----------------------------------------|
+
+    A sample alert message would be:
+
+    Byte   0    1  2    3    4    5    6    7
+          [40] [34 12] [04] [42] [07] [00] [10]
+
+    - The first byte is the Message Type (0x40), which identifies this as an
+      alert message.
+    - The second and third bytes are 0x1234, which is the unique alert ID.
+    - The fourth byte indicates that we have a message payload of 4 byte
+    - The last four bytes are the actual payload: '0x10000742' in this case,
+      assuming we were transmitting a 32-bit value in little-endian format.
+
+    ERROR MESSAGES
+    ==============
+
+    Error messages (Message Type = 0x80) are returned whenever an error
+    condition is present on the system, and have the following structure:
+
+    |-------------------+----------+-----------------------------------------|
+    | Name              | Type     | Meaning                                 |
+    |-------------------+----------+-----------------------------------------|
+    | Message Type      | U8       | Always '0x80'                           |
+    | Error ID          | U16      | Unique ID for the error condition       |
+    |-------------------+----------+-----------------------------------------|
+
+    Whenever an error condition is present and the system needs to be alerted
+    (such as a failed request, an attempt to access a non-existing resource,
+    etc.) the system can return a specific error message with an appropriate
+    Error ID.
+
+    A sample error message would be:
+
+    Byte   0    1  2
+          [80] [00 01]
+
+    - The first byte is the Message Type (0x80), which identifies this is an
+      error message.
+    - The second and third bytes are 0x0100 (00 01 in little-endian notation),
+      which is the error code corresponding to PROT_ERROR_INVALID_PARAM.
+
+*/
+
 #include "projectconfig.h"
 
 #ifdef CFG_PROTOCOL
