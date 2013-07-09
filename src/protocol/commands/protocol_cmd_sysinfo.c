@@ -86,7 +86,8 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the parent code base version ID (see projectconfig.h)
 
-        REQUEST:  Payload length      0
+        COMMAND:  [10] [02 00] [02] [02 00]
+                  Optional Args       None
         RESPONSE: Payload Length      3
                   mess_response[4]    Major version number
                   mess_response[5]    Minor version number
@@ -104,7 +105,8 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the board-specific firmware version (defined in board_*.h)
 
-        REQUEST:  Payload length      0
+        COMMAND:  [10] [02 00] [02] [02 00]
+                  Optional Args       None
         RESPONSE: Payload Length      3
                   mess_response[4]    Major version number
                   mess_response[5]    Minor version number
@@ -122,7 +124,8 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns a string describing the MCU used on the board
 
-        REQUEST:  Payload length      0
+        COMMAND:  [10] [02 00] [02] [03 00]
+                  Optional Args       None
         RESPONSE: Payload Length      variable (0..60 bytes)
                   mess_response[4]    Start of MCU string
        ====================================================================*/
@@ -146,7 +149,8 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the uniaue four word serial number of the LPC chip
 
-        REQUEST:  Payload length      0
+        COMMAND:  [10] [02 00] [02] [04 00]
+                  Optional Args       None
         RESPONSE: Payload Length      16 bytes
                   mess_response[4]    ID 3 (uint32_t)
                   mess_response[8]    ID 2 (uint32_t)
@@ -165,7 +169,8 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the core clock speed in Hz
 
-        REQUEST:  Payload length      0
+        COMMAND:  [10] [02 00] [02] [05 00]
+                  Optional Args       None
         RESPONSE: Payload Length      4 bytes
                   mess_response[4]    Clock speed in Hz (uint32_t)
        ====================================================================*/
@@ -181,7 +186,8 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         Returns the size of the on-board or on-chip EEPROM, or 0 if no
         EEPROM is available
 
-        REQUEST:  Payload length      0
+        COMMAND:  [10] [02 00] [02] [06 00]
+                  Optional Args       None
         RESPONSE: Payload Length      4 bytes
                   mess_response[4]    EEPROM size in bytes (uint32_t)
 
