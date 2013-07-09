@@ -173,6 +173,9 @@ error_t adxl345SetRange(adxl345_range_t range)
   format &= ~0x0F;
   format |= range;
 
+  /* Make sure that the FULL-RES bit is enabled for range scaling */
+  format |= 0x08;
+
   /* Write the register back to the IC */
   ASSERT_STATUS(adxl345Write8(ADXL345_REG_DATA_FORMAT, format));
 
@@ -200,7 +203,7 @@ error_t adxl345GetRange(adxl345_range_t *range)
 /**************************************************************************/
 error_t adxl345SetDataRate(adxl345_dataRate_t dataRate)
 {
-  /* Note: The LOW_POWER bits are currently ignore and we always keep
+  /* Note: The LOW_POWER bits are currently ignored and we always keep
      the device in 'normal' mode */
   ASSERT_STATUS(adxl345Write8(ADXL345_REG_BW_RATE, dataRate));
 
