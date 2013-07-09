@@ -112,7 +112,8 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
 
     case (PROT_CMD_SYSINFO_KEY_EEPROMSIZE):
       mess_response->payload[3] = 4;
-      *(uint32_t*)&mess_response->payload[4] = (unsigned int)CFG_EEPROM_SIZE;
+      uint32_t eepromSize= (uint32_t)CFG_EEPROM_SIZE;
+      memcpy(&mess_response->payload[4], &eepromSize, sizeof(uint32_t));
       break;
 
     default:
