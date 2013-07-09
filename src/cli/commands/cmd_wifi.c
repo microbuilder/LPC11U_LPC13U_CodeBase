@@ -120,16 +120,28 @@ void cmd_wifi_connect(uint8_t argc, char **argv)
     return;
   }
 
-  /* Check key length */
-  if (strlen(argv[2]) > 16)
+  /* Check key length if we're using a secure network */
+  if (sec)
   {
-    printf("Key must be <= 16 characters%s", CFG_PRINTF_NEWLINE);
-    return;
+    if (strlen(argv[2]) > 16)
+    {
+      printf("Key must be <= 16 characters%s", CFG_PRINTF_NEWLINE);
+      return;
+    }
   }
 
   /* Try to connect to the AP */
   printf("Connecting to %s (30s timeout) ...%s", argv[1], CFG_PRINTF_NEWLINE);
-  error = wifi_connectSecure(sec, argv[1], (int32_t)strlen(argv[1]), argv[2], (int32_t)strlen(argv[2]));
+  if (sec)
+  {
+    /* Connect to a secure network */
+    error = wifi_connectSecure(sec, argv[1], (int32_t)strlen(argv[1]), argv[2], (int32_t)strlen(argv[2]));
+  }
+  else
+  {
+    /* Connect to an open network */
+    error = wifi_connectSecure(0, argv[1], (int32_t)strlen(argv[1]), "", 1);
+  }
   if(error)
   {
     cmd_wifi_helper_error(error);
