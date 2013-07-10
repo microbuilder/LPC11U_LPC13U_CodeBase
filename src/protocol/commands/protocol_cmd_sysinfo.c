@@ -72,7 +72,7 @@ typedef enum
 /**************************************************************************/
 error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
-  uint16_t key = payload[4] << 8 | payload[5];
+  uint16_t key = payload[1] << 8 | payload[0];
 
   /* Make sure we have a valid key */
   ASSERT( key > PROT_CMD_SYSINFO_KEY_FIRST, ERROR_INVALIDPARAMETER);
@@ -86,17 +86,17 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the parent code base version ID (see projectconfig.h)
 
-        COMMAND:  [10] [02 00] [02] [02 00]
+        PAYLOAD:  [02 00]
                   Optional Args       None
         RESPONSE: Payload Length      3
                   mess_response[4]    Major version number
                   mess_response[5]    Minor version number
                   mess_response[6]    Revision number
        ====================================================================*/
-      mess_response->payload[3] = 3;
-      mess_response->payload[4] = (uint8_t)CFG_CODEBASE_VERSION_MAJOR & 0xFF;
-      mess_response->payload[5] = (uint8_t)CFG_CODEBASE_VERSION_MINOR & 0xFF;
-      mess_response->payload[6] = (uint8_t)CFG_CODEBASE_VERSION_REVISION & 0xFF;
+      mess_response->length = 3;
+      mess_response->payload[0] = (uint8_t)CFG_CODEBASE_VERSION_MAJOR & 0xFF;
+      mess_response->payload[1] = (uint8_t)CFG_CODEBASE_VERSION_MINOR & 0xFF;
+      mess_response->payload[2] = (uint8_t)CFG_CODEBASE_VERSION_REVISION & 0xFF;
       break;
 
     case (PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION):
@@ -105,17 +105,17 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the board-specific firmware version (defined in board_*.h)
 
-        COMMAND:  [10] [02 00] [02] [02 00]
+        PAYLOAD:  [02 00]
                   Optional Args       None
         RESPONSE: Payload Length      3
                   mess_response[4]    Major version number
                   mess_response[5]    Minor version number
                   mess_response[6]    Revision number
        ====================================================================*/
-      mess_response->payload[3] = 3;
-      mess_response->payload[4] = (uint8_t)CFG_FIRMWARE_VERSION_MAJOR & 0xFF;
-      mess_response->payload[5] = (uint8_t)CFG_FIRMWARE_VERSION_MINOR & 0xFF;
-      mess_response->payload[6] = (uint8_t)CFG_FIRMWARE_VERSION_REVISION & 0xFF;
+      mess_response->length = 3;
+      mess_response->payload[0] = (uint8_t)CFG_FIRMWARE_VERSION_MAJOR & 0xFF;
+      mess_response->payload[1] = (uint8_t)CFG_FIRMWARE_VERSION_MINOR & 0xFF;
+      mess_response->payload[2] = (uint8_t)CFG_FIRMWARE_VERSION_REVISION & 0xFF;
       break;
 
     case (PROT_CMD_SYSINFO_KEY_MCU_STRING):
@@ -124,22 +124,22 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns a string describing the MCU used on the board
 
-        COMMAND:  [10] [02 00] [02] [03 00]
+        PAYLOAD:  [03 00]
                   Optional Args       None
         RESPONSE: Payload Length      variable (0..60 bytes)
                   mess_response[4]    Start of MCU string
        ====================================================================*/
       #ifdef CFG_MCU_LPC11U24FBD48_401
-        mess_response->payload[3] = (uint8_t)strlen("LPC11U24FBD48/401");
-        memcpy(&mess_response->payload[4], "LPC11U24FBD48/401", strlen("LPC11U24FBD48/401"));
+        mess_response->length = (uint8_t)strlen("LPC11U24FBD48/401");
+        memcpy(&mess_response->payload[0], "LPC11U24FBD48/401", strlen("LPC11U24FBD48/401"));
       #endif
       #ifdef CFG_MCU_LPC11U37FBD48_401
-        mess_response->payload[3] = (uint8_t)strlen("LPC11U37FBD48/401");
-        memcpy(&mess_response->payload[4], "LPC11U37FBD48/401", strlen("LPC11U37FBD48/401"));
+        mess_response->length = (uint8_t)strlen("LPC11U37FBD48/401");
+        memcpy(&mess_response->payload[0], "LPC11U37FBD48/401", strlen("LPC11U37FBD48/401"));
       #endif
       #ifdef CFG_MCU_LPC1347FBD48
-        mess_response->payload[3] = (uint8_t)strlen("LPC1347FBD48/401");
-        memcpy(&mess_response->payload[4], "LPC1347FBD48/401", strlen("LPC1347FBD48/401"));
+        mess_response->length = (uint8_t)strlen("LPC1347FBD48/401");
+        memcpy(&mess_response->payload[0], "LPC1347FBD48/401", strlen("LPC1347FBD48/401"));
       #endif
       break;
 
@@ -149,7 +149,7 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the uniaue four word serial number of the LPC chip
 
-        COMMAND:  [10] [02 00] [02] [04 00]
+        PAYLOAD:  [04 00]
                   Optional Args       None
         RESPONSE: Payload Length      16 bytes
                   mess_response[4]    ID 3 (uint32_t)
@@ -157,10 +157,10 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
                   mess_response[12]   ID 1 (uint32_t)
                   mess_response[16]   ID 0 (uint32_t)
        ====================================================================*/
-      // mess_response->payload[3] = 16;
+      // mess_response->length = 16;
       // uint32_t uid[4];
       // iapReadUID(uid);
-      // memcpy(&mess_response->payload[4], uid, 16);
+      // memcpy(&mess_response->payload[0], uid);
       break;
 
     case (PROT_CMD_SYSINFO_KEY_CLOCKSPEED):
@@ -169,12 +169,12 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         -------------------------------------------------------------------
         Returns the core clock speed in Hz
 
-        COMMAND:  [10] [02 00] [02] [05 00]
+        PAYLOAD:  [05 00]
                   Optional Args       None
         RESPONSE: Payload Length      4 bytes
                   mess_response[4]    Clock speed in Hz (uint32_t)
        ====================================================================*/
-      // mess_response->payload[3] = 4;
+      // mess_response->length = 4;
       // uint32_t speed = (uint32_t)SystemCoreClock;
       // memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
       break;
@@ -186,15 +186,15 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         Returns the size of the on-board or on-chip EEPROM, or 0 if no
         EEPROM is available
 
-        COMMAND:  [10] [02 00] [02] [06 00]
+        PAYLOAD:  [06 00]
                   Optional Args       None
         RESPONSE: Payload Length      4 bytes
                   mess_response[4]    EEPROM size in bytes (uint32_t)
 
        ====================================================================*/
-      mess_response->payload[3] = 4;
+      mess_response->length = 4;
       uint32_t eepromSize = (uint32_t)CFG_EEPROM_SIZE;
-      memcpy(&mess_response->payload[4], &eepromSize, sizeof(uint32_t));
+      memcpy(&mess_response->payload[0], &eepromSize, sizeof(uint32_t));
       break;
 
     default:
