@@ -68,6 +68,14 @@ void tearDown(void)
 
 }
 
+/**************************************************************************/
+/*!
+    Makes sure sys info commands with an invalid payload are rejected
+
+    Every sysinfo command must have at least a two-byte key. This function
+    sends a sysinfo command with a zero-length payload (no key).
+*/
+/**************************************************************************/
 void test_invalid_length_zero(void)
 {
   message_cmd = (protMsgCommand_t)
@@ -94,6 +102,13 @@ void test_invalid_length_zero(void)
   prot_task(NULL);
 }
 
+/**************************************************************************/
+/*!
+    Makes sure sys info commands with an invalid payload are rejected
+
+    Sends a sysinfo command with an unexpectedly large payload
+*/
+/**************************************************************************/
 void test_invalid_length_too_long(void)
 {
   message_cmd = (protMsgCommand_t)
@@ -120,6 +135,11 @@ void test_invalid_length_too_long(void)
   prot_task(NULL);
 }
 
+/**************************************************************************/
+/*!
+    Make sure that sysinfo commands with invalid keys are rejected
+*/
+/**************************************************************************/
 void test_invalid_key(void)
 {
   message_cmd = (protMsgCommand_t)
@@ -146,6 +166,45 @@ void test_invalid_key(void)
   prot_task(NULL);
 }
 
+/**************************************************************************/
+/*!
+    Basic PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION tester
+*/
+/**************************************************************************/
+void test_sysinfo_codebase_version(void)
+{
+  /* Define the command message that will be sent */
+  message_cmd = (protMsgCommand_t)
+  {
+    .msg_type    = PROT_MSGTYPE_COMMAND,
+    .cmd_id      = PROT_CMDTYPE_SYSINFO,
+    .length      = 2,
+    .payload     = { U16_LOW_U8(PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION),
+                     U16_HIGH_U8(PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION) }
+  };
 
+  /* Define the response message that we are expecting */
+  message_response = (protMsgResponse_t)
+  {
+    .msg_type    = PROT_MSGTYPE_RESPONSE,
+    .cmd_id      = PROT_CMDTYPE_SYSINFO,
+    .length      = 3,
+    .payload     = { (uint8_t)CFG_CODEBASE_VERSION_MAJOR,
+                     (uint8_t)CFG_CODEBASE_VERSION_MINOR,
+                     (uint8_t)CFG_CODEBASE_VERSION_REVISION }
+  };
 
+  /* Put the command message into the protocol FIFO buffer */
+  fifo_write(&ff_prot_cmd, &message_cmd);
 
+  /* Indicate what we're expecting in the prot_cmd_received_cb callback */
+  prot_cmd_received_cb_Expect(&message_cmd);
+
+  /* Indicate what we're expecting in the prot_cmd_executed_cb callback */
+  prot_cmd_executed_cb_Expect(&message_response);
+
+  MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
+
+  /* ------------- Code Under Test ------------- */
+  prot_task(NULL);
+}
