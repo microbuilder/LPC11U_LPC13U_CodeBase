@@ -35,6 +35,8 @@
 /**************************************************************************/
 #include "projectconfig.h"
 
+#include <stdio.h>
+#include <string.h>
 #include "iap.h"
 
 typedef void (*IAP)(unsigned int [],unsigned int[]);
@@ -48,15 +50,18 @@ static const IAP iap_entry = (IAP) 0x1FFF1FF1;
                 4-word buffer to hold the 128-bit ID
 */
 /**************************************************************************/
-RAMFUNC error_t iapReadUID(uint32_t uid[])
+error_t iapReadUID(uint32_t uid[])
 {
   unsigned int command[5] = {58};
+  unsigned int response[5] = { 0 };
 
   /* Invoke IAP call...*/
-  /* ToDo: Check error messages */
   __disable_irq();
-  iap_entry(command, (unsigned int *)uid);
+  iap_entry(command, response);
   __enable_irq();
+
+  /* Drop the error bit */
+  memcpy(uid, &response[1], 16);
 
   return ERROR_NONE;
 }

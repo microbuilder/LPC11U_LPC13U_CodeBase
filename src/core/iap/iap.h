@@ -42,7 +42,7 @@ extern "C" {
 
 #include "projectconfig.h"
 
-RAMFUNC error_t iapReadUID(uint32_t uid[]);
+error_t iapReadUID(uint32_t uid[]);
 
 #ifdef __cplusplus
 }
