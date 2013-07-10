@@ -157,10 +157,10 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
                   mess_response[12]   ID 1 (uint32_t)
                   mess_response[16]   ID 0 (uint32_t)
        ====================================================================*/
-      // mess_response->length = 16;
-      // uint32_t uid[4];
-      // iapReadUID(uid);
-      // memcpy(&mess_response->payload[0], uid);
+       mess_response->length = 16;
+       uint32_t uid[4];
+       iapReadUID(uid);
+       memcpy(&mess_response->payload[0], uid, 16);
       break;
 
     case (PROT_CMD_SYSINFO_KEY_CLOCKSPEED):

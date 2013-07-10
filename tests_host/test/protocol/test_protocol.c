@@ -42,6 +42,7 @@
 #include "protocol_cmd_led.h"
 #include "protocol_cmd_sysinfo.h"
 
+#include "mock_iap.h"
 #include "mock_usb_hid.h"
 #include "mock_usb_custom_class.h"
 #include "mock_board.h"
