@@ -92,6 +92,59 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+			<storageModule moduleId="scannerConfiguration"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="clean" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clean</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="clobber" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clobber</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.crt.advproject.config.exe.debug.31686071.2088192637">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.crt.advproject.config.exe.debug.31686071.2088192637" moduleId="org.eclipse.cdt.core.settings" name="RF1GHZUSB">
@@ -182,6 +235,59 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+			<storageModule moduleId="scannerConfiguration"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="clean" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clean</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="clobber" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clobber</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.crt.advproject.config.exe.debug.31686071.2088192637.845617240">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.crt.advproject.config.exe.debug.31686071.2088192637.845617240" moduleId="org.eclipse.cdt.core.settings" name="LPCNFC">
@@ -271,6 +377,59 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+			<storageModule moduleId="scannerConfiguration"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="clean" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clean</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="clobber" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clobber</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.crt.advproject.config.exe.debug.31686071.2088192637.925022945">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.crt.advproject.config.exe.debug.31686071.2088192637.925022945" moduleId="org.eclipse.cdt.core.settings" name="LPCXpresso LPC1347">
@@ -361,6 +520,59 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+			<storageModule moduleId="scannerConfiguration"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="clean" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clean</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="clobber" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clobber</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.crt.advproject.config.exe.debug.31686071.2088192637.845617240.860621000">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.crt.advproject.config.exe.debug.31686071.2088192637.845617240.860621000" moduleId="org.eclipse.cdt.core.settings" name="LPCSTEPPER">
@@ -451,6 +663,59 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+			<storageModule moduleId="scannerConfiguration"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="clean" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clean</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="clobber" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clobber</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
 		</cconfiguration>
 		<cconfiguration id="com.crt.advproject.config.exe.debug.31686071.813738243.189727752">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.crt.advproject.config.exe.debug.31686071.813738243.189727752" moduleId="org.eclipse.cdt.core.settings" name="Unit Tests">
@@ -519,6 +784,59 @@
 			<storageModule moduleId="org.eclipse.cdt.core.externalSettings"/>
 			<storageModule moduleId="org.eclipse.cdt.core.language.mapping"/>
 			<storageModule moduleId="org.eclipse.cdt.internal.ui.text.commentOwnerProjectMappings"/>
+			<storageModule moduleId="scannerConfiguration"/>
+			<storageModule moduleId="org.eclipse.cdt.make.core.buildtargets">
+				<buildTargets>
+					<target name="clean" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clean</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="clobber" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>clobber</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:all</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+					<target name="test verbose delta" path="tests_host" targetID="org.eclipse.cdt.build.MakeTargetBuilder">
+						<buildCommand>rake.bat</buildCommand>
+						<buildArguments/>
+						<buildTarget>verbosity[4] test:delta</buildTarget>
+						<stopOnError>true</stopOnError>
+						<useDefaultCommand>false</useDefaultCommand>
+						<runAllBuilders>true</runAllBuilders>
+					</target>
+				</buildTargets>
+			</storageModule>
 		</cconfiguration>
 	</storageModule>
 	<storageModule moduleId="cdtBuildSystem" version="4.0.0">
