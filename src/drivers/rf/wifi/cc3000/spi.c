@@ -303,14 +303,14 @@ void SpiWriteDataSynchronous(unsigned char *data, unsigned short size)
 
     /* RX */
     #if CFG_CC3000_SPI_PORT == 1
-      while ( (LPC_SSP1->SR & (SSP1_SR_BSY_BUSY|SSP1_SR_RNE_NOTEMPTY)) != SSP1_SR_RNE_NOTEMPTY );
+      while ((LPC_SSP1->SR & (SSP1_SR_BSY_BUSY|SSP1_SR_RNE_NOTEMPTY)) != SSP1_SR_RNE_NOTEMPTY);
       dummy = LPC_SSP1->DR;
     #else
-      while ( (LPC_SSP0->SR & (SSP0_SR_BSY_BUSY|SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
-      dummy = LPC_SSP0->DR ;
+      while ((LPC_SSP0->SR & (SSP0_SR_BSY_BUSY|SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY);
+      dummy = LPC_SSP0->DR;
     #endif
 
-    size --;
+    size--;
     data++;
   }
 }
