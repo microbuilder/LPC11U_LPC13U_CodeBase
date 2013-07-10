@@ -46,24 +46,8 @@
 #include <string.h>
 #include "boards/board.h"
 #include "../protocol.h"
+#include "protocol_cmd_sysinfo.h"
 #include "core/iap/iap.h"
-
-/**************************************************************************/
-/*!
-    SYSINFO Keys (indicates what specific system information we want)
-*/
-/**************************************************************************/
-typedef enum
-{
-  PROT_CMD_SYSINFO_KEY_FIRST                = 0x0000,
-  PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION     = 0x0001,   /**< Code base version (3*U8) */
-  PROT_CMD_SYSINFO_KEY_FIRMWARE_VERSION     = 0x0002,   /**< Firmware version (3*U8) */
-  PROT_CMD_SYSINFO_KEY_MCU_STRING           = 0x0003,   /**< MCU model (string) */
-  PROT_CMD_SYSINFO_KEY_SERIAL_NUMBER        = 0x0004,   /**< Unique on-chip serial number (4*U32) */
-  PROT_CMD_SYSINFO_KEY_CLOCKSPEED           = 0x0005,   /**< Core clock speed in Hz (U32) */
-  PROT_CMD_SYSINFO_KEY_EEPROMSIZE           = 0x0006,   /**< EEPROM size in bytes (U32) */
-  PROT_CMD_SYSINFO_KEY_LAST
-} prot_cmd_sysinfo_key_t;
 
 /**************************************************************************/
 /*!
@@ -174,9 +158,9 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         RESPONSE: Payload Length      4 bytes
                   mess_response[4]    Clock speed in Hz (uint32_t)
        ====================================================================*/
-      // mess_response->length = 4;
-      // uint32_t speed = (uint32_t)SystemCoreClock;
-      // memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
+       mess_response->length = 4;
+       uint32_t speed = (uint32_t)SystemCoreClock;
+       memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
       break;
 
     case (PROT_CMD_SYSINFO_KEY_EEPROMSIZE):
