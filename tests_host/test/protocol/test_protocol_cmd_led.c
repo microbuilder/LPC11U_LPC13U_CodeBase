@@ -48,6 +48,7 @@
 #include "mock_board.h"
 #include "mock_protocol_callback.h"
 
+uint32_t SystemCoreClock = 12000000; // overshadow the variable used to determine core lock
 static protMsgCommand_t message_cmd;
 
 void setUp(void)

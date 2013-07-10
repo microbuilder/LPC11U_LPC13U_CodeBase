@@ -48,9 +48,14 @@
 #include "mock_board.h"
 #include "mock_protocol_callback.h"
 
+uint32_t SystemCoreClock = 12000000; // overshadow the variable used to determine core lock
+
 static protMsgCommand_t  message_cmd;
 static protMsgError_t    message_error;
 static protMsgResponse_t message_response;
+
+#define U16_HIGH_U8(u16)  ((uint8_t) (((u16) >> 8) & 0x00FF))
+#define U16_LOW_U8(u16)   ((uint8_t) ((u16) & 0x00FF))
 
 void setUp(void)
 {
@@ -70,8 +75,7 @@ void test_invalid_length_zero(void)
     .msg_type    = PROT_MSGTYPE_COMMAND,
     .cmd_id      = PROT_CMDTYPE_SYSINFO,
     .length      = 0,
-//    .payload     = { PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION }
-    .payload     = { 01, 00 }
+    .payload     = { U16_LOW_U8(PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION),  U16_HIGH_U8(PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION) }
   };
 
   message_error = (protMsgError_t)
@@ -97,7 +101,7 @@ void test_invalid_length_too_long(void)
     .msg_type    = PROT_MSGTYPE_COMMAND,
     .cmd_id      = PROT_CMDTYPE_SYSINFO,
     .length      = 40,
-    .payload     = { 01, 00 }
+    .payload     = { U16_LOW_U8(PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION),  U16_HIGH_U8(PROT_CMD_SYSINFO_KEY_CODEBASE_VERSION) }
   };
 
   message_error = (protMsgError_t)
@@ -115,4 +119,33 @@ void test_invalid_length_too_long(void)
   //------------- Code Under Test -------------//
   prot_task(NULL);
 }
+
+void test_invalid_key(void)
+{
+  message_cmd = (protMsgCommand_t)
+  {
+    .msg_type    = PROT_MSGTYPE_COMMAND,
+    .cmd_id      = PROT_CMDTYPE_SYSINFO,
+    .length      = 40,
+    .payload     = { U16_LOW_U8(PROT_CMD_SYSINFO_KEY_LAST),  U16_HIGH_U8(PROT_CMD_SYSINFO_KEY_LAST) }
+  };
+
+  message_error = (protMsgError_t)
+  {
+    .msg_type = PROT_MSGTYPE_ERROR,
+    .error_id = ERROR_INVALIDPARAMETER
+  };
+
+  fifo_write(&ff_prot_cmd, &message_cmd);
+
+  prot_cmd_received_cb_Expect(&message_cmd);
+  prot_cmd_error_cb_Expect(&message_error);
+  MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
+
+  //------------- Code Under Test -------------//
+  prot_task(NULL);
+}
+
+
+
 
