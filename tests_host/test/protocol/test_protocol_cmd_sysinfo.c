@@ -81,7 +81,7 @@ void test_invalid_length_zero(void)
   message_error = (protMsgError_t)
   {
     .msg_type = PROT_MSGTYPE_ERROR,
-    .error_id = ERROR_INVALIDPARAMETER
+    .error_id = ERROR_PROT_INVALIDPAYLOAD
   };
 
   fifo_write(&ff_prot_cmd, &message_cmd);
@@ -107,7 +107,7 @@ void test_invalid_length_too_long(void)
   message_error = (protMsgError_t)
   {
     .msg_type = PROT_MSGTYPE_ERROR,
-    .error_id = ERROR_INVALIDPARAMETER
+    .error_id = ERROR_PROT_INVALIDPAYLOAD
   };
 
   fifo_write(&ff_prot_cmd, &message_cmd);

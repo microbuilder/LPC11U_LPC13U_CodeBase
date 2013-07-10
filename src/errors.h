@@ -109,6 +109,7 @@ typedef enum
     -----------------------------------------------------------------------*/
     ERROR_PROT_INVALIDMSGTYPE                   = 0x121,  /**< Unexpected msg type encountered */
     ERROR_PROT_INVALIDCOMMANDID                 = 0x122,  /**< Unknown or out of range command ID */
+    ERROR_PROT_INVALIDPAYLOAD                   = 0x123,  /**< Message payload has a problem (invalid len, etc.) */
   /*=======================================================================*/
 
 

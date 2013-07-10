@@ -20,6 +20,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added CFG\_ENABLE\_TIMER32 to disable TIMER32 (interrupt handlers use a lot of flash/SRAM)
 - CC3000 support added (experimental, see note below!)
 - Added sysinfo command to the simple binary protocol
+- Fixed a bug in iap.c (truncated serial numbers)
 - **BREAKING CHANGE**: Moved all /src/drivers/rf code to technology-specific folders ('nfc', 'wifi', etc.)
 - **KNOWN ISSUE**: There's a truckload of issues with the CC3000 API from TI!  It can't currently be built using the makefile, and is CW only at the moment. Be sure to disable CFG_CC3000 in our board config file until these issues can all be resolved!
 

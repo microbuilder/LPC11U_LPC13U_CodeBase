@@ -77,6 +77,7 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
                   mess_response[5]    Minor version number
                   mess_response[6]    Revision number
        ====================================================================*/
+      ASSERT(length == 2, ERROR_PROT_INVALIDPAYLOAD);
       mess_response->length = 3;
       mess_response->payload[0] = (uint8_t)CFG_CODEBASE_VERSION_MAJOR & 0xFF;
       mess_response->payload[1] = (uint8_t)CFG_CODEBASE_VERSION_MINOR & 0xFF;
@@ -96,6 +97,7 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
                   mess_response[5]    Minor version number
                   mess_response[6]    Revision number
        ====================================================================*/
+      ASSERT(length == 2, ERROR_PROT_INVALIDPAYLOAD);
       mess_response->length = 3;
       mess_response->payload[0] = (uint8_t)CFG_FIRMWARE_VERSION_MAJOR & 0xFF;
       mess_response->payload[1] = (uint8_t)CFG_FIRMWARE_VERSION_MINOR & 0xFF;
@@ -113,6 +115,7 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         RESPONSE: Payload Length      variable (0..60 bytes)
                   mess_response[4]    Start of MCU string
        ====================================================================*/
+      ASSERT(length == 2, ERROR_PROT_INVALIDPAYLOAD);
       #ifdef CFG_MCU_LPC11U24FBD48_401
         mess_response->length = (uint8_t)strlen("LPC11U24FBD48/401");
         memcpy(&mess_response->payload[0], "LPC11U24FBD48/401", strlen("LPC11U24FBD48/401"));
@@ -141,10 +144,11 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
                   mess_response[12]   ID 1 (uint32_t)
                   mess_response[16]   ID 0 (uint32_t)
        ====================================================================*/
-       mess_response->length = 16;
-       uint32_t uid[4];
-       iapReadUID(uid);
-       memcpy(&mess_response->payload[0], uid, 16);
+      ASSERT(length == 2, ERROR_PROT_INVALIDPAYLOAD);
+      mess_response->length = 16;
+      uint32_t uid[4];
+      iapReadUID(uid);
+      memcpy(&mess_response->payload[0], uid, 16);
       break;
 
     case (PROT_CMD_SYSINFO_KEY_CLOCKSPEED):
@@ -158,9 +162,10 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
         RESPONSE: Payload Length      4 bytes
                   mess_response[4]    Clock speed in Hz (uint32_t)
        ====================================================================*/
-       mess_response->length = 4;
-       uint32_t speed = (uint32_t)SystemCoreClock;
-       memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
+      ASSERT(length == 2, ERROR_PROT_INVALIDPAYLOAD);
+      mess_response->length = 4;
+      uint32_t speed = (uint32_t)SystemCoreClock;
+      memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
       break;
 
     case (PROT_CMD_SYSINFO_KEY_EEPROMSIZE):
@@ -176,6 +181,7 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
                   mess_response[4]    EEPROM size in bytes (uint32_t)
 
        ====================================================================*/
+      ASSERT(length == 2, ERROR_PROT_INVALIDPAYLOAD);
       mess_response->length = 4;
       uint32_t eepromSize = (uint32_t)CFG_EEPROM_SIZE;
       memcpy(&mess_response->payload[0], &eepromSize, sizeof(uint32_t));
