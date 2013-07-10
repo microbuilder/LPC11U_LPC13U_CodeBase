@@ -39,7 +39,7 @@
 /**************************************************************************/
 #include "projectconfig.h"
 
-#if defined CFG_BRD_LPCXPRESSO_LPC1347
+#ifdef CFG_BRD_LPCXPRESSO_LPC1347
 
 #include <string.h> /* strlen */
 
@@ -52,8 +52,8 @@
 
 #ifdef CFG_CHIBI
   #include "messages.h"
-  #include "drivers/rf/chibi/chb.h"
-  #include "drivers/rf/chibi/chb_drvr.h"
+  #include "drivers/rf/802.15.4/chibi/chb.h"
+  #include "drivers/rf/802.15.4/chibi/chb_drvr.h"
 #endif
 
 #ifdef CFG_USB
@@ -84,7 +84,7 @@
 #endif
 
 #ifdef CFG_CC3000
-  #include "drivers/rf/cc3000/wifi.h"
+  #include "drivers/rf/wifi/cc3000/wifi.h"
 #endif
 
 #ifdef CFG_SDCARD
@@ -168,7 +168,9 @@ void boardInit(void)
   boardLED(CFG_LED_ON);
 }
 
-#if defined CFG_CMSIS_RTOS
+/* The following code is used if CMSIS RTOS (RTX) is enabled */
+#ifdef CFG_CMSIS_RTOS
+
   /* Thread IDs */
   osThreadId tid_mainthread;      /* ID for main thread   */
   osThreadId tid_blinkythread;    /* ID for blinky thread */
@@ -238,16 +240,16 @@ void boardInit(void)
 
     return 1;
   }
-#endif
 
+#endif /* CFG_CMSIS_RTOS */
+
+#ifndef _TEST_
+#ifndef CFG_CMSIS_RTOS
 /**************************************************************************/
 /*!
     @brief Primary (non-RTOS!) entry point for this project.
 */
 /**************************************************************************/
-#ifndef _TEST_
-#ifndef CFG_CMSIS_RTOS
-
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
@@ -256,119 +258,24 @@ int main(void)
   /* Configure the HW */
   boardInit();
 
-//  #ifdef CFG_CC3000
-//    error_t error = wifi_init(0);
-//    if (!error)
-//    {
-//      /* Get the firmware version (we're coding against 1.19!) */
-//      uint8_t major, minor;
-//      if (!wifi_getFirmwareVersion(&major, &minor))
-//      {
-//        printf("Firmware    : v%d.%d%s", major, minor, CFG_PRINTF_NEWLINE);
-//      }
-//
-//      /* Get the MAC Address */
-//      uint8_t macAddress[6] = { 0, 0, 0, 0, 0, 0 };
-//
-//      if (!wifi_getMacAddress(macAddress))
-//      {
-//        /* Display the MAC address */
-//        printf("MAC Address : %02X:%02X:%02X:%02X:%02X:%02X%s",
-//          macAddress[0], macAddress[1], macAddress[2],
-//          macAddress[3], macAddress[4], macAddress[5],
-//          CFG_PRINTF_NEWLINE);
-//      }
-//
-//      /* Optional: Do an SSID scan */
-//      // printf("Performing an SSID scan (~4s)%s", CFG_PRINTF_NEWLINE);
-//      // wifi_displaySSIDResults();
-//
-//      /* Try to connect to an AP */
-//      /* NOTE: key length is 16 bytes max in the CC3000 API, */
-//      /*       ssid length is 32 bytes max! */
-//      uint8_t *ssid = "TESTNETWORK";
-//      uint8_t *key = "abcdefghijklmnop";
-//
-//      printf("Connecting to %s (30s timeout) ...%s", ssid, CFG_PRINTF_NEWLINE);
-//
-//      error = wifi_connectSecure(3, ssid, strlen(ssid), key, strlen(key));
-//
-//      if (!error)
-//      {
-//        printf("Connected!%s", CFG_PRINTF_NEWLINE);
-//
-//        /* Display the connection details */
-//        uint8_t ip[4];
-//        uint8_t netmask[4];
-//        uint8_t gateway[4];
-//        uint8_t dhcp[4];
-//        uint8_t dns[4];
-//
-//        error = wifi_getConnectionDetails(ip, netmask, gateway, dhcp, dns);
-//
-//        if (!error)
-//        {
-//          printf("IP Address  : %d.%d.%d.%d %s",
-//            ip[0], ip[1], ip[2], ip[3], CFG_PRINTF_NEWLINE);
-//          printf("Netmask     : %d.%d.%d.%d %s",
-//            netmask[0], netmask[1], netmask[2], netmask[3], CFG_PRINTF_NEWLINE);
-//          printf("Gateway     : %d.%d.%d.%d %s",
-//            gateway[0], gateway[1], gateway[2], gateway[3], CFG_PRINTF_NEWLINE);
-//          printf("DHCP Server : %d.%d.%d.%d %s",
-//            dhcp[0], dhcp[1], dhcp[2], dhcp[3], CFG_PRINTF_NEWLINE);
-//          printf("DNS Server  : %d.%d.%d.%d %s",
-//            dns[0], dns[1], dns[2], dns[3], CFG_PRINTF_NEWLINE);
-//
-//          /* Ping www.adafruit.com 3 times */
-//          uint8_t pingIP[4] = { 207, 58, 139, 247 };
-//          uint8_t pingAttempts = 3;
-//          uint16_t pingTimeout = 1000;
-//
-//          printf("Pinging %d.%d.%d.%d %d times (%d ms timeout)%s",
-//            pingIP[0], pingIP[1], pingIP[2], pingIP[3],
-//            pingAttempts, pingTimeout, CFG_PRINTF_NEWLINE);
-//
-//          error = wifi_ping(pingIP, pingAttempts, pingTimeout);
-//          if (!error)
-//          {
-//            /* Now lookup www.adafruit.com and see what we get */
-//            uint8_t lookupIP[4] = { 0, 0, 0, 0 };
-//            error = wifi_getHostByName("www.adafruit.com", lookupIP);
-//            printf("www.adafruit.com = %d.%d.%d.%d %s",
-//              lookupIP[0], lookupIP[1], lookupIP[2], lookupIP[3],
-//              CFG_PRINTF_NEWLINE);
-//          }
-//
-//          /* Socket test */
-//
-//        }
-//      }
-//    }
-//
-//    /* Handle any error messages here */
-//    if(error)
-//    {
-//      printf("CC3000 init failed ...");
-//      switch (error)
-//      {
-//        case ERROR_CC3000_CONNECT_TIMEOUT:
-//        printf("timed out waiting for a connection%s", CFG_PRINTF_NEWLINE);
-//          break;
-//        default:
-//          printf("error 0x%04X%s", error, CFG_PRINTF_NEWLINE);
-//          break;
-//      }
-//    }
-//
-//    /* Disconnect for now to clean up after ourselves */
-//    printf("Disconnecting%s", CFG_PRINTF_NEWLINE);
-//    wifi_disconnect();
-//  #endif
-
   while (1)
   {
+    /* Blinky (1Hz) */
+    currentSecond = delayGetSecondsActive();
+    if (currentSecond != lastSecond)
+    {
+      lastSecond = currentSecond;
+      boardLED(lastSecond % 2);
+    }
+
+    /* Check for binary protocol input if CFG_PROTOCOL is enabled */
     #ifdef CFG_PROTOCOL
       prot_task(NULL);
+    #endif
+
+    /* Poll for CLI input if CFG_INTERFACE is enabled */
+    #ifdef CFG_INTERFACE
+      cliPoll();
     #endif
 
 //    if ( usb_custom_is_ready_to_send() )
@@ -386,21 +293,11 @@ int main(void)
 //      custom_recv_magic_number = 0;
 //    }
 
-    /* Poll for CLI input if CFG_INTERFACE is enabled */
-    #ifdef CFG_INTERFACE
-      cliPoll();
-    #endif
-
-    currentSecond = delayGetSecondsActive();
-    if (currentSecond != lastSecond)
-    {
-      lastSecond = currentSecond;
-      boardLED(lastSecond % 2);
-    }
+    /* Optionally enter high level sleep mode here via WFI */
   }
 }
-#endif
-#endif
+#endif /* !CFG_CMSIS_RTOS */
+#endif /* !_TEST_ */
 
 /**************************************************************************/
 /*!
@@ -440,4 +337,4 @@ void boardWakeup(void)
   // ToDo!
 }
 
-#endif
+#endif /* CFG_BRD_LPCXPRESSO_LPC1347 */

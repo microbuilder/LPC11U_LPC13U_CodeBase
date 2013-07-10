@@ -42,10 +42,11 @@
 #ifdef CFG_CHIBI
 
 #include <string.h>
+
 #include "messages.h"
 #include "core/delay/delay.h"
-#include "drivers/rf/chibi/chb.h"
-#include "drivers/rf/chibi/chb_drvr.h"
+#include "chb.h"
+#include "chb_drvr.h"
 
 static uint8_t  _msg[CHB_MAX_PAYLOAD];     // Buffer used when sending messages
 static uint16_t _msg_msgID;                // Auto-incrementing ID for message envelopes

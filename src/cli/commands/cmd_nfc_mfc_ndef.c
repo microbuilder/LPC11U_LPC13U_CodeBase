@@ -45,12 +45,12 @@
 #include "cli/cli.h"
 #include "cli/commands.h"
 
-#include "drivers/rf/pn532/pn532.h"
-#include "drivers/rf/pn532/pn532_bus.h"
-#include "drivers/rf/pn532/helpers/pn532_config.h"
-#include "drivers/rf/pn532/helpers/pn532_mifare_classic.h"
-#include "drivers/rf/pn532/helpers/pn532_ndef.h"
-#include "drivers/rf/pn532/helpers/pn532_ndef_cards.h"
+#include "drivers/rf/nfc/pn532/pn532.h"
+#include "drivers/rf/nfc/pn532/pn532_bus.h"
+#include "drivers/rf/nfc/pn532/helpers/pn532_config.h"
+#include "drivers/rf/nfc/pn532/helpers/pn532_mifare_classic.h"
+#include "drivers/rf/nfc/pn532/helpers/pn532_ndef.h"
+#include "drivers/rf/nfc/pn532/helpers/pn532_ndef_cards.h"
 
 void message_dump(pn532_ndef_message_t mess);
 void print_tag_tech(Tag_t  *pTag);

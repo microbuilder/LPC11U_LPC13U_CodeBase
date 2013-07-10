@@ -37,15 +37,15 @@
 
 #ifdef CFG_CC3000
 
-#include "drivers/rf/cc3000/wifi.h"
-#include "drivers/rf/cc3000/hostdriver/wlan.h"
-#include "drivers/rf/cc3000/hostdriver/socket.h"
-#include "drivers/rf/cc3000/hostdriver/hci.h"
-#include "drivers/rf/cc3000/hostdriver/nvmem.h"
-#include "drivers/rf/cc3000/hostdriver/security.h"
-#include "drivers/rf/cc3000/hostdriver/netapp.h"
-#include "drivers/rf/cc3000/hostdriver/evnt_handler.h"
-#include "drivers/rf/cc3000/spi.h"
+#include "wifi.h"
+#include "spi.h"
+#include "hostdriver/wlan.h"
+#include "hostdriver/socket.h"
+#include "hostdriver/hci.h"
+#include "hostdriver/nvmem.h"
+#include "hostdriver/security.h"
+#include "hostdriver/netapp.h"
+#include "hostdriver/evnt_handler.h"
 #include "core/delay/delay.h"
 #include "core/gpio/gpio.h"
 

@@ -47,11 +47,11 @@
 #include "cli/commands.h"       // Generic helper functions
 
 #include "core/i2c/i2c.h"
-#include "drivers/rf/pn532/pn532.h"
-#include "drivers/rf/pn532/pn532_bus.h"
-#include "drivers/rf/pn532/helpers/pn532_config.h"
-#include "drivers/rf/pn532/helpers/pn532_mifare_classic.h"
-#include "drivers/rf/pn532/helpers/pn532_mifare_ultralight.h"
+#include "drivers/rf/nfc/pn532/pn532.h"
+#include "drivers/rf/nfc/pn532/pn532_bus.h"
+#include "drivers/rf/nfc/pn532/helpers/pn532_config.h"
+#include "drivers/rf/nfc/pn532/helpers/pn532_mifare_classic.h"
+#include "drivers/rf/nfc/pn532/helpers/pn532_mifare_ultralight.h"
 
 /**************************************************************************/
 /*!

@@ -133,44 +133,50 @@
           </folder>
         </folder>
         <folder Name="rf">
-          <folder Name="chibi" file_name="">
-            <file file_name="src/drivers/rf/chibi/chb.c"/>
-            <file file_name="src/drivers/rf/chibi/chb_buf.c"/>
-            <file file_name="src/drivers/rf/chibi/chb_drvr.c"/>
-            <file file_name="src/drivers/rf/chibi/chb_eeprom.c"/>
-            <file file_name="src/drivers/rf/chibi/chb_spi.c"/>
-            <file file_name="src/drivers/rf/chibi/messages.c"/>
-          </folder>
-          <folder Name="pn532">
-            <folder Name="helpers" file_name="">
-              <file file_name="src/drivers/rf/pn532/helpers/pn532_mifare_classic.c"/>
-              <file file_name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.c"/>
-              <file file_name="src/drivers/rf/pn532/helpers/pn532_gpio.c"/>
-              <file file_name="src/drivers/rf/pn532/helpers/pn532_config.c"/>
-              <file file_name="src/drivers/rf/pn532/helpers/pn532_ndef.c"/>
-              <file file_name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.c"/>
-            </folder>
-            <file file_name="src/drivers/rf/pn532/pn532.c"/>
-            <file file_name="src/drivers/rf/pn532/pn532_bus_i2c.c"/>
-            <file file_name="src/drivers/rf/pn532/pn532_bus_uart.c"/>
-            <folder Name="mem_allocator" file_name="">
-              <file file_name="src/drivers/rf/pn532/mem_allocator/bget.c"/>
-              <file file_name="src/drivers/rf/pn532/mem_allocator/pn532_mem.c"/>
+          <folder Name="802.15.4">
+            <folder Name="chibi" file_name="">
+              <file file_name="src/drivers/rf/802.15.4/chibi/chb.c"/>
+              <file file_name="src/drivers/rf/802.15.4/chibi/chb_buf.c"/>
+              <file file_name="src/drivers/rf/802.15.4/chibi/chb_drvr.c"/>
+              <file file_name="src/drivers/rf/802.15.4/chibi/chb_eeprom.c"/>
+              <file file_name="src/drivers/rf/802.15.4/chibi/chb_spi.c"/>
+              <file file_name="src/drivers/rf/802.15.4/chibi/messages.c"/>
             </folder>
           </folder>
-          <folder Name="cc3000" file_name="">
-            <folder Name="hostdriver" file_name="">
-              <file file_name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/security.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
-              <file file_name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
+          <folder Name="nfc">
+            <folder Name="pn532">
+              <folder Name="helpers" file_name="">
+                <file file_name="src/drivers/rf/nfc/pn532/helpers/pn532_mifare_classic.c"/>
+                <file file_name="src/drivers/rf/nfc/pn532/helpers/pn532_mifare_ultralight.c"/>
+                <file file_name="src/drivers/rf/nfc/pn532/helpers/pn532_gpio.c"/>
+                <file file_name="src/drivers/rf/nfc/pn532/helpers/pn532_config.c"/>
+                <file file_name="src/drivers/rf/nfc/pn532/helpers/pn532_ndef.c"/>
+                <file file_name="src/drivers/rf/nfc/pn532/helpers/pn532_ndef_cards.c"/>
+              </folder>
+              <file file_name="src/drivers/rf/nfc/pn532/pn532.c"/>
+              <file file_name="src/drivers/rf/nfc/pn532/pn532_bus_i2c.c"/>
+              <file file_name="src/drivers/rf/nfc/pn532/pn532_bus_uart.c"/>
+              <folder Name="mem_allocator" file_name="">
+                <file file_name="src/drivers/rf/nfc/pn532/mem_allocator/bget.c"/>
+                <file file_name="src/drivers/rf/nfc/pn532/mem_allocator/pn532_mem.c"/>
+              </folder>
             </folder>
-            <file file_name="src/drivers/rf/cc3000/spi.c"/>
-            <file file_name="src/drivers/rf/cc3000/wifi.c"/>
+          </folder>
+          <folder Name="wifi">
+            <folder Name="cc3000" file_name="">
+              <folder Name="hostdriver" file_name="">
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/cc3000_common.c"/>
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/evnt_handler.c"/>
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/hci.c"/>
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/netapp.c"/>
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/nvmem.c"/>
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/security.c"/>
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/socket.c"/>
+                <file file_name="src/drivers/rf/wifi/cc3000/hostdriver/wlan.c"/>
+              </folder>
+              <file file_name="src/drivers/rf/wifi/cc3000/spi.c"/>
+              <file file_name="src/drivers/rf/wifi/cc3000/wifi.c"/>
+            </folder>
           </folder>
         </folder>
         <folder Name="storage">
@@ -314,6 +320,7 @@
         <file file_name="src/protocol/protocol.c"/>
         <folder Name="commands" file_name="">
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
+          <file file_name="src/protocol/commands/protocol_cmd_sysinfo.c"/>
         </folder>
         <file file_name="src/protocol/prot_cmdtable.h"/>
       </folder>

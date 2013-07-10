@@ -46,7 +46,7 @@
 #include "cli/cli.h"
 #include "cli/commands.h"
 #include "core/eeprom/eeprom.h"
-#include "drivers/rf/cc3000/wifi.h"
+#include "drivers/rf/wifi/cc3000/wifi.h"
 
 /**************************************************************************/
 /*!

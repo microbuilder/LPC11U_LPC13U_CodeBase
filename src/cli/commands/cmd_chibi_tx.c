@@ -45,8 +45,8 @@
 #include "boards/board.h"       // boardLED
 
 #ifdef CFG_CHIBI
-  #include "drivers/rf/chibi/chb.h"
-  #include "drivers/rf/chibi/chb_drvr.h"
+  #include "drivers/rf/802.15.4/chibi/chb.h"
+  #include "drivers/rf/802.15.4/chibi/chb_drvr.h"
 
 /**************************************************************************/
 /*!

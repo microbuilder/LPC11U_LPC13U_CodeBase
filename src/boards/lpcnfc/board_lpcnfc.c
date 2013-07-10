@@ -49,8 +49,8 @@
 
 #ifdef CFG_CHIBI
   #include "messages.h"
-  #include "drivers/rf/chibi/chb.h"
-  #include "drivers/rf/chibi/chb_drvr.h"
+  #include "drivers/rf/802.15.4/chibi/chb.h"
+  #include "drivers/rf/802.15.4/chibi/chb_drvr.h"
 #endif
 
 #ifdef CFG_USB
@@ -74,7 +74,7 @@
 #endif
 
 #ifdef CFG_PN532
-  #include "drivers/rf/pn532/pn532.h"
+  #include "drivers/rf/nfc/pn532/pn532.h"
 #endif
 
 #ifdef CFG_ENABLE_UART

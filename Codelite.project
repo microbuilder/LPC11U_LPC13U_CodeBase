@@ -69,74 +69,80 @@
         <File Name="src/drivers/rtc/rtc.h"/>
       </VirtualDirectory>
       <VirtualDirectory Name="rf">
-        <VirtualDirectory Name="pn532">
-          <VirtualDirectory Name="helpers">
-            <File Name="src/drivers/rf/pn532/helpers/pn532_config.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_config.h"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_gpio.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_gpio.h"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare.h"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_classic.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_classic.h"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.h"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.h"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.h"/>
+        <VirtualDirectory Name="802.15.4">
+          <VirtualDirectory Name="chibi">
+            <File Name="src/drivers/rf/chibi/chb.c"/>
+            <File Name="src/drivers/rf/chibi/chb.h"/>
+            <File Name="src/drivers/rf/chibi/chb_buf.c"/>
+            <File Name="src/drivers/rf/chibi/chb_buf.h"/>
+            <File Name="src/drivers/rf/chibi/chb_drvr.c"/>
+            <File Name="src/drivers/rf/chibi/chb_drvr.h"/>
+            <File Name="src/drivers/rf/chibi/chb_eeprom.c"/>
+            <File Name="src/drivers/rf/chibi/chb_eeprom.h"/>
+            <File Name="src/drivers/rf/chibi/chb_spi.c"/>
+            <File Name="src/drivers/rf/chibi/chb_spi.h"/>
+            <File Name="src/drivers/rf/chibi/types.h"/>
+            <File Name="src/drivers/rf/chibi/messages.c"/>
+            <File Name="src/drivers/rf/chibi/messages.h"/>
           </VirtualDirectory>
-          <VirtualDirectory Name="mem_allocator">
-            <File Name="src/drivers/rf/pn532/helpers/bget.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/bget.h"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_mem.c"/>
-            <File Name="src/drivers/rf/pn532/helpers/pn532_mem.h"/>
-          </VirtualDirectory>
-          <File Name="src/drivers/rf/pn532/pn532.c"/>
-          <File Name="src/drivers/rf/pn532/pn532.h"/>
-          <File Name="src/drivers/rf/pn532/pn532_bus.h"/>
-          <File Name="src/drivers/rf/pn532/pn532_bus_i2c.c"/>
-          <File Name="src/drivers/rf/pn532/pn532_bus_uart.c"/>
         </VirtualDirectory>
-        <VirtualDirectory Name="chibi">
-          <File Name="src/drivers/rf/chibi/chb.c"/>
-          <File Name="src/drivers/rf/chibi/chb.h"/>
-          <File Name="src/drivers/rf/chibi/chb_buf.c"/>
-          <File Name="src/drivers/rf/chibi/chb_buf.h"/>
-          <File Name="src/drivers/rf/chibi/chb_drvr.c"/>
-          <File Name="src/drivers/rf/chibi/chb_drvr.h"/>
-          <File Name="src/drivers/rf/chibi/chb_eeprom.c"/>
-          <File Name="src/drivers/rf/chibi/chb_eeprom.h"/>
-          <File Name="src/drivers/rf/chibi/chb_spi.c"/>
-          <File Name="src/drivers/rf/chibi/chb_spi.h"/>
-          <File Name="src/drivers/rf/chibi/types.h"/>
-          <File Name="src/drivers/rf/chibi/messages.c"/>
-          <File Name="src/drivers/rf/chibi/messages.h"/>
-        </VirtualDirectory>
-        <VirtualDirectory Name="cc3000">
-          <VirtualDirectory Name="hostdriver">
-            <File Name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/cc3000_common.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/evnt_handler.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/hci.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/host_driver_version.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/netapp.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/nvmem.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/security.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/security.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/socket.h"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
-            <File Name="src/drivers/rf/cc3000/hostdriver/wlan.h"/>
+        <VirtualDirectory Name="nfc">
+          <VirtualDirectory Name="pn532">
+            <VirtualDirectory Name="helpers">
+              <File Name="src/drivers/rf/pn532/helpers/pn532_config.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_config.h"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_gpio.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_gpio.h"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_mifare.h"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_classic.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_classic.h"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_mifare_ultralight.h"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_ndef.h"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_ndef_cards.h"/>
+            </VirtualDirectory>
+            <VirtualDirectory Name="mem_allocator">
+              <File Name="src/drivers/rf/pn532/helpers/bget.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/bget.h"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_mem.c"/>
+              <File Name="src/drivers/rf/pn532/helpers/pn532_mem.h"/>
+            </VirtualDirectory>
+            <File Name="src/drivers/rf/pn532/pn532.c"/>
+            <File Name="src/drivers/rf/pn532/pn532.h"/>
+            <File Name="src/drivers/rf/pn532/pn532_bus.h"/>
+            <File Name="src/drivers/rf/pn532/pn532_bus_i2c.c"/>
+            <File Name="src/drivers/rf/pn532/pn532_bus_uart.c"/>
           </VirtualDirectory>
-          <File Name="src/drivers/rf/cc3000/spi.c"/>
-          <File Name="src/drivers/rf/cc3000/spi.h"/>
-          <File Name="src/drivers/rf/cc3000/spi_version.h"/>
-          <File Name="src/drivers/rf/cc3000/wifi.c"/>
-          <File Name="src/drivers/rf/cc3000/wifi.h"/>
+        </VirtualDirectory>
+        <VirtualDirectory Name="wifi">
+          <VirtualDirectory Name="cc3000">
+            <VirtualDirectory Name="hostdriver">
+              <File Name="src/drivers/rf/cc3000/hostdriver/cc3000_common.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/cc3000_common.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/evnt_handler.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/evnt_handler.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/hci.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/hci.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/host_driver_version.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/netapp.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/netapp.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/nvmem.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/nvmem.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/security.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/security.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/socket.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/socket.h"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/wlan.c"/>
+              <File Name="src/drivers/rf/cc3000/hostdriver/wlan.h"/>
+            </VirtualDirectory>
+            <File Name="src/drivers/rf/cc3000/spi.c"/>
+            <File Name="src/drivers/rf/cc3000/spi.h"/>
+            <File Name="src/drivers/rf/cc3000/spi_version.h"/>
+            <File Name="src/drivers/rf/cc3000/wifi.c"/>
+            <File Name="src/drivers/rf/cc3000/wifi.h"/>
+          </VirtualDirectory>
         </VirtualDirectory>
       </VirtualDirectory>
       <VirtualDirectory Name="pwm">

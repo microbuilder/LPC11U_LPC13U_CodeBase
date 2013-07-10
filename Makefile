@@ -205,11 +205,32 @@ OBJS  += $(OBJ_PATH)/stepper.o
 VPATH += src/drivers/pwm/pca9685
 OBJS  += $(OBJ_PATH)/pca9685.o
 
-VPATH += src/drivers/rf/cc3000
+VPATH += src/drivers/rf/802.15.4/chibi
+OBJS  += $(OBJ_PATH)/chb.o 
+OBJS  += $(OBJ_PATH)/chb_buf.o 
+OBJS  += $(OBJ_PATH)/chb_drvr.o 
+OBJS  += $(OBJ_PATH)/chb_eeprom.o 
+OBJS  += $(OBJ_PATH)/chb_spi.o
+OBJS  += $(OBJ_PATH)/messages.o
+
+VPATH += src/drivers/rf/nfc/pn532
+OBJS  += $(OBJ_PATH)/pn532.o 
+OBJS  += $(OBJ_PATH)/pn532_bus_i2c.o 
+OBJS  += $(OBJ_PATH)/pn532_bus_uart.o
+
+VPATH += src/drivers/rf/nfc/pn532/helpers
+OBJS  += $(OBJ_PATH)/pn532_config.o 
+OBJS  += $(OBJ_PATH)/pn532_gpio.o 
+OBJS  += $(OBJ_PATH)/pn532_mifare_classic.o 
+OBJS  += $(OBJ_PATH)/pn532_mifare_ultralight.o 
+OBJS  += $(OBJ_PATH)/pn532_ndef.o 
+OBJS  += $(OBJ_PATH)/pn532_ndef_cards.o 
+
+VPATH += src/drivers/rf/wifi/cc3000
 OBJS  += $(OBJ_PATH)/spi.o 
 OBJS  += $(OBJ_PATH)/wifi.o 
 
-VPATH += src/drivers/rf/cc3000/hostdriver
+VPATH += src/drivers/rf/wifi/cc3000/hostdriver
 OBJS  += $(OBJ_PATH)/cc3000_common.o 
 OBJS  += $(OBJ_PATH)/evnt_handler.o 
 OBJS  += $(OBJ_PATH)/hci.o 
@@ -219,28 +240,7 @@ OBJS  += $(OBJ_PATH)/security.o
 OBJS  += $(OBJ_PATH)/socket.o 
 OBJS  += $(OBJ_PATH)/wlan.o 
 
-VPATH += src/drivers/rf/chibi
-OBJS  += $(OBJ_PATH)/chb.o 
-OBJS  += $(OBJ_PATH)/chb_buf.o 
-OBJS  += $(OBJ_PATH)/chb_drvr.o 
-OBJS  += $(OBJ_PATH)/chb_eeprom.o 
-OBJS  += $(OBJ_PATH)/chb_spi.o
-OBJS  += $(OBJ_PATH)/messages.o
-
-VPATH += src/drivers/rf/pn532
-OBJS  += $(OBJ_PATH)/pn532.o 
-OBJS  += $(OBJ_PATH)/pn532_bus_i2c.o 
-OBJS  += $(OBJ_PATH)/pn532_bus_uart.o
-
-VPATH += src/drivers/rf/pn532/helpers
-OBJS  += $(OBJ_PATH)/pn532_config.o 
-OBJS  += $(OBJ_PATH)/pn532_gpio.o 
-OBJS  += $(OBJ_PATH)/pn532_mifare_classic.o 
-OBJS  += $(OBJ_PATH)/pn532_mifare_ultralight.o 
-OBJS  += $(OBJ_PATH)/pn532_ndef.o 
-OBJS  += $(OBJ_PATH)/pn532_ndef_cards.o 
-
-VPATH += src/drivers/rf/pn532/mem_allocator
+VPATH += src/drivers/rf/nfc/pn532/mem_allocator
 OBJS  += $(OBJ_PATH)/bget.o 
 OBJS  += $(OBJ_PATH)/pn532_mem.o 
 
@@ -293,6 +293,7 @@ OBJS  += $(OBJ_PATH)/protocol.o
 
 VPATH += src/protocol/commands
 OBJS  += $(OBJ_PATH)/protocol_cmd_led.o
+OBJS  += $(OBJ_PATH)/protocol_cmd_sysinfo.o
 
 ##########################################################################
 # Include paths
