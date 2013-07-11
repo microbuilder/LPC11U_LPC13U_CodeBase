@@ -188,6 +188,7 @@ void cmd_wifi_smartConfig(uint8_t argc, char **argv)
     return;
   }
 
+  printf("Waiting for a SmartConfig connection ...%s", CFG_PRINTF_NEWLINE);
   error = wifi_startSmartConfig(enableAES);
   if (error)
   {

@@ -56,7 +56,7 @@
     -----------------------------------------------------------------------*/
     #define WIFI_DISABLE              (0)
     #define WIFI_ENABLE               (1)
-    #define WIFI_TIMEOUT_CONNECT      (30000) /* ~30s */
+    #define WIFI_TIMEOUT_CONNECT      (45000) /* ~45s */
 /*=========================================================================*/
 
 
@@ -514,6 +514,8 @@ error_t wifi_ssidScan(uint32_t time)
                 "Failed setting SSID scan params",
                 ERROR_CC3000_WLAN_SET_SCAN_PARAM);
 
+  delay(time + 500);
+
   return ERROR_NONE;
 }
 
@@ -545,7 +547,7 @@ error_t wifi_displaySSIDResults(void)
   WIFI_CHECK_INIT();
 
   /* Reboot first if there was a failed SmartConfig attempt */
-  if (!_wifi_smartConfigFailure)
+  if (_wifi_smartConfigFailure)
   {
     wlan_stop();
     delay(1000);
@@ -555,7 +557,6 @@ error_t wifi_displaySSIDResults(void)
 
   /* Scan for 4 seconds then stop */
   ASSERT_STATUS_MESSAGE(wifi_ssidScan(4000), "SSID scan init failed");
-  delay(4500);
 
   /* Get the scan results */
   WIFI_CHECK_SUCCESS(wlan_ioctl_get_scan_results(0, (uint8_t*)&resultBuff),
@@ -700,16 +701,22 @@ error_t wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen,
 /**************************************************************************/
 error_t wifi_startSmartConfig(bool enableAES)
 {
-  uint8_t      loop    = 0;
-  uint32_t      timeout = 0;
+  uint8_t  loop    = 0;
+  uint32_t timeout = 0;
+
+  _wifi_smartConfigFinished = 0;
+  _wifi_connected = 0;
+  _wifi_dhcp = 0;
+  _wifi_okToShutdown = 0;
 
   WIFI_CHECK_INIT();
 
-  /* Reset all the previous configuration details */
+  /* Reset the connection policy */
   WIFI_CHECK_SUCCESS(wlan_ioctl_set_connection_policy(WIFI_DISABLE, WIFI_DISABLE, WIFI_DISABLE),
                      "Set Connection policy FAIL",
                      ERROR_CC3000_WLAN_SET_CONNECT_POLICY);
 
+  /* Erase all previous connections stored in NVMEM */
   WIFI_CHECK_SUCCESS(wlan_ioctl_del_profile(255),
                      "Delete Profile FAIL",
                      ERROR_CC3000_WLAN_DEL_CONNECT_PROFILE);
@@ -794,7 +801,7 @@ error_t wifi_startSmartConfig(bool enableAES)
 
   /**************** Connect to the AP (time out ~30s) ***********************/
 
-  while ((!_wifi_stopSmartConfig) || (!_wifi_connected) || (!_wifi_dhcp))
+  while ((!_wifi_smartConfigFinished) || (!_wifi_connected) || (!_wifi_dhcp))
   {
     timeout ++;
     if (timeout > WIFI_TIMEOUT_CONNECT / 10)
@@ -805,7 +812,7 @@ error_t wifi_startSmartConfig(bool enableAES)
     delay(10);
   }
 
-  if (((_wifi_stopSmartConfig) && (_wifi_connected) && (_wifi_dhcp)))
+  if (((_wifi_smartConfigFinished) && (_wifi_connected) && (_wifi_dhcp)))
   {
     while (loop < 5)
     {
@@ -815,7 +822,9 @@ error_t wifi_startSmartConfig(bool enableAES)
   }
 
   _wifi_stopSmartConfig = 0;
+  _wifi_smartConfigFinished = 0;
 
+  /* Smart config was successful! */
   return ERROR_NONE;
 }
 
