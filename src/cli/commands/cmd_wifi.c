@@ -79,7 +79,7 @@ void cmd_wifi_ssidscan(uint8_t argc, char **argv)
 {
   error_t error;
 
-  printf("Performing SSID scan (~4s) ...%s%s",
+  printf("Performing SSID scan (please wait a bit) ...%s%s",
     CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
 
   error = wifi_displaySSIDResults();
@@ -167,6 +167,33 @@ void cmd_wifi_connect(uint8_t argc, char **argv)
     dhcp[0], dhcp[1], dhcp[2], dhcp[3], CFG_PRINTF_NEWLINE);
   printf("DNS Server  : %d.%d.%d.%d %s",
     dns[0], dns[1], dns[2], dns[3], CFG_PRINTF_NEWLINE);
+}
+
+/**************************************************************************/
+/*!
+    'wifi_smartConfig' command handler
+*/
+/**************************************************************************/
+void cmd_wifi_smartConfig(uint8_t argc, char **argv)
+{
+  error_t error;
+  uint32_t enableAES;
+
+  getNumber (argv[0], &enableAES);
+
+  /* Make sure enableAES is 1 or 0 */
+  if (enableAES < 0 || enableAES > 1)
+  {
+    printf("enableAES must be 0 or 1%s", CFG_PRINTF_NEWLINE);
+    return;
+  }
+
+  error = wifi_startSmartConfig(enableAES);
+  if (error)
+  {
+    cmd_wifi_helper_error(error);
+    return;
+  }
 }
 
 /**************************************************************************/

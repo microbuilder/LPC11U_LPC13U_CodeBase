@@ -95,6 +95,7 @@ void cmd_rtc_write(uint8_t argc, char **argv);
 #endif
 
 #ifdef CFG_CC3000
+void cmd_wifi_smartConfig(uint8_t argc, char **argv);
 void cmd_wifi_ssidscan(uint8_t argc, char **argv);
 void cmd_wifi_connect(uint8_t argc, char **argv);
 void cmd_wifi_disconnect(uint8_t argc, char **argv);
@@ -151,11 +152,12 @@ cli_t cli_tbl[] =
   { "tw",           6, 7,  0, cmd_rtc_write                               , "RTC write"                          , "'tw <yr> <mon> <day> <hr> <min> <sec>'" },
   #endif
   #ifdef CFG_CC3000
+  { "wsc",          1, 1,  0, cmd_wifi_smartConfig                        , "Wifi smart connect"                 , "'wsc <usekey[0|1]>'" },
   { "ws",           0, 0,  0, cmd_wifi_ssidscan                           , "Wifi SSID scan"                     , CMD_NOPARAMS },
-  { "wc",           2, 3,  0, cmd_wifi_connect                            , "Wifi connect"                       , "'wc <sec> <ssid> <key>'" },
+  { "wc",           2, 3,  0, cmd_wifi_connect                            , "Wifi connect"                       , "'wc <sec[0|1|2|3]> <ssid> <key>'" },
   { "wd",           0, 0,  0, cmd_wifi_disconnect                         , "Wifi disconnect"                    , CMD_NOPARAMS },
   { "wp",           1, 1,  0, cmd_wifi_ping                               , "Wifi ping"                          , "'wp <ipaddress>'" },
-  { "wg",           1, 1,  0, cmd_wifi_gethostnameip                      , "Wifi get IP for host name"          , "'wg <hostname>'" },
+  { "wg",           1, 1,  0, cmd_wifi_gethostnameip                      , "Wifi host name lookup"              , "'wg <hostname>'" },
   #endif
 };
 

@@ -60,6 +60,7 @@ error_t  wifi_setMacAddress(uint8_t macAddress[6]);
 error_t  wifi_ssidScan(uint32_t time);
 error_t  wifi_displaySSIDResults(void);
 error_t  wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen, int8_t *key, int32_t keylen);
+error_t  wifi_startSmartConfig(bool enableAES);
 error_t  wifi_disconnect(void);
 error_t  wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4], uint8_t gateway[4], uint8_t dhcpServer[4], uint8_t dnsServer[4]);
 error_t  wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout);

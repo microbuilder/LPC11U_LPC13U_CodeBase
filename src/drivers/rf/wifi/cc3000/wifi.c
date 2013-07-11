@@ -104,6 +104,11 @@
 /*=========================================================================
     SMARTCONFIG VALUES
     -----------------------------------------------------------------------*/
+    /* AES Key for secure connections w/SmartConfig = 0123456789012345 */
+    char _wifi_ASEsecurity_key[] = { 0x30, 0x31, 0x32, 0x33,
+                                     0x34, 0x35, 0x36, 0x37,
+                                     0x38, 0x39, 0x30, 0x31,
+                                     0x32, 0x33, 0x34, 0x35 };
     char _wifi_sc_deviceName[] = "CC3000";
     char _wifi_sc_prefix[]     = { 'T', 'T', 'T' };
     volatile unsigned char _wifi_stopSmartConfig;
@@ -668,6 +673,148 @@ error_t wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen,
     }
     delay(10);
   }
+
+  return ERROR_NONE;
+}
+
+/**************************************************************************/
+/*!
+    @brief   Starts the SmartConfig process and waits for a connection
+
+    @param   enableAES  True is AES is used for SmartConfig
+
+    @note    Possible error message are:
+
+             - ERROR_CC3000_WLAN_EVENT_MASK (wifi_init)
+             - ERROR_CC3000_WLAN_SET_CONNECT_POLICY
+             - ERROR_CC3000_WLAN_DEL_CONNECT_PROFILE
+             - ERROR_CC3000_WLAN_DISCONNECT
+             - ERROR_CC3000_NVMEM_CREATE_ENTRY
+             - ERROR_CC3000_NVMEM_WRITE
+             - ERROR_CC3000_SMARTCONFIG_SET_PREFIX
+             - ERROR_CC3000_SMARTCONFIG_START
+             - ERROR_CC3000_CONNECT_TIMEOUT
+             - ERROR_CC3000_SMARTCONFIG_PROCESS
+             - ERROR_NONE
+*/
+/**************************************************************************/
+error_t wifi_startSmartConfig(bool enableAES)
+{
+  uint8_t      loop    = 0;
+  uint32_t      timeout = 0;
+
+  WIFI_CHECK_INIT();
+
+  /* Reset all the previous configuration details */
+  WIFI_CHECK_SUCCESS(wlan_ioctl_set_connection_policy(WIFI_DISABLE, WIFI_DISABLE, WIFI_DISABLE),
+                     "Set Connection policy FAIL",
+                     ERROR_CC3000_WLAN_SET_CONNECT_POLICY);
+
+  WIFI_CHECK_SUCCESS(wlan_ioctl_del_profile(255),
+                     "Delete Profile FAIL",
+                     ERROR_CC3000_WLAN_DEL_CONNECT_PROFILE);
+
+  /* Disconnect from the current AP if we're connected to something */
+  while (wlan_ioctl_statusget() == WIFI_STATUS_CONNECTED)
+  {
+    WIFI_CHECK_SUCCESS(wlan_disconnect(),
+                       "Unable to disconnect from the AP",
+                       ERROR_CC3000_WLAN_DISCONNECT);
+    hci_unsolicited_event_handler();
+  }
+
+  /* Reboot the CC3000 */
+  wlan_stop();
+  delay(1000);
+  wlan_start(0);
+
+  /* Create a new entry for the AES encryption key */
+  WIFI_CHECK_SUCCESS(nvmem_create_entry(NVMEM_AES128_KEY_FILEID, 16),
+                    "Unable to create the AES key entry",
+                    ERROR_CC3000_NVMEM_CREATE_ENTRY);
+
+  /* Write the AES key to NVMEM */
+  WIFI_CHECK_SUCCESS(aes_write_key((uint8_t * )(&_wifi_ASEsecurity_key[0])),
+                     "Unable to commit the AES key",
+                     ERROR_CC3000_NVMEM_WRITE);
+
+  /* Set the prefix */
+  WIFI_CHECK_SUCCESS(wlan_smart_config_set_prefix((char * )&_wifi_sc_prefix),
+                     "Unable to set the SmartConfig prefix",
+                     ERROR_CC3000_SMARTCONFIG_SET_PREFIX);
+
+  /* Start the SmartConfig process */
+  WIFI_CHECK_SUCCESS(wlan_smart_config_start(enableAES),
+                     "wlan_smart_config_start failed",
+                     ERROR_CC3000_SMARTCONFIG_START);
+
+  /* Wait for the SmartConfig process to complete */
+  while (_wifi_smartConfigFinished == 0)
+  {
+    // Waiting here for the SIMPLE_CONFIG_DONE event
+    timeout++;
+    if (timeout > WIFI_TIMEOUT_CONNECT / 10)
+    {
+      _wifi_smartConfigFailure = 1;
+      return ERROR_CC3000_CONNECT_TIMEOUT;
+    }
+    delay(10);
+  }
+
+  if (enableAES)
+  {
+    WIFI_CHECK_SUCCESS(wlan_smart_config_process(),
+                       "wlan_smart_config_process failed",
+                       ERROR_CC3000_SMARTCONFIG_PROCESS);
+  }
+
+  /* Configure the device to automatically connect to the AP */
+  WIFI_CHECK_SUCCESS(wlan_ioctl_set_connection_policy(WIFI_DISABLE, WIFI_DISABLE, WIFI_ENABLE),
+                     "Set connection policy FAIL",
+                     ERROR_CC3000_WLAN_SET_CONNECT_POLICY);
+
+  /* Reset the CC3000 */
+  wlan_stop();
+  delay(1000);
+  wlan_start(0);
+
+  /* Setup the event masks (async events we don't want, see hci.h) */
+  WIFI_CHECK_SUCCESS(wlan_set_event_mask(
+                     HCI_EVNT_WLAN_KEEPALIVE         |
+                     HCI_EVNT_WLAN_UNSOL_INIT        |
+                     // HCI_EVNT_WLAN_ASYNC_PING_REPORT |
+                     // HCI_EVNT_WLAN_TX_COMPLETE,
+                     HCI_EVNT_BSD_TCP_CLOSE_WAIT),
+                     "WLAN Set Event Mask FAIL",
+                     ERROR_CC3000_WLAN_EVENT_MASK);
+
+  /* Small delay to wait for the CC3000 to connect to the AP */
+  timeout = 0;
+  delay(1000);
+
+  /**************** Connect to the AP (time out ~30s) ***********************/
+
+  while ((!_wifi_stopSmartConfig) || (!_wifi_connected) || (!_wifi_dhcp))
+  {
+    timeout ++;
+    if (timeout > WIFI_TIMEOUT_CONNECT / 10)
+    {
+      _wifi_smartConfigFailure = 1;
+      return ERROR_CC3000_CONNECT_TIMEOUT;
+    }
+    delay(10);
+  }
+
+  if (((_wifi_stopSmartConfig) && (_wifi_connected) && (_wifi_dhcp)))
+  {
+    while (loop < 5)
+    {
+      mdnsAdvertiser(1, (char *) _wifi_sc_deviceName, strlen(_wifi_sc_deviceName));
+      loop++;
+    }
+  }
+
+  _wifi_stopSmartConfig = 0;
 
   return ERROR_NONE;
 }
