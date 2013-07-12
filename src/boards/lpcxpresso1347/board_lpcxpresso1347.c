@@ -250,6 +250,7 @@ void boardInit(void)
     @brief Primary (non-RTOS!) entry point for this project.
 */
 /**************************************************************************/
+volatile uint32_t test[8] = { 0 };
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
