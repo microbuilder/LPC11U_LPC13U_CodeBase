@@ -209,6 +209,9 @@ void cmd_wifi_smartConfig(uint8_t argc, char **argv)
     cmd_wifi_helper_error(error);
     return;
   }
+
+  /* Display the connection details */
+  cmd_wifi_helper_connectionDetails();
 }
 
 /**************************************************************************/
