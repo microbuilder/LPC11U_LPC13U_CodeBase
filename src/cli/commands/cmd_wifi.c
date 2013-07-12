@@ -91,7 +91,6 @@ void cmd_wifi_helper_connectionDetails(void)
     return;
   }
 
-  printf(CFG_PRINTF_NEWLINE);
   printf("IP Address  : %d.%d.%d.%d %s",
     ip[0], ip[1], ip[2], ip[3], CFG_PRINTF_NEWLINE);
   printf("Netmask     : %d.%d.%d.%d %s",
@@ -177,6 +176,7 @@ void cmd_wifi_connect(uint8_t argc, char **argv)
   }
 
   /* Display the connection details */
+  printf(CFG_PRINTF_NEWLINE);
   cmd_wifi_helper_connectionDetails();
 }
 
@@ -211,6 +211,7 @@ void cmd_wifi_smartConfig(uint8_t argc, char **argv)
   }
 
   /* Display the connection details */
+  printf(CFG_PRINTF_NEWLINE);
   cmd_wifi_helper_connectionDetails();
 }
 
@@ -295,7 +296,7 @@ void cmd_wifi_gethostnameip(uint8_t argc, char **argv)
 void cmd_wifi_moduleinfo(uint8_t argc, char **argv)
 {
   uint8_t major, minor;
-    uint8_t macAddress[6] = { 0, 0, 0, 0, 0, 0 };
+  uint8_t macAddress[6] = { 0, 0, 0, 0, 0, 0 };
 
   if (!wifi_getFirmwareVersion(&major, &minor))
   {
@@ -311,7 +312,7 @@ void cmd_wifi_moduleinfo(uint8_t argc, char **argv)
   }
 
   /* Check if we're connected */
-  if (wifi_isConnected())
+  if (wifi_isConnected() == true)
   {
     cmd_wifi_helper_connectionDetails();
   }

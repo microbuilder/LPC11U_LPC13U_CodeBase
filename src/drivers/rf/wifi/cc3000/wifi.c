@@ -835,15 +835,34 @@ error_t wifi_startSmartConfig(bool enableAES)
     @note   Possible error message are:
 
             - ERROR_CC3000_WLAN_EVENT_MASK (wifi_init)
+            - ERROR_CC3000_CONNECT_TIMEOUT (used for disconnect here)
             - ERROR_NONE
 */
 /**************************************************************************/
 error_t wifi_disconnect(void)
 {
+  uint32_t timeout;
+
   WIFI_CHECK_INIT();
 
   /* Disconnect */
   wlan_disconnect();
+
+  /* Wait until we're finished deconnecting */
+  while (_wifi_connected)
+  {
+    timeout ++;
+    if (timeout > WIFI_TIMEOUT_CONNECT / 10)
+    {
+      return ERROR_CC3000_CONNECT_TIMEOUT;
+    }
+    delay(10);
+  }
+
+  /* Reset the CC3000 */
+  wlan_stop();
+  delay(1000);
+  wlan_start(0);
 
   return ERROR_NONE;
 }
@@ -1038,7 +1057,7 @@ error_t wifi_getHostByName(uint8_t *hostName, uint8_t ip[4])
 /**************************************************************************/
 bool wifi_isConnected(void)
 {
-  return _wifi_connected ? true : false;
+  return (_wifi_connected ? true : false);
 }
 
 /**************************************************************************/
@@ -1048,7 +1067,7 @@ bool wifi_isConnected(void)
 /**************************************************************************/
 bool wifi_isDHCPComplete(void)
 {
-  return _wifi_dhcp ? true : false;
+  return (_wifi_dhcp ? true : false);
 }
 
 #endif

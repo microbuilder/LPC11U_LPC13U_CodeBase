@@ -153,7 +153,7 @@ cli_t cli_tbl[] =
   { "tw",           6, 7,  0, cmd_rtc_write                               , "RTC write"                          , "'tw <yr> <mon> <day> <hr> <min> <sec>'" },
   #endif
   #ifdef CFG_CC3000
-  { "winfo",        0, 0,  0, cmd_wifi_moduleinfo                         , "Wifi module info"                   , CMD_NOPARAMS },
+  { "wi",           0, 0,  0, cmd_wifi_moduleinfo                         , "Wifi module info"                   , CMD_NOPARAMS },
   { "wsc",          0, 1,  0, cmd_wifi_smartConfig                        , "Wifi SmartConnect"                  , "'wsc [<usekey(0|1)>]'" },
   { "ws",           0, 0,  0, cmd_wifi_ssidscan                           , "Wifi SSID scan"                     , CMD_NOPARAMS },
   { "wc",           2, 3,  0, cmd_wifi_connect                            , "Wifi connect"                       , "'wc <sec[0|1|2|3]> <ssid> <key>'" },
