@@ -368,7 +368,8 @@ error_t wifi_init(unsigned short cRequestPatch)
             wifi_writeWlanPin);
 
   /* Start the module */
-  wlan_start(cRequestPatch);
+  wlan_start(1);
+  //wlan_start(cRequestPatch);
 
   /* Set this up here for convenience sake w/SmartConfig */
   wlan_smart_config_set_prefix((char*) _wifi_sc_prefix);

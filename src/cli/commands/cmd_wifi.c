@@ -177,15 +177,18 @@ void cmd_wifi_connect(uint8_t argc, char **argv)
 void cmd_wifi_smartConfig(uint8_t argc, char **argv)
 {
   error_t error;
-  uint32_t enableAES;
+  uint32_t enableAES = 0;
 
-  getNumber (argv[0], &enableAES);
-
-  /* Make sure enableAES is 1 or 0 */
-  if (enableAES < 0 || enableAES > 1)
+  if (argc == 1)
   {
-    printf("enableAES must be 0 or 1%s", CFG_PRINTF_NEWLINE);
-    return;
+    getNumber (argv[0], &enableAES);
+
+    /* Make sure enableAES is 1 or 0 */
+    if (enableAES < 0 || enableAES > 1)
+    {
+      printf("enableAES must be 0 or 1%s", CFG_PRINTF_NEWLINE);
+      return;
+    }
   }
 
   printf("Waiting for a SmartConfig connection ...%s", CFG_PRINTF_NEWLINE);
@@ -266,6 +269,30 @@ void cmd_wifi_gethostnameip(uint8_t argc, char **argv)
     printf("%s => %u.%u.%u.%u %s", argv[0],
       (unsigned int)(lookupIP[0]), (unsigned int)(lookupIP[1]),
       (unsigned int)(lookupIP[2]), (unsigned int)(lookupIP[3]),
+      CFG_PRINTF_NEWLINE);
+  }
+}
+
+/**************************************************************************/
+/*!
+    'wifi_moduleinfo' command handler
+*/
+/**************************************************************************/
+void cmd_wifi_moduleinfo(uint8_t argc, char **argv)
+{
+  uint8_t major, minor;
+    uint8_t macAddress[6] = { 0, 0, 0, 0, 0, 0 };
+
+  if (!wifi_getFirmwareVersion(&major, &minor))
+  {
+    printf("Firmware    : v%d.%d%s", major, minor, CFG_PRINTF_NEWLINE);
+  }
+
+  if (!wifi_getMacAddress(macAddress))
+  {
+    printf("MAC Address : %02X:%02X:%02X:%02X:%02X:%02X%s",
+      macAddress[0], macAddress[1], macAddress[2],
+      macAddress[3], macAddress[4], macAddress[5],
       CFG_PRINTF_NEWLINE);
   }
 }
