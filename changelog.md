@@ -2,7 +2,7 @@
 
 Major changes in the LPC11U/LPC13U code base by code base version number.
 
-## 0.8.7 [ongoing] ##
+## 0.9.0 [Ongoing] ##
 
 - delay.c interrupt priority changed to be one higher than the lowest level so that other interrupts can potentially be configured to use delay by setting them to the lowest level
 - sensorpoll.c added to poll sensor data at fixed intervals using 16-bit timer 1 (though care needs to be taken using this!)
@@ -23,6 +23,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Fixed a bug in iap.c (truncated serial numbers)
 - **BREAKING CHANGE**: Moved all /src/drivers/rf code to technology-specific folders ('nfc', 'wifi', etc.)
 - **KNOWN ISSUE**: There's a truckload of issues with the CC3000 API from TI!  It can't currently be built using the makefile, and is CW only at the moment. Be sure to disable CFG_CC3000 in our board config file until these issues can all be resolved!
+- **KNOWN ISSUE**: CFG\_USB\_CUSTOM\_CLASS can not be combined with any HID classes, and you must use one or the other.  This seems to be an issue with the ROM drivers and memory managed, and placing the USB memory buffer in the main 8KB block (instead of the 2KB USB SRAM block) avoids this issue, but since the buffer needs to be aligned on a 2048 byte boundary this leads to a huge waste of memory.  Investigation ongoing, but for now avoid combining CFG\_USB\_CUSTOM\_CLASS and any HID class(es).
 
 ## 0.8.6 [14 June 2013] ##
 

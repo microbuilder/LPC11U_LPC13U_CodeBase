@@ -68,8 +68,8 @@ extern "C" {
     config file.
     -----------------------------------------------------------------------*/
     #define CFG_CODEBASE_VERSION_MAJOR      (0)
-    #define CFG_CODEBASE_VERSION_MINOR      (8)
-    #define CFG_CODEBASE_VERSION_REVISION   (7)
+    #define CFG_CODEBASE_VERSION_MINOR      (9)
+    #define CFG_CODEBASE_VERSION_REVISION   (0)
 /*=========================================================================*/
 
 
