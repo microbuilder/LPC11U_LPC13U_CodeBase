@@ -2,6 +2,8 @@
 
 Major changes in the LPC11U/LPC13U code base by code base version number.
 
+## 0.9.2 [Ongoing] ##
+
 ## 0.9.1 [12 July 2013] ##
 
 - Fixed .bss placement in USB SRAM in linker scripts! (oops!)
