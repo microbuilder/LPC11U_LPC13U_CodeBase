@@ -72,6 +72,40 @@ void cmd_wifi_helper_error(error_t error)
 
 /**************************************************************************/
 /*!
+    Displays the connection details
+*/
+/**************************************************************************/
+void cmd_wifi_helper_connectionDetails(void)
+{
+  error_t error;
+  uint8_t ip[4];
+  uint8_t netmask[4];
+  uint8_t gateway[4];
+  uint8_t dhcp[4];
+  uint8_t dns[4];
+
+  error = wifi_getConnectionDetails(ip, netmask, gateway, dhcp, dns);
+  if (error)
+  {
+    cmd_wifi_helper_error(error);
+    return;
+  }
+
+  printf(CFG_PRINTF_NEWLINE);
+  printf("IP Address  : %d.%d.%d.%d %s",
+    ip[0], ip[1], ip[2], ip[3], CFG_PRINTF_NEWLINE);
+  printf("Netmask     : %d.%d.%d.%d %s",
+    netmask[0], netmask[1], netmask[2], netmask[3], CFG_PRINTF_NEWLINE);
+  printf("Gateway     : %d.%d.%d.%d %s",
+    gateway[0], gateway[1], gateway[2], gateway[3], CFG_PRINTF_NEWLINE);
+  printf("DHCP Server : %d.%d.%d.%d %s",
+    dhcp[0], dhcp[1], dhcp[2], dhcp[3], CFG_PRINTF_NEWLINE);
+  printf("DNS Server  : %d.%d.%d.%d %s",
+    dns[0], dns[1], dns[2], dns[3], CFG_PRINTF_NEWLINE);
+}
+
+/**************************************************************************/
+/*!
     'wifi_ssidscan' command handler
 */
 /**************************************************************************/
@@ -97,13 +131,7 @@ void cmd_wifi_ssidscan(uint8_t argc, char **argv)
 void cmd_wifi_connect(uint8_t argc, char **argv)
 {
   error_t error;
-
   int32_t sec;
-  uint8_t ip[4];
-  uint8_t netmask[4];
-  uint8_t gateway[4];
-  uint8_t dhcp[4];
-  uint8_t dns[4];
 
   /* Retrieve the security mode */
   getNumber (argv[0], &sec);
@@ -149,24 +177,7 @@ void cmd_wifi_connect(uint8_t argc, char **argv)
   }
 
   /* Display the connection details */
-  error = wifi_getConnectionDetails(ip, netmask, gateway, dhcp, dns);
-  if (error)
-  {
-    cmd_wifi_helper_error(error);
-    return;
-  }
-
-  printf(CFG_PRINTF_NEWLINE);
-  printf("IP Address  : %d.%d.%d.%d %s",
-    ip[0], ip[1], ip[2], ip[3], CFG_PRINTF_NEWLINE);
-  printf("Netmask     : %d.%d.%d.%d %s",
-    netmask[0], netmask[1], netmask[2], netmask[3], CFG_PRINTF_NEWLINE);
-  printf("Gateway     : %d.%d.%d.%d %s",
-    gateway[0], gateway[1], gateway[2], gateway[3], CFG_PRINTF_NEWLINE);
-  printf("DHCP Server : %d.%d.%d.%d %s",
-    dhcp[0], dhcp[1], dhcp[2], dhcp[3], CFG_PRINTF_NEWLINE);
-  printf("DNS Server  : %d.%d.%d.%d %s",
-    dns[0], dns[1], dns[2], dns[3], CFG_PRINTF_NEWLINE);
+  cmd_wifi_helper_connectionDetails();
 }
 
 /**************************************************************************/
@@ -191,7 +202,7 @@ void cmd_wifi_smartConfig(uint8_t argc, char **argv)
     }
   }
 
-  printf("Waiting for a SmartConfig connection ...%s", CFG_PRINTF_NEWLINE);
+  printf("Waiting for a SmartConfig connection (~60s)...%s", CFG_PRINTF_NEWLINE);
   error = wifi_startSmartConfig(enableAES);
   if (error)
   {
@@ -294,6 +305,12 @@ void cmd_wifi_moduleinfo(uint8_t argc, char **argv)
       macAddress[0], macAddress[1], macAddress[2],
       macAddress[3], macAddress[4], macAddress[5],
       CFG_PRINTF_NEWLINE);
+  }
+
+  /* Check if we're connected */
+  if (wifi_isConnected())
+  {
+    cmd_wifi_helper_connectionDetails();
   }
 }
 
