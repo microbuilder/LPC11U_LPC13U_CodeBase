@@ -58,11 +58,6 @@
   #ifdef CFG_USB_CDC
     #include "core/usb/usb_cdc.h"
   #endif
-  #ifdef CFG_USB_HID_GENERIC
-    /* Buffer to hold incoming HID data */
-    static USB_HID_GenericReport_t hid_out_report;
-    static bool is_received_report = false;
-  #endif
 #endif
 
 #ifdef CFG_TFTLCD

@@ -58,9 +58,9 @@ extern "C" {
 
     -----------------------------------------------------------------------*/
     // #define CFG_MCU_LPC11U24FBD48_401
-    // #define CFG_MCU_LPC11U37FBD48_401
+    #define CFG_MCU_LPC11U37FBD48_401
     // #define CFG_MCU_LPC1347FBD48
-    #define CFG_MCU_LPC1347FHN33
+    // #define CFG_MCU_LPC1347FHN33
 
     /* Basic error checking */
     #if !defined CFG_MCU_LPC1347FBD48 && \
@@ -594,6 +594,7 @@ extern "C" {
       // #define CFG_USB_HID_KEYBOARD
       // #define CFG_USB_HID_MOUSE
       // #define CFG_USB_HID_GENERIC
+      #define CFG_USB_HID_GENERIC_REPORT_SIZE (64)
 
       // #define CFG_USB_MSC
 
