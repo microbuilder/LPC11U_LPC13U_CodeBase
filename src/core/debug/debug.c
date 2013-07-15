@@ -118,5 +118,6 @@ void Get_Fault_Point(uint32_t stackpointer)
 		Last_SP = stackpointer + 32;
 	}
 	/* print Fault Point data here or just watch it. */
+	(void) Last_SP;
 }
 
