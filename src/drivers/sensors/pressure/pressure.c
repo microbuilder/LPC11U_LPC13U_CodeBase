@@ -42,6 +42,21 @@
 #include "drivers/sensors/sensors.h"
 #include "pressure.h"
 
+/*  ATMOSPHERIC PRESSURE UNITS
+    ==========================
+    Atmospheric pressure can be described using any of the following units:
+
+    - pounds per square inch (psi)
+    - centimeters of mercury (cm.Hg)
+    - inches of mercury (in.Hg)
+    - Pascal (Pa), the SI unit for pressure and equal to 1 N/m2
+    - bar, an air pressure unit equal to 105 Pa
+    - millibar (mbar) equal to 10–3 bar
+   
+    The relationship between the units is:
+    1 atm = 14.7 psi = 76 cm.Hg = 29.92 in.Hg = 1.01325 bar = 1013.25 mbar
+*/
+
 /**************************************************************************/
 /*!
     Calculates the altitude (in meters) from the specified atmospheric
