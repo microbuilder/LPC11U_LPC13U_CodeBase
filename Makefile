@@ -58,6 +58,9 @@ OBJS  += $(OBJ_PATH)/board_rf1ghzusb.o
 VPATH += src/boards/rf1ghznode
 OBJS  += $(OBJ_PATH)/board_rf1ghznode.o
 
+VPATH += src/boards/rfidio1347
+OBJS  += $(OBJ_PATH)/board_rfidio1347.o
+
 VPATH += src/cli
 OBJS  += $(OBJ_PATH)/cli.o 
 OBJS  += $(OBJ_PATH)/commands.o
