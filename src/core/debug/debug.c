@@ -39,14 +39,6 @@
 
 #include <string.h>
 
-typedef struct {
-	uint32_t R0, R1, R2, R3;
-	uint32_t R12;
-	uint32_t LR;		/** Last Context Link Register. */
-	uint32_t PC;		/** Last Context PC address that generated HardFault. */
-	uint32_t xPSR;		/** Last Context Program Status Register. */
-} __attribute__((packed)) REGISTER_STACK_FRAME;
-
 REGISTER_STACK_FRAME Last_Fault_Point;
 
 void Get_Fault_Point(uint32_t stackpointer);
@@ -87,14 +79,14 @@ void debugDumpNVICPriorities(void)
 #if defined (__GNUC__)
 __attribute__((naked)) void HardFault_Handler(void){
 	register uint32_t tempSP;
-	__asm volatile(
-		" tst lr, #4	\n"
-		" ite eq		\n"
-	);
+	__asm volatile(" tst lr, #4	\n");
+	__asm volatile(" ite eq		\n");
 	__asm volatile(" mrseq %0, msp	\n" : "=r" (tempSP));
 	__asm volatile(" mrsne %0, psp	\n" : "=r" (tempSP));
-  Get_Fault_Point(tempSP);
-  while(1);
+	__asm volatile(" push {lr}	\n");
+	Get_Fault_Point(tempSP);
+	//while(1);
+	__asm volatile(" pop {pc}	\n");
 }
 #endif
 
@@ -107,6 +99,8 @@ __attribute__((naked)) void HardFault_Handler(void){
 void Get_Fault_Point(uint32_t stackpointer)
 {
 	uint32_t Last_SP;
+	CFSR_T ConfigFaultStatus;
+	uint32_t BusFaultAddress = 0;
 
 	memcpy((void*)&Last_Fault_Point, (void*)stackpointer, sizeof(REGISTER_STACK_FRAME));
 
@@ -116,6 +110,52 @@ void Get_Fault_Point(uint32_t stackpointer)
 	}else
 	{
 		Last_SP = stackpointer + 32;
+	}
+
+	/* retrieve Fault Status */
+	ConfigFaultStatus.DWORDVALUE = (*((volatile unsigned long *)(0xE000ED28)));
+
+	/*===== PROCESS BUS FAULT STATUS ======*/
+	if(ConfigFaultStatus.BIT.BFARVALID)
+		BusFaultAddress = (*((volatile unsigned long *)(0xE000ED38)));
+
+	if(ConfigFaultStatus.BIT.IMPRECISERR)
+	{
+		/* Imprecise data access error. Write to invalid address.
+		 * Look back few instructions to find exactly Fault Point PC. */
+		while(1);
+	}
+	if(ConfigFaultStatus.BIT.PRECISERR)
+	{
+		/* precise data access error. Check BusFaultAddress if available. */
+		while(1);
+	}
+	if(ConfigFaultStatus.BIT.IBUSERR)
+	{
+		/* a bus fault on an instruction prefetch. */
+		while(1);
+	}
+
+	/*===== PROCESS USAGE FAULT STATUS ======*/
+	if(ConfigFaultStatus.BIT.UNDEFINSTR)
+	{
+		/* Undefined instruction error. */
+		while(1);
+	}
+	if(ConfigFaultStatus.BIT.INVSTATE)
+	{
+		/* Invalid EPSR.T bit or illegal EPSR.IT bits for executing instruction. */
+		while(1);
+	}
+	if(ConfigFaultStatus.BIT.UNALIGNED)
+	{
+		/* Unaligned access error. */
+		while(1);
+	}
+	if(ConfigFaultStatus.BIT.DIVBYZERO)
+	{
+		/* Divide by zero. */
+		while(1);
 	}
 	/* print Fault Point data here or just watch it. */
 }
