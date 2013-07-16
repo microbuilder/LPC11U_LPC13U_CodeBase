@@ -74,6 +74,17 @@ void cmd_dbg_memrd(uint8_t argc, char **argv)
     /* Get the aligned word address (M0 can't do unaligned access!) */
     uint32_t mem = *(uint32_t*)(startAddr+i - ((startAddr+i) % 4));
 
+    /* Display the line address */
+    if (i == 0)
+    {
+      printf("0x%08X: ", startAddr+i);
+    }
+    else if ((i > 15) && (i % 16 == 0))
+    {
+      printf("\n0x%08X: ", startAddr+i);
+    }
+
+    /* Display the memory contents */
     s++;
     printf("%02X", (unsigned int)((mem >> (8*(3-((startAddr+i) % 4)))) & 0xFF));
     if (s == size)
