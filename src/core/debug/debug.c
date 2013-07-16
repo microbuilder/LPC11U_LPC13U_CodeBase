@@ -85,7 +85,6 @@ __attribute__((naked)) void HardFault_Handler(void){
 	__asm volatile(" mrsne %0, psp	\n" : "=r" (tempSP));
 	__asm volatile(" push {lr}	\n");
 	Get_Fault_Point(tempSP);
-	//while(1);
 	__asm volatile(" pop {pc}	\n");
 }
 #endif
@@ -158,5 +157,6 @@ void Get_Fault_Point(uint32_t stackpointer)
 		while(1);
 	}
 	/* print Fault Point data here or just watch it. */
+	while(1);
 }
 
