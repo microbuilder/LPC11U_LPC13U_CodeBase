@@ -1,5 +1,19 @@
 # Infinite Impulse Response (IIR) Filter #
 
+----------
+
+##Which File ... '**iir.c**' or '**iir\_f.c**, **iir\_i.c** and '**iir\_u16.c**'?
+
+Starting with v0.9.2 of the code base, a new IIR filter implementation has been added named **iir.c**.  This new generic IIR code **only supports float32_t values**, and is intended to be used with IIR filter values calculated in Octave, Matlab or a similar program.
+
+While you can use iir.c to implement a single-pole, low-pass filter identical to that found in iir\_f.c (float32\_t), iir\_i.c (int32\_t) and iir\_u16.c (int16\_t), the earlier type-specific files will always be faster, and are recommended if you need a simple digital RC filter that runs at maximum speed.
+
+iir.c should be used in combination with Octave when you need a custom filter (butterworth, maxflat, etc.) for a specific purpose, rather than just providing a general purpose low past filter using the previous type-specific files.
+
+The rest of this documentation applies to the original type-specific filters, and a proper tutorial on using iir.c with Octave will be added once the code is stable and properly tested.
+
+----------
+
 This simple IIR implementation is a basic single-pole low-pass filter. It's a 'low pass' filter since it attempts to filter out short term fluctuations, giving more weight to the longer-term average. You can use it to 'smooth out' fluctuating sensor data by slowing the response to new signals. It operates on the same principle as an RC filter in HW -- numerous samples are required before the output of the filter shifts to reach the 'new' value, gradual shifting up or down towards any newly integrated values.
 
 You can configure the filter by adjusting the 'alpha' value, which controls the delay or amount of time required for new signals to be integrated into the current output value.
