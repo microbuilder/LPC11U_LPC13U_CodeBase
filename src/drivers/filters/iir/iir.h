@@ -15,10 +15,10 @@ extern "C" {
 /* Single-pole IIR filter data structure */
 typedef struct 
 {
-  float32_t x;
+  float32_t x1;
   float32_t out;
-  float32_t y;
-  float32_t a;
+  float32_t y1;
+  float32_t a1;
   float32_t b0;
   float32_t b1;
 } iir_filt_1p_instance;

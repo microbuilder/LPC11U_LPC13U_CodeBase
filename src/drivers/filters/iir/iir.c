@@ -27,13 +27,13 @@
 float32_t iir_filt_1p(iir_filt_1p_instance* filt, float32_t in)
 {
   /* Calculate new output */
-  filt->out = (filt->b0*in + filt->b1*filt->x - filt->a*filt->y);
+  filt->out = (filt->b0*in + filt->b1*filt->x1 - filt->a1*filt->y1);
 
   /* Shift input samples */
-  filt->x = in;
+  filt->x1 = in;
 
   /* Shift output samples */
-  filt->y = filt->out;
+  filt->y1 = filt->out;
 
   return(filt->out);
 }
