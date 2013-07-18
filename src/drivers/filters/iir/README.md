@@ -12,7 +12,7 @@ The rest of this documentation applies to the original type-specific filters, an
 
 ##Type-Specific Single Pole Low-Pass IIR Filters (iir_\*.c)
 
-'**iir\_f.c**' (float32\_t), '**iir\_i.c**' (int32\_t) and '**iir\_u16.c**' (int16\_t) implement a simple single-pole, low-pass filter in an efficient way using dedicated types, including basic value overflow protection. 
+'iir\_f.c' (float32\_t), 'iir\_i.c' (int32\_t) and 'iir\_u16.c' (int16\_t) implement a simple single-pole, low-pass filter in an efficient way using dedicated types, including basic value overflow protection. 
 
 It's a 'low pass' filter since it attempts to filter out short term fluctuations, giving more weight to the longer-term average. You can use it to 'smooth out' fluctuating sensor data by slowing the response to new signals. It operates on the same principle as an RC filter in HW -- numerous samples are required before the output of the filter shifts to reach the 'new' value, gradual shifting up or down towards any newly integrated values.
 
