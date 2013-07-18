@@ -2,7 +2,7 @@
 /*!
     @file     debug.h
     @author   K. Townsend (microBuilder.eu)
-
+				Huynh Duc Hau (huynhduchau86@gmail.com)
     @section LICENSE
 
     Software License Agreement (BSD License)
@@ -67,7 +67,11 @@ enum {
 
 typedef union {
 	uint32_t DWORDVALUE;
+#if defined (__CC_ARM)
+	__packed struct {
+#elif defined (__GNUC__)
 	struct {
+#endif
 		uint8_t IACCVIOL :1;
 		uint8_t DACCVIOL :1;
 		uint8_t ReservedBit0 :1;
@@ -89,19 +93,41 @@ typedef union {
 		uint8_t ReservedBit3 :4;
 		uint8_t UNALIGNED :1;
 		uint8_t DIVBYZERO :1;
-	}BIT;
+#if defined (__CC_ARM)
+	} BIT;
+#elif defined (__GNUC__)
+	} __attribute__((packed)) BIT;
+#endif
 } CFSR_T;
 
+#if defined (__CC_ARM)
+typedef __packed struct {
+#elif defined (__GNUC__)
 typedef struct {
+#endif
 	uint32_t R0, R1, R2, R3;
 	uint32_t R12;
 	uint32_t LR;		/** Last Context Link Register. */
 	uint32_t PC;		/** Last Context PC address that generated HardFault. */
 	uint32_t xPSR;		/** Last Context Program Status Register. */
+#if defined (__CC_ARM)
+} REGISTER_STACK_FRAME;
+#elif defined (__GNUC__)
 } __attribute__((packed)) REGISTER_STACK_FRAME;
+#endif
+
+typedef struct {
+	uint32_t R7; /* frame pointer. */
+	uint32_t LR;
+} CALLSTACK_FRAME;
+
+/* Max stack size that compiler used for local variables and stack pointer
+ * in a function. */
+#define MAX_STACK_SIZE_IN_FUNC		(4*64)
 
 void     debugDumpNVICPriorities (void);
-
+bool		InFlashRegion(uint32_t address);
+void		TraverseNTrace_Stack(uint32_t StackPos);
 #ifdef __cplusplus
 }
 #endif

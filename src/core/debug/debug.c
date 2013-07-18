@@ -2,7 +2,7 @@
 /*!
     @file     debug.c
     @author   K. Townsend (microBuilder.eu)
-
+				Huynh Duc Hau (huynhduchau86@gmail.com)
     @section LICENSE
 
     Software License Agreement (BSD License)
@@ -43,6 +43,15 @@ REGISTER_STACK_FRAME Last_Fault_Point;
 
 void Get_Fault_Point(uint32_t stackpointer);
 
+#ifdef __CODE_RED
+#define __STACKTOP__ _vStackTop
+#else
+#define __STACKTOP__ _StackTop
+#endif
+extern unsigned int __STACKTOP__;
+extern unsigned int _pvHeapStart;
+static CALLSTACK_FRAME RTCallStack[5];
+static uint32_t RTCallStackIndex;
 /**************************************************************************/
 /*!
     @brief      Dumps the NVIC priority level of every interrupt
@@ -77,7 +86,8 @@ void debugDumpNVICPriorities(void)
 */
 /**************************************************************************/
 #if defined (__GNUC__)
-__attribute__((naked)) void HardFault_Handler(void){
+__attribute__((naked)) void HardFault_Handler(void)
+{
 	register uint32_t tempSP;
 	__asm volatile(" tst lr, #4	\n");
 	__asm volatile(" ite eq		\n");
@@ -111,6 +121,9 @@ void Get_Fault_Point(uint32_t stackpointer)
 		Last_SP = stackpointer + 32;
 	}
 
+	/* Build callstack. */
+	TraverseNTrace_Stack(Last_SP);
+
 	/* retrieve Fault Status */
 	ConfigFaultStatus.DWORDVALUE = (*((volatile unsigned long *)(0xE000ED28)));
 
@@ -132,6 +145,16 @@ void Get_Fault_Point(uint32_t stackpointer)
 	if(ConfigFaultStatus.BIT.IBUSERR)
 	{
 		/* a bus fault on an instruction prefetch. */
+		while(1);
+	}
+	if(ConfigFaultStatus.BIT.UNSTKERR)
+	{
+		/* exception return. Check Last_SP value. */
+		while(1);
+	}
+	if(ConfigFaultStatus.BIT.STKERR)
+	{
+		/* Exception Entry. Check Last_SP value. */
 		while(1);
 	}
 
@@ -160,3 +183,73 @@ void Get_Fault_Point(uint32_t stackpointer)
 	while(1);
 }
 
+/**************************************************************************/
+/*!
+    @brief      InFlashRegion. Check if an given address is in Flash Memory region.
+*/
+/**************************************************************************/
+bool InFlashRegion(uint32_t address)
+{
+	if((address > 0) &&
+			(address < 0x10000))
+		return true;
+	return false;
+}
+
+/**************************************************************************/
+/*!
+    @brief      TraverseNTrace_Stack. Traverse stack from current stack position
+    			in last context and build a runtime callstack.
+*/
+/**************************************************************************/
+void TraverseNTrace_Stack(uint32_t StackPos)
+{
+	uint32_t CurrentStackPos;
+
+
+	CurrentStackPos = StackPos;
+
+	for(RTCallStackIndex = 0; RTCallStackIndex < 5; RTCallStackIndex++)
+	{
+		uint32_t CurrentStackTop;
+		uint32_t *stackentry;
+
+		if((CurrentStackPos + MAX_STACK_SIZE_IN_FUNC) >= (uint32_t)&__STACKTOP__)
+			CurrentStackTop = (uint32_t)&__STACKTOP__;
+		else
+			CurrentStackTop = (CurrentStackPos + MAX_STACK_SIZE_IN_FUNC);
+
+		for(stackentry = (uint32_t *)CurrentStackPos; stackentry < (uint32_t *)CurrentStackTop; stackentry++)
+		{
+			if((*stackentry >= CurrentStackPos) &&		/*|*/
+					(*stackentry < CurrentStackTop) &&	/*|=> In Stack Region. */
+					((*stackentry & 0x03) == 0))		/* Aligned by 4. */
+			{
+				/* R7 detected. */
+				if(InFlashRegion(*(stackentry+1)) && 	/* In Flash Region. */
+						(*(stackentry+1) & 1))			/* Is thumb address. */
+				{
+					/*LR detected. */
+					RTCallStack[RTCallStackIndex].R7 = *stackentry;
+					RTCallStack[RTCallStackIndex].LR = *(stackentry+1);
+					CurrentStackPos = *stackentry;
+					break;
+				}
+				else
+					if(RTCallStackIndex == 0)
+					{
+						RTCallStack[RTCallStackIndex].R7 = *stackentry;
+						RTCallStack[RTCallStackIndex].LR = Last_Fault_Point.LR;
+						CurrentStackPos = *stackentry;
+						break;
+					}
+			}
+		}
+
+		if(stackentry == (uint32_t *)CurrentStackTop){
+			/* reached MAX_STACK_SIZE_IN_FUNC or grown out of stack memory. */
+			/* no more information or need to adjust MAX_STACK_SIZE_IN_FUNC. */
+			break;
+		}
+	}
+}
