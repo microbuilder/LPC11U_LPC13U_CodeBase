@@ -22,6 +22,19 @@
                 The single-precision floating point value to feed into
                 the filter
     @returns    The single-precision floating point filter output
+
+    @code
+
+    float32_t filtered = 0.0F;
+
+    // Setup the single-pole filter values
+    iir_filt_1p_instance iir =  { .a1=0.1F,
+                                  .b0=0.9F, .b1=0.9F };
+
+    // Pass some data into the filter
+    filtered = iir_filt_1p(&iir, 12.345F);
+
+    @endcode
 */
 /**************************************************************************/
 float32_t iir_filt_1p(iir_filt_1p_instance* filt, float32_t in)
