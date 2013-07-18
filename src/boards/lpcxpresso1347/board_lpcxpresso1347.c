@@ -168,9 +168,67 @@ void boardInit(void)
   boardLED(CFG_LED_ON);
 }
 
-/* The following code is used if CMSIS RTOS (RTX) is enabled */
-#ifdef CFG_CMSIS_RTOS
 
+
+#ifndef _TEST_
+#ifndef CFG_CMSIS_RTOS
+/*=========================================================================
+  STANDARD ENTRY POINT
+
+  The default program entry point when an RTOS is not required.
+  -------------------------------------------------------------------------*/
+  volatile uint32_t test[8] = { 0 };
+  int main(void)
+  {
+    uint32_t currentSecond, lastSecond;
+    currentSecond = lastSecond = 0;
+
+    /* Configure the HW */
+    boardInit();
+
+    /* Temp: Initialise ADC and channel 1 (pin 0.12) */
+    LPC_IOCON->TMS_PIO0_12   &= ~0x9F;
+    LPC_IOCON->TMS_PIO0_12   |= 0x02;
+    adcInit();
+
+    while (1)
+    {
+      /* Blinky (1Hz) */
+      currentSecond = delayGetSecondsActive();
+      if (currentSecond != lastSecond)
+      {
+        lastSecond = currentSecond;
+        boardLED(lastSecond % 2);
+      }
+
+      /* Check for binary protocol input if CFG_PROTOCOL is enabled */
+      #ifdef CFG_PROTOCOL
+        prot_task(NULL);
+      #endif
+
+      /* Poll for CLI input if CFG_INTERFACE is enabled */
+      #ifdef CFG_INTERFACE
+        cliPoll();
+      #endif
+
+      /* Optionally enter high level sleep mode here via WFI */
+    }
+  }
+/*=========================================================================*/
+#endif /* !CFG_CMSIS_RTOS */
+#endif /* !_TEST_ */
+
+
+
+#ifdef CFG_CMSIS_RTOS
+/*=========================================================================
+  RTOS ENTRY POINT
+
+  The following code is used if CFG_CMSIS_RTOS (RTX) is defined in the
+  board config file.  The RTOS requires a different entry point since the
+  content switching timer needs to be configured, and an initial thread
+  defined and started.
+  -------------------------------------------------------------------------*/
   /* Thread IDs */
   osThreadId tid_mainthread;      /* ID for main thread   */
   osThreadId tid_blinkythread;    /* ID for blinky thread */
@@ -240,55 +298,9 @@ void boardInit(void)
 
     return 1;
   }
-
-#endif /* CFG_CMSIS_RTOS */
-
-#ifndef _TEST_
-#ifndef CFG_CMSIS_RTOS
-/**************************************************************************/
-/*!
-    @brief Primary (non-RTOS!) entry point for this project.
-*/
-/**************************************************************************/
-volatile uint32_t test[8] = { 0 };
-int main(void)
-{
-  uint32_t currentSecond, lastSecond;
-  currentSecond = lastSecond = 0;
-
-  /* Configure the HW */
-  boardInit();
-
-  /* Temp: Initialise ADC and channel 1 (pin 0.12) */
-  LPC_IOCON->TMS_PIO0_12   &= ~0x9F;
-  LPC_IOCON->TMS_PIO0_12   |= 0x02;
-  adcInit();
-
-  while (1)
-  {
-    /* Blinky (1Hz) */
-    currentSecond = delayGetSecondsActive();
-    if (currentSecond != lastSecond)
-    {
-      lastSecond = currentSecond;
-      boardLED(lastSecond % 2);
-    }
-
-    /* Check for binary protocol input if CFG_PROTOCOL is enabled */
-    #ifdef CFG_PROTOCOL
-      prot_task(NULL);
-    #endif
-
-    /* Poll for CLI input if CFG_INTERFACE is enabled */
-    #ifdef CFG_INTERFACE
-      cliPoll();
-    #endif
-
-    /* Optionally enter high level sleep mode here via WFI */
-  }
-}
+/*=========================================================================*/
 #endif /* !CFG_CMSIS_RTOS */
-#endif /* !_TEST_ */
+
 
 /**************************************************************************/
 /*!
@@ -328,4 +340,4 @@ void boardWakeup(void)
   // ToDo!
 }
 
-#endif /* CFG_BRD_LPCXPRESSO_LPC1347 */
+#endif /* !CFG_BRD_LPCXPRESSO_LPC1347 */
