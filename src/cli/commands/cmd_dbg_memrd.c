@@ -77,11 +77,11 @@ void cmd_dbg_memrd(uint8_t argc, char **argv)
     /* Display the line address */
     if (i == 0)
     {
-      printf("0x%08X: ", startAddr+i);
+      printf("0x%08X: ", (unsigned int)(startAddr+i));
     }
     else if ((i > 15) && (i % 16 == 0))
     {
-      printf("\n0x%08X: ", startAddr+i);
+      printf("\n0x%08X: ", (unsigned int)(startAddr+i));
     }
 
     /* Display the memory contents */

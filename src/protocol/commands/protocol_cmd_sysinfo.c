@@ -165,7 +165,7 @@ error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse
       ASSERT(length == 2, ERROR_PROT_INVALIDPAYLOAD);
       mess_response->length = 4;
       uint32_t speed = (uint32_t)SystemCoreClock;
-      memcpy(&mess_response->payload[4], &speed, sizeof(uint32_t));
+      memcpy(&mess_response->payload[0], &speed, sizeof(uint32_t));
       break;
 
     case (PROT_CMD_SYSINFO_KEY_EEPROMSIZE):
