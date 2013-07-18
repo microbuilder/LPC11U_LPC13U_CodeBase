@@ -1,8 +1,9 @@
 /**************************************************************************/
 /*!
-    @file     debug.c
-    @author   K. Townsend (microBuilder.eu)
-				Huynh Duc Hau (huynhduchau86@gmail.com)
+    @file    debug.c
+    @author  K. Townsend (microBuilder.eu)
+             Huynh Duc Hau (huynhduchau86@gmail.com)
+
     @section LICENSE
 
     Software License Agreement (BSD License)
@@ -44,14 +45,18 @@ REGISTER_STACK_FRAME Last_Fault_Point;
 void Get_Fault_Point(uint32_t stackpointer);
 
 #ifdef __CODE_RED
-#define __STACKTOP__ _vStackTop
+  #define __STACKTOP__ _vStackTop
+#elif  __CROSSWORKS_ARM
+  #define __STACKTOP__ __stack_start__
 #else
-#define __STACKTOP__ _StackTop
+  #define __STACKTOP__ _StackTop
 #endif
+
 extern unsigned int __STACKTOP__;
 extern unsigned int _pvHeapStart;
 static CALLSTACK_FRAME RTCallStack[5];
 static uint32_t RTCallStackIndex;
+
 /**************************************************************************/
 /*!
     @brief      Dumps the NVIC priority level of every interrupt
@@ -88,99 +93,109 @@ void debugDumpNVICPriorities(void)
 #if defined (__GNUC__)
 __attribute__((naked)) void HardFault_Handler(void)
 {
-	register uint32_t tempSP;
-	__asm volatile(" tst lr, #4	\n");
-	__asm volatile(" ite eq		\n");
-	__asm volatile(" mrseq %0, msp	\n" : "=r" (tempSP));
-	__asm volatile(" mrsne %0, psp	\n" : "=r" (tempSP));
-	__asm volatile(" push {lr}	\n");
-	Get_Fault_Point(tempSP);
-	__asm volatile(" pop {pc}	\n");
+  register uint32_t tempSP;
+  __asm volatile(" tst lr, #4     \n");
+  __asm volatile(" ite eq         \n");
+  __asm volatile(" mrseq %0, msp  \n" : "=r" (tempSP));
+  __asm volatile(" mrsne %0, psp  \n" : "=r" (tempSP));
+  __asm volatile(" push {lr}      \n");
+  Get_Fault_Point(tempSP);
+  __asm volatile(" pop {pc}       \n");
 }
 #endif
 
 /**************************************************************************/
 /*!
     @brief      Get_Fault_Point. This is stack safe function. Any activities
-    			inside this function will not modify stack when exits.
+                        inside this function will not modify stack when exits.
 */
 /**************************************************************************/
 void Get_Fault_Point(uint32_t stackpointer)
 {
-	uint32_t Last_SP;
-	CFSR_T ConfigFaultStatus;
-	uint32_t BusFaultAddress = 0;
+  uint32_t Last_SP;
+  CFSR_T ConfigFaultStatus;
+  uint32_t BusFaultAddress = 0;
 
-	memcpy((void*)&Last_Fault_Point, (void*)stackpointer, sizeof(REGISTER_STACK_FRAME));
+  memcpy((void*)&Last_Fault_Point, (void*)stackpointer, sizeof(REGISTER_STACK_FRAME));
 
-	if(Last_Fault_Point.xPSR & (1<<9))
-	{
-		Last_SP = stackpointer + 36;
-	}else
-	{
-		Last_SP = stackpointer + 32;
-	}
+  if(Last_Fault_Point.xPSR & (1<<9))
+  {
+    Last_SP = stackpointer + 36;
+  } else
+  {
+    Last_SP = stackpointer + 32;
+  }
 
-	/* Build callstack. */
-	TraverseNTrace_Stack(Last_SP);
+  /* Build callstack. */
+  TraverseNTrace_Stack(Last_SP);
 
-	/* retrieve Fault Status */
-	ConfigFaultStatus.DWORDVALUE = (*((volatile unsigned long *)(0xE000ED28)));
+  /* retrieve Fault Status */
+  ConfigFaultStatus.DWORDVALUE = (*((volatile unsigned long *)(0xE000ED28)));
 
-	/*===== PROCESS BUS FAULT STATUS ======*/
-	if(ConfigFaultStatus.BIT.BFARVALID)
-		BusFaultAddress = (*((volatile unsigned long *)(0xE000ED38)));
+  /*===== PROCESS BUS FAULT STATUS ======*/
 
-	if(ConfigFaultStatus.BIT.IMPRECISERR)
-	{
-		/* Imprecise data access error. Write to invalid address.
-		 * Look back few instructions to find exactly Fault Point PC. */
-		while(1);
-	}
-	if(ConfigFaultStatus.BIT.PRECISERR)
-	{
-		/* precise data access error. Check BusFaultAddress if available. */
-		while(1);
-	}
-	if(ConfigFaultStatus.BIT.IBUSERR)
-	{
-		/* a bus fault on an instruction prefetch. */
-		while(1);
-	}
-	if(ConfigFaultStatus.BIT.UNSTKERR)
-	{
-		/* exception return. Check Last_SP value. */
-		while(1);
-	}
-	if(ConfigFaultStatus.BIT.STKERR)
-	{
-		/* Exception Entry. Check Last_SP value. */
-		while(1);
-	}
+  if(ConfigFaultStatus.BIT.BFARVALID)
+    BusFaultAddress = (*((volatile unsigned long *)(0xE000ED38)));
 
-	/*===== PROCESS USAGE FAULT STATUS ======*/
-	if(ConfigFaultStatus.BIT.UNDEFINSTR)
-	{
-		/* Undefined instruction error. */
-		while(1);
-	}
-	if(ConfigFaultStatus.BIT.INVSTATE)
-	{
-		/* Invalid EPSR.T bit or illegal EPSR.IT bits for executing instruction. */
-		while(1);
-	}
-	if(ConfigFaultStatus.BIT.UNALIGNED)
-	{
-		/* Unaligned access error. */
-		while(1);
-	}
-	if(ConfigFaultStatus.BIT.DIVBYZERO)
-	{
-		/* Divide by zero. */
-		while(1);
-	}
-	/* print Fault Point data here or just watch it. */
-	while(1);
+  if(ConfigFaultStatus.BIT.IMPRECISERR)
+  {
+    /* Imprecise data access error. Write to invalid address.
+     * Look back few instructions to find exactly Fault Point PC. */
+    while(1);
+  }
+
+  if(ConfigFaultStatus.BIT.PRECISERR)
+  {
+    /* precise data access error. Check BusFaultAddress if available. */
+    while(1);
+  }
+
+  if(ConfigFaultStatus.BIT.IBUSERR)
+  {
+    /* a bus fault on an instruction prefetch. */
+    while(1);
+  }
+
+  if(ConfigFaultStatus.BIT.UNSTKERR)
+  {
+    /* exception return. Check Last_SP value. */
+    while(1);
+  }
+
+  if(ConfigFaultStatus.BIT.STKERR)
+  {
+    /* Exception Entry. Check Last_SP value. */
+    while(1);
+  }
+
+  /*===== PROCESS USAGE FAULT STATUS ======*/
+
+  if(ConfigFaultStatus.BIT.UNDEFINSTR)
+  {
+    /* Undefined instruction error. */
+    while(1);
+  }
+
+  if(ConfigFaultStatus.BIT.INVSTATE)
+  {
+    /* Invalid EPSR.T bit or illegal EPSR.IT bits for executing instruction. */
+    while(1);
+  }
+
+  if(ConfigFaultStatus.BIT.UNALIGNED)
+  {
+    /* Unaligned access error. */
+    while(1);
+  }
+
+  if(ConfigFaultStatus.BIT.DIVBYZERO)
+  {
+    /* Divide by zero. */
+    while(1);
+  }
+
+  /* print Fault Point data here or just watch it. */
+  while(1);
 }
 
 /**************************************************************************/
@@ -190,66 +205,66 @@ void Get_Fault_Point(uint32_t stackpointer)
 /**************************************************************************/
 bool InFlashRegion(uint32_t address)
 {
-	if((address > 0) &&
-			(address < 0x10000))
-		return true;
-	return false;
+  return ((address > 0) && (address < 0x10000)) ? true : false;
 }
 
 /**************************************************************************/
 /*!
     @brief      TraverseNTrace_Stack. Traverse stack from current stack position
-    			in last context and build a runtime callstack.
+                        in last context and build a runtime callstack.
 */
 /**************************************************************************/
 void TraverseNTrace_Stack(uint32_t StackPos)
 {
-	uint32_t CurrentStackPos;
+  uint32_t CurrentStackPos;
 
+  CurrentStackPos = StackPos;
 
-	CurrentStackPos = StackPos;
+  for(RTCallStackIndex = 0; RTCallStackIndex < 5; RTCallStackIndex++)
+  {
+    uint32_t CurrentStackTop;
+    uint32_t *stackentry;
 
-	for(RTCallStackIndex = 0; RTCallStackIndex < 5; RTCallStackIndex++)
-	{
-		uint32_t CurrentStackTop;
-		uint32_t *stackentry;
+    if( (CurrentStackPos + MAX_STACK_SIZE_IN_FUNC) >= (uint32_t)&__STACKTOP__ )
+    {
+      CurrentStackTop = (uint32_t)&__STACKTOP__;
+    }
+    else
+    {
+      CurrentStackTop = (CurrentStackPos + MAX_STACK_SIZE_IN_FUNC);
+    }
 
-		if((CurrentStackPos + MAX_STACK_SIZE_IN_FUNC) >= (uint32_t)&__STACKTOP__)
-			CurrentStackTop = (uint32_t)&__STACKTOP__;
-		else
-			CurrentStackTop = (CurrentStackPos + MAX_STACK_SIZE_IN_FUNC);
+    for(stackentry = (uint32_t *)CurrentStackPos; stackentry < (uint32_t *)CurrentStackTop; stackentry++)
+    {
+      if((*stackentry >= CurrentStackPos) &&       /*|*/
+         (*stackentry < CurrentStackTop) &&        /*|=> In Stack Region. */
+         ((*stackentry & 0x03) == 0))              /* Aligned by 4. */
+      {
+        /* R7 detected. */
+        if(InFlashRegion(*(stackentry+1)) &&       /* In Flash Region. */
+                        (*(stackentry+1) & 1))     /* Is thumb address. */
+        {
+          /*LR detected. */
+          RTCallStack[RTCallStackIndex].R7 = *stackentry;
+          RTCallStack[RTCallStackIndex].LR = *(stackentry+1);
+          CurrentStackPos = *stackentry;
+          break;
+        }
+        else if(RTCallStackIndex == 0)
+        {
+          RTCallStack[RTCallStackIndex].R7 = *stackentry;
+          RTCallStack[RTCallStackIndex].LR = Last_Fault_Point.LR;
+          CurrentStackPos = *stackentry;
+          break;
+        }
+      }
+    }
 
-		for(stackentry = (uint32_t *)CurrentStackPos; stackentry < (uint32_t *)CurrentStackTop; stackentry++)
-		{
-			if((*stackentry >= CurrentStackPos) &&		/*|*/
-					(*stackentry < CurrentStackTop) &&	/*|=> In Stack Region. */
-					((*stackentry & 0x03) == 0))		/* Aligned by 4. */
-			{
-				/* R7 detected. */
-				if(InFlashRegion(*(stackentry+1)) && 	/* In Flash Region. */
-						(*(stackentry+1) & 1))			/* Is thumb address. */
-				{
-					/*LR detected. */
-					RTCallStack[RTCallStackIndex].R7 = *stackentry;
-					RTCallStack[RTCallStackIndex].LR = *(stackentry+1);
-					CurrentStackPos = *stackentry;
-					break;
-				}
-				else
-					if(RTCallStackIndex == 0)
-					{
-						RTCallStack[RTCallStackIndex].R7 = *stackentry;
-						RTCallStack[RTCallStackIndex].LR = Last_Fault_Point.LR;
-						CurrentStackPos = *stackentry;
-						break;
-					}
-			}
-		}
-
-		if(stackentry == (uint32_t *)CurrentStackTop){
-			/* reached MAX_STACK_SIZE_IN_FUNC or grown out of stack memory. */
-			/* no more information or need to adjust MAX_STACK_SIZE_IN_FUNC. */
-			break;
-		}
-	}
+    if(stackentry == (uint32_t *)CurrentStackTop)
+    {
+      /* reached MAX_STACK_SIZE_IN_FUNC or grown out of stack memory. */
+      /* no more information or need to adjust MAX_STACK_SIZE_IN_FUNC. */
+      break;
+    }
+  }
 }
