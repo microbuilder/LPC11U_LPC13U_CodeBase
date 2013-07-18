@@ -259,6 +259,11 @@ int main(void)
   /* Configure the HW */
   boardInit();
 
+  /* Temp: Initialise ADC and channel 1 (pin 0.12) */
+  LPC_IOCON->TMS_PIO0_12   &= ~0x9F;
+  LPC_IOCON->TMS_PIO0_12   |= 0x02;
+  adcInit();
+
   while (1)
   {
     /* Blinky (1Hz) */
@@ -278,21 +283,6 @@ int main(void)
     #ifdef CFG_INTERFACE
       cliPoll();
     #endif
-
-//    if ( usb_custom_is_ready_to_send() )
-//    {
-//      static uint32_t magic_number = 0;
-//      uint32_t buffer[2][16];  // 2x64 byte in size
-//      buffer[0][0] = magic_number++;
-//      buffer[1][0] = magic_number++;
-//      usb_custom_send(buffer, 64*2);
-//    }
-//
-//    if (custom_recv_magic_number != 0)
-//    {
-//      printf("%d\n", custom_recv_magic_number);
-//      custom_recv_magic_number = 0;
-//    }
 
     /* Optionally enter high level sleep mode here via WFI */
   }

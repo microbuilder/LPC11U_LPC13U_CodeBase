@@ -1,7 +1,9 @@
 /**************************************************************************/
 /*!
-    @file     prot_cmdtable.h
+    @file     protocol_cmd_adc.c
     @author   K. Townsend (microBuilder.eu)
+
+    This command can be used to read an ADC channel on the MCU.
 
     @section LICENSE
 
@@ -33,43 +35,35 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+#include "projectconfig.h"
 
-#ifndef _PROT_CMDTABLE_H_
-#define _PROT_CMDTABLE_H_
+#ifdef CFG_PROTOCOL
 
-#ifdef __cplusplus
- extern "C" {
-#endif
+#include <stdio.h>
+#include <string.h>
+#include "boards/board.h"
+#include "../protocol.h"
+
+#include "core/adc/adc.h"
 
 /**************************************************************************/
 /*!
-    This enumeration is used to make sure that each command has a unique
-    ID, and is used to create the command lookup table enum further down
+    Returns the results from a single read on the specified ADC channel
 */
 /**************************************************************************/
-typedef enum {
-  PROT_CMDTYPE_LED      = 0x0001, /**< Enables/disables the on board LED */
-  PROT_CMDTYPE_SYSINFO  = 0x0002, /**< Gets system properties */
-  PROT_CMDTYPE_ADC      = 0x0003, /**< Reads from the ADC */
-  PROT_CMDTYPE_COUNT              /**< Total number of commands */
-} protCmdType_t;
+error_t protcmd_adc(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+{
+  uint8_t channel = payload[0];
 
-/**************************************************************************/
-/*
-    The command lookup table is constructed based on this macro containing
-    the command ID (as defined in protCmdType_t) and the actual callback
-    function to associate with it (in the format defined by protCmdFunc_t)
-*/
-/**************************************************************************/
-#define PROTOCOL_COMMAND_TABLE(ENTRY)            \
-    ENTRY(PROT_CMDTYPE_LED, protcmd_led)         \
-    ENTRY(PROT_CMDTYPE_SYSINFO, protcmd_sysinfo) \
-    ENTRY(PROT_CMDTYPE_ADC, protcmd_adc)         \
+  /* Make sure we have a valid channel */
+  ASSERT (channel < 8, ERROR_INVALIDPARAMETER);
 
-#ifdef __cplusplus
- }
+  /* Read the ADC channel and copy the results into mess_response */
+  mess_response->length = 2;
+  uint16_t results = (uint16_t)adcRead(channel);
+  memcpy(&mess_response->payload[0], &results, sizeof(uint16_t));
+
+  return ERROR_NONE;
+}
+
 #endif
-
-#endif /* _PROT_CMDTABLE_H_ */
-
-/** @} */

@@ -188,6 +188,7 @@ VPATH += src/drivers/displays/segment/ht16k33
 OBJS  += $(OBJ_PATH)/ht16k33.o
 
 VPATH += src/drivers/filters/iir
+OBJS  += $(OBJ_PATH)/iir.o
 OBJS  += $(OBJ_PATH)/iir_f.o
 OBJS  += $(OBJ_PATH)/iir_i.o
 OBJS  += $(OBJ_PATH)/iir_u16.o
@@ -293,6 +294,7 @@ VPATH += src/protocol
 OBJS  += $(OBJ_PATH)/protocol.o
 
 VPATH += src/protocol/commands
+OBJS  += $(OBJ_PATH)/protocol_cmd_adc.o
 OBJS  += $(OBJ_PATH)/protocol_cmd_led.o
 OBJS  += $(OBJ_PATH)/protocol_cmd_sysinfo.o
 
