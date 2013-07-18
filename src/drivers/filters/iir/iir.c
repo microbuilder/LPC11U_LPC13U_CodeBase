@@ -82,7 +82,7 @@ float32_t iir_filt_1p(iir_filt_1p_instance* filt, float32_t in)
 
     // Setup the 2 pole butterworth filter with values calculated above
     iir_filt_2p_instance iir_butter =  { .a1=-1.91120F, .a2=0.91498F,
-                                         .b0=1.8894e-003, .b1=9.4469e-004 };
+                                         .b0=9.4469e-004, .b1=1.8894e-003, .b2=9.4469e-004 };
 
     float32_t i, filtered;
     i = filtered = 0.0F;
