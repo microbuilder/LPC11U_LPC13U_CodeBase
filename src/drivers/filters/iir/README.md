@@ -10,9 +10,11 @@ iir.c should be used in combination with Octave when you need a custom filter (b
 
 The rest of this documentation applies to the original type-specific filters, and a proper tutorial on using iir.c with Octave will be added once the code is stable and properly tested.
 
-----------
+##Type-Specific Single Pole Low-Pass IIR Filters (iir_\*.c)
 
-This simple IIR implementation is a basic single-pole low-pass filter. It's a 'low pass' filter since it attempts to filter out short term fluctuations, giving more weight to the longer-term average. You can use it to 'smooth out' fluctuating sensor data by slowing the response to new signals. It operates on the same principle as an RC filter in HW -- numerous samples are required before the output of the filter shifts to reach the 'new' value, gradual shifting up or down towards any newly integrated values.
+'**iir\_f.c**' (float32\_t), '**iir\_i.c**' (int32\_t) and '**iir\_u16.c**' (int16\_t) implement a simple single-pole, low-pass filter in an efficient way using dedicated types, including basic value overflow protection. 
+
+It's a 'low pass' filter since it attempts to filter out short term fluctuations, giving more weight to the longer-term average. You can use it to 'smooth out' fluctuating sensor data by slowing the response to new signals. It operates on the same principle as an RC filter in HW -- numerous samples are required before the output of the filter shifts to reach the 'new' value, gradual shifting up or down towards any newly integrated values.
 
 You can configure the filter by adjusting the 'alpha' value, which controls the delay or amount of time required for new signals to be integrated into the current output value.
 
