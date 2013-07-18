@@ -1,8 +1,6 @@
 # Infinite Impulse Response (IIR) Filter #
 
-----------
-
-##Which File ... '**iir.c**' or '**iir\_f.c**, **iir\_i.c** and '**iir\_u16.c**'?
+##Which File ... 'iir.c' or 'iir\_f.c, iir\_i.c and 'iir\_u16.c'?
 
 Starting with v0.9.2 of the code base, a new IIR filter implementation has been added named **iir.c**.  This new generic IIR code **only supports float32_t values**, and is intended to be used with IIR filter values calculated in Octave, Matlab or a similar program.
 
