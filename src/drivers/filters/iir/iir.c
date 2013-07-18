@@ -186,3 +186,38 @@ float32_t iir_filt_3p(iir_filt_3p_instance* filt, float32_t in)
 
   return(filt->out);
 }
+
+/**************************************************************************/
+/*!
+    @brief      Four pole IIR filter routine
+
+    @param[in]  filt
+                Pointer to the iir_filt_4p_instance instance containing
+                the filter settings
+    @param[in]  in
+                The single-precision floating point value to feed into
+                the filter
+    @returns    The single-precision floating point filter output
+*/
+/**************************************************************************/
+float32_t iir_filt_4p(iir_filt_4p_instance* filt, float32_t in)
+{
+  /* Calculate new output */
+  filt->out = (filt->b0*in +
+               filt->b1*filt->x1 + filt->b2*filt->x2 + filt->b3*filt->x3 + filt->b4*filt->x4 -
+               filt->a1*filt->y1 - filt->a2*filt->y2 - filt->a3*filt->y3 - filt->a4*filt->y4);
+
+  /* Shift input samples */
+  filt->x4 = filt->x3;
+  filt->x3 = filt->x2;
+  filt->x2 = filt->x1;
+  filt->x1 = in;
+
+  /* Shift output samples */
+  filt->y4 = filt->y3;
+  filt->y3 = filt->y2;
+  filt->y2 = filt->y1;
+  filt->y1 = filt->out;
+
+  return(filt->out);
+}
