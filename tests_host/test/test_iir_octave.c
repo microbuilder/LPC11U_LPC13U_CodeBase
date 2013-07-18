@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
-    @file     prot_cmdtable.h
-    @author   K. Townsend (microBuilder.eu)
+    @file     test_iir_octave.c
+    @ingroup  Unit Tests
 
     @section LICENSE
 
@@ -33,43 +33,43 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
+#include "unity.h"
+#include "iir.h"
 
-#ifndef _PROT_CMDTABLE_H_
-#define _PROT_CMDTABLE_H_
+float32_t i, filtered;
 
-#ifdef __cplusplus
- extern "C" {
-#endif
+void setUp(void)
+{
+  i = filtered = 0.0F;
+}
 
-/**************************************************************************/
-/*!
-    This enumeration is used to make sure that each command has a unique
-    ID, and is used to create the command lookup table enum further down
-*/
-/**************************************************************************/
-typedef enum {
-  PROT_CMDTYPE_LED      = 0x0001, /**< Enables/disables the on board LED */
-  PROT_CMDTYPE_SYSINFO  = 0x0002, /**< Gets system properties */
-  PROT_CMDTYPE_ADC      = 0x0003, /**< Reads from the ADC */
-  PROT_CMDTYPE_COUNT              /**< Total number of commands */
-} protCmdType_t;
+void tearDown(void)
+{
+}
 
-/**************************************************************************/
-/*
-    The command lookup table is constructed based on this macro containing
-    the command ID (as defined in protCmdType_t) and the actual callback
-    function to associate with it (in the format defined by protCmdFunc_t)
-*/
-/**************************************************************************/
-#define PROTOCOL_COMMAND_TABLE(ENTRY)            \
-    ENTRY(PROT_CMDTYPE_LED, protcmd_led)         \
-    ENTRY(PROT_CMDTYPE_SYSINFO, protcmd_sysinfo) \
-    ENTRY(PROT_CMDTYPE_ADC, protcmd_adc)         \
+void test_iir_1p_init(void)
+{
+  /* Configure the IIR filter */
+  iir_filt_1p_instance iir =  { .a1=0.1F,
+                                .b0=0.9F, .b1=0.9F };
 
-#ifdef __cplusplus
- }
-#endif
+  /* Calculate comparison data in Octave:
+   * a = [1.0 0.1]
+   * b = [0.9 0.9]
+   * data = [12.345 12.345 12.345 12.345 12.345]
+   * results = filter(b,a,data)
+   * => 11.111   21.110   20.110   20.210   20.200
+   */
 
-#endif /* _PROT_CMDTABLE_H_ */
-
-/** @} */
+  /* Push some data into the filter */
+  filtered = iir_filt_1p(&iir, 12.345F);
+  TEST_ASSERT_EQUAL_FLOAT(11.1105F, filtered);
+  filtered = iir_filt_1p(&iir, 12.345F);
+  TEST_ASSERT_EQUAL_FLOAT(21.11F, filtered);
+  filtered = iir_filt_1p(&iir, 12.345F);
+  TEST_ASSERT_EQUAL_FLOAT(20.11F, filtered);
+  filtered = iir_filt_1p(&iir, 12.345F);
+  TEST_ASSERT_EQUAL_FLOAT(20.21F, filtered);
+  filtered = iir_filt_1p(&iir, 12.345F);
+  TEST_ASSERT_EQUAL_FLOAT(20.2F, filtered);
+}

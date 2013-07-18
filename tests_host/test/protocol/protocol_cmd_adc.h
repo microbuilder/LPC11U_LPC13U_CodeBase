@@ -1,6 +1,6 @@
 /**************************************************************************/
 /*!
-    @file     prot_cmdtable.h
+    @file     protocol_cmd_led.h
     @author   K. Townsend (microBuilder.eu)
 
     @section LICENSE
@@ -34,42 +34,18 @@
 */
 /**************************************************************************/
 
-#ifndef _PROT_CMDTABLE_H_
-#define _PROT_CMDTABLE_H_
+#ifndef __PROTOCOL_CMD_LED_H__
+#define __PROTOCOL_CMD_LED_H__
 
 #ifdef __cplusplus
  extern "C" {
 #endif
 
-/**************************************************************************/
-/*!
-    This enumeration is used to make sure that each command has a unique
-    ID, and is used to create the command lookup table enum further down
-*/
-/**************************************************************************/
-typedef enum {
-  PROT_CMDTYPE_LED      = 0x0001, /**< Enables/disables the on board LED */
-  PROT_CMDTYPE_SYSINFO  = 0x0002, /**< Gets system properties */
-  PROT_CMDTYPE_ADC      = 0x0003, /**< Reads from the ADC */
-  PROT_CMDTYPE_COUNT              /**< Total number of commands */
-} protCmdType_t;
-
-/**************************************************************************/
-/*
-    The command lookup table is constructed based on this macro containing
-    the command ID (as defined in protCmdType_t) and the actual callback
-    function to associate with it (in the format defined by protCmdFunc_t)
-*/
-/**************************************************************************/
-#define PROTOCOL_COMMAND_TABLE(ENTRY)            \
-    ENTRY(PROT_CMDTYPE_LED, protcmd_led)         \
-    ENTRY(PROT_CMDTYPE_SYSINFO, protcmd_sysinfo) \
-    ENTRY(PROT_CMDTYPE_ADC, protcmd_adc)         \
 
 #ifdef __cplusplus
  }
 #endif
 
-#endif /* _PROT_CMDTABLE_H_ */
+#endif /* __PROTOCOL_CMD_LED_H__ */
 
 /** @} */

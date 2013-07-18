@@ -5,6 +5,8 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 ## 0.9.2 [Ongoing] ##
 
 - SmartConfig now works for the CC3000 (bug fix plus longer timeout required)
+- Added 1/2/3-pole IIR filter implementation for use with Octave/Matlab
+- Added float32\_t and float64\_t to sysdefs.h
 
 ## 0.9.1 [12 July 2013] ##
 

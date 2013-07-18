@@ -236,8 +236,10 @@
         </folder>
         <folder Name="filters" file_name="">
           <folder Name="iir" file_name="">
+            <file file_name="src/drivers/filters/iir/iir.c"/>
             <file file_name="src/drivers/filters/iir/iir_f.c"/>
             <file file_name="src/drivers/filters/iir/iir_i.c"/>
+            <file file_name="src/drivers/filters/iir/iir_u16.c"/>
           </folder>
           <folder Name="ma" file_name="">
             <file file_name="src/drivers/filters/ma/sma_f.c"/>
@@ -324,6 +326,7 @@
         <folder Name="commands" file_name="">
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
           <file file_name="src/protocol/commands/protocol_cmd_sysinfo.c"/>
+          <file file_name="src/protocol/commands/protocol_cmd_adc.c"/>
         </folder>
         <file file_name="src/protocol/prot_cmdtable.h"/>
       </folder>

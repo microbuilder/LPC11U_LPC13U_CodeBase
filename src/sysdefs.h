@@ -46,6 +46,9 @@ extern "C" {
 
 typedef unsigned char byte_t;
 
+typedef float  float32_t;
+typedef double float64_t;
+
 /* Stay compatible with ugly "windows" style for bool */
 #define BOOL bool
 
