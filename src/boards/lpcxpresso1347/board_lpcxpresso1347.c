@@ -49,6 +49,7 @@
 #include "core/delay/delay.h"
 #include "core/eeprom/eeprom.h"
 #include "core/pmu/pmu.h"
+#include "core/adc/adc.h"
 
 #ifdef CFG_CHIBI
   #include "messages.h"
