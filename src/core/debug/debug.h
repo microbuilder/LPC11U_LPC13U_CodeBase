@@ -161,7 +161,7 @@ void debugDumpNVICPriorities (void);
 
 #ifdef DEBUG_BUILD_RT_CALLSTACK
 bool debugInFlashRegion ( uint32_t address );
-void	ebugTraverseStack ( uint32_t StackPos );
+void debugTraverseStack ( uint32_t StackPos );
 #endif
 
 #ifdef __cplusplus
