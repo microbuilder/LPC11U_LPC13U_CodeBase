@@ -53,7 +53,6 @@ void Get_Fault_Point(uint32_t stackpointer);
     #define __STACKTOP__ _StackTop
   #endif
   extern unsigned int __STACKTOP__;
-  extern unsigned int _pvHeapStart;
   extern void ResetISR(void);
   static CALLSTACK_FRAME RTCallStack[MAX_CALLSTACK_FRAME];
   static uint32_t RTCallStackIndex;
