@@ -44,20 +44,19 @@ REGISTER_STACK_FRAME Last_Fault_Point;
 
 void Get_Fault_Point(uint32_t stackpointer);
 
-#ifdef BUILD_RT_CALLSTACK
-#ifdef __CODE_RED
-  #define __STACKTOP__ _vStackTop
-#elif  __CROSSWORKS_ARM
-  #define __STACKTOP__ __stack_start__
-#else
-  #define __STACKTOP__ _StackTop
-#endif
-
-extern unsigned int __STACKTOP__;
-extern unsigned int _pvHeapStart;
-extern void ResetISR(void);
-static CALLSTACK_FRAME RTCallStack[MAX_CALLSTACK_FRAME];
-static uint32_t RTCallStackIndex;
+#ifdef DEBUG_BUILD_RT_CALLSTACK
+  #ifdef __CODE_RED
+    #define __STACKTOP__ _vStackTop
+  #elif  __CROSSWORKS_ARM
+    #define __STACKTOP__ __stack_start__
+  #else
+    #define __STACKTOP__ _StackTop
+  #endif
+  extern unsigned int __STACKTOP__;
+  extern unsigned int _pvHeapStart;
+  extern void ResetISR(void);
+  static CALLSTACK_FRAME RTCallStack[MAX_CALLSTACK_FRAME];
+  static uint32_t RTCallStackIndex;
 #endif
 
 /**************************************************************************/
@@ -128,12 +127,12 @@ void Get_Fault_Point(uint32_t stackpointer)
     Last_SP = stackpointer + 32;
   }
 
-#ifdef BUILD_RT_CALLSTACK
+#ifdef DEBUG_BUILD_RT_CALLSTACK
   /* Build callstack. */
-  TraverseNTrace_Stack(Last_SP);
+  debugTraverseStack(Last_SP);
 #endif
 
-  /* retrieve Fault Status */
+  /* Retrieve Fault Status */
   ConfigFaultStatus.DWORDVALUE = (*((volatile unsigned long *)(0xE000ED28)));
 
   /*===== PROCESS BUS FAULT STATUS ======*/
@@ -150,25 +149,25 @@ void Get_Fault_Point(uint32_t stackpointer)
 
   if(ConfigFaultStatus.BIT.PRECISERR)
   {
-    /* precise data access error. Check BusFaultAddress if available. */
+    /* Precise data access error. Check BusFaultAddress if available. */
     while(1);
   }
 
   if(ConfigFaultStatus.BIT.IBUSERR)
   {
-    /* a bus fault on an instruction prefetch. */
+    /* A bus fault on an instruction prefetch. */
     while(1);
   }
 
   if(ConfigFaultStatus.BIT.UNSTKERR)
   {
-    /* exception return. Check Last_SP value. */
+    /* Exception return. Check Last_SP value. */
     while(1);
   }
 
   if(ConfigFaultStatus.BIT.STKERR)
   {
-    /* Exception Entry. Check Last_SP value. */
+    /* Exception entry. Check Last_SP value. */
     while(1);
   }
 
@@ -198,29 +197,30 @@ void Get_Fault_Point(uint32_t stackpointer)
     while(1);
   }
 
-  /* print Fault Point data here or just watch it. */
+  /* Wait here for any other unhandled errors */
   while(1);
 }
 
-#ifdef BUILD_RT_CALLSTACK
-
+#ifdef DEBUG_BUILD_RT_CALLSTACK
 /**************************************************************************/
 /*!
-    @brief      InFlashRegion. Check if an given address is in Flash Memory region.
+    @brief  Checks if a given address is in Flash Memory region.
 */
 /**************************************************************************/
-bool InFlashRegion(uint32_t address)
+bool debugInFlashRegion(uint32_t address)
 {
   return ((address >= (uint32_t)&ResetISR) && (address < 0x10000)) ? true : false;
 }
 
 /**************************************************************************/
 /*!
-    @brief      TraverseNTrace_Stack. Traverse stack from current stack position
-                        in last context and build a runtime callstack.
+    @brief  Traverses the stack from the current stack position.
+
+            This function moves back in the stack through previous
+            contexts in an attempt to build a runtime callstack.
 */
 /**************************************************************************/
-void TraverseNTrace_Stack(uint32_t StackPos)
+void debugTraverseStack(uint32_t StackPos)
 {
   uint32_t CurrentStackPos;
 
@@ -242,13 +242,13 @@ void TraverseNTrace_Stack(uint32_t StackPos)
 
     for(stackentry = (uint32_t *)CurrentStackPos; stackentry < (uint32_t *)CurrentStackTop; stackentry++)
     {
-      if((*stackentry >= CurrentStackPos) &&       /*|*/
-         (*stackentry < CurrentStackTop) &&        /*|=> In Stack Region. */
-         ((*stackentry & 0x03) == 0))              /* Aligned by 4. */
+      if((*stackentry >= CurrentStackPos) &&          /*|*/
+         (*stackentry < CurrentStackTop) &&           /*|=> In Stack Region. */
+         ((*stackentry & 0x03) == 0))                 /* Aligned by 4. */
       {
         /* R7 detected. */
-        if(InFlashRegion(*(stackentry+1)) &&       /* In Flash Region. */
-                        (*(stackentry+1) & 1))     /* Is thumb address. */
+        if(debugInFlashRegion(*(stackentry+1)) &&     /* In Flash Region. */
+                             (*(stackentry+1) & 1))   /* Is thumb address. */
         {
           /*LR detected. */
           RTCallStack[RTCallStackIndex].R7 = *stackentry;
@@ -274,4 +274,4 @@ void TraverseNTrace_Stack(uint32_t StackPos)
     }
   }
 }
-#endif // BUILD_RT_CALLSTACK
+#endif // DEBUG_BUILD_RT_CALLSTACK
