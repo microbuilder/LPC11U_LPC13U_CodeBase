@@ -42,6 +42,10 @@ extern "C" {
 
 #include "projectconfig.h"
 
+/* enable to use call stack.
+ * Note: Use this without compiler optimization or option -fomit-frame-pointer. */
+//#define BUILD_RT_CALLSTACK
+
 enum {
 	/* Memory Management Fault Status Bit Definitions */
 	CFSR_MM_IACCVIOL = 0,
@@ -116,6 +120,7 @@ typedef struct {
 } __attribute__((packed)) REGISTER_STACK_FRAME;
 #endif
 
+#ifdef BUILD_RT_CALLSTACK
 typedef struct {
 	uint32_t R7; /* frame pointer. */
 	uint32_t LR;
@@ -124,10 +129,15 @@ typedef struct {
 /* Max stack size that compiler used for local variables and stack pointer
  * in a function. */
 #define MAX_STACK_SIZE_IN_FUNC		(4*64)
+/* MAX LEVEL OF CALLSTACK. */
+#define MAX_CALLSTACK_FRAME			(5)
+#endif
 
 void     debugDumpNVICPriorities (void);
+#ifdef BUILD_RT_CALLSTACK
 bool		InFlashRegion(uint32_t address);
 void		TraverseNTrace_Stack(uint32_t StackPos);
+#endif
 #ifdef __cplusplus
 }
 #endif

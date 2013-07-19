@@ -44,6 +44,7 @@ REGISTER_STACK_FRAME Last_Fault_Point;
 
 void Get_Fault_Point(uint32_t stackpointer);
 
+#ifdef BUILD_RT_CALLSTACK
 #ifdef __CODE_RED
   #define __STACKTOP__ _vStackTop
 #elif  __CROSSWORKS_ARM
@@ -54,8 +55,10 @@ void Get_Fault_Point(uint32_t stackpointer);
 
 extern unsigned int __STACKTOP__;
 extern unsigned int _pvHeapStart;
-static CALLSTACK_FRAME RTCallStack[5];
+extern void ResetISR(void);
+static CALLSTACK_FRAME RTCallStack[MAX_CALLSTACK_FRAME];
 static uint32_t RTCallStackIndex;
+#endif
 
 /**************************************************************************/
 /*!
@@ -93,13 +96,12 @@ void debugDumpNVICPriorities(void)
 #if defined (__GNUC__)
 __attribute__((naked)) void HardFault_Handler(void)
 {
-  register uint32_t tempSP;
   __asm volatile(" tst lr, #4     \n");
   __asm volatile(" ite eq         \n");
-  __asm volatile(" mrseq %0, msp  \n" : "=r" (tempSP));
-  __asm volatile(" mrsne %0, psp  \n" : "=r" (tempSP));
+  __asm volatile(" mrseq r0, msp  \n");
+  __asm volatile(" mrsne r0, psp  \n");
   __asm volatile(" push {lr}      \n");
-  Get_Fault_Point(tempSP);
+  __asm volatile(" bl Get_Fault_Point \n");
   __asm volatile(" pop {pc}       \n");
 }
 #endif
@@ -126,8 +128,10 @@ void Get_Fault_Point(uint32_t stackpointer)
     Last_SP = stackpointer + 32;
   }
 
+#ifdef BUILD_RT_CALLSTACK
   /* Build callstack. */
   TraverseNTrace_Stack(Last_SP);
+#endif
 
   /* retrieve Fault Status */
   ConfigFaultStatus.DWORDVALUE = (*((volatile unsigned long *)(0xE000ED28)));
@@ -198,6 +202,8 @@ void Get_Fault_Point(uint32_t stackpointer)
   while(1);
 }
 
+#ifdef BUILD_RT_CALLSTACK
+
 /**************************************************************************/
 /*!
     @brief      InFlashRegion. Check if an given address is in Flash Memory region.
@@ -205,7 +211,7 @@ void Get_Fault_Point(uint32_t stackpointer)
 /**************************************************************************/
 bool InFlashRegion(uint32_t address)
 {
-  return ((address > 0) && (address < 0x10000)) ? true : false;
+  return ((address >= (uint32_t)&ResetISR) && (address < 0x10000)) ? true : false;
 }
 
 /**************************************************************************/
@@ -268,3 +274,4 @@ void TraverseNTrace_Stack(uint32_t StackPos)
     }
   }
 }
+#endif // BUILD_RT_CALLSTACK
