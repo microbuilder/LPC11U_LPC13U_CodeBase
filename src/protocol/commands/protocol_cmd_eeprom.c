@@ -107,7 +107,7 @@ error_t protcmd_eeprom_write(uint8_t length, uint8_t const payload[], protMsgRes
   ASSERT (address + wrlen < CFG_EEPROM_SIZE, ERROR_INVALIDPARAMETER);
 
   /* Try to write to EEPROM memory */
-  ASSERT_STATUS(writeEEPROM((uint8_t*)address, &payload[3], wrlen));
+  ASSERT_STATUS(writeEEPROM((uint8_t*)address, (uint8_t*)&payload[3], wrlen));
 
   return ERROR_NONE;
 }
