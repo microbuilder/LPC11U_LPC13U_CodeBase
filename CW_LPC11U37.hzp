@@ -324,7 +324,8 @@
           <file file_name="src/protocol/commands/protocol_cmd_led.c"/>
           <file file_name="src/protocol/commands/protocol_cmd_sysinfo.c"/>
           <file file_name="src/protocol/commands/protocol_cmd_adc.c"/>
-        </folder>
+          <file file_name="src/protocol/commands/protocol_cmd_eeprom.c"/>
+       </folder>
         <file file_name="src/protocol/prot_cmdtable.h"/>
       </folder>
       <file file_name="src/fixed.h"/>
