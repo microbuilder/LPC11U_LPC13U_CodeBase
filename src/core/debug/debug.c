@@ -225,7 +225,7 @@ void debugTraverseStack(uint32_t StackPos)
 
   CurrentStackPos = StackPos;
 
-  for(RTCallStackIndex = 0; RTCallStackIndex < 5; RTCallStackIndex++)
+  for(RTCallStackIndex = 0; RTCallStackIndex < MAX_CALLSTACK_FRAME; RTCallStackIndex++)
   {
     uint32_t CurrentStackTop;
     uint32_t *stackentry;
