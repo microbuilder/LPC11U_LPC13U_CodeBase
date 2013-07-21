@@ -49,6 +49,12 @@
 /**************************************************************************/
 /*!
     Returns the results from a single read on the specified ADC channel
+
+    PAYLOAD:  Byte 0 : ADC channel (0..7)
+
+    RESPONSE: Payload Length : 2
+              payload[0] : ADC results (lower byte)
+              payload[1] : ADC result (upper byte)
 */
 /**************************************************************************/
 error_t protcmd_adc(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)

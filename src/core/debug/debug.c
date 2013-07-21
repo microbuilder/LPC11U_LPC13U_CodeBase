@@ -116,6 +116,10 @@ void Get_Fault_Point(uint32_t stackpointer)
   CFSR_T ConfigFaultStatus;
   uint32_t BusFaultAddress = 0;
 
+  /* Ugly, but avoids GCC throwing 'unused' warnings */
+  (void)Last_SP;
+  (void)BusFaultAddress;
+
   memcpy((void*)&Last_Fault_Point, (void*)stackpointer, sizeof(REGISTER_STACK_FRAME));
 
   if(Last_Fault_Point.xPSR & (1<<9))
