@@ -38,9 +38,10 @@
 #include "unity.h"
 #include "fifo.h"
 #include "protocol.h"
+#include "protocol_cmd_adc.h"
+#include "protocol_cmd_eeprom.h"
 #include "protocol_cmd_led.h"
 #include "protocol_cmd_sysinfo.h"
-#include "protocol_cmd_adc.h"
 #include "protocol_support.h"
 
 #include "mock_iap.h"
@@ -49,6 +50,7 @@
 #include "mock_board.h"
 #include "mock_protocol_callback.h"
 #include "mock_adc.h"
+#include "mock_eeprom.h"
 
 uint32_t SystemCoreClock = 12000000; // overshadow the variable used to determine core lock
 

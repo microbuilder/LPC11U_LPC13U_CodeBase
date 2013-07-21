@@ -295,6 +295,7 @@ OBJS  += $(OBJ_PATH)/protocol.o
 
 VPATH += src/protocol/commands
 OBJS  += $(OBJ_PATH)/protocol_cmd_adc.o
+OBJS  += $(OBJ_PATH)/protocol_cmd_eeprom.o
 OBJS  += $(OBJ_PATH)/protocol_cmd_led.o
 OBJS  += $(OBJ_PATH)/protocol_cmd_sysinfo.o
 
