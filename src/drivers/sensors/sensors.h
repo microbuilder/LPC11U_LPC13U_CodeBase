@@ -98,6 +98,7 @@ typedef enum
   SENSOR_TYPE_GYROSCOPE             = (4),
   SENSOR_TYPE_LIGHT                 = (5),
   SENSOR_TYPE_PRESSURE              = (6),
+  SENSOR_TYPE_COLOR                 = (7),
   SENSOR_TYPE_PROXIMITY             = (8),
   SENSOR_TYPE_GRAVITY               = (9),
   SENSOR_TYPE_LINEAR_ACCELERATION   = (10),  /**< Acceleration not including gravity */
@@ -105,8 +106,7 @@ typedef enum
   SENSOR_TYPE_RELATIVE_HUMIDITY     = (12),
   SENSOR_TYPE_AMBIENT_TEMPERATURE   = (13),
   SENSOR_TYPE_VOLTAGE               = (15),
-  SENSOR_TYPE_CURRENT               = (16),
-  SENSOR_TYPE_COLOR                 = (17)
+  SENSOR_TYPE_CURRENT               = (16)
 } sensors_type_t;
 
 /** struct sensors_vec_s is used to return a vector in a common format. */
