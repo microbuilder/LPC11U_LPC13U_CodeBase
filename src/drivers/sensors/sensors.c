@@ -109,8 +109,7 @@ size_t sensorsSerializeSensor(uint8_t *buffer, const sensor_t *sensor)
     @endcode
 */
 /**************************************************************************/
-size_t sensorsSerializeSensorsEvent(uint8_t *buffer,
-    const sensors_event_t *event)
+size_t sensorsSerializeSensorsEvent(uint8_t *buffer, const sensors_event_t *event)
 {
    size_t i = 0;
 
@@ -128,6 +127,60 @@ size_t sensorsSerializeSensorsEvent(uint8_t *buffer,
    i += sizeof event->data;
 
    return i;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Deserializes a sensor_t object from the supplied buffer
+*/
+/**************************************************************************/
+size_t sensorsDeserializeSensor(sensor_t *sensor, const uint8_t *buffer)
+{
+  size_t i = 0;
+
+  memcpy(&sensor->name, &buffer[i], sizeof sensor->name);
+  i += sizeof sensor->name;
+  memcpy(&sensor->version, &buffer[i], sizeof sensor->version);
+  i += sizeof sensor->version;
+  memcpy(&sensor->sensor_id, &buffer[i], sizeof sensor->sensor_id);
+  i += sizeof sensor->sensor_id;
+  memcpy(&sensor->type, &buffer[i], sizeof sensor->type);
+  i += sizeof sensor->type;
+  memcpy(&sensor->max_value, &buffer[i], sizeof sensor->max_value);
+  i += sizeof sensor->max_value;
+  memcpy(&sensor->min_value, &buffer[i], sizeof sensor->min_value);
+  i += sizeof sensor->min_value;
+  memcpy(&sensor->resolution, &buffer[i], sizeof sensor->resolution);
+  i += sizeof sensor->resolution;
+  memcpy(&sensor->min_delay, &buffer[i], sizeof sensor->min_delay);
+  i += sizeof sensor->min_delay;
+
+  return i;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Deserializes a sensors_event_t object from the supplied buffer
+*/
+/**************************************************************************/
+size_t sensorsDeserializeSensorsEvent(sensors_event_t *event, const uint8_t *buffer)
+{
+  size_t i = 0;
+
+  memcpy(&event->version, &buffer[i], sizeof event->version);
+  i += sizeof event->version;
+  memcpy(&event->sensor_id, &buffer[i], sizeof event->sensor_id);
+  i += sizeof event->sensor_id;
+  memcpy(&event->type, &buffer[i], sizeof event->type);
+  i += sizeof event->type;
+  memcpy(&event->reserved0, &buffer[i], sizeof event->reserved0);
+  i += sizeof event->reserved0;
+  memcpy(&event->timestamp, &buffer[i], sizeof event->timestamp);
+  i += sizeof event->timestamp;
+  memcpy(&event->data, &buffer[i], sizeof event->data);
+  i += sizeof event->data;
+
+  return i;
 }
 
 /**************************************************************************/
