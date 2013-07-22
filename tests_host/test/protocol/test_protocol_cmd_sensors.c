@@ -68,7 +68,6 @@ void setUp(void)
     .cmd_id   = PROT_CMDTYPE_SENSORS_EVENT,
     .length   = 2
   };
-
 }
 
 void tearDown(void)
@@ -76,39 +75,82 @@ void tearDown(void)
 
 }
 
+/**************************************************************************/
+/*!
+    @brief  Simulates the HW call in 'lsm303accelGetSensorEvent'
+*/
+/**************************************************************************/
 error_t stub_lsm303accel_get(sensors_event_t *event, int num_call)
 {
-  static float              _lsm303accel_MG_LSB = 0.001F;
+  static float _lsm303accel_MG_LSB = 0.001F;
 
   (*event) = (sensors_event_t)
   {
     .version        = sizeof(sensors_event_t),
     .sensor_id      = 12345,
     .type           = SENSOR_TYPE_ACCELEROMETER,
-    .timestamp      = num_call+1, // num_call start from 0
-    .acceleration.x = ( (rand()%(2048*2)) - 2048 )  * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
-    .acceleration.y = ( (rand()%(2048*2)) - 2048 )  * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
-    .acceleration.z = ( (rand()%(2048*2)) - 2048 )  * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD
+    //.timestamp      = num_call+1,
+    //.acceleration.x = ( (rand()%(2048*2)) - 2048 )  * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
+    //.acceleration.y = ( (rand()%(2048*2)) - 2048 )  * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
+    //.acceleration.z = ( (rand()%(2048*2)) - 2048 )  * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD
+    .timestamp      = 0,
+    .acceleration.x = 1024 * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
+    .acceleration.y = -512 * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
+    .acceleration.z = -256 * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD
   };
 
   return ERROR_NONE;
 }
+
+/**************************************************************************/
+/*!
+    @brief  Tries to read the LSM303 accelerometer (using simulated HW
+            via 'stub_lsm303accel_get' above)
+*/
+/**************************************************************************/
 void test_prot_sensor_accel_lsm303(void)
 {
+  static float _lsm303accel_MG_LSB = 0.001F;
+  uint8_t buffer[sizeof(sensors_event_t)];
+
+  /* Request sensor data from the LSM303 accelerometer */
   message_cmd.payload[0] = U16_LOW_U8(PROT_CMD_SENSORS_KEY_ACCEL_LSM303);
   message_cmd.payload[1] = U16_HIGH_U8(PROT_CMD_SENSORS_KEY_ACCEL_LSM303);
+
+  /* Define the response message that we are expecting */
+  message_response = (protMsgResponse_t)
+  {
+    .msg_type    = PROT_MSGTYPE_RESPONSE,
+    .cmd_id      = PROT_CMDTYPE_SENSORS_EVENT,
+    .length      = 36
+  };
+
+  /* Define and insert the response message payload */
+  sensors_event_t event =
+  {
+    .version        = sizeof(sensors_event_t),
+    .sensor_id      = 12345,
+    .type           = SENSOR_TYPE_ACCELEROMETER,
+    .timestamp      = 0,
+    .acceleration.x = 1024 * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
+    .acceleration.y = -512 * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD,
+    .acceleration.z = -256 * _lsm303accel_MG_LSB * SENSORS_GRAVITY_STANDARD
+  };
+  sensorsSerializeSensorsEvent(buffer, &event);
+  memcpy(&message_response.payload, buffer, sizeof(sensors_event_t));
 
   /* Put the command message into the protocol FIFO buffer */
   fifo_write(&ff_prot_cmd, &message_cmd);
 
+  /* Substitute 'lsm303accelGetSensorEvent' with the mocked version */
   lsm303accelGetSensorEvent_StubWithCallback(stub_lsm303accel_get);
 
   /* Indicate what we're expecting in the prot_cmd_received_cb callback */
   prot_cmd_received_cb_Expect(&message_cmd);
 
   /* Indicate what we're expecting in the prot_cmd_executed_cb callback */
-//  prot_cmd_executed_cb_Expect(&message_response);
-  prot_cmd_executed_cb_Ignore();
+  prot_cmd_executed_cb_Expect(&message_response);
+  // prot_cmd_executed_cb_Ignore();
 
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
