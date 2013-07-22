@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
     @file     protocol.h
-    @author   K. Townsend (microBuilder.eu)
+    @author   hathach (tinyusb.org)
 
     @section LICENSE
 

@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
     @file     protocol.c
-    @author   K. Townsend (microBuilder.eu)
+    @author   hathach (tinyusb.org)
 
     @section LICENSE
 
@@ -255,8 +255,16 @@ typedef error_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgRespon
     Expands the function to have the standard function signature
 */
 /**************************************************************************/
+
+#ifdef _TEST_
+  #define ATTR_TEST_WEAK     __attribute__ ((weak))
+#else
+  #define ATTR_TEST_WEAK
+#endif
+
+
 #define CMD_PROTOTYPE_EXPAND(command, function) \
-  error_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response);\
+  error_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response) ATTR_TEST_WEAK;\
 
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 

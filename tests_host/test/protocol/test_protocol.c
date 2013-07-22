@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
-    @file     test_fifo.c
-    @author   K. Townsend (microBuilder.eu)
+    @file     test_protocol.c
+    @author   hathach (tinyusb.org)
 
     @section LICENSE
 
@@ -39,11 +39,11 @@
 #include "fifo.h"
 #include "protocol.h"
 #include "protocol_support.h"
-#include "protocol_cmd_adc.h"
-#include "protocol_cmd_eeprom.h"
-#include "protocol_cmd_led.h"
-#include "protocol_cmd_sensors.h"
-#include "protocol_cmd_sysinfo.h"
+//#include "protocol_cmd_adc.h"
+//#include "protocol_cmd_eeprom.h"
+//#include "protocol_cmd_led.h"
+//#include "protocol_cmd_sensors.h"
+//#include "protocol_cmd_sysinfo.h"
 
 #include "mock_iap.h"
 #include "mock_usb_hid.h"

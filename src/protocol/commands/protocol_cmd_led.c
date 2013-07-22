@@ -1,7 +1,7 @@
 /**************************************************************************/
 /*!
     @file     protocol_cmd_help.c
-    @author   K. Townsend (microBuilder.eu)
+    @author   hathach (tinyusb.org)
 
     @section LICENSE
 
