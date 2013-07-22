@@ -69,14 +69,15 @@ void test_sensors_serialiseSensor(void)
   sensor_t compare;
   memset(&compare, 0, sizeof(sensor_t));
 
-  /* Serialize sensor into a byte array */
-  sensorsSerializeSensor(buffer_sensor, &sensor);
+  /* Serialise sensor into a byte array */
+  int32_t len = sensorsSerializeSensor(buffer_sensor, &sensor);
 
   /* Deserialise the data back into a sensor object */
-  sensorsDeserializeSensor(&compare, buffer_sensor);
+  memcpy(&compare, buffer_sensor, sizeof(sensor_t));
 
   /* Compare the two structs */
   TEST_ASSERT_EQUAL_MEMORY(&sensor, &compare, sizeof(sensor_t));
+  TEST_ASSERT_EQUAL_INT(len, sizeof(sensor_t));
 }
 
 void test_sensors_serialiseEvent(void)
@@ -98,12 +99,12 @@ void test_sensors_serialiseEvent(void)
   memset(&compare, 0, sizeof(sensors_event_t));
   
   /* Serialize sensor data into a byte array */
-  sensorsSerializeSensorsEvent(buffer_event, &event);
+  uint32_t len = sensorsSerializeSensorsEvent(buffer_event, &event);
   
   /* Deserialise the data back into an event object */
-  sensorsDeserializeSensorsEvent(&compare, buffer_event);
+  memcpy(&compare, buffer_event, sizeof(sensors_event_t));
 
   /* Compare the two structs */
   TEST_ASSERT_EQUAL_MEMORY(&event, &compare, sizeof(sensors_event_t));
+  TEST_ASSERT_EQUAL_INT(len, sizeof(sensors_event_t));
 }
-

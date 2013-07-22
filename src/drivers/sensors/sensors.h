@@ -194,8 +194,6 @@ typedef struct
 
 size_t sensorsSerializeSensor(uint8_t *buffer, const sensor_t *sensor);
 size_t sensorsSerializeSensorsEvent(uint8_t *buffer, const sensors_event_t *event);
-size_t sensorsDeserializeSensor(sensor_t *sensor, const uint8_t *buffer);
-size_t sensorsDeserializeSensorsEvent(sensors_event_t *event, const uint8_t *buffer);
 size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor);
 size_t sensorsLogSensorsEvent(char *buffer, const size_t len, const sensors_event_t *event);
 
