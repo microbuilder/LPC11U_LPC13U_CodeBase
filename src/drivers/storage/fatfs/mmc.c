@@ -324,8 +324,8 @@ DSTATUS disk_initialize (
           ssp1Init();
         #endif
 
-        LPC_GPIO->DIR[CFG_SDCARD_ENBLPORT] |= (1 << CFG_SDCARD_ENBLPORT);
-        LPC_GPIO->DIR[CFG_SDCARD_SSELPORT] |= (1 << CFG_SDCARD_SSELPORT);
+        LPC_GPIO->DIR[CFG_SDCARD_ENBLPORT] |= (1 << CFG_SDCARD_ENBLPIN);
+        LPC_GPIO->DIR[CFG_SDCARD_SSELPORT] |= (1 << CFG_SDCARD_SSELPIN);
         LPC_GPIO->DIR[CFG_SDCARD_CDPORT]   &= ~(1 << CFG_SDCARD_CDPIN);
 
         // Wait 20ms for card detect to stabilise
