@@ -67,7 +67,7 @@
     @param  temp          Temperature in degrees Celsius
 */
 /**************************************************************************/
-float pressureToAltitude(float seaLevel, float atmospheric, float temp)
+float32_t pressureToAltitude(float32_t seaLevel, float32_t atmospheric, float32_t temp)
 {
   /* Hyposometric formula:                      */
   /*                                            */
@@ -80,7 +80,7 @@ float pressureToAltitude(float seaLevel, float atmospheric, float temp)
   /*        P   = atmospheric pressure (in hPa) */
   /*        T   = temperature (in °C)           */
 
-  return (((float)pow((seaLevel/atmospheric), 0.190223F) - 1.0F)
+  return (((float32_t)pow((seaLevel/atmospheric), 0.190223F) - 1.0F)
          * (temp + 273.15F)) / 0.0065F;
 }
 
@@ -95,7 +95,7 @@ float pressureToAltitude(float seaLevel, float atmospheric, float temp)
     @param  temp          Temperature in degrees Celsius
 */
 /**************************************************************************/
-float pressureSeaLevelFromAltitude(float altitude, float atmospheric, float temp)
+float32_t pressureSeaLevelFromAltitude(float32_t altitude, float32_t atmospheric, float32_t temp)
 {
   /* Sea-level pressure:                        */
   /*                                            */
@@ -108,7 +108,7 @@ float pressureSeaLevelFromAltitude(float altitude, float atmospheric, float temp
   /*        h   = altitude (in meters)          */
   /*        T   = Temperature (in °C)           */
 
-  return atmospheric * (float)pow((1.0F - (0.0065 * altitude) /
+  return atmospheric * (float32_t)pow((1.0F - (0.0065 * altitude) /
           (temp + 0.0065 * altitude + 273.15F)), -5.257F);
 }
 
@@ -123,7 +123,7 @@ float pressureSeaLevelFromAltitude(float altitude, float atmospheric, float temp
     @param  destAltitude    Destination altitude (in meters)
 */
 /**************************************************************************/
-float pressureTempAtDestination(float currTemp, float currAltitude, float destAltitude)
+float32_t pressureTempAtDestination(float32_t currTemp, float32_t currAltitude, float32_t destAltitude)
 {
   /* Temperature at destination:                */
   /*                                            */
@@ -152,7 +152,7 @@ float pressureTempAtDestination(float currTemp, float currAltitude, float destAl
           this function!
 */
 /**************************************************************************/
-float pressureAtDestination(float seaLevel, float destTemp, float destAltitude)
+float32_t pressureAtDestination(float32_t seaLevel, float32_t destTemp, float32_t destAltitude)
 {
   /* Atmospheric pressure at destination:       */
   /*                                            */
@@ -165,9 +165,9 @@ float pressureAtDestination(float seaLevel, float destTemp, float destAltitude)
   /*        h   = Destination altitude (meters) */
   /*        T   = Destination temperature (°C)  */
 
-  return seaLevel * (float)pow(1.0F - (0.0065F * destAltitude) /
+  return seaLevel * (float32_t)pow(1.0F - (0.0065F * destAltitude) /
           (destTemp + 0.0065F * destAltitude + 273.15F), 5.257F);
 }
 
 // ToDo: Calculate vertical speed over fixed delay
-// float vertical_speed = ( pressureToAltitude(sea level pressure, pressure at t0, temp) – pressureToAltitude(sea level pressure, pressure at t1, temp) / ( t1 – t0 );
+// float32_t vertical_speed = ( pressureToAltitude(sea level pressure, pressure at t0, temp) – pressureToAltitude(sea level pressure, pressure at t1, temp) / ( t1 – t0 );

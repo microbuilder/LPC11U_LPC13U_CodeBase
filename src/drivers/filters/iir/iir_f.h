@@ -14,13 +14,13 @@ extern "C" {
 
 typedef struct iir_f_s
 {
-  float alpha;
+  float32_t alpha;
   size_t k;       /**< Sample count */
-  float  avg;
+  float32_t  avg;
 } iir_f_t;
 
-void  iir_f_init ( iir_f_t *iir, float alpha );
-void  iir_f_add  ( iir_f_t *iir, float x );
+void  iir_f_init ( iir_f_t *iir, float32_t alpha );
+void  iir_f_add  ( iir_f_t *iir, float32_t x );
 
 #ifdef __cplusplus
 }

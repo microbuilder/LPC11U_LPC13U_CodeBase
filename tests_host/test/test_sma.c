@@ -38,7 +38,7 @@
 #include "sma_f.h"
 
 /* Declare a data buffer */
-float sma_buffer[8];
+float32_t sma_buffer[8];
 
 void setUp(void)
 {

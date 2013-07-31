@@ -220,10 +220,10 @@ error_t tcs34725GetRawData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c)
 /**************************************************************************/
 uint16_t tcs34725CalculateColorTemperature(uint16_t r, uint16_t g, uint16_t b)
 {
-  float X, Y, Z;      /* RGB to XYZ correlation      */
-  float xc, yc;       /* Chromaticity co-ordinates   */
-  float n;            /* McCamy's formula            */
-  float cct;
+  float32_t X, Y, Z;      /* RGB to XYZ correlation      */
+  float32_t xc, yc;       /* Chromaticity co-ordinates   */
+  float32_t n;            /* McCamy's formula            */
+  float32_t cct;
 
   /* 1. Map RGB values to their XYZ counterparts.    */
   /* Based on 6500K fluorescent, 3000K fluorescent   */
@@ -255,7 +255,7 @@ uint16_t tcs34725CalculateColorTemperature(uint16_t r, uint16_t g, uint16_t b)
 /**************************************************************************/
 uint16_t tcs34725CalculateLux(uint16_t r, uint16_t g, uint16_t b)
 {
-  float illuminance;
+  float32_t illuminance;
 
   /* This only uses RGB ... how can we integrate clear or calculate lux */
   /* based exclusively on clear since this might be more reliable?      */
@@ -293,7 +293,7 @@ void tcs34725GetSensor(sensor_t *sensor)
 /**************************************************************************/
 error_t tcs34725GetSensorEvent(sensors_event_t *event)
 {
-  float maxCount;
+  float32_t maxCount;
   uint16_t r, g, b, c;
 
   /* Clear the event */

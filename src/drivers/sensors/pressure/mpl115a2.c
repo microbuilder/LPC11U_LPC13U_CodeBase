@@ -51,10 +51,10 @@ extern volatile uint8_t   I2CMasterBuffer[I2C_BUFSIZE];
 extern volatile uint8_t   I2CSlaveBuffer[I2C_BUFSIZE];
 extern volatile uint32_t  I2CReadLength, I2CWriteLength;
 
-static float _mpl115a2_a0;
-static float _mpl115a2_b1;
-static float _mpl115a2_b2;
-static float _mpl115a2_c12;
+static float32_t _mpl115a2_a0;
+static float32_t _mpl115a2_b1;
+static float32_t _mpl115a2_b2;
+static float32_t _mpl115a2_c12;
 
 static bool    _mpl115a2Initialised = false;
 static int32_t _mpl115a2SensorID = 0;
@@ -116,10 +116,10 @@ error_t mpl115a2ReadCoefficients(void)
   b2coeff = (I2CSlaveBuffer[4] << 8 ) | I2CSlaveBuffer[5];
   c12coeff = ((I2CSlaveBuffer[6] << 8 ) | I2CSlaveBuffer[7]) >> 2;
 
-  _mpl115a2_a0 = (float)a0coeff / 8;
-  _mpl115a2_b1 = (float)b1coeff / 8192;
-  _mpl115a2_b2 = (float)b2coeff / 16384;
-  _mpl115a2_c12 = (float)c12coeff / 4194304;
+  _mpl115a2_a0 = (float32_t)a0coeff / 8;
+  _mpl115a2_b1 = (float32_t)b1coeff / 8192;
+  _mpl115a2_b2 = (float32_t)b2coeff / 16384;
+  _mpl115a2_c12 = (float32_t)c12coeff / 4194304;
 
   return ERROR_NONE;
 }
@@ -150,10 +150,10 @@ error_t mpl115a2Init(void)
     @brief  Gets the compensated pressure level in kPa
 */
 /**************************************************************************/
-error_t mpl115a2GetPressure(float *pressure)
+error_t mpl115a2GetPressure(float32_t *pressure)
 {
   uint16_t  Padc, Tadc;
-  float     Pcomp;
+  float32_t Pcomp;
 
   /* Make sure the coefficients have been read, etc. */
   if (!_mpl115a2Initialised)
@@ -168,7 +168,7 @@ error_t mpl115a2GetPressure(float *pressure)
   Pcomp = _mpl115a2_a0 + (_mpl115a2_b1 + _mpl115a2_c12 * Tadc ) * Padc + _mpl115a2_b2 * Tadc;
 
   /* Return pressure as floating point value */
-  *pressure = ((65.0F / 1023.0F)*(float)Pcomp) + 50;
+  *pressure = ((65.0F / 1023.0F)*(float32_t)Pcomp) + 50;
 
   return ERROR_NONE;
 }
@@ -202,7 +202,7 @@ void mpl115a2GetSensor(sensor_t *sensor)
 /**************************************************************************/
 error_t mpl115a2GetSensorEvent(sensors_event_t *event)
 {
-  float pressure_kPa;
+  float32_t pressure_kPa;
 
   /* Clear the event */
   memset(event, 0, sizeof(sensors_event_t));

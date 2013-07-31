@@ -66,7 +66,7 @@ enum
 };
 
 error_t mpl115a2Init(void);
-error_t mpl115a2GetPressure(float *pressure);
+error_t mpl115a2GetPressure(float32_t *pressure);
 void    mpl115a2GetSensor(sensor_t *sensor);
 error_t mpl115a2GetSensorEvent(sensors_event_t *event);
 

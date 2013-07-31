@@ -95,8 +95,8 @@ typedef struct
 } bmp085_calib_data;
 
 error_t bmp085Init(bmp085_mode_t mode);
-error_t bmp085GetTemperature(float *temp);
-error_t bmp085GetPressure(float *pressure);
+error_t bmp085GetTemperature(float32_t *temp);
+error_t bmp085GetPressure(float32_t *pressure);
 void    bmp085GetSensor(sensor_t *sensor);
 error_t bmp085GetSensorEvent(sensors_event_t *event);
 

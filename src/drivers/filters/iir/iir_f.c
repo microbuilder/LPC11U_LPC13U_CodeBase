@@ -39,7 +39,7 @@
                  change.
 */
 /**************************************************************************/
-void iir_f_init(iir_f_t *iir, float alpha)
+void iir_f_init(iir_f_t *iir, float32_t alpha)
 {
   if (alpha > 1.0F)
     alpha = 1.0F;
@@ -61,7 +61,7 @@ void iir_f_init(iir_f_t *iir, float alpha)
                  Value to insert
 */
 /**************************************************************************/
-void iir_f_add(iir_f_t *iir, float x)
+void iir_f_add(iir_f_t *iir, float32_t x)
 {
   iir->k++;
   if (1 == iir->k)

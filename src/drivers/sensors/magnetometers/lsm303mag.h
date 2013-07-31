@@ -78,9 +78,9 @@ typedef enum
 
 typedef struct lsm303MagData_s
 {
-  float x;
-  float y;
-  float z;
+  float32_t x;
+  float32_t y;
+  float32_t z;
 } lsm303MagData_t;
 
 error_t  lsm303magInit(void);

@@ -6,10 +6,11 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 
 - SmartConfig now works for the CC3000 (bug fix plus longer timeout required)
 - Added 1/2/3-pole IIR filter implementation for use with Octave/Matlab
-- Added float32\_t and float64\_t to sysdefs.h
+- Added float32\_t and float64\_t to sysdefs.h, and standardised all 'float' values as float32_t
 - Added EEPROM command to binary protocol
 - Added SENSOR commands to binary protocol
 - Changed 'SENSOR\_TYPE\_COLOR' from '17' to '7' in sensors.h
+- Bug fix in mmc.c for pin setup (PORT used instead of PIN)
 
 ## 0.9.1 [12 July 2013] ##
 

@@ -262,7 +262,7 @@ error_t bmp085Init(bmp085_mode_t mode)
     @brief  Gets the compensated pressure level in kPa
 */
 /**************************************************************************/
-error_t bmp085GetPressure(float *pressure)
+error_t bmp085GetPressure(float32_t *pressure)
 {
   int32_t  ut = 0, up = 0, compp = 0;
   int32_t  x1, x2, b5, b6, x3, b3, p;
@@ -320,10 +320,10 @@ error_t bmp085GetPressure(float *pressure)
     @brief  Reads the temperatures in degrees Celsius
 */
 /**************************************************************************/
-error_t bmp085GetTemperature(float *temp)
+error_t bmp085GetTemperature(float32_t *temp)
 {
   int32_t ut, x1, x2, b5;
-  float t;
+  float32_t t;
 
   if (!_bmp085Initialised)
   {
@@ -372,7 +372,7 @@ void bmp085GetSensor(sensor_t *sensor)
 /**************************************************************************/
 error_t bmp085GetSensorEvent(sensors_event_t *event)
 {
-  float pressure_kPa;
+  float32_t pressure_kPa;
 
   /* Clear the event */
   memset(event, 0, sizeof(sensors_event_t));

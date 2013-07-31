@@ -83,9 +83,9 @@ enum
 
 typedef struct lsm303AccelData_s
 {
-  float x;
-  float y;
-  float z;
+  float32_t x;
+  float32_t y;
+  float32_t z;
 } lsm303AccelData_t;
 
 error_t  lsm303accelInit(void);

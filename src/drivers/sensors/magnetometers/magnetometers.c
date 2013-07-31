@@ -104,8 +104,8 @@
 /**************************************************************************/
 void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event)
 {
-  float accel_X, accel_Y, accel_Z;
-  float *mag_X, *mag_Y, *mag_Z;
+  float32_t accel_X, accel_Y, accel_Z;
+  float32_t *mag_X, *mag_Y, *mag_Z;
 
   switch (axis)
   {
@@ -141,16 +141,16 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
       break;
   }
 
-  float t_roll = accel_X * accel_X + accel_Z * accel_Z;
-  float rollRadians = (float)atan2(accel_Y, sqrt(t_roll));
+  float32_t t_roll = accel_X * accel_X + accel_Z * accel_Z;
+  float32_t rollRadians = (float32_t)atan2(accel_Y, sqrt(t_roll));
 
-  float t_pitch = accel_Y * accel_Y + accel_Z * accel_Z;
-  float pitchRadians = (float)atan2(accel_X, sqrt(t_pitch));
+  float32_t t_pitch = accel_Y * accel_Y + accel_Z * accel_Z;
+  float32_t pitchRadians = (float32_t)atan2(accel_X, sqrt(t_pitch));
 
-  float cosRoll = (float)cos(rollRadians);
-  float sinRoll = (float)sin(rollRadians);
-  float cosPitch = (float)cos(pitchRadians);
-  float sinPitch = (float)sin(pitchRadians);
+  float32_t cosRoll = (float32_t)cos(rollRadians);
+  float32_t sinRoll = (float32_t)sin(rollRadians);
+  float32_t cosPitch = (float32_t)cos(pitchRadians);
+  float32_t sinPitch = (float32_t)sin(pitchRadians);
 
   /* The tilt compensation algorithm                            */
   /* Xh = X.cosPitch + Z.sinPitch                               */
@@ -184,7 +184,7 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
 /**************************************************************************/
 void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *orientation)
 {
-  float const PI = 3.14159265F;
+  float32_t const PI = 3.14159265F;
 
   switch (axis)
   {
@@ -192,20 +192,20 @@ void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_
       /* Sensor rotates around X-axis                                                                 */
       /* "heading" is the angle between the 'Y axis' and magnetic north on the horizontal plane (Oyz) */
       /* heading = atan(Mz / My)                                                                      */
-      orientation->heading = (float)atan2(event->magnetic.z, event->magnetic.y) * 180 / PI;
+      orientation->heading = (float32_t)atan2(event->magnetic.z, event->magnetic.y) * 180 / PI;
       break;
     case SENSOR_AXIS_Y:
       /* Sensor rotates around Y-axis                                                                 */
       /* "heading" is the angle between the 'Z axis' and magnetic north on the horizontal plane (Ozx) */
       /* heading = atan(Mx / Mz)                                                                      */
-      orientation->heading = (float)atan2(event->magnetic.x, event->magnetic.z) * 180 / PI;
+      orientation->heading = (float32_t)atan2(event->magnetic.x, event->magnetic.z) * 180 / PI;
       break;
     case SENSOR_AXIS_Z:
     default:
       /* Sensor rotates around Z-axis                                                                 */
       /* "heading" is the angle between the 'X axis' and magnetic north on the horizontal plane (Oxy) */
       /* heading = atan(My / Mx)                                                                      */
-      orientation->heading = (float)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
+      orientation->heading = (float32_t)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
       break;
     }
 

@@ -49,8 +49,8 @@ static bool               _lsm303magInitialised = false;
 static int32_t            _lsm303magSensorID = 0;
 static lsm303MagData_t    _lsm303magData;
 static lsm303MagGain_t    _lsm303magGain = LSM303_MAGGAIN_1_3;
-static float              _lsm303mag_Gauss_LSB_XY = 1100.0F; // Varies with gain
-static float              _lsm303mag_Gauss_LSB_Z = 980.0F;   // Varies with gain
+static float32_t          _lsm303mag_Gauss_LSB_XY = 1100.0F; // Varies with gain
+static float32_t          _lsm303mag_Gauss_LSB_Z = 980.0F;   // Varies with gain
 
 /**************************************************************************/
 /*!

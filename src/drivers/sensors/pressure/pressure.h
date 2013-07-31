@@ -43,10 +43,10 @@ extern "C" {
 
 #include "projectconfig.h"
 
-float pressureToAltitude(float seaLevel, float atmospheric, float temp);
-float pressureSLPFromAltitude(float altitude, float atmospheric, float temp);
-float pressureTempAtDestination(float currTemp, float currAltitude, float destAltitude);
-float pressureAtDestination(float seaLevel, float destTemp, float destAltitude);
+float32_t pressureToAltitude(float32_t seaLevel, float32_t atmospheric, float32_t temp);
+float32_t pressureSLPFromAltitude(float32_t altitude, float32_t atmospheric, float32_t temp);
+float32_t pressureTempAtDestination(float32_t currTemp, float32_t currAltitude, float32_t destAltitude);
+float32_t pressureAtDestination(float32_t seaLevel, float32_t destTemp, float32_t destAltitude);
 
 #ifdef __cplusplus
 }

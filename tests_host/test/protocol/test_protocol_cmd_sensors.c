@@ -82,7 +82,7 @@ void tearDown(void)
 /**************************************************************************/
 error_t stub_lsm303accel_get(sensors_event_t *event, int num_call)
 {
-  static float _lsm303accel_MG_LSB = 0.001F;
+  static float32_t _lsm303accel_MG_LSB = 0.001F;
 
   (*event) = (sensors_event_t)
   {
@@ -110,7 +110,7 @@ error_t stub_lsm303accel_get(sensors_event_t *event, int num_call)
 /**************************************************************************/
 void test_prot_sensor_accel_lsm303(void)
 {
-  static float _lsm303accel_MG_LSB = 0.001F;
+  static float32_t _lsm303accel_MG_LSB = 0.001F;
   uint8_t buffer[sizeof(sensors_event_t)];
 
   /* Request sensor data from the LSM303 accelerometer */

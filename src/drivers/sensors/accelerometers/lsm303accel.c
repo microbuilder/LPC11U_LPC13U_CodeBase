@@ -48,7 +48,7 @@ extern volatile uint32_t  I2CReadLength, I2CWriteLength;
 static bool               _lsm303accelInitialised = false;
 static int32_t            _lsm303accelSensorID = 0;
 static lsm303AccelData_t  _lsm303accelData;
-static float              _lsm303accel_MG_LSB = 0.001F;      // 1, 2, 4 or 12 mg per lsb
+static float32_t          _lsm303accel_MG_LSB = 0.001F;      // 1, 2, 4 or 12 mg per lsb
 
 /**************************************************************************/
 /*!

@@ -42,9 +42,9 @@
         // this will result in larger compiled code if you add in floating
         // point support for printf, etc.
         //
-        // float tempFloat = 0.0F;
+        // float32_t tempFloat = 0.0F;
         // lm75bGetTemperature(&temp);
-        // tempFloat = (float)temp / 8.0F;
+        // tempFloat = (float32_t)temp / 8.0F;
       }
     }
     @endcode

@@ -116,8 +116,8 @@
 /**************************************************************************/
 void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
 {
-  float t_pitch, t_roll;
-  float const PI = 3.14159265F;
+  float32_t t_pitch, t_roll;
+  float32_t const PI = 3.14159265F;
 
   /* roll: Rotation around the longitudinal axis (the plane body, 'X axis'). -180<=roll<=180  */
   /* roll is positive and increasing when moving downward                                     */
@@ -128,7 +128,7 @@ void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   /* where:  x, y, z are returned value from accelerometer sensor                             */
 
   t_roll = event->acceleration.x * event->acceleration.x + event->acceleration.z * event->acceleration.z;
-  orientation->roll = (float)atan2(event->acceleration.y, sqrt(t_roll)) * 180 / PI;
+  orientation->roll = (float32_t)atan2(event->acceleration.y, sqrt(t_roll)) * 180 / PI;
 
   /* scale the angle of Roll in the range [-180, 180] */
   if (event->acceleration.z < 0)
@@ -148,7 +148,7 @@ void accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   /* where:  x, y, z are returned value from accelerometer sensor                             */
 
   t_pitch = event->acceleration.y * event->acceleration.y + event->acceleration.z * event->acceleration.z;
-  orientation->pitch = (float)atan2(event->acceleration.x, sqrt(t_pitch)) * 180 / PI;
+  orientation->pitch = (float32_t)atan2(event->acceleration.x, sqrt(t_pitch)) * 180 / PI;
 
   /* scale the angle of Pitch in the range [-180, 180] */
   if (event->acceleration.z < 0)

@@ -48,14 +48,14 @@ This typedef describes the specific capabilities of this sensor, and allows us t
 /** struct sensor_s is used to describe basic information about a specific sensor. */
 typedef struct
 {
-    char     name[12];
-    int32_t  version;
-    int32_t  sensor_id;
-    int32_t  type;
-    float    max_value;
-    float    min_value;
-    float    resolution;
-    int32_t  min_delay;
+    char      name[12];
+    int32_t   version;
+    int32_t   sensor_id;
+    int32_t   type;
+    float32_t max_value;
+    float32_t min_value;
+    float32_t resolution;
+    int32_t   min_delay;
 } sensor_t;
 ```
 
@@ -86,18 +86,18 @@ typedef struct
     int32_t timestamp;
     union
     {
-        float           data[4];
+        float32_t       data[4];
         sensors_vec_t   acceleration;
         sensors_vec_t   magnetic;
         sensors_vec_t   orientation;
         sensors_vec_t   gyro;
-        float           temperature;
-        float           distance;
-        float           light;
-        float           pressure;
-        float           relative_humidity;
-        float           current;
-        float           voltage;
+        float32_t       temperature;
+        float32_t       distance;
+        float32_t       light;
+        float32_t       pressure;
+        float32_t       relative_humidity;
+        float32_t       current;
+        float32_t       voltage;
     };
 } sensors_event_t;
 ```

@@ -112,17 +112,17 @@ typedef enum
 /** struct sensors_vec_s is used to return a vector in a common format. */
 typedef struct {
     union {
-        float v[3];
+        float32_t v[3];
         struct {
-            float x;
-            float y;
-            float z;
+            float32_t x;
+            float32_t y;
+            float32_t z;
         };
         /* Orientation sensors */
         struct {
-            float roll;    /**< Rotation around the longitudinal axis (the plane body, 'X axis'). Roll is positive and increasing when moving downward. -180°<=roll<=180° */
-            float pitch;   /**< Rotation around the lateral axis (the wing span, 'Y axis'). Pitch is positive and increasing when moving upwards. -180°<=pitch<=180°) */
-            float heading; /**< Angle between the longitudinal axis (the plane body) and magnetic north, measured clockwise when viewing from the top of the device. 0-359° */
+            float32_t roll;    /**< Rotation around the longitudinal axis (the plane body, 'X axis'). Roll is positive and increasing when moving downward. -180°<=roll<=180° */
+            float32_t pitch;   /**< Rotation around the lateral axis (the wing span, 'Y axis'). Pitch is positive and increasing when moving upwards. -180°<=pitch<=180°) */
+            float32_t heading; /**< Angle between the longitudinal axis (the plane body) and magnetic north, measured clockwise when viewing from the top of the device. 0-359° */
         };
     };
     int8_t status;
@@ -140,12 +140,12 @@ typedef enum
 /** struct sensors_color_s is used to return color data in a common format. */
 typedef struct {
     union {
-        float c[3];
+        float32_t c[3];
         /* RGB color space */
         struct {
-            float r;       /**< Red component */
-            float g;       /**< Green component */
-            float b;       /**< Blue component */
+            float32_t r;       /**< Red component */
+            float32_t g;       /**< Green component */
+            float32_t b;       /**< Blue component */
         };
     };
     uint32_t rgba;         /**< 24-bit RGBA value */
@@ -162,18 +162,18 @@ typedef struct
     int32_t timestamp;                        /**< time is in milliseconds */
     union
     {
-        float           data[4];
+        float32_t       data[4];
         sensors_vec_t   acceleration;         /**< acceleration values are in meter per second per second (m/s^2) */
         sensors_vec_t   magnetic;             /**< magnetic vector values are in micro-Tesla (uT) */
         sensors_vec_t   orientation;          /**< orientation values are in degrees */
         sensors_vec_t   gyro;                 /**< gyroscope values are in rad/s */
-        float           temperature;          /**< temperature is in degrees centigrade (Celsius) */
-        float           distance;             /**< distance in centimeters */
-        float           light;                /**< light in SI lux units */
-        float           pressure;             /**< pressure in hectopascal (hPa) */
-        float           relative_humidity;    /**< relative humidity in percent */
-        float           current;              /**< current in milliamps (mA) */
-        float           voltage;              /**< voltage in volts (V) */
+        float32_t       temperature;          /**< temperature is in degrees centigrade (Celsius) */
+        float32_t       distance;             /**< distance in centimeters */
+        float32_t       light;                /**< light in SI lux units */
+        float32_t       pressure;             /**< pressure in hectopascal (hPa) */
+        float32_t       relative_humidity;    /**< relative humidity in percent */
+        float32_t       current;              /**< current in milliamps (mA) */
+        float32_t       voltage;              /**< voltage in volts (V) */
         sensors_color_t color;                /**< color in RGB component values */
     };
 } sensors_event_t;
@@ -182,14 +182,14 @@ typedef struct
 /** struct sensor_s is used to describe basic information about a specific sensor. */
 typedef struct
 {
-    char     name[12];                        /**< sensor name */
-    int32_t  version;                         /**< version of the hardware + driver */
-    int32_t  sensor_id;                       /**< unique sensor identifier */
-    int32_t  type;                            /**< this sensor's type (ex. SENSOR_TYPE_LIGHT) */
-    float    max_value;                       /**< maximum value of this sensor's value in SI units */
-    float    min_value;                       /**< minimum value of this sensor's value in SI units */
-    float    resolution;                      /**< smallest difference between two values reported by this sensor */
-    int32_t  min_delay;                       /**< min delay in microseconds between events. zero = not a constant rate */
+    char      name[12];                       /**< sensor name */
+    int32_t   version;                        /**< version of the hardware + driver */
+    int32_t   sensor_id;                      /**< unique sensor identifier */
+    int32_t   type;                           /**< this sensor's type (ex. SENSOR_TYPE_LIGHT) */
+    float32_t max_value;                      /**< maximum value of this sensor's value in SI units */
+    float32_t min_value;                      /**< minimum value of this sensor's value in SI units */
+    float32_t resolution;                     /**< smallest difference between two values reported by this sensor */
+    int32_t   min_delay;                      /**< min delay in microseconds between events. zero = not a constant rate */
 } sensor_t;
 
 size_t sensorsSerializeSensor(uint8_t *buffer, const sensor_t *sensor);
