@@ -25,13 +25,8 @@ This codebase is targetted at GCC, and currently supports the following toolchai
 
 ## Other Documentation (outside /doc)##
 
-
 - [Board/HW Abstraction Layer](../src/boards/README.md)
 - [Command Line Interface (CLI)](../src/cli/README.md)
 - [USB Support](../src/core/usb/README.md)
 - [Sensor Abstraction Layer](../src/drivers/sensors/README.md)
 - [Localisation Support](../src/localisation/README.md)
-- [Unit Tests](../src/tests/README.md)
-
-
-

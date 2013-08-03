@@ -39,9 +39,17 @@ make clean
 
 The code base has a relatively basic makefile that should work out of the box with only one or two minor change depending on your exact requirements.
 
+## Setting the Target HW ##
+
+First, set an appropriate board flag based on your target HW:
+```
+  # See projectconfig.h for a list of valid BOARD options!
+  BOARD=CFG_BRD_LPCXPRESSO_LPC1347
+```
+
 ## Selecting Your Core ##
 
-To produce the best possible code, GCC needs to know what core to create code for when running the compiler and the assembler.
+Next, GCC needs to know what core to create code for when running the compiler and the assembler.
 
 Depending on if you are using a Cortex M0 (LPC11U24, LPC11U37) or a Cortex M3 (LPC1347) MCU, you need to modify the 'TARGET' definition at the top of the makefile as follows:
 

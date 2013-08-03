@@ -27,32 +27,10 @@ Right-click on your project name in the Project Explorer and select 'Properties'
 
 ![MCU Settings](images/CodeRed_SwitchMCU_MCUSelection.PNG?raw=true)
 
-**Step Two: MCU C Settings**
+**Step Two: Select your Build Configuration**
 
-Next you need to update the references to the external CMSIS library and the selected core in the MCU C Settings dialogue (C/C++ Build > MCU Settings > MCU C Compiler).
+Next you need to let LPCXpresso/Red Suite know which build configuration to use.
 
-**NOTE: Be sure to make these changes for every Configuration in the 'Configuration' dropdown at the top of the dialogue box!**
+You can do this by right-clicking on the project in the Project Explorer and selecting the **Build Configurations** option, then selecting the appropriate target HW:
 
-![C Symbols](images/CodeRed_SwitchMCU_C_Symbols.PNG?raw=true)
-
-![C Includes](images/CodeRed_SwitchMCU_C_Includes.PNG?raw=true)
-
-![C Target](images/CodeRed_SwitchMCU_C_Target.PNG?raw=true)
-
-**Step Three: MCU Assembler Settings**
-
-Next change the target architecture in the assembler settings exactly the same way you did for the C settings, making sure to repeat the steps for every configuration:
-
-![C Target](images/CodeRed_SwitchMCU_ASM_Target.PNG?raw=true)
-
-**Step Four: MCU Linker Settings**
-
-Finally, update the linker configuration to point to the correct libraries and to links files with the right target core:
-
-![C Target](images/CodeRed_SwitchMCU_Linker_Libs.PNG?raw=true)
-
-![C Target](images/CodeRed_SwitchMCU_Linker_Target.PNG?raw=true)
-
-**Step Five: Clean and build your project**
-
-Your project should work with the new MCU and core now.  Clean and then build the project, and see if you have any issues.
+![MCU Settings](images/CodeRed_BuildConfiguration.png?raw=true)
