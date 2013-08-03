@@ -1,9 +1,21 @@
 # Where's main.c ? #
 
-To make it easier to use the code base across a number of projects, the '**int main(void)**' function is placed inside a board-specific file in '/src/boards/board_name/', along with a header file containing all of the configuration flags for that project.
+To make it easier to use the code base across a number of projects, the 'int main(void)' function is placed inside a board-specific file in '/src/boards/board_name/', along with a header file containing all of the configuration flags for that project.
 
-You select a target board by adding a single #define somewhere in your project (this should already be done for you in the LPCXpresso and Crossworks project files, as well as in the Makefile), and projectconfig.h in the root src folder will point the code base to the right board file based on this define:
+# OK ... So How Do I Select a Board? #
 
+To select a target board you simply need to add a single #define somewhere in your project, matching an entry in the global **projectconfig.h** config file.
+
+If you are using the **Makefile**, the target board is set using the following flag at the top of the make file:
+```
+    # See projectconfig.h for a list of valid BOARD options!
+    BOARD=CFG_BRD_LPCXPRESSO_LPC1347
+```
+If you are using the **LPCXpresso or RedSuite** (or any Eclipse-based) IDE, you can select the appropriate target board by right-clicking on your project and selecting the correct 'Build Configuration'.
+
+If you are using **Crossworks for ARM**, the board is defined in the Solution properties, in the 'Preprocessor Definitions' field (eg.: CFG\_BRD\_LPCXPRESSO\_LPC1347).
+
+**The target board macro must match one of the entries in projectconfig.h!**.  This file is included in every source file in the code base, ensuring that the correct board config settings are used when compiling the code base. Current board definitions (as of v0.9.2 of the case base) can been seen below:
 ```
     #if defined(CFG_BRD_LPCXPRESSO_LPC1347)
       #include "boards/lpcxpresso1347/board_lpcxpresso1347.h"
