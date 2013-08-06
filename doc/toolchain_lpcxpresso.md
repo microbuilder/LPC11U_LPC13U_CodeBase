@@ -34,3 +34,11 @@ Next you need to let LPCXpresso/Red Suite know which build configuration to use.
 You can do this by right-clicking on the project in the Project Explorer and selecting the **Build Configurations** option, then selecting the appropriate target HW:
 
 ![MCU Settings](images/CodeRed_BuildConfiguration.png?raw=true)
+
+## Enabling Semihost Support ##
+
+If you wish to use semihost support in LPCXpresso/RedSuite to redirect printf output into the LPCXpresso console window, you will need to exclude the /core/libc/* files from your build, which include a custom printf implementation and cause all printf output to be redirected to src/printf-retarget.c.
+
+You can exclude the files in the IDE by right clicking on the /core/libc folder, and selecting 'Resource Configurations... > Exclude From Build...' and then selecting the build configurations you want to exclude these files from.  
+
+Be sure to enable semihost support as well, which can be done in the QuickStart Panel by selecting 'Quick Settings > Set Library Type > Redlib (semihost)'
