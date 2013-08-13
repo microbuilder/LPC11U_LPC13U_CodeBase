@@ -187,13 +187,13 @@ void uartInit(uint32_t baudrate)
 #if defined UART_RTS_CTS_FLOWCONTROL
   /* start RTS/CTS flow control setup - davidson 130531 */
   LPC_IOCON->PIO0_7 &= ~0x07;   /* Flow control CTS UART I/O Config  Type Input */
-  LPC_IOCON->PIO0_7 |= 0x01; 
+  LPC_IOCON->PIO0_7 |= 0x01;
 
   LPC_IOCON->PIO1_17 &= ~0x07;  /* Flow control RTS UART I/O Config  Type Output */
-  LPC_IOCON->PIO1_17 |= 0x01;  
+  LPC_IOCON->PIO1_17 |= 0x01;
   /* end of RTS/CTS flow control setup */
-#endif  
-  
+#endif
+
   /* Enable UART clock */
   LPC_SYSCON->SYSAHBCLKCTRL |= (1 << 12);
   LPC_SYSCON->UARTCLKDIV = 1;
@@ -228,9 +228,9 @@ void uartInit(uint32_t baudrate)
 
 #if defined UART_RTS_CTS_FLOWCONTROL
   /* Enable Auto RTS and Auto CTS  - davidson 130531 */
-  LPC_UART->MCR = 0xC0;
+  LPC_USART->MCR = 0xC0;
 #endif
-                
+
   /* Read to clear the line status. */
   regVal = LPC_USART->LSR;
 
