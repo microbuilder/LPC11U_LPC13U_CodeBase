@@ -110,15 +110,16 @@
                 <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontCalibri18_AA4.c"/>
               </folder>
             </folder>
-            <folder Name="hw">
+            <folder Name="hw" file_name="">
               <file file_name="src/drivers/displays/graphic/hw/hx8340b.c">
-                <configuration Name="THUMB Flash Release" build_exclude_from_build="No"/>
-                <configuration Name="THUMB Flash Debug" build_exclude_from_build="No"/>
+                <configuration Name="THUMB Flash Release" build_exclude_from_build="Yes"/>
+                <configuration Name="THUMB Flash Debug" build_exclude_from_build="Yes"/>
               </file>
               <file file_name="src/drivers/displays/graphic/hw/hx8347g.c">
                 <configuration Name="THUMB Flash Release" build_exclude_from_build="Yes"/>
                 <configuration Name="THUMB Flash Debug" build_exclude_from_build="Yes"/>
               </file>
+              <file file_name="src/drivers/displays/graphic/hw/ili9340.c"/>
             </folder>
             <file file_name="src/drivers/displays/graphic/lcd.h"/>
           </folder>
