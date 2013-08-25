@@ -168,19 +168,27 @@ BOOL select (void)        /* TRUE:Successful, FALSE:Timeout */
 static
 void power_on (void)
 {
+  #if CFG_SDCARD_ENBLENABLED
   LPC_GPIO->CLR[CFG_SDCARD_ENBLPORT] = (1 << CFG_SDCARD_ENBLPIN);
+  #endif
 }
 
 static
 void power_off (void)
 {
+  #if CFG_SDCARD_ENBLENABLED
   LPC_GPIO->SET[CFG_SDCARD_ENBLPORT] = (1 << CFG_SDCARD_ENBLPIN);
+  #endif
 }
 
 static
 int chk_power(void)                /* Socket power state: 0=off, 1=on */
 {
+  #if CFG_SDCARD_ENBLENABLED
   return GPIOGetPinValue(CFG_SDCARD_ENBLPORT, CFG_SDCARD_ENBLPIN) ? 0 : 1;
+  #else
+  return 1;
+  #endif
 }
 
 
@@ -312,7 +320,7 @@ BYTE send_cmd (
 /*-----------------------------------------------------------------------*/
 
 DSTATUS disk_initialize (
-        BYTE drv                /* Physical drive nmuber (0) */
+        BYTE drv                /* Physical drive number (0) */
 )
 {
         BYTE n, cmd, ty, ocr[4];
@@ -324,9 +332,13 @@ DSTATUS disk_initialize (
           ssp1Init();
         #endif
 
-        LPC_GPIO->DIR[CFG_SDCARD_ENBLPORT] |= (1 << CFG_SDCARD_ENBLPIN);
         LPC_GPIO->DIR[CFG_SDCARD_SSELPORT] |= (1 << CFG_SDCARD_SSELPIN);
+        #if CFG_SDCARD_ENBLENABLED
+        LPC_GPIO->DIR[CFG_SDCARD_ENBLPORT] |= (1 << CFG_SDCARD_ENBLPIN);
+        #endif
+        #if CFG_SDCARD_CDENABLED
         LPC_GPIO->DIR[CFG_SDCARD_CDPORT]   &= ~(1 << CFG_SDCARD_CDPIN);
+        #endif
 
         // Wait 20ms for card detect to stabilise
         delay(20);
@@ -632,7 +644,11 @@ void disk_timerproc (void)
   n = pv;
   pv = 0;
   /* Sample card detect pin */
+  #if CFG_SDCARD_CDENABLED
   pv = GPIOGetPinValue(CFG_SDCARD_CDPORT, CFG_SDCARD_CDPIN);
+  #else
+  pv = 1;
+  #endif
 
   /* Have contacts stabled? */
   if (n == pv)

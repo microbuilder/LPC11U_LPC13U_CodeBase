@@ -425,25 +425,37 @@ extern "C" {
     CFG_SDCARD_READONLY       If this is set to 1, all commands to
                               write to the SD card will be removed
                               saving some flash space.
+    CFG_SDCARD_CDENABLED      If set to one, the card detect pin is used
+                              to determine if an SD card is present
     CFG_SDCARD_CDPORT         The card detect port number
     CFG_SDCARD_CDPIN          The card detect pin number
+    CFG_SDCARD_CDENABLED      If set to one, the enable pin will be used
+                              to enable/disable the SD card (saves power)
 
     NOTE:                     All config settings for FAT32 are defined
                               in ffconf.h
     -----------------------------------------------------------------------*/
     // #define CFG_SDCARD
-    #define CFG_SDCARD_READONLY         (1)   // Must be 0 or 1
+    #define CFG_SDCARD_READONLY         (0)   // Must be 0 or 1
     #define CFG_SDCARD_SPIPORT          (0)
     #define CFG_SDCARD_SSELPORT         (0)
     #define CFG_SDCARD_SSELPIN          (0)
+    #define CFG_SDCARD_CDENABLED        (0)   // Must be 0 or 1
     #define CFG_SDCARD_CDPORT           (0)
     #define CFG_SDCARD_CDPIN            (0)
+    #define CFG_SDCARD_ENBLENABLED      (0)   // Must be 0 or 1
     #define CFG_SDCARD_ENBLPORT         (0)
     #define CFG_SDCARD_ENBLPIN          (0)
 
     #ifdef CFG_SDCARD
       #if !((CFG_SDCARD_READONLY == 0) || (CFG_SDCARD_READONLY == 1))
         #error "Invalid value for CFG_SDCARD_READONLY"
+      #endif
+      #if !((CFG_SDCARD_CDENABLED == 0) || (CFG_SDCARD_CDENABLED == 1))
+        #error "Invalid value for CFG_SDCARD_CDENABLED"
+      #endif
+      #if !((CFG_SDCARD_ENBLENABLED == 0) || (CFG_SDCARD_ENBLENABLED == 1))
+        #error "Invalid value for CFG_SDCARD_ENBLENABLED"
       #endif
       #if !((CFG_SDCARD_SPIPORT == 0) || (CFG_SDCARD_SPIPORT == 1))
         #error "Invalid SPI port for CFG_SDCARD_SPIPORT"

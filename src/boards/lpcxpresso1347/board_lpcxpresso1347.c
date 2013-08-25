@@ -43,13 +43,15 @@
 
 #include <string.h> /* strlen */
 
-#include "cmsis_os.h"
 #include "boards/board.h"
 #include "core/gpio/gpio.h"
 #include "core/delay/delay.h"
 #include "core/eeprom/eeprom.h"
-#include "core/pmu/pmu.h"
 #include "core/adc/adc.h"
+
+#ifdef CFG_CMSIS_RTOS
+  #include "cmsis_os.h"
+#endif
 
 #ifdef CFG_CHIBI
   #include "messages.h"
@@ -84,9 +86,16 @@
   #include "RTX_CM_lib.h"
 #endif
 
+#ifdef CFG_SDCARD
+  #include "drivers/storage/fatfs/diskio.h"
+  #include "drivers/storage/fatfs/ff.h"
+#endif
+
 #ifdef CFG_CC3000
   #include "drivers/rf/wifi/cc3000/wifi.h"
 #endif
+
+#include "drivers/leds/ws2812/ws2812.h"
 
 #ifdef CFG_SDCARD
 /**************************************************************************/
@@ -165,11 +174,19 @@ void boardInit(void)
     LPC_IOCON ->PIO0_16       |= (1<<4);
   #endif
 
+  /* Initialise the SD Card? */
+  #ifdef CFG_SDCARD
+    DSTATUS stat = disk_initialize(0);
+  #endif
+
+  /* Initialise ADC channel 1 (pin 0.12) */
+  LPC_IOCON->TMS_PIO0_12   &= ~0x9F;
+  LPC_IOCON->TMS_PIO0_12   |= 0x02;
+  adcInit();
+
   /* Turn the user LED on after init to indicate that everything is OK */
   boardLED(CFG_LED_ON);
 }
-
-
 
 #ifndef _TEST_
 #ifndef CFG_CMSIS_RTOS
@@ -187,10 +204,72 @@ void boardInit(void)
     /* Configure the HW */
     boardInit();
 
-    /* Temp: Initialise ADC and channel 1 (pin 0.12) */
-    LPC_IOCON->TMS_PIO0_12   &= ~0x9F;
-    LPC_IOCON->TMS_PIO0_12   |= 0x02;
-    adcInit();
+//                         //  GG    RR    BB
+//    uint8_t buffer[30] = { 0xFF, 0x00, 0x00,
+//                           0x00, 0xFF, 0x00,
+//                           0x00, 0x00, 0xFF,
+//                           0xFF, 0xFF, 0x00,
+//                           0x00, 0xFF, 0xFF,
+//                           0xFF, 0x00, 0xFF,
+//                           0xFF, 0x00, 0x00,
+//                           0x00, 0xFF, 0x00,
+//                           0x00, 0x00, 0xFF,
+//                           0xFF, 0xFF, 0x00 };
+//
+//    ws2812Init();
+//    while(1)
+//    {
+//      ws2812WriteArray(buffer, 30);
+//    }
+
+
+
+
+
+
+//    ws2812Init();
+//    uint8_t buffer[30];
+//    uint8_t r,g,b;
+//    r = g = b = 0;
+//
+//    while(1)
+//    {
+//      r++;
+//      g--;
+//      b++;
+//      buffer[0] = g;
+//      buffer[1] = r;
+//      buffer[2] = b;
+//      buffer[3] = g;
+//      buffer[4] = r;
+//      buffer[5] = b;
+//      buffer[6] = g;
+//      buffer[7] = r;
+//      buffer[8] = b;
+//      buffer[9] = g;
+//      buffer[10] = r;
+//      buffer[11] = b;
+//      buffer[12] = g;
+//      buffer[13] = r;
+//      buffer[14] = b;
+//      buffer[15] = g;
+//      buffer[16] = r;
+//      buffer[17] = b;
+//      buffer[18] = g;
+//      buffer[19] = r;
+//      buffer[20] = b;
+//      buffer[21] = g;
+//      buffer[22] = r;
+//      buffer[23] = b;
+//      buffer[24] = g;
+//      buffer[25] = r;
+//      buffer[26] = b;
+//      buffer[27] = g;
+//      buffer[28] = r;
+//      buffer[29] = b;
+//      ws2812WriteArray(buffer, 30);
+//      delay(10);
+//    }
 
     while (1)
     {
@@ -218,8 +297,6 @@ void boardInit(void)
 /*=========================================================================*/
 #endif /* !CFG_CMSIS_RTOS */
 #endif /* !_TEST_ */
-
-
 
 #ifdef CFG_CMSIS_RTOS
 /*=========================================================================
