@@ -95,8 +95,6 @@
   #include "drivers/rf/wifi/cc3000/wifi.h"
 #endif
 
-#include "drivers/leds/ws2812/ws2812.h"
-
 #ifdef CFG_SDCARD
 /**************************************************************************/
 /*!
@@ -176,7 +174,7 @@ void boardInit(void)
 
   /* Initialise the SD Card? */
   #ifdef CFG_SDCARD
-    DSTATUS stat = disk_initialize(0);
+    // DSTATUS stat = disk_initialize(0);
   #endif
 
   /* Initialise ADC channel 1 (pin 0.12) */
@@ -203,73 +201,6 @@ void boardInit(void)
 
     /* Configure the HW */
     boardInit();
-
-//                         //  GG    RR    BB
-//    uint8_t buffer[30] = { 0xFF, 0x00, 0x00,
-//                           0x00, 0xFF, 0x00,
-//                           0x00, 0x00, 0xFF,
-//                           0xFF, 0xFF, 0x00,
-//                           0x00, 0xFF, 0xFF,
-//                           0xFF, 0x00, 0xFF,
-//                           0xFF, 0x00, 0x00,
-//                           0x00, 0xFF, 0x00,
-//                           0x00, 0x00, 0xFF,
-//                           0xFF, 0xFF, 0x00 };
-//
-//    ws2812Init();
-//    while(1)
-//    {
-//      ws2812WriteArray(buffer, 30);
-//    }
-
-
-
-
-
-
-//    ws2812Init();
-//    uint8_t buffer[30];
-//    uint8_t r,g,b;
-//    r = g = b = 0;
-//
-//    while(1)
-//    {
-//      r++;
-//      g--;
-//      b++;
-//      buffer[0] = g;
-//      buffer[1] = r;
-//      buffer[2] = b;
-//      buffer[3] = g;
-//      buffer[4] = r;
-//      buffer[5] = b;
-//      buffer[6] = g;
-//      buffer[7] = r;
-//      buffer[8] = b;
-//      buffer[9] = g;
-//      buffer[10] = r;
-//      buffer[11] = b;
-//      buffer[12] = g;
-//      buffer[13] = r;
-//      buffer[14] = b;
-//      buffer[15] = g;
-//      buffer[16] = r;
-//      buffer[17] = b;
-//      buffer[18] = g;
-//      buffer[19] = r;
-//      buffer[20] = b;
-//      buffer[21] = g;
-//      buffer[22] = r;
-//      buffer[23] = b;
-//      buffer[24] = g;
-//      buffer[25] = r;
-//      buffer[26] = b;
-//      buffer[27] = g;
-//      buffer[28] = r;
-//      buffer[29] = b;
-//      ws2812WriteArray(buffer, 30);
-//      delay(10);
-//    }
 
     while (1)
     {
