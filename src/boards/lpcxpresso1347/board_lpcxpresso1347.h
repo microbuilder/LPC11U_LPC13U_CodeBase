@@ -431,7 +431,7 @@ extern "C" {
     CFG_PROTOCOL             If this field is defined the binary command
                               parser will be included
     -----------------------------------------------------------------------*/
-    // #define CFG_PROTOCOL
+    #define CFG_PROTOCOL
 
     #define CFG_PROTOCOL_VIA_HID
     // #define CFG_PROTOCOL_VIA_BULK
