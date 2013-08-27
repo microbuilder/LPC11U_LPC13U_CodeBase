@@ -191,19 +191,19 @@ void ili9340InitDisplay(void)
 /*************************************************/
 static void ili9340SetWindow(uint32_t x0, uint32_t y0, uint32_t x1, uint32_t y1)
 {
-  ili9340WriteCmd(ILI9340_CASET); // Column addr set
+  ili9340WriteCmd(ILI9340_CASET);
   ili9340WriteData(x0 >> 8);
-  ili9340WriteData(x0 & 0xFF);     // XSTART
+  ili9340WriteData(x0 & 0xFF);
   ili9340WriteData(x1 >> 8);
-  ili9340WriteData(x1 & 0xFF);     // XEND
+  ili9340WriteData(x1 & 0xFF);
 
-  ili9340WriteCmd(ILI9340_PASET); // Row addr set
+  ili9340WriteCmd(ILI9340_PASET);
   ili9340WriteData(y0>>8);
-  ili9340WriteData(y0);     // YSTART
+  ili9340WriteData(y0);
   ili9340WriteData(y1>>8);
-  ili9340WriteData(y1);     // YEND
+  ili9340WriteData(y1);
 
-  ili9340WriteCmd(ILI9340_RAMWR); // write to RAM
+  ili9340WriteCmd(ILI9340_RAMWR);
 }
 
 /*************************************************/
@@ -282,6 +282,9 @@ void lcdFillRGB(uint16_t color)
 {
   uint16_t i,j;
   uint8_t buf[2] = { color >> 8, color & 0xFF };
+
+  ili9340SetWindow(0, 0, 239, 320);
+
   SET_DC;
   for (i=0;i<240;i++)
   {
@@ -325,11 +328,13 @@ void lcdDrawPixels(uint16_t x, uint16_t y, uint16_t *data, uint32_t len)
 /*************************************************/
 void lcdDrawHLine(uint16_t x0, uint16_t x1, uint16_t y, uint16_t color)
 {
+  // ToDo
 }
 
 /*************************************************/
 void lcdDrawVLine(uint16_t x0, uint16_t x1, uint16_t y, uint16_t color)
 {
+  // ToDo
 }
 
 /*************************************************/
