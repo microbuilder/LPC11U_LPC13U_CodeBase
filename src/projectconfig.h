@@ -115,6 +115,8 @@ extern "C" {
       #include "boards/lpcstepper/board_lpcstepper.h"
     #elif defined (CFG_BRD_SIMULATOR)
       #include "boards/simulator/board_simulator.h"
+    #elif defined (CFG_BRD_LOADCELL1347)
+      #include "boards/loadcell1347/board_loadcell1347.h"
     #else
       #error "No CFG_BRD_* has been defined"
     #endif

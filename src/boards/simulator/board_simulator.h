@@ -73,7 +73,7 @@ extern "C" {
     #endif
 
     /* Set flag to indicate which CMSIS library to use */
-    #if (defined CFG_MCU_LPC1347FBD48 || defined CFG_MCU_LPC1347FHN33)
+    #if (defined CFG_MCU_LPC1347FBD64 || defined CFG_MCU_LPC1347FBD48 || defined CFG_MCU_LPC1347FHN33)
       #define CFG_MCU_FAMILY_LPC13UXX
     #elif (defined CFG_MCU_LPC11U24FBD48_401 || defined CFG_MCU_LPC11U37FBD48_401)
       #define CFG_MCU_FAMILY_LPC11UXX
