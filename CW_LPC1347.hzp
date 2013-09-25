@@ -293,10 +293,6 @@
         <file file_name="src/localisation/locale_fr.dat"/>
       </folder>
       <folder Name="boards" file_name="">
-        <folder Name="lpcnfc" file_name="">
-          <file file_name="src/boards/lpcnfc/board_lpcnfc.c"/>
-          <file file_name="src/boards/lpcnfc/board_lpcnfc.h"/>
-        </folder>
         <folder Name="lpcxpresso1347" file_name="">
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.c"/>
           <file file_name="src/boards/lpcxpresso1347/board_lpcxpresso1347.h"/>
@@ -308,10 +304,6 @@
         <folder Name="rf1ghznode" file_name="">
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.c"/>
           <file file_name="src/boards/rf1ghznode/board_rf1ghznode.h"/>
-        </folder>
-        <folder Name="lpcstepper" file_name="">
-          <file file_name="src/boards/lpcstepper/board_lpcstepper.c"/>
-          <file file_name="src/boards/lpcstepper/board_lpcstepper.h"/>
         </folder>
         <folder Name="simulator" file_name="">
           <file file_name="src/boards/simulator/board_simulator.c"/>

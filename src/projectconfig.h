@@ -109,14 +109,8 @@ extern "C" {
        #include "boards/rf1ghznode/board_rf1ghznode.h"
     #elif defined(CFG_BRD_RF1GHZUSB)
       #include "boards/rf1ghzusb/board_rf1ghzusb.h"
-    #elif defined (CFG_BRD_LPCNFC)
-      #include "boards/lpcnfc/board_lpcnfc.h"
-    #elif defined (CFG_BRD_LPCSTEPPER)
-      #include "boards/lpcstepper/board_lpcstepper.h"
     #elif defined (CFG_BRD_SIMULATOR)
       #include "boards/simulator/board_simulator.h"
-    #elif defined (CFG_BRD_LOADCELL1347)
-      #include "boards/loadcell1347/board_loadcell1347.h"
     #else
       #error "No CFG_BRD_* has been defined"
     #endif

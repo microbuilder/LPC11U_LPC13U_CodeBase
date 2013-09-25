@@ -219,13 +219,13 @@ extern "C" {
           EEPROM Address (0x0000..0x00FF)
           ===============================
           0 1 2 3 4 5 6 7 8 9 A B C D E F
-    000x  x x . . x x x x x x x x . . . .   Chibi
+    000x  x x . . x x x x x x x x . . . .   Chibi Node Addresses
     001x  . . . . . . . . . . . . . . . .
     002x  . . . . . . . . . . . . . . . .
     003x  . . . . . . . . . . . . . . . .
-    004x  . . . . . . . . . . . . . . . .
-    005x  . . . . . . . . . . . . . . . .
-    006x  . . . . . . . . . . . . . . . .
+    004x  x x x x x x x x x x x x x x x x   Accelerometer Cal Settings
+    005x  x x x x x x x x x x x x x x x x   Magnetometer Cal Settings
+    006x  x x x x x x x x x x x x x x x x   Gyroscope Cal Settings
     007x  . . . . . . . . . . . . . . . .
     008x  . . . . . . . . . . . . . . . .
     009x  . . . . . . . . . . . . . . . .
@@ -237,10 +237,38 @@ extern "C" {
     00Fx  . . . . . . . . . . . . . . . .
 
     -----------------------------------------------------------------------*/
-    #define CFG_EEPROM_SIZE                   (4032)
-    #define CFG_EEPROM_RESERVED               (0x00FF)              // Protect first 256 bytes of memory
-    #define CFG_EEPROM_CHIBI_NODEADDR         (uint16_t)(0x0000)    // 2
-    #define CFG_EEPROM_CHIBI_IEEEADDR         (uint16_t)(0x0004)    // 8
+    #define CFG_EEPROM_SIZE                         (4032)
+    #define CFG_EEPROM_RESERVED                     (0x00FF) // Protect the first 256 bytes of memory
+
+    #define CFG_EEPROM_CHIBI_NODEADDR               (uint16_t)(0x0000)  // 2
+    #define CFG_EEPROM_CHIBI_IEEEADDR               (uint16_t)(0x0004)  // 8
+
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_CONFIG     (uint16_t)(0x0040)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_SENSORID   (uint16_t)(0x0042)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_X_SCALE    (uint16_t)(0x0044)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_X_OFFSET   (uint16_t)(0x0046)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Y_SCALE    (uint16_t)(0x0048)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Y_OFFSET   (uint16_t)(0x004A)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Z_SCALE    (uint16_t)(0x004C)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Z_OFFSET   (uint16_t)(0x004E)  // 2
+
+    #define CFG_EEPROM_SENSORS_CAL_MAG_CONFIG       (uint16_t)(0x0050)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_SENSORID     (uint16_t)(0x0052)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_X_SCALE      (uint16_t)(0x0054)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_X_OFFSET     (uint16_t)(0x0056)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Y_SCALE      (uint16_t)(0x0058)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Y_OFFSET     (uint16_t)(0x005A)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Z_SCALE      (uint16_t)(0x005C)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Z_OFFSET     (uint16_t)(0x005E)  // 2
+
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_CONFIG      (uint16_t)(0x0060)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_SENSORID    (uint16_t)(0x0062)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_X_SCALE     (uint16_t)(0x0064)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_X_OFFSET    (uint16_t)(0x0066)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Y_SCALE     (uint16_t)(0x0068)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Y_OFFSET    (uint16_t)(0x006A)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Z_SCALE     (uint16_t)(0x006C)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Z_OFFSET    (uint16_t)(0x006E)  // 2
 /*=========================================================================*/
 
 

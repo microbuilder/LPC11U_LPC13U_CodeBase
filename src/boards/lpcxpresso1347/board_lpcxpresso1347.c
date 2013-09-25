@@ -41,17 +41,13 @@
 
 #ifdef CFG_BRD_LPCXPRESSO_LPC1347
 
-#include <string.h> /* strlen */
+#include <string.h>
 
 #include "boards/board.h"
 #include "core/gpio/gpio.h"
 #include "core/delay/delay.h"
 #include "core/eeprom/eeprom.h"
 #include "core/adc/adc.h"
-
-#ifdef CFG_CMSIS_RTOS
-  #include "cmsis_os.h"
-#endif
 
 #ifdef CFG_CHIBI
   #include "messages.h"
@@ -80,10 +76,6 @@
 
 #ifdef CFG_ENABLE_UART
   #include "core/uart/uart.h"
-#endif
-
-#ifdef CFG_CMSIS_RTOS
-  #include "RTX_CM_lib.h"
 #endif
 
 #ifdef CFG_SDCARD
@@ -187,129 +179,38 @@ void boardInit(void)
 }
 
 #ifndef _TEST_
-#ifndef CFG_CMSIS_RTOS
-/*=========================================================================
-  STANDARD ENTRY POINT
+int main(void)
+{
+  uint32_t currentSecond, lastSecond;
+  currentSecond = lastSecond = 0;
 
-  The default program entry point when an RTOS is not required.
-  -------------------------------------------------------------------------*/
-  volatile uint32_t test[8] = { 0 };
-  int main(void)
+  /* Configure the HW */
+  boardInit();
+
+  while (1)
   {
-    uint32_t currentSecond, lastSecond;
-    currentSecond = lastSecond = 0;
-
-    /* Configure the HW */
-    boardInit();
-
-    while (1)
+    /* Blinky (1Hz) */
+    currentSecond = delayGetSecondsActive();
+    if (currentSecond != lastSecond)
     {
-      /* Blinky (1Hz) */
-      currentSecond = delayGetSecondsActive();
-      if (currentSecond != lastSecond)
-      {
-        lastSecond = currentSecond;
-        boardLED(lastSecond % 2);
-      }
-
-      /* Check for binary protocol input if CFG_PROTOCOL is enabled */
-      #ifdef CFG_PROTOCOL
-        prot_task(NULL);
-      #endif
-
-      /* Poll for CLI input if CFG_INTERFACE is enabled */
-      #ifdef CFG_INTERFACE
-        cliPoll();
-      #endif
-
-      /* Optionally enter high level sleep mode here via WFI */
+      lastSecond = currentSecond;
+      boardLED(lastSecond % 2);
     }
+
+    /* Check for binary protocol input if CFG_PROTOCOL is enabled */
+    #ifdef CFG_PROTOCOL
+      prot_task(NULL);
+    #endif
+
+    /* Poll for CLI input if CFG_INTERFACE is enabled */
+    #ifdef CFG_INTERFACE
+      cliPoll();
+    #endif
+
+    /* Optionally enter high level sleep mode here via WFI */
   }
-/*=========================================================================*/
-#endif /* !CFG_CMSIS_RTOS */
+}
 #endif /* !_TEST_ */
-
-#ifdef CFG_CMSIS_RTOS
-/*=========================================================================
-  RTOS ENTRY POINT
-
-  The following code is used if CFG_CMSIS_RTOS (RTX) is defined in the
-  board config file.  The RTOS requires a different entry point since the
-  content switching timer needs to be configured, and an initial thread
-  defined and started.
-  -------------------------------------------------------------------------*/
-  /* Thread IDs */
-  osThreadId tid_mainthread;      /* ID for main thread   */
-  osThreadId tid_blinkythread;    /* ID for blinky thread */
-
-  /* Function prototypes */
-  void main_thread(void const *argument);
-  void blinky_thread (void const *argument);
-
-  /* Thread definitions */
-  osThreadDef(blinky_thread, osPriorityHigh, 1, 0);
-  osThreadDef(main_thread, osPriorityNormal, 1, 4 * OS_MAINSTKSIZE);
-
-  /**************************************************************************/
-  /*!
-      @brief Blinky thread, high priority, active very 3ms
-  */
-  /**************************************************************************/
-  void blinky_thread (void const *argument)
-  {
-   while (1)
-   {
-     /* Pass control to other tasks for 1s */
-     osDelay(1000);
-     printf ("Thread 1\n");
-   }
-  }
-
-  /**************************************************************************/
-  /*!
-      @brief Main thread, normal priority
-  */
-  /**************************************************************************/
-  void main_thread(void const *argument)
-  {
-    uint32_t currentSecond, lastSecond;
-    currentSecond = lastSecond = 0;
-
-    for (;;)
-    {
-       osDelay(1000);
-       boardLED((currentSecond++) & 1);
-    }
-  }
-
-  /**************************************************************************/
-  /*!
-      @brief RTX code entry point (replaces non-RTOS main further down!)
-  */
-  /**************************************************************************/
-  int main(void)
-  {
-    /* Initiaise the HW */
-    boardInit();
-
-    /* Initialise the RTX kernel */
-    osKernelInitialize();
-
-    /* Create out threads */
-    tid_mainthread = osThreadCreate(osThread(main_thread), NULL);
-    tid_blinkythread = osThreadCreate(osThread(blinky_thread), NULL);
-
-    /* Start the kernel and then go into an endless loop */
-    osKernelStart();
-
-    /* No return */
-    while(1);
-
-    return 1;
-  }
-/*=========================================================================*/
-#endif /* !CFG_CMSIS_RTOS */
-
 
 /**************************************************************************/
 /*!

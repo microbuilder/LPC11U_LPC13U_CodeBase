@@ -11,6 +11,10 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added SENSOR commands to binary protocol
 - Changed 'SENSOR\_TYPE\_COLOR' from '17' to '7' in sensors.h
 - Bug fix in mmc.c for pin setup (PORT used instead of PIN)
+- Added CFG_MCU_LPC1347FBD64 option to board config files
+- Removed unpublished boards from public repository
+- Removed RTC support from the LPCXpresso LPC1347 board file for now, use RF1GHZNODE for reference code
+- Added EEPROM entries for accel/mag/gyro calibration data
 
 ## 0.9.1 [12 July 2013] ##
 
