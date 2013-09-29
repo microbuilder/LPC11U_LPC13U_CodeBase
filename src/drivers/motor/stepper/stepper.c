@@ -160,10 +160,15 @@ void stepperInit(stepper_motor_t *motor)
   timer32Init(CFG_STEPPER_TIMER32);
   timer32Enable(CFG_STEPPER_TIMER32);
 
-  // Set the default speed (2 rotations per second)
+  // Set the motor speed and delay values
   if (motor->rpm = 0)
   {
+    // Default to 2 revolutions per second
     stepperUpdateRPM(motor, 120);
+  }
+  else
+  {
+    stepperUpdateRPM(motor, motor->rpm);
   }
 }
 
