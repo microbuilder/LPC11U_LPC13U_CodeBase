@@ -297,8 +297,10 @@ pn532_error_t pn532_ndef_createFromStream(pn532_ndef_record_t *pNdefRecord,
   {
     return PN532_ERROR_INVALID_PARAM;
   }
+#if 0
   pRec = (NdefRecord_t*) pn532_mem_alloc(sizeof(NdefRecord_t));
   if (pRec == NULL)
+#endif
   {
     return PN532_ERROR_MEM_INSUFFICIENT;
   }
