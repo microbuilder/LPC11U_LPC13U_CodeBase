@@ -39,14 +39,31 @@
 
 #include "projectconfig.h"
 
-void     stepperInit( uint32_t steps );
-void     stepperSetSpeed( uint32_t rpm );
-int64_t  stepperGetPosition();
-uint32_t stepperGetRotation();
-void     stepperMoveHome();
-void     stepperSetHome();
-void     stepperMoveZero();
-void     stepperSetZero();
-void     stepperStep( int32_t steps );
+typedef struct
+{
+  uint8_t   in1_port;           /**< The port number for the IN1 pin */
+  uint8_t   in1_pin;            /**< The pin number for the IN1 pin */
+  uint8_t   in2_port;           /**< The port number for the IN2 pin */
+  uint8_t   in2_pin;            /**< The pin number for the IN2 pin */
+  uint8_t   in3_port;           /**< The port number for the IN3 pin */
+  uint8_t   in3_pin;            /**< The pin number for the IN3 pin */
+  uint8_t   in4_port;           /**< The port number for the IN4 pin */
+  uint8_t   in4_pin;            /**< The pin number for the IN4 pin */
+  uint32_t  stepsPerRotation;   /**< Number of steps in a full 360° rotation */
+  uint16_t  rpm;                /**< Motor speed in revolutions per minute */
+  uint16_t  id;                 /**< Optional ID to identify the stepper motor */
+  /* The following fields are assigned by stepper.c and are not user defined */
+  uint32_t  delay;              /**< Delay in CPU ticks between steps */
+  int64_t   position;           /**< The current position of the spindle (in steps) relative to the 'home' position */
+  uint16_t  stepNumber;         /**< The current position of the spindle (in steps) relative to 0° */
+} stepper_motor_t;
+
+void     stepperInit      ( stepper_motor_t *motor );
+void     stepperSetHome   ( stepper_motor_t *motor );
+void     stepperMoveHome  ( stepper_motor_t *motor );
+void     stepperSetZero   ( stepper_motor_t *motor );
+void     stepperMoveZero  ( stepper_motor_t *motor );
+void     stepperUpdateRPM ( stepper_motor_t *motor, uint32_t rpm );
+void     stepperStep      ( stepper_motor_t *motor, int32_t steps );
 
 #endif

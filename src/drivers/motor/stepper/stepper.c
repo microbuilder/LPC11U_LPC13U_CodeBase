@@ -15,20 +15,43 @@
 
     @code
 
-    stepperInit(200);         // Initialise driver for 200-step motor
-    stepperSetSpeed(60);      // Set speed to 120 rpm (2 revolutions per second)
+    stepper_motor_t stepper =
+    {
+      // H-Bridge GPIO Pin Locations
+      .in1_port         = CFG_STEPPER_IN1_PORT,
+      .in1_pin          = CFG_STEPPER_IN1_PIN,
+      .in2_port         = CFG_STEPPER_IN2_PORT,
+      .in2_pin          = CFG_STEPPER_IN2_PIN,
+      .in3_port         = CFG_STEPPER_IN3_PORT,
+      .in3_pin          = CFG_STEPPER_IN3_PIN,
+      .in4_port         = CFG_STEPPER_IN4_PORT,
+      .in4_pin          = CFG_STEPPER_IN4_PIN,
+
+      // Motor Settings
+      .stepsPerRotation = 200,  // 200 step motor
+      .rpm              = 120,  // 2 rotations per second
+      .id               = 'X',  // Optional motor ID
+
+      // Do Not Populate ... these fields are set by stepper.c
+      .delay            = 0,
+      .position         = 0,
+      .stepNumber       = 0
+    };
+
+    stepperInit(&stepper, 200);       // Initialise driver for 200-step motor
+    stepperUpdateRPM(&stepper, 120);  // Set speed to 120 rpm (2 revolutions per second)
 
     while (1)
     {
-      stepperStep(400);       // Move forward 400 steps
-      stepperStep(-200);      // Move backward 200 steps
-      delay(1000);     // Wait one second
+      stepperStep(&stepper, 400);     // Move forward 400 steps
+      stepperStep(&stepper, -200);    // Move backward 200 steps
+      delay(1000);                    // Wait one second
 
       // Move 'home' after 10 loops (current position = 2000)
-      if (stepperGetPosition() == 2000)
+      if (stepper.position == 2000)
       {
-        stepperMoveHome();    // Move back to the starting position
-        delay(1000);   // Wait one second
+        stepperMoveHome(&stepper);    // Move back to the starting position
+        delay(1000);                  // Wait one second
       }
     }
 
@@ -74,43 +97,38 @@
 #include "core/gpio/gpio.h"
 #include "core/timer32/timer32.h"
 
-static int64_t  stepperPosition = 0;          // The current position (in steps) relative to 'Home'
-static uint32_t stepperStepNumber = 0;        // The current position (in steps) relative to 0°
-static uint32_t stepperStepsPerRotation = 0;  // Number of steps in a full 360° rotation
-static uint32_t stepperStepDelay = 0;         // Delay in CPU ticks between individual steps
-
 /**************************************************************************/
 /*!
     Private - Cause the motor to step forward or backward one step
 */
 /**************************************************************************/
-void stepMotor(uint32_t thisStep)
+void stepMotor(stepper_motor_t *motor, uint32_t thisStep)
 {
   switch (thisStep)
   {
     case 0: // 1010
-      LPC_GPIO->SET[CFG_STEPPER_IN1_PORT] =  (1 << CFG_STEPPER_IN1_PIN);
-      LPC_GPIO->CLR[CFG_STEPPER_IN2_PORT] =  (1 << CFG_STEPPER_IN2_PIN);
-      LPC_GPIO->SET[CFG_STEPPER_IN3_PORT] =  (1 << CFG_STEPPER_IN3_PIN);
-      LPC_GPIO->CLR[CFG_STEPPER_IN4_PORT] =  (1 << CFG_STEPPER_IN4_PIN);
+      LPC_GPIO->SET[motor->in1_port] =  (1 << motor->in1_pin);
+      LPC_GPIO->CLR[motor->in2_port] =  (1 << motor->in2_pin);
+      LPC_GPIO->SET[motor->in3_port] =  (1 << motor->in3_pin);
+      LPC_GPIO->CLR[motor->in4_port] =  (1 << motor->in4_pin);
       break;
     case 1: // 0110
-      LPC_GPIO->CLR[CFG_STEPPER_IN1_PORT] =  (1 << CFG_STEPPER_IN1_PIN);
-      LPC_GPIO->SET[CFG_STEPPER_IN2_PORT] =  (1 << CFG_STEPPER_IN2_PIN);
-      LPC_GPIO->SET[CFG_STEPPER_IN3_PORT] =  (1 << CFG_STEPPER_IN3_PIN);
-      LPC_GPIO->CLR[CFG_STEPPER_IN4_PORT] =  (1 << CFG_STEPPER_IN4_PIN);
+      LPC_GPIO->CLR[motor->in1_port] =  (1 << motor->in1_pin);
+      LPC_GPIO->SET[motor->in2_port] =  (1 << motor->in2_pin);
+      LPC_GPIO->SET[motor->in3_port] =  (1 << motor->in3_pin);
+      LPC_GPIO->CLR[motor->in4_port] =  (1 << motor->in4_pin);
       break;
     case 2: // 0101
-      LPC_GPIO->CLR[CFG_STEPPER_IN1_PORT] =  (1 << CFG_STEPPER_IN1_PIN);
-      LPC_GPIO->SET[CFG_STEPPER_IN2_PORT] =  (1 << CFG_STEPPER_IN2_PIN);
-      LPC_GPIO->CLR[CFG_STEPPER_IN3_PORT] =  (1 << CFG_STEPPER_IN3_PIN);
-      LPC_GPIO->SET[CFG_STEPPER_IN4_PORT] =  (1 << CFG_STEPPER_IN4_PIN);
+      LPC_GPIO->CLR[motor->in1_port] =  (1 << motor->in1_pin);
+      LPC_GPIO->SET[motor->in2_port] =  (1 << motor->in2_pin);
+      LPC_GPIO->CLR[motor->in3_port] =  (1 << motor->in3_pin);
+      LPC_GPIO->SET[motor->in4_port] =  (1 << motor->in4_pin);
       break;
     case 3: // 1001
-      LPC_GPIO->SET[CFG_STEPPER_IN1_PORT] =  (1 << CFG_STEPPER_IN1_PIN);
-      LPC_GPIO->CLR[CFG_STEPPER_IN2_PORT] =  (1 << CFG_STEPPER_IN2_PIN);
-      LPC_GPIO->CLR[CFG_STEPPER_IN3_PORT] =  (1 << CFG_STEPPER_IN3_PIN);
-      LPC_GPIO->SET[CFG_STEPPER_IN4_PORT] =  (1 << CFG_STEPPER_IN4_PIN);
+      LPC_GPIO->SET[motor->in1_port] =  (1 << motor->in1_pin);
+      LPC_GPIO->CLR[motor->in2_port] =  (1 << motor->in2_pin);
+      LPC_GPIO->CLR[motor->in3_port] =  (1 << motor->in3_pin);
+      LPC_GPIO->SET[motor->in4_port] =  (1 << motor->in4_pin);
       break;
   }
 }
@@ -120,60 +138,33 @@ void stepMotor(uint32_t thisStep)
     @brief      Initialises the GPIO pins and delay timer and sets any
                 default values.
 
-    @param[in]  steps
-                The number of steps per rotation (typically 200 or 400)
+    @param[in]  motor
+                Pointer to the stepper_motor_t ref containing the motor
+                details
 */
 /**************************************************************************/
-void stepperInit(uint32_t steps)
+void stepperInit(stepper_motor_t *motor)
 {
   // Setup motor control pins
-  LPC_GPIO->DIR[CFG_STEPPER_IN1_PORT] |=  (1 << CFG_STEPPER_IN1_PIN);
-  LPC_GPIO->DIR[CFG_STEPPER_IN2_PORT] |=  (1 << CFG_STEPPER_IN2_PIN);
-  LPC_GPIO->DIR[CFG_STEPPER_IN3_PORT] |=  (1 << CFG_STEPPER_IN3_PIN);
-  LPC_GPIO->DIR[CFG_STEPPER_IN4_PORT] |=  (1 << CFG_STEPPER_IN4_PIN);
+  LPC_GPIO->DIR[motor->in1_port] |=  (1 << motor->in1_pin);
+  LPC_GPIO->DIR[motor->in2_port] |=  (1 << motor->in2_pin);
+  LPC_GPIO->DIR[motor->in3_port] |=  (1 << motor->in3_pin);
+  LPC_GPIO->DIR[motor->in4_port] |=  (1 << motor->in4_pin);
 
-  LPC_GPIO->CLR[CFG_STEPPER_IN1_PORT] =  (1 << CFG_STEPPER_IN1_PIN);
-  LPC_GPIO->CLR[CFG_STEPPER_IN2_PORT] =  (1 << CFG_STEPPER_IN2_PIN);
-  LPC_GPIO->CLR[CFG_STEPPER_IN3_PORT] =  (1 << CFG_STEPPER_IN3_PIN);
-  LPC_GPIO->CLR[CFG_STEPPER_IN4_PORT] =  (1 << CFG_STEPPER_IN4_PIN);
+  LPC_GPIO->CLR[motor->in1_port] =  (1 << motor->in1_pin);
+  LPC_GPIO->CLR[motor->in2_port] =  (1 << motor->in2_pin);
+  LPC_GPIO->CLR[motor->in3_port] =  (1 << motor->in3_pin);
+  LPC_GPIO->CLR[motor->in4_port] =  (1 << motor->in4_pin);
 
   // Initialise 32-bit timer (used for delays)
   timer32Init(CFG_STEPPER_TIMER32);
   timer32Enable(CFG_STEPPER_TIMER32);
 
-  // Set the number of steps per rotation
-  stepperStepsPerRotation = steps;
-
   // Set the default speed (2 rotations per second)
-  stepperSetSpeed(120);
-}
-
-/**************************************************************************/
-/*!
-    @brief    Gets the current position (in steps) relative to 'Home'.
-
-    @return   The difference (in steps) of the motor's current position
-              from the original 'Home' position. Value can be negative or
-              positive depending on the direction of previous movements.
-*/
-/**************************************************************************/
-int64_t stepperGetPosition()
-{
-  return stepperPosition;
-}
-
-/**************************************************************************/
-/*!
-    @brief    Gets the motor's current rotation (in steps) relative to
-              the spindle's 'Zero' position.
-
-    @return   The current step (0 .. steps per rotation) on the motor's
-              spindle relative to 0°.  Value is always positive.
-*/
-/**************************************************************************/
-uint32_t stepperGetRotation()
-{
-  return stepperStepNumber;
+  if (motor->rpm = 0)
+  {
+    stepperUpdateRPM(motor, 120);
+  }
 }
 
 /**************************************************************************/
@@ -181,21 +172,29 @@ uint32_t stepperGetRotation()
     @brief    Sets the motor's current position to 'Home', meaning that
               any future movement will be relative to the current
               position.
+
+    @param[in]  motor
+                Pointer to the stepper_motor_t ref containing the motor
+                details
 */
 /**************************************************************************/
-void stepperSetHome()
+void stepperSetHome(stepper_motor_t *motor)
 {
-  stepperPosition = 0;
+  motor->position = 0;
 }
 
 /**************************************************************************/
 /*!
     @brief    Moves the motor back to the original 'Home' position.
+
+    @param[in]  motor
+                Pointer to the stepper_motor_t ref containing the motor
+                details
 */
 /**************************************************************************/
-void stepperMoveHome()
+void stepperMoveHome(stepper_motor_t *motor)
 {
-  stepperStep(stepperPosition * -1);
+  stepperStep(motor, motor->position * -1);
 }
 
 /**************************************************************************/
@@ -203,11 +202,15 @@ void stepperMoveHome()
     @brief    Saves the spindle's current angle/position as 0°.  Each
               step the spindle takes will now be relative to the spindle's
               current position.
+
+    @param[in]  motor
+                Pointer to the stepper_motor_t ref containing the motor
+                details
 */
 /**************************************************************************/
-void stepperSetZero()
+void stepperSetZero(stepper_motor_t *motor)
 {
-  stepperStepNumber = 0;
+  motor->stepNumber = 0;
 }
 
 /**************************************************************************/
@@ -215,13 +218,17 @@ void stepperSetZero()
     @brief    Moves the motor to its original rotation value. For example,
               if a 200-step motor is currently rotated to step 137, it
               will move the motor forward 63 steps to end at step 0 or 0°.
+
+    @param[in]  motor
+                Pointer to the stepper_motor_t ref containing the motor
+                details
 */
 /**************************************************************************/
-void stepperMoveZero()
+void stepperMoveZero(stepper_motor_t *motor)
 {
-  if (!stepperStepNumber)
+  if (!motor->stepNumber)
   {
-    stepperStep(stepperStepsPerRotation - stepperStepNumber);
+    stepperStep(motor, motor->stepsPerRotation - motor->stepNumber);
   }
 }
 
@@ -230,6 +237,9 @@ void stepperMoveZero()
     @brief    Sets the motor speed in rpm, meaning the number of times the
               motor will fully rotate in a one minute period.
 
+    @param[in]  motor
+                Pointer to the stepper_motor_t ref containing the motor
+                details
     @param[in]  rpm
                 Motor speed in revolutions per minute (RPM)
 
@@ -238,12 +248,12 @@ void stepperMoveZero()
               the motor.
 */
 /**************************************************************************/
-void stepperSetSpeed(uint32_t rpm)
+void stepperUpdateRPM(stepper_motor_t *motor, uint32_t rpm)
 {
-  uint32_t ticksOneRPM = (SystemCoreClock / stepperStepsPerRotation) * 60;
+  uint32_t ticksOneRPM = (SystemCoreClock / motor->stepsPerRotation) * 60;
 
   // Set stepper RPM
-  stepperStepDelay = ticksOneRPM / rpm;
+  motor->delay = ticksOneRPM / rpm;
 }
 
 /**************************************************************************/
@@ -252,45 +262,48 @@ void stepperSetSpeed(uint32_t rpm)
                 of steps.  A positive number moves the motor forward,
                 while a negative number moves the motor backwards.
 
+    @param[in]  motor
+                Pointer to the stepper_motor_t ref containing the motor
+                details
     @param[in]  steps
                 The number of steps to move foreward (positive) or
                 backward (negative)
 */
 /**************************************************************************/
-void stepperStep(int32_t steps)
+void stepperStep(stepper_motor_t *motor, int32_t steps)
 {
   uint32_t stepsLeft = abs(steps);          // Force number to be positive
 
   while (stepsLeft > 0)
   {
     // Wait x ticks between individual steps
-    timer32DelayTicks(CFG_STEPPER_TIMER32, stepperStepDelay);
+    timer32DelayTicks(CFG_STEPPER_TIMER32, motor->delay);
 
     // Increment or decrement step counters (depending on direction)
     if (steps > 0)
     {
-      stepperPosition++;          // Increment global position counter
-      stepperStepNumber++;        // Increment single rotation counter
-      if (stepperStepNumber == stepperStepsPerRotation)
+      motor->position++;          // Increment global position counter
+      motor->stepNumber++;        // Increment single rotation counter
+      if (motor->stepNumber == motor->stepsPerRotation)
       {
-        stepperStepNumber = 0;
+        motor->stepNumber = 0;
       }
     }
     else
     {
-      stepperPosition--;          // Decrement global position counter
-      if (stepperStepNumber == 0)
+      motor->position--;          // Decrement global position counter
+      if (motor->stepNumber == 0)
       {
-        stepperStepNumber = stepperStepsPerRotation;
+        motor->stepNumber = motor->stepsPerRotation;
       }
-      stepperStepNumber--;        // Decrement single rotation counter
+      motor->stepNumber--;        // Decrement single rotation counter
     }
 
     // Decrement number of remaining steps
     stepsLeft--;
 
     // Step the motor one step
-    stepMotor(stepperStepNumber % 4);
+    stepMotor(motor, motor->stepNumber % 4);
   }
 }
 
