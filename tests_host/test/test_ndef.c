@@ -506,7 +506,7 @@ void test_ndef_updateFromRaw(void)
           pn532_ndef_updateFromRawEx(rec1, (uint8_t*)reference0, 2000,
                   NDEF_CREATE_BUFFER_MODE_DUPLICATE));
 }
-#if 0
+
 /**************************************************************************/
 /*!
     Create messages from a stream
@@ -653,7 +653,7 @@ void test_ndef_getNextRecord(void)
   pn532_ndef_destroy(rec);
   pn532_ndef_destroy(rec1);
 }
-
+#if 0
 /**************************************************************************/
 /*!
     Get record tests
