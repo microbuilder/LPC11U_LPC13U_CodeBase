@@ -592,6 +592,7 @@ void test_ndef_linkNextRecord(void)
   pn532_ndef_destroy(rec1);
 }
 
+#if 0
 /**************************************************************************/
 /*!
     Get next record tests
@@ -653,7 +654,7 @@ void test_ndef_getNextRecord(void)
   pn532_ndef_destroy(rec);
   pn532_ndef_destroy(rec1);
 }
-#if 0
+
 /**************************************************************************/
 /*!
     Get record tests
