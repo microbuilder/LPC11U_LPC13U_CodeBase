@@ -354,7 +354,7 @@ void test_ndef_createFromRaw(void)
   TEST_ASSERT_EQUAL_UINT32(PN532_ERROR_MEM_INSUFFICIENT,
           pn532_ndef_createFromRaw(&rec1, (uint8_t*)reference1, 2000));
 }
-#if 0
+
 /**************************************************************************/
 /*!
 
@@ -506,7 +506,7 @@ void test_ndef_updateFromRaw(void)
           pn532_ndef_updateFromRawEx(rec1, (uint8_t*)reference0, 2000,
                   NDEF_CREATE_BUFFER_MODE_DUPLICATE));
 }
-
+#if 0
 /**************************************************************************/
 /*!
     Create messages from a stream
