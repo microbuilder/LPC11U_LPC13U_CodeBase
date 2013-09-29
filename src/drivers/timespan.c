@@ -58,16 +58,16 @@ error_t timespanCreate(int64_t ticks, timespan_t *timespan)
     return ERROR_INVALIDPARAMETER;
   }
 
-  memcpy(timespan, 0, sizeof(timespan_t));
+  memset(timespan, 0, sizeof(timespan_t));
 
-  timespan->days = (ticks / TIMESPAN_NANOSPERDAY);
-  timespan->hours = (ticks / TIMESPAN_NANOSPERHOUR) % 24;
-  timespan->minutes = (ticks / TIMESPAN_NANOSPERMINUTE) % 60;
-  timespan->seconds = (ticks / TIMESPAN_NANOSPERSECOND) % 60;
+  timespan->days         = (ticks / TIMESPAN_NANOSPERDAY);
+  timespan->hours        = (ticks / TIMESPAN_NANOSPERHOUR) % 24;
+  timespan->minutes      = (ticks / TIMESPAN_NANOSPERMINUTE) % 60;
+  timespan->seconds      = (ticks / TIMESPAN_NANOSPERSECOND) % 60;
   timespan->milliseconds = (ticks / TIMESPAN_NANOSPERMILLISECOND) % 1000;
   timespan->microseconds = (ticks / TIMESPAN_NANOSPERMICROSECOND) % 1000;
-  timespan->nanoseconds = (ticks % 1000);
-  timespan->__ticks = ticks;
+  timespan->nanoseconds  = (ticks % 1000);
+  timespan->__ticks      = ticks;
 
   return ERROR_NONE;
 }
