@@ -301,7 +301,7 @@ void test_ndef_update(void)
   /* Kill the record to free up some memory */
   pn532_ndef_destroy(rec);
 }
-#if 0
+
 /**************************************************************************/
 /*!
     Create an NDEF message from a raw byte array
@@ -354,7 +354,7 @@ void test_ndef_createFromRaw(void)
   TEST_ASSERT_EQUAL_UINT32(PN532_ERROR_MEM_INSUFFICIENT,
           pn532_ndef_createFromRaw(&rec1, (uint8_t*)reference1, 2000));
 }
-
+#if 0
 /**************************************************************************/
 /*!
 
