@@ -507,19 +507,20 @@ void test_ndef_updateFromRaw(void)
                   NDEF_CREATE_BUFFER_MODE_DUPLICATE));
 }
 
-#if 0
 
 /**************************************************************************/
 /*!
     Create messages from a stream
 */
 /**************************************************************************/
+// this test has segmentation fault on travis
 void test_ndef_createFromStream(void)
 {
   pn532_error_t       errorCode;
   pn532_ndef_record_t rec;
 
   errorCode = pn532_ndef_createFromStream(&rec, fn_fetch, NULL);
+#if 1
   TEST_ASSERT_EQUAL_UINT32(PN532_ERROR_NONE, errorCode);
   TEST_ASSERT_EQUAL_MEMORY(referenceNull, pn532_ndef_getAll(rec),
           pn532_ndef_getLength(rec));
@@ -550,8 +551,8 @@ void test_ndef_createFromStream(void)
   /* pNdefRecord = NULL, should be PN532_ERROR_INVALID_PARAM  */
   TEST_ASSERT_EQUAL_UINT32(PN532_ERROR_INVALID_PARAM,
           pn532_ndef_createFromStream(NULL, fn_fetch, NULL));
-}
 #endif
+}
 
 /**************************************************************************/
 /*!
