@@ -507,6 +507,8 @@ void test_ndef_updateFromRaw(void)
                   NDEF_CREATE_BUFFER_MODE_DUPLICATE));
 }
 
+#if 0
+
 /**************************************************************************/
 /*!
     Create messages from a stream
@@ -549,8 +551,6 @@ void test_ndef_createFromStream(void)
   TEST_ASSERT_EQUAL_UINT32(PN532_ERROR_INVALID_PARAM,
           pn532_ndef_createFromStream(NULL, fn_fetch, NULL));
 }
-
-#if 0
 
 /**************************************************************************/
 /*!
