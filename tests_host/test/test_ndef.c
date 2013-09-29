@@ -133,7 +133,7 @@ void test_ndef_createTextRecord(void)
   /* Destroy the record */
   pn532_ndef_destroy(rec);
 }
-#if 0
+
 /**************************************************************************/
 /*!
     Create an NDEF record by passing in some specific values
@@ -234,7 +234,7 @@ void test_ndef_createFromValue(void)
   /* Free up any memory used by the record */
   pn532_ndef_destroy(rec);
 }
-
+#if 0
 /**************************************************************************/
 /*!
     Updates an existing NDEF record
