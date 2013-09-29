@@ -550,6 +550,8 @@ void test_ndef_createFromStream(void)
           pn532_ndef_createFromStream(NULL, fn_fetch, NULL));
 }
 
+#if 0
+
 /**************************************************************************/
 /*!
     Link record tests
@@ -592,7 +594,6 @@ void test_ndef_linkNextRecord(void)
   pn532_ndef_destroy(rec1);
 }
 
-#if 0
 /**************************************************************************/
 /*!
     Get next record tests
