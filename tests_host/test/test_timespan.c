@@ -193,7 +193,7 @@ void test_timespan_toSeconds(void)
 {
   /* Check upper limit */
   timespanCreate(TIMESPAN_MAXNANOSECONDS, &timespan);
-  TEST_ASSERT_EQUAL_INT((int32_t)TIMESPAN_MAXSECONDS, timespanToSeconds(&timespan));
+  TEST_ASSERT_EQUAL_INT(/*(int32_t)*/TIMESPAN_MAXSECONDS, timespanToSeconds(&timespan));
   memset(&timespan, 0, sizeof(timespan_t));
 
   /* Check lower limit */
