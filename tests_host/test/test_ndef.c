@@ -234,7 +234,7 @@ void test_ndef_createFromValue(void)
   /* Free up any memory used by the record */
   pn532_ndef_destroy(rec);
 }
-#if 0
+
 /**************************************************************************/
 /*!
     Updates an existing NDEF record
@@ -301,7 +301,7 @@ void test_ndef_update(void)
   /* Kill the record to free up some memory */
   pn532_ndef_destroy(rec);
 }
-
+#if 0
 /**************************************************************************/
 /*!
     Create an NDEF message from a raw byte array
