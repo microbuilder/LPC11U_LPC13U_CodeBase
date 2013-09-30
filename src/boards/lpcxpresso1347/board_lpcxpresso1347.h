@@ -223,12 +223,12 @@ extern "C" {
     001x  . . . . . . . . . . . . . . . .
     002x  . . . . . . . . . . . . . . . .
     003x  . . . . . . . . . . . . . . . .
-    004x  x x x x x x x x x x x x x x x x   Accelerometer Cal Settings
-    005x  x x x x x x x x x x x x x x x x   Magnetometer Cal Settings
-    006x  x x x x x x x x x x x x x x x x   Gyroscope Cal Settings
-    007x  . . . . . . . . . . . . . . . .
-    008x  . . . . . . . . . . . . . . . .
-    009x  . . . . . . . . . . . . . . . .
+    004x  x x x x . . . . x x x x x x x x   Accelerometer Cal Settings
+    005x  x x x x x x x x x x x x x x x x
+    006x  x x x x . . . . x x x x x x x x   Magnetometer Cal Settings
+    007x  x x x x x x x x x x x x x x x x
+    008x  x x x x . . . . x x x x x x x x   Gyroscope Cal Settings
+    009x  x x x x x x x x x x x x x x x x
     00Ax  . . . . . . . . . . . . . . . .
     00Bx  . . . . . . . . . . . . . . . .
     00Cx  . . . . . . . . . . . . . . . .
@@ -245,30 +245,30 @@ extern "C" {
 
     #define CFG_EEPROM_SENSORS_CAL_ACCEL_CONFIG     (uint16_t)(0x0040)  // 2
     #define CFG_EEPROM_SENSORS_CAL_ACCEL_SENSORID   (uint16_t)(0x0042)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_ACCEL_X_SCALE    (uint16_t)(0x0044)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_ACCEL_X_OFFSET   (uint16_t)(0x0046)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Y_SCALE    (uint16_t)(0x0048)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Y_OFFSET   (uint16_t)(0x004A)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Z_SCALE    (uint16_t)(0x004C)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Z_OFFSET   (uint16_t)(0x004E)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_X_SCALE    (uint16_t)(0x0048)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_X_OFFSET   (uint16_t)(0x004C)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Y_SCALE    (uint16_t)(0x0050)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Y_OFFSET   (uint16_t)(0x0054)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Z_SCALE    (uint16_t)(0x0058)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_ACCEL_Z_OFFSET   (uint16_t)(0x005C)  // 4
 
-    #define CFG_EEPROM_SENSORS_CAL_MAG_CONFIG       (uint16_t)(0x0050)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_MAG_SENSORID     (uint16_t)(0x0052)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_MAG_X_SCALE      (uint16_t)(0x0054)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_MAG_X_OFFSET     (uint16_t)(0x0056)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_MAG_Y_SCALE      (uint16_t)(0x0058)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_MAG_Y_OFFSET     (uint16_t)(0x005A)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_MAG_Z_SCALE      (uint16_t)(0x005C)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_MAG_Z_OFFSET     (uint16_t)(0x005E)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_CONFIG       (uint16_t)(0x0060)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_SENSORID     (uint16_t)(0x0062)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_MAG_X_SCALE      (uint16_t)(0x0068)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_MAG_X_OFFSET     (uint16_t)(0x006C)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Y_SCALE      (uint16_t)(0x0070)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Y_OFFSET     (uint16_t)(0x0074)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Z_SCALE      (uint16_t)(0x0078)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_MAG_Z_OFFSET     (uint16_t)(0x007C)  // 4
 
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_CONFIG      (uint16_t)(0x0060)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_SENSORID    (uint16_t)(0x0062)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_X_SCALE     (uint16_t)(0x0064)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_X_OFFSET    (uint16_t)(0x0066)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_Y_SCALE     (uint16_t)(0x0068)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_Y_OFFSET    (uint16_t)(0x006A)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_Z_SCALE     (uint16_t)(0x006C)  // 2
-    #define CFG_EEPROM_SENSORS_CAL_GYRO_Z_OFFSET    (uint16_t)(0x006E)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_CONFIG      (uint16_t)(0x0080)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_SENSORID    (uint16_t)(0x0082)  // 2
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_X_SCALE     (uint16_t)(0x0088)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_X_OFFSET    (uint16_t)(0x008C)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Y_SCALE     (uint16_t)(0x0090)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Y_OFFSET    (uint16_t)(0x0094)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Z_SCALE     (uint16_t)(0x0098)  // 4
+    #define CFG_EEPROM_SENSORS_CAL_GYRO_Z_OFFSET    (uint16_t)(0x009C)  // 4
 /*=========================================================================*/
 
 

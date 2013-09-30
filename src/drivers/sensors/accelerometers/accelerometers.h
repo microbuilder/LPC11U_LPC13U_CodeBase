@@ -44,36 +44,24 @@ extern "C" {
 #include "projectconfig.h"
 #include "drivers/sensors/sensors.h"
 
-typedef enum
-{
-  X_MAX = (1),
-  X_MIN = (2),
-  Y_MAX = (3),
-  Y_MIN = (4),
-  Z_MAX = (5),
-  Z_MIN = (6)
-} accel_calib_pos_t;
-
 typedef struct
 {
-  float max;     /**< max raw data */
-  float min;     /**< min raw data */
-  float scale;   /**< scale factor */
-  float offset;  /**< offset error */
+  float32_t scale;   /**< scale factor */
+  float32_t offset;  /**< offset error */
 } calib_params_t;
 
 typedef struct
 {
+  uint16_t config;
+  uint16_t sensorID;
   calib_params_t x;
   calib_params_t y;
   calib_params_t z;
 } accel_calib_data_t;
 
-error_t accelGetPeakRawData(accel_calib_pos_t pos, accel_calib_data_t *calib_data,
-                            error_t (*pGetSensorEvent)(sensors_event_t *));
-void accelGetCalibParams   (accel_calib_data_t *calib_data);
-void accelGetCalibEvent    (sensors_event_t *event, accel_calib_data_t *calib_data);
-void accelGetOrientation   (sensors_event_t *event, sensors_vec_t *orientation);
+error_t accelGetOrientation     ( sensors_event_t *event, sensors_vec_t *orientation);
+error_t accelLoadCalData        ( accel_calib_data_t *calib_data);
+error_t accelCalibrateEventData ( sensors_event_t *event, accel_calib_data_t *calib_data);
 
 #ifdef __cplusplus
 }
