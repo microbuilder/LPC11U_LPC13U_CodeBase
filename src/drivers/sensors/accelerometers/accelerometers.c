@@ -76,6 +76,7 @@
 #include "projectconfig.h"
 #include "accelerometers.h"
 #include "core/delay/delay.h"
+#include "core/eeprom/eeprom.h"
 #include <math.h>
 
 /**************************************************************************/
@@ -102,11 +103,13 @@
 /**************************************************************************/
 error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
 {
+  /* Make sure the input is valid, not null, etc. */
+  ASSERT(event != NULL, ERROR_INVALIDPARAMETER);
+  ASSERT(orientation != NULL, ERROR_INVALIDPARAMETER);
+
   float t_pitch, t_roll;
   float const PI = 3.14159265F;
-  float signOfZ = event->acceleration.z > 0 ? 1.0F : -1.0F;
-  
-  /* ToDo: Make sure the input is valid, not null, etc. */
+  float signOfZ = event->acceleration.z >= 0 ? 1.0F : -1.0F;
   
   /* roll: Rotation around the longitudinal axis (the plane body, 'X axis'). -90<=roll<=90    */
   /* roll is positive and increasing when moving downward                                     */
@@ -158,24 +161,22 @@ error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
 /**************************************************************************/
 error_t accelLoadCalData(accel_calib_data_t *calib_data)
 {
-  bool calDataPresent = false;
-  
-  /* ToDo: Load calibration data from EEPROM and assign it to cali_data */
-  /* See eeprom.c for some sample code for this, using the addresses in */
-  /* EEPROM from the board config file */
-  
-  /* ToDo: Check the config bit first to make sure data is present, and if
-     not return an error! */  
-  if (calDataPresent)
+  /* Try to read the accel config data from the EEPROM memory */
+  uint16_t accelConfig;
+  ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_CONFIG, (uint8_t*)&accelConfig, 2));
+
+  /* Check the config bit first to make sure data is present, and if not return an error! */
+  if (accelConfig & SENSORS_CAL_DATA_PRESENT)
   {
-    calib_data->config = 0;
-    calib_data->sensorID = 0;
-    calib_data->x.scale = 0;
-    calib_data->x.offset = 0;
-    calib_data->y.scale = 0;
-    calib_data->y.offset = 0;
-    calib_data->z.scale = 0;
-    calib_data->z.offset = 0;
+    /* If data is present, load calibration data from EEPROM and assign it to calib_data   */
+    calib_data->config = accelConfig;
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_SENSORID, (uint8_t*)&calib_data->sensorID, 2));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_X_SCALE, (uint8_t*)&calib_data->x.scale, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_X_OFFSET, (uint8_t*)&calib_data->x.offset, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_Y_SCALE, (uint8_t*)&calib_data->y.scale, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_Y_OFFSET, (uint8_t*)&calib_data->y.offset, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_Z_SCALE, (uint8_t*)&calib_data->z.scale, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_Z_OFFSET, (uint8_t*)&calib_data->z.offset, 4));
   }
   else
   {
@@ -203,8 +204,10 @@ error_t accelLoadCalData(accel_calib_data_t *calib_data)
 /**************************************************************************/
 error_t accelCalibrateEventData(sensors_event_t *event, accel_calib_data_t *calib_data)
 {
-  /* ToDo: Make sure event and calib_data are valid, not NULL, etc.!*/
-  
+  /* Make sure event and calib_data are valid, not NULL, etc.!*/
+  ASSERT(event != NULL, ERROR_INVALIDPARAMETER);
+  ASSERT(calib_data != NULL, ERROR_INVALIDPARAMETER);
+
   event->acceleration.x = event->acceleration.x * calib_data->x.scale + calib_data->x.offset;
   event->acceleration.y = event->acceleration.y * calib_data->y.scale + calib_data->y.offset;
   event->acceleration.z = event->acceleration.z * calib_data->z.scale + calib_data->z.offset;

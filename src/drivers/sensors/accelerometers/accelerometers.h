@@ -44,6 +44,8 @@ extern "C" {
 #include "projectconfig.h"
 #include "drivers/sensors/sensors.h"
 
+#define SENSORS_CAL_DATA_PRESENT     (1 << 0)
+
 typedef struct
 {
   float32_t scale;   /**< scale factor */
