@@ -3,7 +3,9 @@
  @file test_ndef.c
  */
 /**************************************************************************/
-#define CFG_PN532
+#ifndef CFG_PN532
+  #define CFG_PN532
+#endif
 
 #include <string.h>
 #include "unity.h"
