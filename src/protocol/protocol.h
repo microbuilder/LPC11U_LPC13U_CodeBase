@@ -68,7 +68,9 @@ typedef enum
     Command message struct
 */
 /**************************************************************************/
-typedef PRE_PACK struct POST_PACK {
+#define ATTR_PACKED_STRUCT(x)     x __attribute__ ((packed))
+
+typedef ATTR_PACKED_STRUCT(struct){
   uint8_t msg_type;
   union {
     uint16_t cmd_id;
@@ -102,7 +104,7 @@ typedef protMsgCommand_t protMsgAlert_t;
     Error message struct
 */
 /**************************************************************************/
-typedef PRE_PACK struct POST_PACK {
+typedef ATTR_PACKED_STRUCT(struct) {
   uint8_t msg_type;
   union {
     uint16_t error_id;
