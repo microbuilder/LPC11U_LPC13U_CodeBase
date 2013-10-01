@@ -83,7 +83,9 @@ typedef ATTR_PACKED_STRUCT(struct){
   uint8_t payload[PROT_MAX_MSG_SIZE-4];
 } protMsgCommand_t;
 
+#ifndef _TEST_
 STATIC_ASSERT(sizeof(protMsgCommand_t) == 64);
+#endif
 
 /**************************************************************************/
 /*!
@@ -115,7 +117,9 @@ typedef ATTR_PACKED_STRUCT(struct) {
   };
 } protMsgError_t;
 
+#ifndef _TEST_
 STATIC_ASSERT(sizeof(protMsgError_t) == 3);
+#endif
 
 //--------------------------------------------------------------------+
 // PUBLIC API
