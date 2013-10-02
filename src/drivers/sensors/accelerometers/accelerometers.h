@@ -44,26 +44,26 @@ extern "C" {
 #include "projectconfig.h"
 #include "drivers/sensors/sensors.h"
 
-#define SENSORS_CAL_DATA_PRESENT     (1 << 0)
+#define SENSORS_CAL_ACCEL_DATA_PRESENT     (1 << 0)
 
 typedef struct
 {
   float32_t scale;   /**< scale factor */
   float32_t offset;  /**< offset error */
-} calib_params_t;
+} accel_calib_params_t;
 
 typedef struct
 {
   uint16_t config;
   uint16_t sensorID;
-  calib_params_t x;
-  calib_params_t y;
-  calib_params_t z;
+  accel_calib_params_t x;
+  accel_calib_params_t y;
+  accel_calib_params_t z;
 } accel_calib_data_t;
 
-error_t accelGetOrientation     ( sensors_event_t *event, sensors_vec_t *orientation);
-error_t accelLoadCalData        ( accel_calib_data_t *calib_data);
-error_t accelCalibrateEventData ( sensors_event_t *event, accel_calib_data_t *calib_data);
+error_t accelGetOrientation     ( sensors_event_t *event, sensors_vec_t *orientation );
+error_t accelLoadCalData        ( accel_calib_data_t *calib_data );
+error_t accelCalibrateEventData ( sensors_event_t *event, accel_calib_data_t *calib_data );
 
 #ifdef __cplusplus
 }

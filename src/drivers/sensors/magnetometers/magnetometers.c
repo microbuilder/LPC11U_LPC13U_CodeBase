@@ -72,8 +72,59 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "magnetometers.h"
-#include "core/delay/delay.h"
+#include "core/eeprom/eeprom.h"
 #include <math.h>
+
+
+/**************************************************************************/
+/*!
+    @brief  Loads the calibration settings from EEPROM, or returns
+            ERROR_UNEXPECTEDVALUE if no calibration data was found
+
+    @param  calib_data    The calib parameter placeholder
+
+    @code
+
+    mag_calib_data_t calib_data;
+    ...
+    if (magLoadCalData(&calib_data))
+    {
+      // Do something with the cal data
+    }
+    else
+    {
+      printf("No calibration data was found in memory");
+    }
+
+    @endcode
+*/
+/**************************************************************************/
+error_t magLoadCalData(mag_calib_data_t *calib_data)
+{
+  /* Try to read the mag config data from the EEPROM memory */
+  uint16_t magConfig;
+  ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_CONFIG, (uint8_t*)&magConfig, 2));
+
+  /* Check the config bit first to make sure data is present, and if not return an error! */
+  if (magConfig & SENSORS_CAL_MAG_DATA_PRESENT)
+  {
+    /* If data is present, load calibration data from EEPROM and assign it to calib_data   */
+    calib_data->config = magConfig;
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_SENSORID, (uint8_t*)&calib_data->sensorID, 2));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_X_SCALE, (uint8_t*)&calib_data->x.scale, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_X_OFFSET, (uint8_t*)&calib_data->x.offset, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_Y_SCALE, (uint8_t*)&calib_data->y.scale, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_Y_OFFSET, (uint8_t*)&calib_data->y.offset, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_Z_SCALE, (uint8_t*)&calib_data->z.scale, 4));
+    ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_MAG_Z_OFFSET, (uint8_t*)&calib_data->z.offset, 4));
+  }
+  else
+  {
+    return ERROR_UNEXPECTEDVALUE;
+  }
+
+  return ERROR_NONE;
+}
 
 /**************************************************************************/
 /*!
@@ -102,8 +153,12 @@
     @endcode
 */
 /**************************************************************************/
-void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event)
+error_t magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event)
 {
+  /* Make sure the input is valid, not null, etc. */
+  ASSERT(mag_event != NULL, ERROR_INVALIDPARAMETER);
+  ASSERT(accel_event != NULL, ERROR_INVALIDPARAMETER);
+
   float32_t accel_X, accel_Y, accel_Z;
   float32_t *mag_X, *mag_Y, *mag_Z;
 
@@ -130,7 +185,6 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
       break;
 
     case SENSOR_AXIS_Z:
-    default:
       /* The Z-axis is parallel to the gravity */
       accel_X = accel_event->acceleration.x;
       accel_Y = accel_event->acceleration.y;
@@ -139,6 +193,9 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
       mag_Y = &(mag_event->magnetic.y);
       mag_Z = &(mag_event->magnetic.z);
       break;
+
+    default:
+      return ERROR_INVALIDPARAMETER;
   }
 
   float32_t t_roll = accel_X * accel_X + accel_Z * accel_Z;
@@ -157,6 +214,8 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
   /* Yh = X.sinRoll.sinPitch + Y.cosRoll - Z.sinRoll.cosPitch   */
   *mag_X = (*mag_X) * cosPitch + (*mag_Z) * sinPitch;
   *mag_Y = (*mag_X) * sinRoll * sinPitch + (*mag_Y) * cosRoll - (*mag_Z) * sinRoll * cosPitch;
+
+  return ERROR_NONE;
 }
 
 /**************************************************************************/
@@ -166,8 +225,7 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
 
             Heading increases when measuring clockwise
 
-    @param  axis          The given axis (SENSOR_AXIS_X/Y/Z) that is
-                          parallel to the gravity of the Earth
+    @param  axis          The given axis (SENSOR_AXIS_X/Y/Z)
 
     @param  event         The raw magnetometer sensor data to use when
                           calculating out heading
@@ -182,8 +240,12 @@ void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensor
     @endcode
 */
 /**************************************************************************/
-void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *orientation)
+error_t magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *orientation)
 {
+  /* Make sure the input is valid, not null, etc. */
+  ASSERT(event != NULL, ERROR_INVALIDPARAMETER);
+  ASSERT(orientation != NULL, ERROR_INVALIDPARAMETER);
+
   float32_t const PI = 3.14159265F;
 
   switch (axis)
@@ -194,24 +256,82 @@ void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_
       /* heading = atan(Mz / My)                                                                      */
       orientation->heading = (float32_t)atan2(event->magnetic.z, event->magnetic.y) * 180 / PI;
       break;
+
     case SENSOR_AXIS_Y:
       /* Sensor rotates around Y-axis                                                                 */
       /* "heading" is the angle between the 'Z axis' and magnetic north on the horizontal plane (Ozx) */
       /* heading = atan(Mx / Mz)                                                                      */
       orientation->heading = (float32_t)atan2(event->magnetic.x, event->magnetic.z) * 180 / PI;
       break;
+
     case SENSOR_AXIS_Z:
-    default:
       /* Sensor rotates around Z-axis                                                                 */
       /* "heading" is the angle between the 'X axis' and magnetic north on the horizontal plane (Oxy) */
       /* heading = atan(My / Mx)                                                                      */
       orientation->heading = (float32_t)atan2(event->magnetic.y, event->magnetic.x) * 180 / PI;
       break;
-    }
+
+    default:
+      return ERROR_INVALIDPARAMETER;
+  }
 
   /* Normalize to 0-359° */
   if (orientation->heading < 0)
   {
     orientation->heading = 360 + orientation->heading;
   }
+
+  return ERROR_NONE;
+}
+
+/**************************************************************************/
+/*!
+    @brief  Re-scale the sensor event data with the calibration parameter
+                calib_output = sensor_output * scale_factor + offset
+
+    @param  axis          The given axis (SENSOR_AXIS_X/Y/Z)
+
+    @param  event         The raw magnetometer sensor data to use when
+                          calculating out heading
+
+    @param  calib_data    The calib parameter placeholder
+
+    @code
+
+    sensors_event_t event;
+    mag_calib_data_t calib_data;
+    ...
+     magCalibrateEventData(SENSOR_AXIS_Z, &event, &calib_data);
+
+    @endcode
+*/
+/**************************************************************************/
+error_t magCalibrateEventData(sensors_axis_t axis, sensors_event_t *event, mag_calib_data_t *calib_data)
+{
+  /* Make sure event and calib_data are valid, not NULL, etc.!*/
+  ASSERT(event != NULL, ERROR_INVALIDPARAMETER);
+  ASSERT(calib_data != NULL, ERROR_INVALIDPARAMETER);
+
+  switch (axis)
+  {
+    case SENSOR_AXIS_X:
+      event->magnetic.y = event->magnetic.y * calib_data->y.scale + calib_data->y.offset;
+      event->magnetic.z = event->magnetic.z * calib_data->z.scale + calib_data->z.offset;
+      break;
+
+    case SENSOR_AXIS_Y:
+      event->magnetic.x = event->magnetic.x * calib_data->x.scale + calib_data->x.offset;
+      event->magnetic.z = event->magnetic.z * calib_data->z.scale + calib_data->z.offset;
+      break;
+
+    case SENSOR_AXIS_Z:
+      event->magnetic.x = event->magnetic.x * calib_data->x.scale + calib_data->x.offset;
+      event->magnetic.y = event->magnetic.y * calib_data->y.scale + calib_data->y.offset;
+      break;
+
+    default:
+      return ERROR_INVALIDPARAMETER;
+  }
+
+  return ERROR_NONE;
 }

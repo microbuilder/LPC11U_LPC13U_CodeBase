@@ -44,8 +44,27 @@ extern "C" {
 #include "projectconfig.h"
 #include "drivers/sensors/sensors.h"
 
-void magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event);
-void magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *mag_orientation);
+#define SENSORS_CAL_MAG_DATA_PRESENT     (1 << 0)
+
+typedef struct
+{
+  float32_t scale;   /**< scale factor */
+  float32_t offset;  /**< offset error */
+} mag_calib_params_t;
+
+typedef struct
+{
+  uint16_t config;
+  uint16_t sensorID;
+  mag_calib_params_t x;
+  mag_calib_params_t y;
+  mag_calib_params_t z;
+} mag_calib_data_t;
+
+error_t magLoadCalData        ( mag_calib_data_t *calib_data );
+error_t magCalibrateEventData ( sensors_axis_t axis, sensors_event_t *event, mag_calib_data_t *calib_data);
+error_t magTiltCompensation   ( sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event );
+error_t magGetOrientation     ( sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *mag_orientation );
 
 #ifdef __cplusplus
 }

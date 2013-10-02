@@ -75,7 +75,6 @@
 /**************************************************************************/
 #include "projectconfig.h"
 #include "accelerometers.h"
-#include "core/delay/delay.h"
 #include "core/eeprom/eeprom.h"
 #include <math.h>
 
@@ -141,7 +140,7 @@ error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
     @brief  Loads the calibration settings from EEPROM, or returns
             ERROR_UNEXPECTEDVALUE if no calibration data was found
 
-    @param  calib_data           The calib parameter placeholder
+    @param  calib_data    The calib parameter placeholder
 
     @code
 
@@ -189,8 +188,12 @@ error_t accelLoadCalData(accel_calib_data_t *calib_data)
 /**************************************************************************/
 /*!
     @brief  Re-scale the sensor event data with the calibration parameter
+                 calib_output = sensor_output * scale_factor + offset
 
-            calib_output = sensor_output * scale_factor + offset
+    @param  event         The raw accelerometer sensor data to use when
+                          calculating out pitch and roll
+
+    @param  calib_data    The calib parameter placeholder
 
     @code
 
