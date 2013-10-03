@@ -15,6 +15,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Removed unpublished boards from public repository
 - Removed RTC support from the LPCXpresso LPC1347 board file for now, use RF1GHZNODE for reference code
 - Added EEPROM entries for accel/mag/gyro calibration data
+- Renamed prot_task to prot_exec
 
 ## 0.9.1 [12 July 2013] ##
 

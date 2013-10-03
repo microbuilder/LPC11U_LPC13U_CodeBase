@@ -334,13 +334,13 @@ void prot_init(void)
     {
       // Constantly check for incoming messages (this can of course be
       // handled more efficiently depending on your requirements)
-      prot_task(NULL);
+      prot_exec(NULL);
     }
 
     @endcode
 */
 /**************************************************************************/
-void prot_task(void * p_para)
+void prot_exec(void * p_para)
 {
   if ( !fifo_isEmpty(&ff_prot_cmd) )
   {
@@ -432,7 +432,7 @@ void prot_task(void * p_para)
     defined in a macro at the top of this file).
 
     This callback will write the incoming command into the FIFO for
-    processing by prot_task when there is enough bandwidth to run
+    processing by prot_exec when there is enough bandwidth to run
     the command parser.
 */
 /**************************************************************************/

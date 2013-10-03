@@ -199,7 +199,7 @@ int main(void)
 
     /* Check for binary protocol input if CFG_PROTOCOL is enabled */
     #ifdef CFG_PROTOCOL
-      prot_task(NULL);
+      prot_exec(NULL);
     #endif
 
     /* Poll for CLI input if CFG_INTERFACE is enabled */

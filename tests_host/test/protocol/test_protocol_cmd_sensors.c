@@ -155,5 +155,5 @@ void test_prot_sensor_accel_lsm303(void)
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   /* ------------- Code Under Test ------------- */
-  prot_task(NULL);
+  prot_exec(NULL);
 }

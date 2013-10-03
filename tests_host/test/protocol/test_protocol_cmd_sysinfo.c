@@ -98,7 +98,7 @@ void test_sysinfo_invalid_length_zero(void)
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   //------------- Code Under Test -------------//
-  prot_task(NULL);
+  prot_exec(NULL);
 }
 
 /**************************************************************************/
@@ -131,7 +131,7 @@ void test_sysinfo_invalid_length_too_long(void)
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   //------------- Code Under Test -------------//
-  prot_task(NULL);
+  prot_exec(NULL);
 }
 
 /**************************************************************************/
@@ -162,7 +162,7 @@ void test_sysinfo_invalid_key(void)
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   //------------- Code Under Test -------------//
-  prot_task(NULL);
+  prot_exec(NULL);
 }
 
 /**************************************************************************/
@@ -205,7 +205,7 @@ void test_sysinfo_codebase_version(void)
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   /* ------------- Code Under Test ------------- */
-  prot_task(NULL);
+  prot_exec(NULL);
 }
 
 /**************************************************************************/
@@ -257,5 +257,5 @@ void test_sysinfo_uid(void)
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   /* ------------- Code Under Test ------------- */
-  prot_task(NULL);
+  prot_exec(NULL);
 }

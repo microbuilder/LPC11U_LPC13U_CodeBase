@@ -93,7 +93,7 @@ void test_cmd_led_invalid_length(void)
   MOCK_PROT(command_send, _IgnoreAndReturn)(LPC_OK);
 
   //------------- Code Under Test -------------//
-  prot_task(NULL);
+  prot_exec(NULL);
 }
 
 void test_cmd_led_on(void)
@@ -113,7 +113,7 @@ void test_cmd_led_on(void)
   MOCK_PROT(command_send, _IgnoreAndReturn) (LPC_OK);
 
   //------------- CUT -------------//
-  prot_task(NULL);
+  prot_exec(NULL);
 }
 
 void test_cmd_led_off(void)
@@ -133,5 +133,5 @@ void test_cmd_led_off(void)
   MOCK_PROT(command_send, _IgnoreAndReturn) (LPC_OK);
 
   //------------- CUT -------------//
-  prot_task(NULL);
+  prot_exec(NULL);
 }

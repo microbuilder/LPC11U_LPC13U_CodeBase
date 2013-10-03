@@ -121,7 +121,7 @@ void test_invalid_message_type(void)
 
   //------------- Code Under Test -------------//
   // Process the FIFO contents and run the test code
-  prot_task(NULL);
+  prot_exec(NULL);
 }
 
 void test_invalid_command(void)
@@ -143,7 +143,7 @@ void test_invalid_command(void)
       sizeof(protMsgError_t), LPC_OK);
 
   //------------- Code Under Test -------------//
-  prot_task(NULL);
+  prot_exec(NULL);
 
 }
 
