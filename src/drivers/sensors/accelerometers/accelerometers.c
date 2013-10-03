@@ -109,7 +109,7 @@ error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   float t_pitch, t_roll;
   float const PI = 3.14159265F;
   float signOfZ = event->acceleration.z >= 0 ? 1.0F : -1.0F;
-  
+
   /* roll: Rotation around the longitudinal axis (the plane body, 'X axis'). -90<=roll<=90    */
   /* roll is positive and increasing when moving downward                                     */
   /*                                                                                          */
@@ -117,7 +117,7 @@ error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   /*             roll = atan(-----------------)                                               */
   /*                          sqrt(x^2 + z^2)                                                 */
   /* where:  x, y, z are returned value from accelerometer sensor                             */
-  
+
   t_roll = event->acceleration.x * event->acceleration.x + event->acceleration.z * event->acceleration.z;
   orientation->roll = (float)atan2(event->acceleration.y, sqrt(t_roll)) * 180 / PI;
 
@@ -131,7 +131,7 @@ error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
 
   t_pitch = event->acceleration.y * event->acceleration.y + event->acceleration.z * event->acceleration.z;
   orientation->pitch = (float)atan2(event->acceleration.x, signOfZ * sqrt(t_pitch)) * 180 / PI;
-  
+
   return ERROR_NONE;
 }
 
@@ -165,7 +165,7 @@ error_t accelLoadCalData(accel_calib_data_t *calib_data)
   ASSERT_STATUS(readEEPROM((uint8_t*)CFG_EEPROM_SENSORS_CAL_ACCEL_CONFIG, (uint8_t*)&accelConfig, 2));
 
   /* Check the config bit first to make sure data is present, and if not return an error! */
-  if (accelConfig & SENSORS_CAL_DATA_PRESENT)
+  if (accelConfig & SENSORS_CAL_ACCEL_DATA_PRESENT)
   {
     /* If data is present, load calibration data from EEPROM and assign it to calib_data   */
     calib_data->config = accelConfig;
@@ -180,8 +180,8 @@ error_t accelLoadCalData(accel_calib_data_t *calib_data)
   else
   {
     return ERROR_UNEXPECTEDVALUE;
-  }  
-  
+  }
+
   return ERROR_NONE;
 }
 
@@ -214,6 +214,6 @@ error_t accelCalibrateEventData(sensors_event_t *event, accel_calib_data_t *cali
   event->acceleration.x = event->acceleration.x * calib_data->x.scale + calib_data->x.offset;
   event->acceleration.y = event->acceleration.y * calib_data->y.scale + calib_data->y.offset;
   event->acceleration.z = event->acceleration.z * calib_data->z.scale + calib_data->z.offset;
-  
+
   return ERROR_NONE;
 }
