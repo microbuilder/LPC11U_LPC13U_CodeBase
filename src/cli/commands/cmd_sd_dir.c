@@ -73,12 +73,12 @@ void cmd_sd_dir(uint8_t argc, char **argv)
   if (stat & STA_NOINIT)
   {
     // Init failed
-    printf("%s%s", STRING(LOCALISATION_TEXT_SD_init_failed), CFG_PRINTF_NEWLINE);
+    printf("SD init failed%s", CFG_PRINTF_NEWLINE);
   }
   if (stat & STA_NODISK)
   {
     // No disk present
-    printf("%s%s", STRING(LOCALISATION_TEXT_No_SD_card), CFG_PRINTF_NEWLINE);
+    printf("No SD card%s", CFG_PRINTF_NEWLINE);
   }
   if (stat == 0)
   {
@@ -89,8 +89,8 @@ void cmd_sd_dir(uint8_t argc, char **argv)
     res = f_mount(0, &Fatfs[0]);
     if (res != FR_OK)
     {
-          // Unable to mount driver
-      printf("%s%s", STRING(LOCALISATION_TEXT_Failed_to_mount_partition), CFG_PRINTF_NEWLINE);
+      // Unable to mount driver
+      printf("Failed to mount partition%s", CFG_PRINTF_NEWLINE);
     }
     if (res == FR_OK)
     {
@@ -98,7 +98,7 @@ void cmd_sd_dir(uint8_t argc, char **argv)
       if (res)
       {
           // Unable to open specified path
-          printf("%s '%s' %s", STRING(LOCALISATION_TEXT_Failed_to_open), path, CFG_PRINTF_NEWLINE);
+          printf("Failed to open '%s' %s", path, CFG_PRINTF_NEWLINE);
           return;
       }
 
@@ -110,8 +110,8 @@ void cmd_sd_dir(uint8_t argc, char **argv)
       #endif
 
       // Display directory name
-      printf("%s %s %s %s%s", CFG_PRINTF_NEWLINE, STRING(LOCALISATION_TEXT_Contents_of), path, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
-      printf("       %-25s %12s %s", STRING(LOCALISATION_TEXT_Filename), STRING(LOCALISATION_TEXT_Size), CFG_PRINTF_NEWLINE);
+      printf("%s Contents of %s %s%s", CFG_PRINTF_NEWLINE, path, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+      printf("       %-25s %12s %s", "Filename", "Size", CFG_PRINTF_NEWLINE);
       printf("       %-25s %12s %s", "--------", "----", CFG_PRINTF_NEWLINE);
 
       // Read directory contents
@@ -142,14 +142,14 @@ void cmd_sd_dir(uint8_t argc, char **argv)
             #if _USE_LFN
               if (*Finfo.lfname)
               {
-                printf("       %-25s %12d %s %s", (char *)&Finfo.lfname[0], (int)(Finfo.fsize), STRING(LOCALISATION_TEXT_Bytes), CFG_PRINTF_NEWLINE);
+                printf("       %-25s %12d bytes %s", (char *)&Finfo.lfname[0], (int)(Finfo.fsize), CFG_PRINTF_NEWLINE);
               }
               else
               {
-                printf("       %-25s %12d %s %s", (char *)&Finfo.fname[0], (int)(Finfo.fsize), STRING(LOCALISATION_TEXT_Bytes), CFG_PRINTF_NEWLINE);
+                printf("       %-25s %12d bytes %s", (char *)&Finfo.fname[0], (int)(Finfo.fsize), CFG_PRINTF_NEWLINE);
               }
             #else
-              printf("       %-25s %12d %s %s", (char *)&Finfo.fname[0], (int)(Finfo.fsize), STRING(LOCALISATION_TEXT_Bytes), CFG_PRINTF_NEWLINE);
+              printf("       %-25s %12d bytes %s", (char *)&Finfo.fname[0], (int)(Finfo.fsize), CFG_PRINTF_NEWLINE);
             #endif
           }
           folderBytes += Finfo.fsize;
@@ -157,7 +157,7 @@ void cmd_sd_dir(uint8_t argc, char **argv)
 
       // Display folder size
       printf("%s", CFG_PRINTF_NEWLINE);
-      printf("       %-25s %12d %s %s", STRING(LOCALISATION_TEXT_Folder_Size_COLON_SPACE), (int)(folderBytes / 1024), STRING(LOCALISATION_SYMBOL_KILOBYTES), CFG_PRINTF_NEWLINE);
+      printf("       %-25s %12d KB %s", "Folder Size: "), (int)(folderBytes / 1024), CFG_PRINTF_NEWLINE);
 
       // Get free disk space (only available if FATFS was compiled with _FS_MINIMIZE set to 0)
       #if _FS_MINIMIZE == 0 && _FS_READONLY == 0
@@ -170,8 +170,8 @@ void cmd_sd_dir(uint8_t argc, char **argv)
           res = f_getfree("0:", &clust, &fs);
 
           // Display total and free space
-          printf("       %-25s %12d %s %s", STRING(LOCALISATION_TEXT_Disk_Size_COLON_SPACE), (int)((DWORD)(fs->max_clust - 2) * fs->csize / 2), STRING(LOCALISATION_SYMBOL_KILOBYTES), CFG_PRINTF_NEWLINE);
-          printf("       %-25s %12d %s %s", STRING(LOCALISATION_TEXT_Space_Available_COLON_SPACE), (int)(clust * fs->csize / 2), STRING(LOCALISATION_SYMBOL_KILOBYTES), CFG_PRINTF_NEWLINE);
+          printf("       %-25s %12d KB %s", "Disk Space: ", (int)((DWORD)(fs->max_clust - 2) * fs->csize / 2), CFG_PRINTF_NEWLINE);
+          printf("       %-25s %12d KB %s", "Space Available: ", (int)(clust * fs->csize / 2), CFG_PRINTF_NEWLINE);
         } while(0);
       #endif
     }

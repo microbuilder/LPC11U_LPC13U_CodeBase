@@ -57,7 +57,7 @@ void cmd_i2c_scan(uint8_t argc, char **argv)
   i2cInit(I2CMASTER);
 
   // "Scanning I2C bus for devices"
-  printf("%s%s%s", STRING(LOCALISATION_TEXT_Scanning_I2C_bus_for_devices), CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+  printf("Scanning I2C bus for devices%s%s", CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
   printf("     0  1  2  3  4  5  6  7  8  9  A  B  C  D  E  F%s", CFG_PRINTF_NEWLINE);
   printf("00:          ");
 
@@ -87,9 +87,9 @@ void cmd_i2c_scan(uint8_t argc, char **argv)
 
   printf("%s%s", CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
   // "All addresses are in 7-bit format and are not"
-  printf("%s%s", STRING(LOCALISATION_TEXT_All_addresses_are_in_7bit_L1), CFG_PRINTF_NEWLINE);
+  printf("All addresses are in 7-bit format and are not%s", CFG_PRINTF_NEWLINE);
   // "shifted to include the read bit."
-  printf("%s%s", STRING(LOCALISATION_TEXT_All_addresses_are_in_7bit_L2), CFG_PRINTF_NEWLINE);
+  printf("shifted to include the read bit.%s", CFG_PRINTF_NEWLINE);
 }
 
 #endif /* CFG_ENABLE_I2C */

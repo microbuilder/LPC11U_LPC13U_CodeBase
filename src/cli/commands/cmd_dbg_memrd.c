@@ -64,7 +64,7 @@ void cmd_dbg_memrd(uint8_t argc, char **argv)
   /* Make sure size is something sane */
   if ((size < 1) || (size > 8))
   {
-    printf("%s %d%s", STRING(LOCALISATION_TEXT_Invalid_argument), (int)size, CFG_PRINTF_NEWLINE);
+    printf("Invalid argument %d%s", (int)size, CFG_PRINTF_NEWLINE);
     return;
   }
 

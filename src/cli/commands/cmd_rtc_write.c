@@ -108,7 +108,7 @@ void cmd_rtc_write(uint8_t argc, char **argv)
   error = pcf2129SetTime(time);
   if (error)
   {
-    printf("%s%s", STRING(LOCALISATION_TEXT_No_response_on_the_I2C_bus), CFG_PRINTF_NEWLINE);
+    printf("No response on the I2C bus%s", CFG_PRINTF_NEWLINE);
     return;
   }
 }

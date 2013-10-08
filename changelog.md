@@ -13,9 +13,10 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Bug fix in mmc.c for pin setup (PORT used instead of PIN)
 - Added CFG_MCU_LPC1347FBD64 option to board config files
 - Removed unpublished boards from public repository
-- Removed RTC support from the LPCXpresso LPC1347 board file for now, use RF1GHZNODE for reference code
+- Removed CMSIS-RTOS (RTX) support from the LPCXpresso LPC1347 board file for now, use RF1GHZNODE for reference code
 - Added EEPROM entries for accel/mag/gyro calibration data
 - Renamed prot_task to prot_exec
+- Removed all reference to STRING() macro (localisation.c) pending a respin of the localisation support
 
 ## 0.9.1 [12 July 2013] ##
 

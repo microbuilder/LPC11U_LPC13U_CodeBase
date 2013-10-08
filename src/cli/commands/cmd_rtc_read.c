@@ -59,7 +59,7 @@ void cmd_rtc_read(uint8_t argc, char **argv)
   error = pcf2129ReadTime(&time);
   if (error)
   {
-    printf("%s%s", STRING(LOCALISATION_TEXT_No_response_on_the_I2C_bus), CFG_PRINTF_NEWLINE);
+    printf("No response on the I2C bus. Check address/connections%s", CFG_PRINTF_NEWLINE);
     return;
   }
 

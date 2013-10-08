@@ -87,7 +87,7 @@ void cmd_i2c_write(uint8_t argc, char **argv)
   /* Make sure addr is valid */
   if ((addr32 < 0x03) || (addr32 > 0x78))
   {
-	    printf("%s%s", STRING(LOCALISATION_TEXT_Invalid_I2C_Address), CFG_PRINTF_NEWLINE);
+	    printf("ADDR must be between 0x03 and 0x78%s", CFG_PRINTF_NEWLINE);
     return;
   }
   addr = (uint8_t)addr32 & 0xFF;
@@ -95,7 +95,7 @@ void cmd_i2c_write(uint8_t argc, char **argv)
   /* Make sure len is valid */
   if (argc-1 > I2C_BUFSIZE)
   {
-    printf("%s (%d %s)%s", STRING(LOCALISATION_TEXT_Too_large_for_I2C_buffer), I2C_BUFSIZE, STRING(LOCALISATION_TEXT_bytes), CFG_PRINTF_NEWLINE);
+    printf("Too large for I2C buffer (%d bytes)%s", I2C_BUFSIZE, CFG_PRINTF_NEWLINE);
     return;
   }
 
@@ -107,7 +107,7 @@ void cmd_i2c_write(uint8_t argc, char **argv)
     getNumber(argv[i], &val);
     if ((val > 0xFF) || (val < 0))
     {
-      printf("%s (%d)%s", STRING(LOCALISATION_TEXT_Invalid_argument), i, CFG_PRINTF_NEWLINE);
+      printf("Invalid argument (%d)%s", i, CFG_PRINTF_NEWLINE);
       return;
     }
     values[i-1] = (uint8_t)val & 0xFF;
@@ -122,19 +122,19 @@ void cmd_i2c_write(uint8_t argc, char **argv)
     switch(error)
     {
       case ERROR_I2C_NOACK:
-        printf("%s%s", STRING(LOCALISATION_TEXT_No_ACK_received), CFG_PRINTF_NEWLINE);
+        printf("No ACK received%s", CFG_PRINTF_NEWLINE);
         break;
       case ERROR_I2C_TIMEOUT:
-        printf("%s%s", STRING(LOCALISATION_TEXT_Timeout), CFG_PRINTF_NEWLINE);
+        printf("Timeout%s", CFG_PRINTF_NEWLINE);
         break;
       default:
-        printf("%s: %04X%s", STRING(LOCALISATION_TEXT_Unknown_Error), error, CFG_PRINTF_NEWLINE);
+        printf("Unknown Error: %04X%s", error, CFG_PRINTF_NEWLINE);
         break;
     }
     return;
   }
 
-  printf("%s%s", STRING(LOCALISATION_TEXT_OK), CFG_PRINTF_NEWLINE);
+  printf("OK%s", CFG_PRINTF_NEWLINE);
 }
 
 #endif /* CFG_ENABLE_I2C */

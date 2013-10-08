@@ -175,6 +175,6 @@ void  localisation_SetCulture ( culture_t culture );
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif

@@ -93,7 +93,7 @@ void cmd_i2c_read(uint8_t argc, char **argv)
   /* Make sure addr is valid */
   if ((addr32 < 0x03) || (addr32 > 0x78))
   {
-    printf("%s%s", STRING(LOCALISATION_TEXT_Invalid_I2C_Address), CFG_PRINTF_NEWLINE);
+    printf("ADDR must be between 0x03 and 0x78%s", CFG_PRINTF_NEWLINE);
     return;
   }
   addr = (uint8_t)addr32 & 0xFF;
@@ -101,7 +101,7 @@ void cmd_i2c_read(uint8_t argc, char **argv)
   /* Make sure len is valid */
   if ((len32 > I2C_BUFSIZE) || (len32 < 1))
   {
-    printf("%s %d%s", STRING(LOCALISATION_TEXT_len_must_be_less_than_equal), I2C_BUFSIZE, CFG_PRINTF_NEWLINE);
+    printf("'len' must be <= %d%s", I2C_BUFSIZE, CFG_PRINTF_NEWLINE);
     return;
   }
   len = (uint8_t)len32 & 0xFF;
@@ -115,13 +115,13 @@ void cmd_i2c_read(uint8_t argc, char **argv)
     switch(error)
     {
       case ERROR_I2C_NOACK:
-        printf("%s%s", STRING(LOCALISATION_TEXT_No_ACK_received), CFG_PRINTF_NEWLINE);
+        printf("No ACK received%s", CFG_PRINTF_NEWLINE);
         break;
       case ERROR_I2C_TIMEOUT:
-        printf("%s%s", STRING(LOCALISATION_TEXT_Timeout), CFG_PRINTF_NEWLINE);
+        printf("Timeout%s", CFG_PRINTF_NEWLINE);
         break;
       default:
-        printf("%s: %04X%s", STRING(LOCALISATION_TEXT_Unknown_Error), error, CFG_PRINTF_NEWLINE);
+        printf("Unknown Error: %04X%s", error, CFG_PRINTF_NEWLINE);
         break;
     }
     return;

@@ -256,8 +256,8 @@ void cliParse(char *cmd)
           #if CFG_INTERFACE_SHORTERRORS == 1
           printf ("%s%s", CFG_INTERFACE_SHORTERRORS_TOOFEWARGS, CFG_PRINTF_NEWLINE);
           #else
-          printf ("%s (%s %d)%s", STRING(LOCALISATION_TEXT_Too_few_arguments), STRING(LOCALISATION_TEXT_Expected), cli_tbl[i].minArgs, CFG_PRINTF_NEWLINE);
-          printf ("%s'%s ?' %s%s%s", CFG_PRINTF_NEWLINE, cli_tbl[i].command, STRING(LOCALISATION_TEXT_for_more_information), CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+          printf ("Too few argument (Expected %d)%s", cli_tbl[i].minArgs, CFG_PRINTF_NEWLINE);
+          printf ("%s'%s ?' for more information%s%s", CFG_PRINTF_NEWLINE, cli_tbl[i].command, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
           #endif
         }
         else if ((argc - 1) > cli_tbl[i].maxArgs)
@@ -266,8 +266,8 @@ void cliParse(char *cmd)
           #if CFG_INTERFACE_SHORTERRORS == 1
           printf ("%s%s", CFG_INTERFACE_SHORTERRORS_TOOMANYARGS, CFG_PRINTF_NEWLINE);
           #else
-          printf ("%s (%s %d)%s", STRING(LOCALISATION_TEXT_Too_many_arguments), STRING(LOCALISATION_TEXT_Maximum), cli_tbl[i].maxArgs, CFG_PRINTF_NEWLINE);
-          printf ("%s'%s ?' %s%s%s", CFG_PRINTF_NEWLINE, cli_tbl[i].command, STRING(LOCALISATION_TEXT_for_more_information), CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+          printf ("Too many arguments (Maximum %d)%s", cli_tbl[i].maxArgs, CFG_PRINTF_NEWLINE);
+          printf ("%s'%s ?' for more information%s%s", CFG_PRINTF_NEWLINE, cli_tbl[i].command, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
           #endif
         }
         else
@@ -293,9 +293,9 @@ void cliParse(char *cmd)
   #if CFG_INTERFACE_SHORTERRORS == 1
   printf ("%s%s", CFG_INTERFACE_SHORTERRORS_UNKNOWNCOMMAND, CFG_PRINTF_NEWLINE);
   #else
-  printf("%s: '%s'%s%s", STRING(LOCALISATION_TEXT_Command_Not_Recognized), cmd, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
+  printf("Command not recognized: '%s'%s%s", cmd, CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
   #if CFG_INTERFACE_SILENTMODE == 0
-  printf("%s%s", STRING(LOCALISATION_TEXT_Type_QUESTION_for_a_list_of), CFG_PRINTF_NEWLINE);
+  printf("Type '?' for a list of all available commands%s", CFG_PRINTF_NEWLINE);
   #endif
   #endif
 
@@ -345,7 +345,7 @@ void cmd_help(uint8_t argc, char **argv)
 {
   size_t i;
 
-  printf("%s      %s%s", STRING(LOCALISATION_TEXT_Command), STRING(LOCALISATION_TEXT_Description), CFG_PRINTF_NEWLINE);
+  printf("Command      Description%s", CFG_PRINTF_NEWLINE);
   printf("-------      -----------%s", CFG_PRINTF_NEWLINE);
 
   // Display full command list
@@ -357,7 +357,7 @@ void cmd_help(uint8_t argc, char **argv)
     }
   }
 
-  printf("%s%s", STRING(LOCALISATION_TEXT_Command_parameters_can_be_seen), CFG_PRINTF_NEWLINE);
+  printf("Command parameters can be seen by entering: <command-name> ?%s", CFG_PRINTF_NEWLINE);
 }
 
 #endif
