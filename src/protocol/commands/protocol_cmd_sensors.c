@@ -164,31 +164,7 @@ error_t protcmd_sensors_getevent(uint8_t length, uint8_t const payload[], protMs
 
 
   /*=======================================================================
-    Gravity                                                0x0900 .. 0x09FF
-    -----------------------------------------------------------------------*/
-    case (PROT_CMD_SENSORS_KEY_GRAV_DEFAULT):
-      break;
-  /*=======================================================================*/
-
-
-  /*=======================================================================
-    Linear Acceleration                                    0x0A00 .. 0x0AFF
-    -----------------------------------------------------------------------*/
-    case (PROT_CMD_SENSORS_KEY_LINACCEL_DEFAULT):
-      break;
-  /*=======================================================================*/
-
-
-  /*=======================================================================
-    Rotation                                               0x0B00 .. 0x0BFF
-    -----------------------------------------------------------------------*/
-    case (PROT_CMD_SENSORS_KEY_ROT_DEFAULT):
-      break;
-  /*=======================================================================*/
-
-
-  /*=======================================================================
-    Humidity                                               0x0C00 .. 0x0CFF
+    Humidity                                               0x0900 .. 0x09FF
     -----------------------------------------------------------------------*/
     case (PROT_CMD_SENSORS_KEY_HUMIDITY_DEFAULT):
       break;
@@ -196,7 +172,7 @@ error_t protcmd_sensors_getevent(uint8_t length, uint8_t const payload[], protMs
 
 
   /*=======================================================================
-    Ambient Temperature                                    0x0D00 .. 0x0DFF
+    Ambient Temperature                                    0x0A00 .. 0x0AFF
     -----------------------------------------------------------------------*/
     case (PROT_CMD_SENSORS_KEY_AMBTEMP_DEFAULT):
       break;
@@ -204,7 +180,7 @@ error_t protcmd_sensors_getevent(uint8_t length, uint8_t const payload[], protMs
 
 
   /*=======================================================================
-    Voltage                                                0x0E00 .. 0x0EFF
+    Voltage                                                0x0B00 .. 0x0BFF
     -----------------------------------------------------------------------*/
     case (PROT_CMD_SENSORS_KEY_VOLT_DEFAULT):
       break;
@@ -212,7 +188,7 @@ error_t protcmd_sensors_getevent(uint8_t length, uint8_t const payload[], protMs
 
 
   /*=======================================================================
-    Current                                                0x0F00 .. 0x0FFF
+    Current                                                0x0C00 .. 0x0CFF
     -----------------------------------------------------------------------*/
     case (PROT_CMD_SENSORS_KEY_CURRENT_DEFAULT):
       break;

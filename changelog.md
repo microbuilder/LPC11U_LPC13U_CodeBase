@@ -10,6 +10,10 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added EEPROM command to binary protocol
 - Added SENSOR commands to binary protocol
 - Changed 'SENSOR\_TYPE\_COLOR' from '17' to '7' in sensors.h
+- Changed 'SENSOR\_TYPE\_RELATIVE\_HUMIDITY' from '12' to '9' in sensors.h
+- Changed 'SENSOR\_TYPE\_AMBIENT\_TEMPERATURE' from '13' to '10' in sensors.h
+- Changed 'SENSOR\_TYPE\_VOLTAGE' from '14' to '11' in sensors.h
+- Changed 'SENSOR\_TYPE\_CURRENT' from '15' to '12' in sensors.h
 - Bug fix in mmc.c for pin setup (PORT used instead of PIN)
 - Added CFG_MCU_LPC1347FBD64 option to board config files
 - Removed unpublished boards from public repository

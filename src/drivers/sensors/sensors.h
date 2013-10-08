@@ -100,13 +100,10 @@ typedef enum
   SENSOR_TYPE_PRESSURE              = (6),
   SENSOR_TYPE_COLOR                 = (7),
   SENSOR_TYPE_PROXIMITY             = (8),
-  SENSOR_TYPE_GRAVITY               = (9),
-  SENSOR_TYPE_LINEAR_ACCELERATION   = (10),  /**< Acceleration not including gravity */
-  SENSOR_TYPE_ROTATION_VECTOR       = (11),
-  SENSOR_TYPE_RELATIVE_HUMIDITY     = (12),
-  SENSOR_TYPE_AMBIENT_TEMPERATURE   = (13),
-  SENSOR_TYPE_VOLTAGE               = (15),
-  SENSOR_TYPE_CURRENT               = (16)
+  SENSOR_TYPE_RELATIVE_HUMIDITY     = (9),
+  SENSOR_TYPE_AMBIENT_TEMPERATURE   = (10),
+  SENSOR_TYPE_VOLTAGE               = (11),
+  SENSOR_TYPE_CURRENT               = (12)
 } sensors_type_t;
 
 /** struct sensors_vec_s is used to return a vector in a common format. */
@@ -199,6 +196,6 @@ size_t sensorsLogSensorsEvent(char *buffer, const size_t len, const sensors_even
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif

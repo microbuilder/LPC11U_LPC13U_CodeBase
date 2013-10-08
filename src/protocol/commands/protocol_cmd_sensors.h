@@ -56,13 +56,10 @@
     0x0600..06FF  Pressure Sensors      SENSOR_TYPE_PRESSURE (6)
     0x0700..07FF  Color                 SENSOR_TYPE_COLOR (7)
     0x0800..08FF  Proximity             SENSOR_TYPE_PROXIMITY (8)
-    0x0900..09FF  Gravity               SENSOR_TYPE_GRAVITY (9)
-    0x0A00..0AFF  Linear Acceleration   SENSOR_TYPE_LINEAR_ACCELERATION (10)
-    0x0B00..0BFF  Rotation              SENSOR_TYPE_ROTATION_VECTOR (11)
-    0x0C00..0CFF  Humidity              SENSOR_TYPE_RELATIVE_HUMIDITY (12)
-    0x0D00..0DFF  Ambient Temperature   SENSOR_TYPE_AMBIENT_TEMPERATURE (13)
-    0x0E00..0EFF  Voltage               SENSOR_TYPE_VOLTAGE (14)
-    0x0F00..0FFF  Current               SENSOR_TYPE_CURRENT (15)
+    0x0C00..0CFF  Humidity              SENSOR_TYPE_RELATIVE_HUMIDITY (9)
+    0x0D00..0DFF  Ambient Temperature   SENSOR_TYPE_AMBIENT_TEMPERATURE (10)
+    0x0E00..0EFF  Voltage               SENSOR_TYPE_VOLTAGE (11)
+    0x0F00..0FFF  Current               SENSOR_TYPE_CURRENT (12)
 */
 /**************************************************************************/
 typedef enum
@@ -128,49 +125,28 @@ typedef enum
 
 
   /*=======================================================================
-    Gravity                                                0x0900 .. 0x09FF
-    -----------------------------------------------------------------------*/
-    PROT_CMD_SENSORS_KEY_GRAV_DEFAULT         = 0x0900,   /**< Tries to read the default gravity sensor */
-  /*=======================================================================*/
-
-
-  /*=======================================================================
-    Linear Acceleration                                    0x0A00 .. 0x0AFF
-    -----------------------------------------------------------------------*/
-    PROT_CMD_SENSORS_KEY_LINACCEL_DEFAULT     = 0x0A00,   /**< Tries to read the default linear acceleration sensor */
-  /*=======================================================================*/
-
-
-  /*=======================================================================
-    Rotation                                               0x0B00 .. 0x0BFF
-    -----------------------------------------------------------------------*/
-    PROT_CMD_SENSORS_KEY_ROT_DEFAULT          = 0x0B00,   /**< Tries to read the default rotation sensor */
-  /*=======================================================================*/
-
-
-  /*=======================================================================
-    Humidity                                               0x0C00 .. 0x0CFF
+    Humidity                                               0x0900 .. 0x09FF
     -----------------------------------------------------------------------*/
     PROT_CMD_SENSORS_KEY_HUMIDITY_DEFAULT     = 0x0C00,   /**< Tries to read the default humidity sensor */
   /*=======================================================================*/
 
 
   /*=======================================================================
-    Ambient Temperature                                    0x0D00 .. 0x0DFF
+    Ambient Temperature                                    0x0A00 .. 0x0AFF
     -----------------------------------------------------------------------*/
     PROT_CMD_SENSORS_KEY_AMBTEMP_DEFAULT      = 0x0D00,   /**< Tries to read the default ambient temperature sensor */
   /*=======================================================================*/
 
 
   /*=======================================================================
-    Voltage                                                0x0E00 .. 0x0EFF
+    Voltage                                                0x0B00 .. 0x0BFF
     -----------------------------------------------------------------------*/
     PROT_CMD_SENSORS_KEY_VOLT_DEFAULT         = 0x0E00,   /**< Tries to read the default voltage sensor */
   /*=======================================================================*/
 
 
   /*=======================================================================
-    Current                                                0x0F00 .. 0x0FFF
+    Current                                                0x0C00 .. 0x0CFF
     -----------------------------------------------------------------------*/
     PROT_CMD_SENSORS_KEY_CURRENT_DEFAULT      = 0x0F00,   /**< Tries to read the default current sensor */
   /*=======================================================================*/
