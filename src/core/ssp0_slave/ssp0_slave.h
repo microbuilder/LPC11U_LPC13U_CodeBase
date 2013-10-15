@@ -107,7 +107,8 @@ extern "C" {
 //void ssp0_slaveClockFast(void);
 void ssp0_slaveInit(void);
 void ssp0_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length);
-
+uint32_t ssp0_slaveRecv(uint8_t* buf, uint32_t maxlen);
+void ssp0_slave_send(uint8_t const * buf, uint32_t length);
 
 #ifdef __cplusplus
 }

@@ -229,6 +229,14 @@
 #elif defined(CFG_PROTOCOL_VIA_BULK)
   #define command_received_isr  usb_custom_received_isr
   #define command_send          usb_custom_send
+#elif defined(CFG_PROTOCOL_VIA_SSP0)
+  #define command_received_isr  ssp0_received_isr
+  #define command_send          ssp0_slave_send
+#endif
+#elif defined(CFG_PROTOCOL_VIA_SSP1)
+  #define command_received_isr  ssp1_received_isr
+  #define command_send          ssp1_slave_send
+#endif
 #endif
 
 #define U16_HIGH_U8(u16)  ((uint8_t) (((u16) >> 8) & 0x00FF))
@@ -342,6 +350,20 @@ void prot_init(void)
 /**************************************************************************/
 void prot_exec(void * p_para)
 {
+#if defined CFG_PROTOCOL_VIA_SPI0
+	uint8_t ssp_buffer[8];
+	uint32_t ssp_data_len;
+	/* probe if SSP data available. */
+	ssp_data_len = ssp0_slaveRecv(ssp_buffer, 8);
+	/* Call command received isr here to process ssp data. */
+	command_received_isr(ssp_buffer, ssp_data_len);
+#elif defined CFG_PROTOCOL_VIA_SPI1
+	uint8_t ssp_buffer[8];
+	/* probe if SSP data available. */
+	ssp_data_len = ssp1_slaveRecv(ssp_buffer, 8);
+	/* Call command received isr here to process ssp data. */
+	command_received_isr(ssp_buffer, ssp_data_len);
+#endif
   if ( !fifo_isEmpty(&ff_prot_cmd) )
   {
     /* If we get here, it means a command was received */

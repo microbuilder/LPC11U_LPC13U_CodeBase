@@ -201,3 +201,38 @@ void ssp1_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 	}
   }
 }
+
+/**************************************************************************/
+/*!
+    @brief receive a block of data using SSP0
+
+    @param[in]  buf
+                Pointer to the data buffer
+    @param[in]  maxlen
+                Max block length of the data buffer
+    @return     Number of received data.
+*/
+/**************************************************************************/
+uint32_t ssp1_slaveRecv(uint8_t* buf, uint32_t maxlen)
+{
+  uint32_t i;
+  uint32_t Dummy;
+
+  for ( i = 0; i < maxlen; i++ )
+  {
+	LPC_SSP1->DR = 0xFF;
+
+    if ( (LPC_SSP1->SR & (SSP1_SR_BSY_BUSY|SSP1_SR_RNE_NOTEMPTY)) == SSP1_SR_RNE_NOTEMPTY )
+    {
+	  *buf = LPC_SSP1->DR;
+	  buf++;
+	}else
+	  break;
+  }
+  return i;
+}
+
+void ssp1_slave_send(uint8_t const * buf, uint32_t length)
+{
+	ssp1_slaveTransfer(NULL, buf, length);
+}

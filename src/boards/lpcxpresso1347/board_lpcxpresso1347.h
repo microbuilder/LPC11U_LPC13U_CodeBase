@@ -463,8 +463,10 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_PROTOCOL
 
-    #define CFG_PROTOCOL_VIA_HID
+    // #define CFG_PROTOCOL_VIA_HID
     // #define CFG_PROTOCOL_VIA_BULK
+    #define CFG_PROTOCOL_VIA_SSP0
+    // #define CFG_PROTOCOL_VIA_SSP1
 
     #if defined(CFG_PROTOCOL) && !defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_PROTOCOL_VIA_BULK)
         #error CFG_PROTOCOL must be enabled with either CFG_PROTOCOL_VIA_HID or CFG_PROTOCOL_VIA_BULK

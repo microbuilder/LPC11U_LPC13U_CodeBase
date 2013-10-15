@@ -154,6 +154,11 @@ void boardInit(void)
     cliInit();
   #endif
 
+  #if defined CFG_PROTOCOL_VIA_SPI0
+    ssp0_slaveInit();
+  #elif defined CFG_PROTOCOL_VIA_SPI1
+    ssp1_slaveInit();
+  #endif
   /* Initialise the CC3000 WiFi module and connect to an AP */
   #ifdef CFG_CC3000
     /* Setup the CC3000 pins */
