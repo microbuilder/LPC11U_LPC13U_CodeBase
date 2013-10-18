@@ -4,23 +4,32 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 
 ## 0.9.2 [Ongoing] ##
 
-- SmartConfig now works for the CC3000 (bug fix plus longer timeout required)
+**Additions**
+
 - Added 1/2/3-pole IIR filter implementation for use with Octave/Matlab
-- Added float32\_t and float64\_t to sysdefs.h, and standardised all 'float' values as float32_t
 - Added EEPROM command to binary protocol
 - Added SENSOR commands to binary protocol
+- Added CFG_MCU_LPC1347FBD64 option to board config files
+- Added float32\_t and float64\_t to sysdefs.h, and standardised all 'float' values as float32_t
+- Added basic calibration code to accelerometers.c and magnetometers.c
+
+**Changes**
+
 - Changed 'SENSOR\_TYPE\_COLOR' from '17' to '7' in sensors.h
 - Changed 'SENSOR\_TYPE\_RELATIVE\_HUMIDITY' from '12' to '9' in sensors.h
 - Changed 'SENSOR\_TYPE\_AMBIENT\_TEMPERATURE' from '13' to '10' in sensors.h
 - Changed 'SENSOR\_TYPE\_VOLTAGE' from '14' to '11' in sensors.h
 - Changed 'SENSOR\_TYPE\_CURRENT' from '15' to '12' in sensors.h
-- Bug fix in mmc.c for pin setup (PORT used instead of PIN)
-- Added CFG_MCU_LPC1347FBD64 option to board config files
 - Removed unpublished boards from public repository
 - Removed CMSIS-RTOS (RTX) support from the LPCXpresso LPC1347 board file for now, use RF1GHZNODE for reference code
-- Added EEPROM entries for accel/mag/gyro calibration data
-- Renamed prot_task to prot_exec
 - Removed all reference to STRING() macro (localisation.c) pending a respin of the localisation support
+- Renamed prot_task to prot_exec
+
+**Bug Fixes**
+
+- SmartConfig now works for the CC3000 (bug fix plus longer timeout required)
+- Bug fix in mmc.c for pin setup (PORT used instead of PIN)
+- Added EEPROM entries for accel/mag/gyro calibration data
 
 ## 0.9.1 [12 July 2013] ##
 
