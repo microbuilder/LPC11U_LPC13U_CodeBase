@@ -12,6 +12,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added CFG_MCU_LPC1347FBD64 option to board config files
 - Added float32\_t and float64\_t to sysdefs.h, and standardised all 'float' values as float32_t
 - Added basic calibration code to accelerometers.c and magnetometers.c
+- Added EEPROM entries for accel/mag/gyro calibration data
 
 **Changes**
 
@@ -22,14 +23,13 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Changed 'SENSOR\_TYPE\_CURRENT' from '15' to '12' in sensors.h
 - Removed unpublished boards from public repository
 - Removed CMSIS-RTOS (RTX) support from the LPCXpresso LPC1347 board file for now, use RF1GHZNODE for reference code
-- Removed all reference to STRING() macro (localisation.c) pending a respin of the localisation support
+- Removed all references to STRING() macro (localisation.c) pending a respin of the localisation support
 - Renamed prot_task to prot_exec
 
 **Bug Fixes**
 
 - SmartConfig now works for the CC3000 (bug fix plus longer timeout required)
 - Bug fix in mmc.c for pin setup (PORT used instead of PIN)
-- Added EEPROM entries for accel/mag/gyro calibration data
 
 ## 0.9.1 [12 July 2013] ##
 
