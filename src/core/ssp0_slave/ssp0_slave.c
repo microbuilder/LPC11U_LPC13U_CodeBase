@@ -144,7 +144,9 @@ void ssp0_slaveInit(void)
   }  
   
   /* Enable device and set it to slave mode, no loopback */
-  LPC_SSP0->CR1 = SSP0_CR1_SSE_ENABLED | SSP0_CR1_LBM_NORMAL;
+  LPC_SSP0->CR1 = SSP0_CR1_SSE_ENABLED | SSP0_CR1_MS_SLAVE | SSP0_CR1_LBM_NORMAL;
+
+  //NVIC_EnableIRQ(SSP0_IRQn);
 }
 
 /**************************************************************************/
@@ -178,7 +180,7 @@ void ssp0_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 		LPC_SSP0->DR = 0xFF;
 	}
 
-    while ( (LPC_SSP0->SR & (SSP0_SR_BSY_BUSY|SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
+    while ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
     /* Whenever a byte is written, MISO FIFO counter increments, Clear FIFO
     on MISO. Otherwise, when this function is called, previous data byte
     is left in the FIFO. */
@@ -206,6 +208,9 @@ void ssp0_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 /**************************************************************************/
 uint32_t ssp0_slaveRecv(uint8_t* buf, uint32_t maxlen)
 {
+	ssp0_slaveTransfer(buf, NULL, maxlen);
+	return maxlen;
+#if 0
   uint32_t i;
   uint32_t Dummy;
 
@@ -213,7 +218,7 @@ uint32_t ssp0_slaveRecv(uint8_t* buf, uint32_t maxlen)
   {
 	LPC_SSP0->DR = 0xFF;
 
-    if ( (LPC_SSP0->SR & (SSP0_SR_BSY_BUSY|SSP0_SR_RNE_NOTEMPTY)) == SSP0_SR_RNE_NOTEMPTY )
+    if ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) == SSP0_SR_RNE_NOTEMPTY )
     {
 	  *buf = LPC_SSP0->DR;
 	  buf++;
@@ -221,9 +226,11 @@ uint32_t ssp0_slaveRecv(uint8_t* buf, uint32_t maxlen)
 	  break;
   }
   return i;
+#endif
 }
 
 void ssp0_slave_send(uint8_t const * buf, uint32_t length)
 {
 	ssp0_slaveTransfer(NULL, buf, length);
 }
+
