@@ -229,6 +229,12 @@
 #elif defined(CFG_PROTOCOL_VIA_BULK)
   #define command_received_isr  usb_custom_received_isr
   #define command_send          usb_custom_send
+#elif defined(CFG_PROTOCOL_VIA_SSP0)
+  #define command_received_isr  ssp0_received_isr
+  #define command_send          ssp0_slave_send
+#elif defined(CFG_PROTOCOL_VIA_SSP1)
+  #define command_received_isr  ssp1_received_isr
+  #define command_send          ssp1_slave_send
 #endif
 
 #define U16_HIGH_U8(u16)  ((uint8_t) (((u16) >> 8) & 0x00FF))
@@ -313,6 +319,25 @@ static protCmdFunc_t protocol_cmd_tbl[] =
 void prot_init(void)
 {
   fifo_clear(&ff_prot_cmd);
+#if defined CFG_PROTOCOL_VIA_SSP0
+  /* Use pin P0_2 for SSEL. */
+    LPC_IOCON->PIO0_2 &= ~0x07;
+    LPC_IOCON->PIO0_2 |= 0x01;
+  ssp0_slaveInit();
+
+#elif defined CFG_PROTOCOL_VIA_SSP1
+  ssp1_slaveInit();
+  /* Use pin P0_2 for SSEL. */
+  LPC_IOCON->PIO0_2 &= ~0x07;
+  LPC_IOCON->PIO0_2 |= 0x01;
+#endif
+#if defined CFG_PROTOCOL_BYPASS_VIA_SSP0
+  ssp0Init();
+  /* Use pin P0_2 for SSEL. */
+  LPC_IOCON->PIO0_2 &= ~0x07;
+  LPC_IOCON->PIO0_2 |= 0x01;
+  //LPC_GPIO->DIR[0] |= (1 << 2);
+#endif
 }
 
 /**************************************************************************/
@@ -342,6 +367,32 @@ void prot_init(void)
 /**************************************************************************/
 void prot_exec(void * p_para)
 {
+#if defined CFG_PROTOCOL_VIA_SSP0
+	uint8_t ssp_buffer[sizeof(protMsgCommand_t)];
+	static uint32_t ssp_data_len = 0;
+	static uint16_t ssp_timeout = 0xFFFF;
+	/* probe if SSP data available. */
+	ssp_data_len += ssp0_slaveRecv(ssp_buffer, sizeof(protMsgCommand_t));
+	/* Call command received isr here to process ssp data. */
+	if(ssp_data_len >= sizeof(protMsgCommand_t)){
+	  command_received_isr(ssp_buffer, ssp_data_len);
+	  ssp_data_len = 0;
+	}else if(ssp_data_len > 0)
+	{
+		ssp_timeout--;
+		if(ssp_timeout == 0){
+			ssp_data_len = 0;
+			ssp_timeout = 0xFFFF;
+		}
+	}
+
+#elif defined CFG_PROTOCOL_VIA_SSP1
+	uint8_t ssp_buffer[8];
+	/* probe if SSP data available. */
+	ssp_data_len = ssp1_slaveRecv(ssp_buffer, 8);
+	/* Call command received isr here to process ssp data. */
+	command_received_isr(ssp_buffer, ssp_data_len);
+#endif
   if ( !fifo_isEmpty(&ff_prot_cmd) )
   {
     /* If we get here, it means a command was received */
@@ -372,6 +423,10 @@ void prot_exec(void * p_para)
     }
     else
     {
+#if defined(CFG_PROTOCOL_BYPASS_VIA_SSP0)
+     /*Command is received, send it to SSP0 */
+     ssp0Send((uint8_t *)&message_cmd, sizeof(protMsgCommand_t));
+#else
       /* Keep track of the command ID for the response message */
       message_reponse.msg_type    = PROT_MSGTYPE_RESPONSE;
       message_reponse.cmd_id_high = message_cmd.cmd_id_high;
@@ -385,10 +440,22 @@ void prot_exec(void * p_para)
 
       /* Fire the appropriate handler based on the command ID */
       error = protocol_cmd_tbl[command_id] ( message_cmd.length, message_cmd.payload, &message_reponse );
+#endif
     }
 
     /* RESPONSE PHASE */
+#if defined(CFG_PROTOCOL_BYPASS_VIA_SSP0)
+    message_reponse.length = 0;
+	/*Read response Msg */
+	ssp0Receive((uint8_t*) &message_reponse, sizeof(protMsgResponse_t) - sizeof(uint8_t)*(1+PROT_MAX_MSG_SIZE-4));
+	if(message_reponse.msg_type != PROT_MSGTYPE_ERROR)
+	{
+		ssp0Receive((uint8_t*) &(message_reponse.length), sizeof(uint8_t)*(1+PROT_MAX_MSG_SIZE-4));
+		command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
+	}else
+		command_send( (uint8_t*) &message_reponse, sizeof(protMsgError_t));
 
+#else
     // TODO:  Make sure the usb command is ready to send
     // in case there are a bunch of cmds queued in FIFO
 
@@ -399,7 +466,6 @@ void prot_exec(void * p_para)
       {
         prot_cmd_executed_cb(&message_reponse);
       }
-
       /* Send the response message (cmd successfully executed) */
       command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
     }
@@ -418,10 +484,10 @@ void prot_exec(void * p_para)
       {
         prot_cmd_error_cb(&message_error);
       }
-
       /* Send back a mandatory error message */
       command_send( (uint8_t*)  &message_error, sizeof(protMsgError_t));
     }
+#endif
   }
 }
 
@@ -438,7 +504,10 @@ void prot_exec(void * p_para)
 /**************************************************************************/
 void command_received_isr(uint8_t * p_data, uint32_t length)
 {
-  fifo_write(&ff_prot_cmd, p_data);
+  /* FIX ME: FIFO is always written without knowing of data length.
+   * check if length is equal to defined item size value of ff_prot_cmd or not. */
+  if(length == sizeof(protMsgCommand_t))
+    fifo_write(&ff_prot_cmd, p_data);
 }
 
 #endif
