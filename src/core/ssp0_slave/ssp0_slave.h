@@ -105,13 +105,13 @@ extern "C" {
 
 #define SSP0_RX_INTERRUPT_MASK			(0x07)
 #define SSP0_RX_INTERRUPT_CLEAR_MASK	(0x03)
+
 typedef void(*SSP_CALLBACK)();
-//void ssp0_slaveClockSlow(void);
-//void ssp0_slaveClockFast(void);
-void ssp0_slaveInit(void);
-void ssp0_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length);
-void ssp0_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback);
-void ssp0_slave_send(uint8_t const * buf, uint32_t length);
+
+void ssp0_slaveInit 		 ( void );
+void ssp0_slaveTransfer 	 ( uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length );
+void ssp0_slaveInterruptRecv ( uint8_t* buf, uint32_t len, SSP_CALLBACK callback );
+void ssp0_slave_send 		 ( uint8_t const * buf, uint32_t length );
 
 #ifdef __cplusplus
 }

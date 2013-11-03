@@ -458,12 +458,18 @@ extern "C" {
     SIMPLE BINARY PROTOCOL
     -----------------------------------------------------------------------
 
-    CFG_PROTOCOL             If this field is defined the binary command
-                              parser will be included
-    -----------------------------------------------------------------------*/
-    #define CFG_PROTOCOL
+    CFG_PROTOCOL            If this field is defined the binary command
+                            parser will be included
 
-	//#define CFG_PROTOCOL_BYPASS_VIA_SSP0
+	CFG_PROTOCOL_VIA_HID	Use USB HID for the binary protocol
+							(requires CFG_USB_HID_GENERIC)
+	CFG_PROTOCOL_VIA_BULK	Use USB Bulk for the binary protocol
+							(requires CFG_USB_CUSTOM_CLASS)
+	CFG_PROTOCO_VIA_SSP0	Uses SSP0 Slave for the binary protocol
+	CFG_PROTOCO_VIA_SSP1	Uses SSP1 Slave for the binary protocol
+    -----------------------------------------------------------------------*/
+    // #define CFG_PROTOCOL
+
     // #define CFG_PROTOCOL_VIA_HID
     // #define CFG_PROTOCOL_VIA_BULK
     #define CFG_PROTOCOL_VIA_SSP0

@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?fileVersion 4.0.0?>
-
-<cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
+<?fileVersion 4.0.0?><cproject storage_type_id="org.eclipse.cdt.core.XmlProjectDescriptionStorage">
 	<storageModule moduleId="org.eclipse.cdt.core.settings">
 		<cconfiguration id="com.crt.advproject.config.exe.debug.31686071.1683240460">
 			<storageModule buildSystemId="org.eclipse.cdt.managedbuilder.core.configurationDataProvider" id="com.crt.advproject.config.exe.debug.31686071.1683240460" moduleId="org.eclipse.cdt.core.settings" name="RF1GHZNODE">
@@ -58,7 +56,7 @@
 							<tool id="com.crt.advproject.link.exe.debug.1302209906" name="MCU Linker" superClass="com.crt.advproject.link.exe.debug">
 								<option id="com.crt.advproject.link.arch.1272124390" name="Architecture" superClass="com.crt.advproject.link.arch" value="com.crt.advproject.link.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.thumb.1054411598" name="Thumb mode" superClass="com.crt.advproject.link.thumb" value="true" valueType="boolean"/>
-								<option id="com.crt.advproject.link.script.1417406066" name="Linker script" superClass="com.crt.advproject.link.script" value="&quot;LPC11U_LPC13U_CodeBase_RF1GHZNODE.ld&quot;" valueType="string"/>
+								<option id="com.crt.advproject.link.script.1417406066" name="Linker script" superClass="com.crt.advproject.link.script" value="&quot;LPC11U_LPC13U_Codebase_RF1GHZNODE.ld&quot;" valueType="string"/>
 								<option id="com.crt.advproject.link.manage.186448314" name="Manage linker script" superClass="com.crt.advproject.link.manage" value="true" valueType="boolean"/>
 								<option id="gnu.c.link.option.nostdlibs.2044725838" name="No startup or default libs (-nostdlib)" superClass="gnu.c.link.option.nostdlibs" value="true" valueType="boolean"/>
 								<option id="gnu.c.link.option.other.1470988433" name="Other options (-Xlinker [option])" superClass="gnu.c.link.option.other" valueType="stringList">
@@ -208,7 +206,7 @@
 							<tool id="com.crt.advproject.link.exe.debug.317357732" name="MCU Linker" superClass="com.crt.advproject.link.exe.debug">
 								<option id="com.crt.advproject.link.arch.1701703795" name="Architecture" superClass="com.crt.advproject.link.arch" value="com.crt.advproject.link.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.thumb.1262333094" name="Thumb mode" superClass="com.crt.advproject.link.thumb" value="true" valueType="boolean"/>
-								<option id="com.crt.advproject.link.script.1180633184" name="Linker script" superClass="com.crt.advproject.link.script" value="&quot;LPC11U_LPC13U_CodeBase_RF1GHZUSB.ld&quot;" valueType="string"/>
+								<option id="com.crt.advproject.link.script.1180633184" name="Linker script" superClass="com.crt.advproject.link.script" value="&quot;LPC11U_LPC13U_Codebase_RF1GHZUSB.ld&quot;" valueType="string"/>
 								<option id="com.crt.advproject.link.manage.2042373910" name="Manage linker script" superClass="com.crt.advproject.link.manage" value="true" valueType="boolean"/>
 								<option id="gnu.c.link.option.nostdlibs.1445136205" name="No startup or default libs (-nostdlib)" superClass="gnu.c.link.option.nostdlibs" value="true" valueType="boolean"/>
 								<option id="gnu.c.link.option.other.756967378" name="Other options (-Xlinker [option])" superClass="gnu.c.link.option.other" valueType="stringList">
@@ -358,7 +356,7 @@
 							<tool command="arm-none-eabi-gcc" commandLinePattern="${COMMAND} ${FLAGS} ${OUTPUT_FLAG}${OUTPUT_PREFIX}${OUTPUT} ${INPUTS}" errorParsers="org.eclipse.cdt.core.GLDErrorParser" id="com.crt.advproject.link.exe.debug.1218922656" name="MCU Linker" superClass="com.crt.advproject.link.exe.debug">
 								<option id="com.crt.advproject.link.arch.403194258" name="Architecture" superClass="com.crt.advproject.link.arch" value="com.crt.advproject.link.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.link.thumb.1077052836" name="Thumb mode" superClass="com.crt.advproject.link.thumb" value="true" valueType="boolean"/>
-								<option id="com.crt.advproject.link.script.1098515890" name="Linker script" superClass="com.crt.advproject.link.script" value="&quot;LPC11U_LPC13U_CodeBase_LPCXpresso_LPC1347.ld&quot;" valueType="string"/>
+								<option id="com.crt.advproject.link.script.1098515890" name="Linker script" superClass="com.crt.advproject.link.script" value="&quot;LPC11U_LPC13U_Codebase_LPCXpresso_LPC1347.ld&quot;" valueType="string"/>
 								<option id="com.crt.advproject.link.manage.2111218160" name="Manage linker script" superClass="com.crt.advproject.link.manage" value="true" valueType="boolean"/>
 								<option id="gnu.c.link.option.nostdlibs.460492021" name="No startup or default libs (-nostdlib)" superClass="gnu.c.link.option.nostdlibs" value="true" valueType="boolean"/>
 								<option id="gnu.c.link.option.other.790182996" name="Other options (-Xlinker [option])" superClass="gnu.c.link.option.other" valueType="stringList">

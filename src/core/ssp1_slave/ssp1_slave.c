@@ -41,6 +41,7 @@
 static uint8_t* ssp1_recv_buff;
 static uint32_t ssp1_recv_remainlen;
 static SSP_CALLBACK ssp1_recv_callback;
+
 /**************************************************************************/
 /*!
     Set SSP clock to slow (400 KHz)
@@ -174,7 +175,6 @@ void ssp1_slaveInit(void)
                 Block length of the data buffer
 */
 /**************************************************************************/
-
 void ssp1_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 {
 	uint32_t i;
@@ -188,7 +188,7 @@ void ssp1_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 	{
 	    LPC_SSP1->DR = *sendbuf;
 	    sendbuf++;
-	}else
+	} else
 	{
 		LPC_SSP1->DR = 0xFF;
 	}
@@ -201,7 +201,7 @@ void ssp1_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 	{
 		*recvbuf = LPC_SSP1->DR;
 		recvbuf++;
-	}else
+	} else
 	{
 		Dummy = LPC_SSP1->DR;
 	}
@@ -230,11 +230,21 @@ void ssp1_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback)
 	LPC_SSP1->IMSC |= SSP1_RX_INTERRUPT_MASK;
 }
 
+/**************************************************************************/
+/*!
+
+*/
+/**************************************************************************/
 void ssp1_slave_send(uint8_t const * buf, uint32_t length)
 {
 	ssp1_slaveTransfer(NULL, (uint8_t*)buf, length);
 }
 
+/**************************************************************************/
+/*!
+
+*/
+/**************************************************************************/
 void SSP1_IRQHandler(void)
 {
 	uint32_t status_register = LPC_SSP1->MIS;
@@ -247,7 +257,7 @@ void SSP1_IRQHandler(void)
 				*ssp1_recv_buff = LPC_SSP0->DR;
 				ssp1_recv_buff++;
 				ssp1_recv_remainlen--;
-			}else
+			} else
 			{
 				/* disable rx interrupt. */
 				LPC_SSP1->IMSC &= ~SSP1_RX_INTERRUPT_MASK;
@@ -257,7 +267,7 @@ void SSP1_IRQHandler(void)
 				ssp1_recv_buff = NULL;
 				ssp1_recv_remainlen = 0;
 			}
-		}else
+		} else
 		{
 			uint32_t Dummy = LPC_SSP1->DR;
 		}

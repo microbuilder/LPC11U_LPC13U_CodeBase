@@ -106,8 +106,11 @@
                 <file file_name="src/drivers/displays/graphic/aafonts/aa2/FontCalibriItalic18_AA2.c"/>
                 <file file_name="src/drivers/displays/graphic/aafonts/aa2/FontFranklinGothicBold99_Numbers_AA2.c"/>
               </folder>
-              <folder Name="aa4">
+              <folder Name="aa4" file_name="">
                 <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontCalibri18_AA4.c"/>
+                <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontRobotoHeavy18_AA4.c"/>
+                <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontRobotoLight18_AA4.c"/>
+                <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontRobotoLight14_AA4.c"/>
               </folder>
             </folder>
             <folder Name="hw" file_name="">
@@ -288,7 +291,9 @@
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
       <folder Name="localisation" file_name="">
-        <file file_name="src/localisation/localisation.c"/>
+        <file file_name="src/localisation/localisation.c">
+          <configuration Name="THUMB Flash Debug" build_exclude_from_build="No"/>
+        </file>
         <file file_name="src/localisation/locale_en.dat"/>
         <file file_name="src/localisation/locale_fr.dat"/>
       </folder>

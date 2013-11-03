@@ -13,6 +13,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added float32\_t and float64\_t to sysdefs.h, and standardised all 'float' values as float32_t
 - Added basic calibration code to accelerometers.c and magnetometers.c
 - Added EEPROM entries for accel/mag/gyro calibration data
+- Added SSP slave drivers (testing needed)
 
 **Changes**
 
