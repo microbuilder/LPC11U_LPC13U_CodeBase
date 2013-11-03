@@ -45,7 +45,7 @@ extern "C" {
 #include "core/i2c/i2c.h"
 #include "drivers/sensors/sensors.h"
 
-#define L3GD20_ADDRESS                (0x6B<<1)     // 1101001
+#define L3GD20_ADDRESS                (0x6B<<1)     // 1101011
 #define L3GD20_READBIT                (0x01)
 #define L3GD20_POLL_TIMEOUT           (100)         // Maximum number of read attempts in l3gd20Poll()
 #define L3GD20_ID                     BIN8(11010100)
@@ -97,6 +97,6 @@ error_t l3gd20GetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
