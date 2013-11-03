@@ -112,8 +112,14 @@ OBJS  += $(OBJ_PATH)/pmu.o
 VPATH += src/core/ssp0
 OBJS  += $(OBJ_PATH)/ssp0.o
 
+VPATH += src/core/ssp0_slave
+OBJS  += $(OBJ_PATH)/ssp0_slave.o
+
 VPATH += src/core/ssp1
 OBJS  += $(OBJ_PATH)/ssp1.o
+
+VPATH += src/core/ssp1_slave
+OBJS  += $(OBJ_PATH)/ssp1_slave.o
 
 VPATH += src/core/timer16
 OBJS  += $(OBJ_PATH)/timer16.o
@@ -162,6 +168,9 @@ OBJS  += $(OBJ_PATH)/FontFranklinGothicBold99_Numbers_AA2.o
 
 VPATH += src/drivers/displays/graphic/aafonts/aa4 
 OBJS  += $(OBJ_PATH)/FontCalibri18_AA4.o
+OBJS  += $(OBJ_PATH)/FontRobotoHeavy18_AA4.o
+OBJS  += $(OBJ_PATH)/FontRobotoLight14_AA4.o
+OBJS  += $(OBJ_PATH)/FontRobotoLight18_AA4.o
 
 VPATH += src/drivers/displays/graphic/fonts 
 OBJS  += $(OBJ_PATH)/dejavusans9.o 

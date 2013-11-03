@@ -66,6 +66,12 @@
         <folder Name="debug" file_name="">
           <file file_name="src/core/debug/debug.c"/>
         </folder>
+        <folder Name="ssp0_slave" file_name="">
+          <file file_name="src/core/ssp0_slave/ssp0_slave.c"/>
+        </folder>
+        <folder Name="ssp1_slave" file_name="">
+          <file file_name="src/core/ssp1_slave/ssp1_slave.c"/>
+        </folder>
       </folder>
       <folder Name="drivers">
         <folder Name="displays">
@@ -105,6 +111,9 @@
               </folder>
               <folder Name="aa4">
                 <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontCalibri18_AA4.c"/>
+                <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontRobotoHeavy18_AA4.c"/>
+                <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontRobotoLight18_AA4.c"/>
+                <file file_name="src/drivers/displays/graphic/aafonts/aa4/FontRobotoLight14_AA4.c"/>
               </folder>
             </folder>
             <folder Name="hw">

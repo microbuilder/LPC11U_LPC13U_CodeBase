@@ -35,10 +35,11 @@
 */
 /**************************************************************************/
 #include "projectconfig.h"
-
 #include "debug.h"
-
 #include <string.h>
+
+/* ToDo: Current ASM code won't work on M0 ... update to cover all cores */
+#if defined CFG_MCU_FAMILY_LPC13UXX
 
 REGISTER_STACK_FRAME Last_Fault_Point;
 
@@ -94,7 +95,7 @@ void debugDumpNVICPriorities(void)
 #if defined (__GNUC__)
 __attribute__((naked)) void HardFault_Handler(void)
 {
-  __asm volatile(" tst lr, #4     \n");
+  __asm volatile(" tst lr, #4     \n");     /* ToDo: M3/M4 only ... update for M0! */
   __asm volatile(" ite eq         \n");
   __asm volatile(" mrseq r0, msp  \n");
   __asm volatile(" mrsne r0, psp  \n");
@@ -107,7 +108,7 @@ __attribute__((naked)) void HardFault_Handler(void)
 /**************************************************************************/
 /*!
     @brief      Get_Fault_Point. This is stack safe function. Any activities
-                        inside this function will not modify stack when exits.
+                inside this function will not modify stack when exits.
 */
 /**************************************************************************/
 void Get_Fault_Point(uint32_t stackpointer)
@@ -278,3 +279,5 @@ void debugTraverseStack(uint32_t StackPos)
   }
 }
 #endif // DEBUG_BUILD_RT_CALLSTACK
+
+#endif // CFG_MCU_FAMILY_LPC13UXX

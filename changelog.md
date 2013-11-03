@@ -14,6 +14,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Added basic calibration code to accelerometers.c and magnetometers.c
 - Added EEPROM entries for accel/mag/gyro calibration data
 - Added SSP slave drivers (testing needed)
+- Added SSP0/SSP1 slave as options for CFG_PROTOCOL
 
 **Changes**
 
@@ -26,6 +27,7 @@ Major changes in the LPC11U/LPC13U code base by code base version number.
 - Removed CMSIS-RTOS (RTX) support from the LPCXpresso LPC1347 board file for now, use RF1GHZNODE for reference code
 - Removed all references to STRING() macro (localisation.c) pending a respin of the localisation support
 - Renamed prot_task to prot_exec
+- Removed debug.c support for M0 for now since the ASM code isn't M0 safe
 
 **Bug Fixes**
 
