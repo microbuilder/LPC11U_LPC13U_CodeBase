@@ -38,6 +38,9 @@
 #include "core/gpio/gpio.h"
 #include "core/ssp1_slave/ssp1_slave.h"
 
+static uint8_t* ssp1_recv_buff;
+static uint32_t ssp1_recv_remainlen;
+static SSP_CALLBACK ssp1_recv_callback;
 /**************************************************************************/
 /*!
     Set SSP clock to slow (400 KHz)
@@ -153,7 +156,10 @@ void ssp1_slaveInit(void)
   }
 
   /* Enable device and set it to slave mode, no loopback */
-  LPC_SSP1->CR1 = SSP1_CR1_SSE_ENABLED | SSP1_CR1_LBM_NORMAL;
+  LPC_SSP1->CR1 = SSP1_CR1_SSE_ENABLED | SSP1_CR1_MS_SLAVE | SSP1_CR1_LBM_NORMAL;
+  ssp1_recv_buff = NULL;
+  ssp1_recv_remainlen = 0;
+  NVIC_EnableIRQ(SSP1_IRQn);
 }
 
 /**************************************************************************/
@@ -187,7 +193,7 @@ void ssp1_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 		LPC_SSP1->DR = 0xFF;
 	}
 
-    while ( (LPC_SSP1->SR & (SSP1_SR_BSY_BUSY|SSP1_SR_RNE_NOTEMPTY)) != SSP1_SR_RNE_NOTEMPTY );
+    while ( (LPC_SSP1->SR & (/*SSP1_SR_BSY_BUSY|*/SSP1_SR_RNE_NOTEMPTY)) != SSP1_SR_RNE_NOTEMPTY );
     /* Whenever a byte is written, MISO FIFO counter increments, Clear FIFO
     on MISO. Otherwise, when this function is called, previous data byte
     is left in the FIFO. */
@@ -208,31 +214,57 @@ void ssp1_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 
     @param[in]  buf
                 Pointer to the data buffer
-    @param[in]  maxlen
-                Max block length of the data buffer
+    @param[in]  len
+                length of the data buffer
+    @param[in]  callback
+                Function pointer to be called when done.
     @return     Number of received data.
 */
 /**************************************************************************/
-uint32_t ssp1_slaveRecv(uint8_t* buf, uint32_t maxlen)
+void ssp1_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback)
 {
-  uint32_t i;
-  uint32_t Dummy;
-
-  for ( i = 0; i < maxlen; i++ )
-  {
-	LPC_SSP1->DR = 0xFF;
-
-    if ( (LPC_SSP1->SR & (SSP1_SR_BSY_BUSY|SSP1_SR_RNE_NOTEMPTY)) == SSP1_SR_RNE_NOTEMPTY )
-    {
-	  *buf = LPC_SSP1->DR;
-	  buf++;
-	}else
-	  break;
-  }
-  return i;
+	ssp1_recv_buff = buf;
+	ssp1_recv_remainlen = len;
+	ssp1_recv_callback = callback;
+	/* set interrupt on recv. */
+	LPC_SSP1->IMSC |= SSP1_RX_INTERRUPT_MASK;
 }
 
 void ssp1_slave_send(uint8_t const * buf, uint32_t length)
 {
-	ssp1_slaveTransfer(NULL, buf, length);
+	ssp1_slaveTransfer(NULL, (uint8_t*)buf, length);
+}
+
+void SSP1_IRQHandler(void)
+{
+	uint32_t status_register = LPC_SSP1->MIS;
+	if(status_register & SSP1_RX_INTERRUPT_MASK)
+	{
+		if((ssp1_recv_buff != NULL))
+		{
+			if(ssp1_recv_remainlen > 0)
+			{
+				*ssp1_recv_buff = LPC_SSP0->DR;
+				ssp1_recv_buff++;
+				ssp1_recv_remainlen--;
+			}else
+			{
+				/* disable rx interrupt. */
+				LPC_SSP1->IMSC &= ~SSP1_RX_INTERRUPT_MASK;
+				/* call done callback function. */
+				ssp1_recv_callback();
+				/* reset internal variable. */
+				ssp1_recv_buff = NULL;
+				ssp1_recv_remainlen = 0;
+			}
+		}else
+		{
+			uint32_t Dummy = LPC_SSP1->DR;
+		}
+	}
+
+	if(status_register & SSP1_RX_INTERRUPT_CLEAR_MASK)
+	{
+		LPC_SSP1->ICR = status_register;
+	}
 }

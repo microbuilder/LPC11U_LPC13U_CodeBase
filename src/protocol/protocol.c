@@ -221,7 +221,12 @@
 
 #include "protocol.h"
 #include "core/fifo/fifo.h"
-
+#if defined(CFG_PROTOCOL_VIA_SSP0)
+#include "core/ssp0_slave/ssp0_slave.h"
+#endif
+#if defined(CFG_PROTOCOL_VIA_SSP1)
+#include "core/ssp1_slave/ssp1_slave.h"
+#endif
 /* Callback functions to let us know when new data arrives via USB, etc. */
 #if defined(CFG_PROTOCOL_VIA_HID)
   #define command_received_isr  usb_hid_generic_recv_isr
@@ -339,6 +344,16 @@ void prot_init(void)
   //LPC_GPIO->DIR[0] |= (1 << 2);
 #endif
 }
+#if defined(CFG_PROTOCOL_VIA_SSP0) || defined(CFG_PROTOCOL_VIA_SSP1)
+static uint8_t ssp_buffer[sizeof(protMsgCommand_t)];
+static uint8_t is_ssp_probing = 0;
+void ssp_recv_done(void)
+{
+	/* Call command received isr here to process ssp data. */
+	command_received_isr(ssp_buffer, sizeof(protMsgCommand_t));
+	is_ssp_probing = 0;
+}
+#endif
 
 /**************************************************************************/
 /*!
@@ -368,30 +383,16 @@ void prot_init(void)
 void prot_exec(void * p_para)
 {
 #if defined CFG_PROTOCOL_VIA_SSP0
-	uint8_t ssp_buffer[sizeof(protMsgCommand_t)];
-	static uint32_t ssp_data_len = 0;
-	static uint16_t ssp_timeout = 0xFFFF;
 	/* probe if SSP data available. */
-	ssp_data_len += ssp0_slaveRecv(ssp_buffer, sizeof(protMsgCommand_t));
-	/* Call command received isr here to process ssp data. */
-	if(ssp_data_len >= sizeof(protMsgCommand_t)){
-	  command_received_isr(ssp_buffer, ssp_data_len);
-	  ssp_data_len = 0;
-	}else if(ssp_data_len > 0)
+	if(is_ssp_probing == 0)
 	{
-		ssp_timeout--;
-		if(ssp_timeout == 0){
-			ssp_data_len = 0;
-			ssp_timeout = 0xFFFF;
-		}
+		ssp0_slaveInterruptRecv(ssp_buffer, sizeof(protMsgCommand_t), ssp_recv_done);
+		is_ssp_probing = 1;
 	}
-
 #elif defined CFG_PROTOCOL_VIA_SSP1
 	uint8_t ssp_buffer[8];
 	/* probe if SSP data available. */
-	ssp_data_len = ssp1_slaveRecv(ssp_buffer, 8);
-	/* Call command received isr here to process ssp data. */
-	command_received_isr(ssp_buffer, ssp_data_len);
+	ssp1_slaveRecv(ssp_buffer, sizeof(protMsgCommand_t), ssp_recv_done);
 #endif
   if ( !fifo_isEmpty(&ff_prot_cmd) )
   {

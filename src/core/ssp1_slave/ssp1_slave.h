@@ -103,11 +103,14 @@ extern "C" {
 #define SSP1_CR1_MS_SLAVE     (0x00000004)
 #define SSP1_CR1_SOD_MASK     (0x00000008) // Slave output disable
 
+#define SSP1_RX_INTERRUPT_MASK			(0x07)
+#define SSP1_RX_INTERRUPT_CLEAR_MASK	(0x03)
+typedef void(*SSP_CALLBACK)();
 //void ssp1ClockSlow(void);
 //void ssp1ClockFast(void);
 void ssp1_slaveInit(void);
 void ssp1_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length);
-uint32_t ssp1_slaveRecv(uint8_t* buf, uint32_t maxlen);
+void ssp1_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback);
 void ssp1_slave_send(uint8_t const * buf, uint32_t length);
 
 #ifdef __cplusplus

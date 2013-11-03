@@ -38,6 +38,9 @@
 #include "core/gpio/gpio.h"
 #include "core/ssp0_slave/ssp0_slave.h"
 
+static uint8_t* ssp0_recv_buff;
+static uint32_t ssp0_recv_remainlen;
+static SSP_CALLBACK ssp0_recv_callback;
 /**************************************************************************/
 /*!
     Set SSP clock to slow (400 KHz)
@@ -146,7 +149,9 @@ void ssp0_slaveInit(void)
   /* Enable device and set it to slave mode, no loopback */
   LPC_SSP0->CR1 = SSP0_CR1_SSE_ENABLED | SSP0_CR1_MS_SLAVE | SSP0_CR1_LBM_NORMAL;
 
-  //NVIC_EnableIRQ(SSP0_IRQn);
+  ssp0_recv_buff = NULL;
+  ssp0_recv_remainlen = 0;
+  NVIC_EnableIRQ(SSP0_IRQn);
 }
 
 /**************************************************************************/
@@ -201,36 +206,57 @@ void ssp0_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 
     @param[in]  buf
                 Pointer to the data buffer
-    @param[in]  maxlen
-                Max block length of the data buffer
+    @param[in]  len
+                length of the data buffer
+    @param[in]  callback
+                Function pointer to be called when done.
     @return     Number of received data.
 */
 /**************************************************************************/
-uint32_t ssp0_slaveRecv(uint8_t* buf, uint32_t maxlen)
+void ssp0_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback)
 {
-	ssp0_slaveTransfer(buf, NULL, maxlen);
-	return maxlen;
-#if 0
-  uint32_t i;
-  uint32_t Dummy;
-
-  for ( i = 0; i < maxlen; i++ )
-  {
-	LPC_SSP0->DR = 0xFF;
-
-    if ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) == SSP0_SR_RNE_NOTEMPTY )
-    {
-	  *buf = LPC_SSP0->DR;
-	  buf++;
-	}else
-	  break;
-  }
-  return i;
-#endif
+	ssp0_recv_buff = buf;
+	ssp0_recv_remainlen = len;
+	ssp0_recv_callback = callback;
+	/* set interrupt on recv. */
+	LPC_SSP0->IMSC |= SSP0_RX_INTERRUPT_MASK;
 }
 
 void ssp0_slave_send(uint8_t const * buf, uint32_t length)
 {
-	ssp0_slaveTransfer(NULL, buf, length);
+	ssp0_slaveTransfer(NULL, (uint8_t*)buf, length);
 }
 
+void SSP0_IRQHandler(void)
+{
+	uint32_t status_register = LPC_SSP0->MIS;
+	if(status_register & SSP0_RX_INTERRUPT_MASK)
+	{
+		if((ssp0_recv_buff != NULL))
+		{
+			if(ssp0_recv_remainlen > 0)
+			{
+				*ssp0_recv_buff = LPC_SSP0->DR;
+				ssp0_recv_buff++;
+				ssp0_recv_remainlen--;
+			}else
+			{
+				/* disable rx interrupt. */
+				LPC_SSP0->IMSC &= ~SSP0_RX_INTERRUPT_MASK;
+				/* call done callback function. */
+				ssp0_recv_callback();
+				/* reset internal variable. */
+				ssp0_recv_buff = NULL;
+				ssp0_recv_remainlen = 0;
+			}
+		}else
+		{
+			uint32_t Dummy = LPC_SSP0->DR;
+		}
+	}
+
+	if(status_register & SSP0_RX_INTERRUPT_CLEAR_MASK)
+	{
+		LPC_SSP0->ICR = status_register;
+	}
+}
