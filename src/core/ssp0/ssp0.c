@@ -169,7 +169,7 @@ void ssp0Send (uint8_t *buf, uint32_t length)
     LPC_SSP0->DR = *buf;
     buf++;
 
-    while ( (LPC_SSP0->SR & (SSP0_SR_BSY_BUSY|SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
+    while ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
     /* Whenever a byte is written, MISO FIFO counter increments, Clear FIFO
     on MISO. Otherwise, when sspReceive is called, previous data byte
     is left in the FIFO. */
@@ -199,7 +199,7 @@ void ssp0Receive(uint8_t *buf, uint32_t length)
     LPC_SSP0->DR = 0xFF;
 
     /* Wait until the Busy bit is cleared */
-    while ( (LPC_SSP0->SR & (SSP0_SR_BSY_BUSY|SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
+    while ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
 
     *buf = LPC_SSP0->DR;
     buf++;
