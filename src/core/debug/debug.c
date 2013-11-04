@@ -94,7 +94,7 @@ void debugDumpNVICPriorities(void)
 #if defined (__GNUC__)
 __attribute__((naked)) void HardFault_Handler(void)
 {
-  __asm volatile(" tst lr, #4     \n");
+  __asm volatile(" cmp lr, #4     \n");
   __asm volatile(" ite eq         \n");
   __asm volatile(" mrseq r0, msp  \n");
   __asm volatile(" mrsne r0, psp  \n");
