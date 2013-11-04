@@ -44,39 +44,52 @@ static SSP_CALLBACK ssp0_recv_callback;
 
 /**************************************************************************/
 /*!
-    Set SSP clock to slow (400 KHz)
+
 */
 /**************************************************************************/
-void ssp0_slaveClockSlow()
+void SSP0_IRQHandler(void)
 {
-  /* Divide by 15 for SSPCLKDIV */
-  LPC_SYSCON->SSP0CLKDIV = SCB_CLKDIV_DIV15;
+  uint32_t status_register = LPC_SSP0->MIS;
+  if(status_register & SSP0_RX_INTERRUPT_MASK)
+  {
+    if((ssp0_recv_buff != NULL))
+    {
+      if(ssp0_recv_remainlen > 0)
+      {
+        *ssp0_recv_buff = LPC_SSP0->DR;
+        ssp0_recv_buff++;
+        ssp0_recv_remainlen--;
+      }
+      else
+      {
+        /* disable rx interrupt. */
+        LPC_SSP0->IMSC &= ~SSP0_RX_INTERRUPT_MASK;
+        /* call done callback function. */
+        ssp0_recv_callback();
+        /* reset internal variable. */
+        ssp0_recv_buff = NULL;
+        ssp0_recv_remainlen = 0;
+      }
+    }
+    else
+    {
+      uint32_t Dummy = LPC_SSP0->DR;
+      (void)Dummy;
+    }
+  }
 
-  /* (PCLK / (CPSDVSR * [SCR+1])) = (4,800,000 / (2 x [5 + 1])) = 400 KHz */
-  LPC_SSP0->CR0 = ( (7u << 0)     // Data size = 8-bit  (bits 3:0)
-           | (0 << 4)             // Frame format = SPI (bits 5:4)
-           #if CFG_SSP_CPOL0 == 1
-           | (1  << 6)            // CPOL = 1           (bit 6)
-           #else
-           | (0  << 6)            // CPOL = 0           (bit 6)
-           #endif
-           #if CFG_SSP_CPHA0 == 1
-           | (1 << 7)             // CPHA = 1           (bit 7)
-           #else
-           | (0 << 7)             // CPHA = 0           (bit 7)
-           #endif
-           | SSP0_SCR_5);         // Clock rate = 5     (bits 15:8)
-
-  /* Clock prescale register must be even and at least 2 in master mode */
-  LPC_SSP0->CPSR = 2;
+  if(status_register & SSP0_RX_INTERRUPT_CLEAR_MASK)
+  {
+    LPC_SSP0->ICR = status_register;
+  }
 }
 
 /**************************************************************************/
 /*!
-    Set SSP clock to fast (6.0 MHz)
+    Set SSP clock to 6.0 MHz
 */
 /**************************************************************************/
-void ssp0_slaveClockFast()
+void ssp0_slaveSetupClock()
 {
   /* Divide by 1 for SSPCLKDIV */
   LPC_SYSCON->SSP0CLKDIV = SCB_CLKDIV_DIV1;
@@ -139,14 +152,14 @@ void ssp0_slaveInit(void)
   #endif
 
   /* Set SPI clock to high-speed by default */
-  ssp0ClockFast();
+  ssp0_slaveSetupClock();
 
   /* Clear the Rx FIFO */
   for ( i = 0; i < SSP0_FIFOSIZE; i++ )
   {
     Dummy = LPC_SSP0->DR;
-  }  
-  
+  }
+
   /* Enable device and set it to slave mode, no loopback */
   LPC_SSP0->CR1 = SSP0_CR1_SSE_ENABLED | SSP0_CR1_MS_SLAVE | SSP0_CR1_LBM_NORMAL;
 
@@ -161,7 +174,7 @@ void ssp0_slaveInit(void)
 
     @param[in]  recvbufbuf
                 Pointer to the rx data buffer
-	@param[in]  sendbuf
+    @param[in]  sendbuf
                 Pointer to the tx data buffer
     @param[in]  length
                 Block length of the data buffer
@@ -176,27 +189,30 @@ void ssp0_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
   {
     /* Move on only if NOT busy and TX FIFO not full. */
     while ((LPC_SSP0->SR & (SSP0_SR_TNF_NOTFULL | SSP0_SR_BSY_BUSY)) != SSP0_SR_TNF_NOTFULL);
-	if(sendbuf != NULL)
-	{
-		LPC_SSP0->DR = *sendbuf;
-		sendbuf++;
-	} else
-	{
-		LPC_SSP0->DR = 0xFF;
-	}
+    if(sendbuf != NULL)
+    {
+      LPC_SSP0->DR = *sendbuf;
+      sendbuf++;
+    }
+    else
+    {
+      LPC_SSP0->DR = 0xFF;
+    }
 
     while ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
     /* Whenever a byte is written, MISO FIFO counter increments, Clear FIFO
     on MISO. Otherwise, when this function is called, previous data byte
     is left in the FIFO. */
-	if(recvbuf != NULL)
-	{
-		*recvbuf = LPC_SSP0->DR;
-		recvbuf++;
-	} else
-	{
-		Dummy = LPC_SSP0->DR;
-	}
+    if(recvbuf != NULL)
+    {
+      *recvbuf = LPC_SSP0->DR;
+      recvbuf++;
+    }
+    else
+    {
+      Dummy = LPC_SSP0->DR;
+      (void)Dummy;
+    }
   }
 }
 
@@ -215,11 +231,11 @@ void ssp0_slaveTransfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 /**************************************************************************/
 void ssp0_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback)
 {
-	ssp0_recv_buff = buf;
-	ssp0_recv_remainlen = len;
-	ssp0_recv_callback = callback;
-	/* set interrupt on recv. */
-	LPC_SSP0->IMSC |= SSP0_RX_INTERRUPT_MASK;
+  ssp0_recv_buff = buf;
+  ssp0_recv_remainlen = len;
+  ssp0_recv_callback = callback;
+  /* set interrupt on recv. */
+  LPC_SSP0->IMSC |= SSP0_RX_INTERRUPT_MASK;
 }
 
 /**************************************************************************/
@@ -229,44 +245,5 @@ void ssp0_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback)
 /**************************************************************************/
 void ssp0_slave_send(uint8_t const * buf, uint32_t length)
 {
-	ssp0_slaveTransfer(NULL, (uint8_t*)buf, length);
-}
-
-/**************************************************************************/
-/*!
-
-*/
-/**************************************************************************/
-void SSP0_IRQHandler(void)
-{
-	uint32_t status_register = LPC_SSP0->MIS;
-	if(status_register & SSP0_RX_INTERRUPT_MASK)
-	{
-		if((ssp0_recv_buff != NULL))
-		{
-			if(ssp0_recv_remainlen > 0)
-			{
-				*ssp0_recv_buff = LPC_SSP0->DR;
-				ssp0_recv_buff++;
-				ssp0_recv_remainlen--;
-			} else
-			{
-				/* disable rx interrupt. */
-				LPC_SSP0->IMSC &= ~SSP0_RX_INTERRUPT_MASK;
-				/* call done callback function. */
-				ssp0_recv_callback();
-				/* reset internal variable. */
-				ssp0_recv_buff = NULL;
-				ssp0_recv_remainlen = 0;
-			}
-		} else
-		{
-			uint32_t Dummy = LPC_SSP0->DR;
-		}
-	}
-
-	if(status_register & SSP0_RX_INTERRUPT_CLEAR_MASK)
-	{
-		LPC_SSP0->ICR = status_register;
-	}
+  ssp0_slaveTransfer(NULL, (uint8_t*)buf, length);
 }

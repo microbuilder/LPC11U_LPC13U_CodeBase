@@ -69,6 +69,12 @@
         <folder Name="debug" file_name="">
           <file file_name="src/core/debug/debug.c"/>
         </folder>
+        <folder Name="ssp0_slave" file_name="">
+          <file file_name="src/core/ssp0_slave/ssp0_slave.c"/>
+        </folder>
+        <folder Name="ssp1_slave" file_name="">
+          <file file_name="src/core/ssp1_slave/ssp1_slave.c"/>
+        </folder>
       </folder>
       <folder Name="drivers">
         <folder Name="displays">
@@ -291,9 +297,7 @@
       <file file_name="src/errors.h"/>
       <file file_name="src/sysdefs.h"/>
       <folder Name="localisation" file_name="">
-        <file file_name="src/localisation/localisation.c">
-          <configuration Name="THUMB Flash Debug" build_exclude_from_build="No"/>
-        </file>
+        <file file_name="src/localisation/localisation.c"/>
         <file file_name="src/localisation/locale_en.dat"/>
         <file file_name="src/localisation/locale_fr.dat"/>
       </folder>

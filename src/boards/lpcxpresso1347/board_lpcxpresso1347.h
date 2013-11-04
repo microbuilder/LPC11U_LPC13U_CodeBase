@@ -468,7 +468,7 @@ extern "C" {
 	CFG_PROTOCO_VIA_SSP0	Uses SSP0 Slave for the binary protocol
 	CFG_PROTOCO_VIA_SSP1	Uses SSP1 Slave for the binary protocol
     -----------------------------------------------------------------------*/
-    // #define CFG_PROTOCOL
+    #define CFG_PROTOCOL
 
     // #define CFG_PROTOCOL_VIA_HID
     // #define CFG_PROTOCOL_VIA_BULK

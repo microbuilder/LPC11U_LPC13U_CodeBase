@@ -47,6 +47,12 @@ extern fifo_t ff_prot_cmd; // command fifo in protocol.c
 #elif defined(CFG_PROTOCOL_VIA_BULK)
   #define command_received_isr usb_custom_received_isr
   #define command_send         usb_custom_send
+#elif defined(CFG_PROTOCOL_VIA_SSP0)
+  #define command_received_isr  ssp0_received_isr
+  #define command_send          ssp0_slave_send
+#elif defined(CFG_PROTOCOL_VIA_SSP1)
+  #define command_received_isr  ssp1_received_isr
+  #define command_send          ssp1_slave_send
 #endif
 
 #define MOCK_PROT(func, behavior)   XSTRING_CONCAT(func, behavior)

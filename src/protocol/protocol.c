@@ -323,6 +323,25 @@ static protCmdFunc_t protocol_cmd_tbl[] =
 
 /**************************************************************************/
 /*!
+    Callback for incoming commands (the exact callback function
+    depends on the interface used by the simple binary protocol, and is
+    defined in a macro at the top of this file).
+
+    This callback will write the incoming command into the FIFO for
+    processing by prot_exec when there is enough bandwidth to run
+    the command parser.
+*/
+/**************************************************************************/
+void command_received_isr(uint8_t * p_data, uint32_t length)
+{
+  /* FIX ME: FIFO is always written without knowing of data length.
+   * check if length is equal to defined item size value of ff_prot_cmd or not. */
+  if(length == sizeof(protMsgCommand_t))
+    fifo_write(&ff_prot_cmd, p_data);
+}
+
+/**************************************************************************/
+/*!
     @brief      Initialises the simple binary protocol (FIFO init, etc.)
 */
 /**************************************************************************/
@@ -346,8 +365,8 @@ void prot_init(void)
 
 /**************************************************************************/
 /*!
-	This callback will fired once the specified number of bytes have
-	been received over SSP slave (see: ssp0_slaveInterruptRecv)
+        This callback will fired once the specified number of bytes have
+        been received over SSP slave (see: ssp0_slaveInterruptRecv)
 */
 /**************************************************************************/
 #if defined(CFG_PROTOCOL_VIA_SSP0) || defined(CFG_PROTOCOL_VIA_SSP1)
@@ -388,19 +407,19 @@ void prot_exec(void * p_para)
 {
   /* ToDo: This should be handled in SSP drivers! */
   #if defined CFG_PROTOCOL_VIA_SSP0
-	/* Check if any SPI data is available. */
-	if(is_ssp_busy == 0)
-	{
+        /* Check if any SPI data is available. */
+        if(is_ssp_busy == 0)
+        {
       ssp0_slaveInterruptRecv(ssp_buffer, sizeof(protMsgCommand_t), ssp_recv_done);
       is_ssp_busy = 1;
-	}
+        }
   #elif defined CFG_PROTOCOL_VIA_SSP1
-	/* Check if any SPI data is available. */
-	if(is_ssp_busy == 0)
-	{
+        /* Check if any SPI data is available. */
+        if(is_ssp_busy == 0)
+        {
       ssp1_slaveInterruptRecv(ssp_buffer, sizeof(protMsgCommand_t), ssp_recv_done);
       is_ssp_busy = 1;
-	}
+        }
   #endif
 
   if ( !fifo_isEmpty(&ff_prot_cmd) )
@@ -449,56 +468,37 @@ void prot_exec(void * p_para)
     }
 
     /* RESPONSE PHASE */
-	// TODO:  Make sure the usb command is ready to send
-	// in case there are a bunch of cmds queued in FIFO
-	if (error == ERROR_NONE)
-	{
-	  /* Invoke the 'cmd_executed' callback */
-	  if (prot_cmd_executed_cb)
-	  {
-		prot_cmd_executed_cb(&message_reponse);
-	  }
-	  /* Send the response message (cmd successfully executed) */
-	  command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
-	}
-	else
-	{
-	  /* Something went wrong ... parse the error ID */
-	  protMsgError_t message_error =
-	  {
-		.msg_type      = PROT_MSGTYPE_ERROR,
-	  };
-	  message_error.error_id_high = U16_HIGH_U8(error);
-	  message_error.error_id_low  = U16_LOW_U8 (error);
+        // TODO:  Make sure the usb command is ready to send
+        // in case there are a bunch of cmds queued in FIFO
+        if (error == ERROR_NONE)
+        {
+          /* Invoke the 'cmd_executed' callback */
+          if (prot_cmd_executed_cb)
+          {
+                prot_cmd_executed_cb(&message_reponse);
+          }
+          /* Send the response message (cmd successfully executed) */
+          command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
+        }
+        else
+        {
+          /* Something went wrong ... parse the error ID */
+          protMsgError_t message_error =
+          {
+                .msg_type      = PROT_MSGTYPE_ERROR,
+          };
+          message_error.error_id_high = U16_HIGH_U8(error);
+          message_error.error_id_low  = U16_LOW_U8 (error);
 
-	  /* Invoke the 'cmd_error' callback */
-	  if (prot_cmd_error_cb)
-	  {
-		prot_cmd_error_cb(&message_error);
-	  }
-	  /* Send back a mandatory error message */
-	  command_send( (uint8_t*)  &message_error, sizeof(protMsgError_t));
-	}
+          /* Invoke the 'cmd_error' callback */
+          if (prot_cmd_error_cb)
+          {
+                prot_cmd_error_cb(&message_error);
+          }
+          /* Send back a mandatory error message */
+          command_send( (uint8_t*)  &message_error, sizeof(protMsgError_t));
+        }
   }
-}
-
-/**************************************************************************/
-/*!
-    USB callback for incoming commands (the exact callback function
-    depends on the interface used by the simple binary protocol, and is
-    defined in a macro at the top of this file).
-
-    This callback will write the incoming command into the FIFO for
-    processing by prot_exec when there is enough bandwidth to run
-    the command parser.
-*/
-/**************************************************************************/
-void command_received_isr(uint8_t * p_data, uint32_t length)
-{
-  /* FIX ME: FIFO is always written without knowing of data length.
-   * check if length is equal to defined item size value of ff_prot_cmd or not. */
-  if(length == sizeof(protMsgCommand_t))
-    fifo_write(&ff_prot_cmd, p_data);
 }
 
 #endif
