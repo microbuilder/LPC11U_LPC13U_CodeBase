@@ -85,6 +85,9 @@ static const uint8_t _ht16k33_numbertable[] =
   0x5E, /* D */
   0x79, /* E */
   0x71, /* F */
+  0x40, /* - */
+  0x80, /* . */
+  0x06, /* : */
 };
 
 // Function prototypes
@@ -93,6 +96,7 @@ error_t ht16k33SetBrightness ( uint8_t brightness );
 error_t ht16k33SetBlinkRate ( ht16k33BlinkRate_t blinkRate );
 error_t ht16k33WriteDisplay ( void );
 void    ht16k33Clear ( void );
+void ht16k33LoadString7Seg4Digit(char *s, uint8_t justification);
 
 #ifdef __cplusplus
 }

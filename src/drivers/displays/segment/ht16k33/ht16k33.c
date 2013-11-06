@@ -109,8 +109,8 @@ error_t ht16k33Init(void)
   i2cInit(I2CMASTER);
 
   /* Ping the I2C device first to see if it exists! */
-  ASSERT(!(i2cCheckAddress(HT16K33_I2C_ADDRESS)), ERROR_I2C_DEVICENOTFOUND);
-
+  //ASSERT(!(i2cCheckAddress(HT16K33_I2C_ADDRESS)), ERROR_I2C_DEVICENOTFOUND);
+  ASSERT(i2cCheckAddress(HT16K33_I2C_ADDRESS), ERROR_I2C_DEVICENOTFOUND);
   // Turn the oscillator on
   ASSERT_STATUS(ht16k33WriteRegister(HT16K33_REGISTER_SYSTEM_SETUP | 0x01));
 
@@ -180,6 +180,151 @@ void ht16k33Clear(void)
   uint8_t i;
   for (i=0; i<8; i++)
   {
-    _ht16k33_Buffer[i] = 0xFFFF;
+    _ht16k33_Buffer[i] =  0x0000;
+  }
+}
+
+/**************************************************************************/
+/*!
+    @brief  Displays a hexadecimal value string up to 5 characters in
+            length. Assumes a 4-Digit, 7-Segment display w/":" between
+            digits 2 and 3.  Will handle "-" and "." chars in addition to
+            standard hexadecimal values (0..9, A..F).
+            
+    @args[in] c   
+              Pointer to the string containing the text to display
+    @args[in] justification
+              0 = right justified, 1 = left justified
+              
+    @author Robert Davidson
+
+    @section EXAMPLE
+    @code
+    
+    static uint8_t sbuff[5];
+    float x;
+    int i;
+    
+    ht16k33Init();
+    ht16k33Clear();
+    ht16k33WriteDisplay();
+
+    // Make sure you're using Redlib(nohost) for this in LPCXpresso
+    // so that sprintf is handled by /src/core/libc/stdio.c
+
+	// Cycle through the range of -10.0 to 200.0
+    for(i=-100; i<=2000; i++)
+    {
+      x = i / 10.0;
+      sprintf(sbuff, "%5f", x);
+      ht16k33LoadString7Seg4Digit(sbuff, 0);
+      ht16k33WriteDisplay();
+      delay(100);
+    }
+    
+    @endcode
+*/
+/**************************************************************************/
+void ht16k33LoadString7Seg4Digit(char *s, uint8_t justification)
+{
+  char buf[5];
+  uint8_t i=0, j=0, k=0, numDigits=0, length=0;
+
+  length = strlen(s);
+
+  if(length > 5) // only fill _ht16k33_buffer with 5 chars
+  {
+    length = 5;
+  }
+
+  strncpy(buf, s, length);
+
+  for (i = 0; i < length; i++)
+  {
+    // compute 7-segment Hex value of each char using gfedcba encoding
+    // contained in _ht16k33_numbertable[].
+
+    if (buf[i] >= 0x30 && buf[i] <= 0x39) /* for digits 0 - 9 */
+    {
+      j = buf[i] - 0x30; // compute index into table
+      _ht16k33_Buffer[k] = _ht16k33_numbertable[j] * 0x100;  // shift to upper byte
+      k++; // track number of char to hex conversions
+    }
+    else if(buf[i] == 0x2E) /* char is a decimal point,  "." */
+    {
+      // In strings, the "." is just another char.  However on 7-seg
+      // display, each digit contains a decimal point that can be
+      // turned on.  Thus a 4 digit number with a decimal point is 5 chars
+      // in string but can be displayed on a 4 digit 7 segment display.
+
+      if(k != 3)
+      {
+        // this display has a ":" that looks like a 5th digit to the
+        // ht16k33 so have to take that into account.  It's the 3rd
+        // digit out of 5 from the point of view of the ht16k33.
+        // OR'ing 0x80000 with the 7-seg hex value (shifted to upper
+        // byte in ht16t33 array) turns on the decimal point.
+        //
+        // decimal point goes with previous digit on 7 seg
+
+        _ht16k33_Buffer[k-1] = _ht16k33_Buffer[k-1] | 0x8000;
+      }
+      else
+      {
+        // decimal point is third char, goes with 2nd digit
+        // (0-offset array)
+        _ht16k33_Buffer[k-2] = _ht16k33_Buffer[k-2] | 0x8000;
+      }
+    }
+    else if (buf[i] == 0x2D)
+    {
+      _ht16k33_Buffer[k] = 0x4000;  // char is minus sign
+      k++;
+    }
+    else if (buf[i] == 0x2B)  // char is plus sign, just drop it
+    {
+      _ht16k33_Buffer[k] = 0x0000;
+      k++;
+    }
+
+    if(k == 2)
+    {
+      // always turn ":" off (unless it's a clock!)
+
+      _ht16k33_Buffer[k] = 0x0000;
+      k++;
+    }
+  }
+
+  if(justification == 0)
+  {
+    numDigits = k;
+
+    if (numDigits == 4)
+    {
+      _ht16k33_Buffer[4] = _ht16k33_Buffer[3];
+      _ht16k33_Buffer[3] = _ht16k33_Buffer[1];
+      _ht16k33_Buffer[1] = _ht16k33_Buffer[0];
+      _ht16k33_Buffer[2] = 0x0000;
+      _ht16k33_Buffer[0] = 0x0000;
+    }
+
+    if (numDigits == 3)
+    {
+      _ht16k33_Buffer[4] = _ht16k33_Buffer[1];
+      _ht16k33_Buffer[3] = _ht16k33_Buffer[0];
+      _ht16k33_Buffer[0] = 0x0000;
+      _ht16k33_Buffer[1] = 0x0000;
+      _ht16k33_Buffer[2] = 0x0000;
+    }
+
+    if (numDigits == 2)
+    {
+      _ht16k33_Buffer[4] = _ht16k33_Buffer[0];
+      _ht16k33_Buffer[3] = 0x0000;
+      _ht16k33_Buffer[0] = 0x0000;
+      _ht16k33_Buffer[1] = 0x0000;
+      _ht16k33_Buffer[2] = 0x0000;
+    }
   }
 }
