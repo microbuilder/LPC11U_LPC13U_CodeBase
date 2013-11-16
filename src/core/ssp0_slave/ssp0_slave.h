@@ -112,7 +112,8 @@ void ssp0_slaveInit 		 ( void );
 void ssp0_slaveTransfer 	 ( uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length );
 void ssp0_slaveInterruptRecv ( uint8_t* buf, uint32_t len, SSP_CALLBACK callback );
 void ssp0_slave_send 		 ( uint8_t const * buf, uint32_t length );
-
+void ssp0_slave_enable_RXIRQ (void);
+void ssp0_slave_disable_RXIRQ(void);
 #ifdef __cplusplus
 }
 #endif 

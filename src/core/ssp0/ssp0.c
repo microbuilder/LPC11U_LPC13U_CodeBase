@@ -135,7 +135,7 @@ void ssp0Init(void)
   #endif
 
   /* Set SPI clock to high-speed by default */
-  ssp0ClockFast();
+  ssp0ClockSlow();
 
   /* Clear the Rx FIFO */
   for ( i = 0; i < SSP0_FIFOSIZE; i++ )
@@ -206,4 +206,44 @@ void ssp0Receive(uint8_t *buf, uint32_t length)
   }
 
   return;
+}
+
+void ssp0Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
+{
+  uint32_t i;
+  uint32_t Dummy;
+
+  while ( (LPC_SSP0->SR & (SSP0_SR_RNE_NOTEMPTY)) == SSP0_SR_RNE_NOTEMPTY )
+	{
+	  Dummy = LPC_SSP0->DR;
+	}
+  for ( i = 0; i < length; i++ )
+  {
+    /* Move on only if NOT busy and TX FIFO not full. */
+    while ((LPC_SSP0->SR & (SSP0_SR_TNF_NOTFULL | SSP0_SR_BSY_BUSY)) != SSP0_SR_TNF_NOTFULL);
+    if(sendbuf != NULL)
+    {
+      LPC_SSP0->DR = *sendbuf;
+      sendbuf++;
+    }
+    else
+    {
+      LPC_SSP0->DR = 0xFF;
+    }
+
+    while ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
+    /* Whenever a byte is written, MISO FIFO counter increments, Clear FIFO
+    on MISO. Otherwise, when this function is called, previous data byte
+    is left in the FIFO. */
+    if(recvbuf != NULL)
+    {
+      *recvbuf = LPC_SSP0->DR;
+      recvbuf++;
+    }
+    else
+    {
+      Dummy = LPC_SSP0->DR;
+      (void)Dummy;
+    }
+  }
 }

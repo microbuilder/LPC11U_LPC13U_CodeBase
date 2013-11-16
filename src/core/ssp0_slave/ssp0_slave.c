@@ -52,6 +52,7 @@ void SSP0_IRQHandler(void)
   uint32_t status_register = LPC_SSP0->MIS;
   if(status_register & SSP0_RX_INTERRUPT_MASK)
   {
+#if 0
     if((ssp0_recv_buff != NULL))
     {
       if(ssp0_recv_remainlen > 0)
@@ -76,6 +77,9 @@ void SSP0_IRQHandler(void)
       uint32_t Dummy = LPC_SSP0->DR;
       (void)Dummy;
     }
+#else
+    LPC_SSP0->DR = spi_DL_slave_state_machine(LPC_SSP0->DR);
+#endif
   }
 
   if(status_register & SSP0_RX_INTERRUPT_CLEAR_MASK)
@@ -246,4 +250,14 @@ void ssp0_slaveInterruptRecv(uint8_t* buf, uint32_t len, SSP_CALLBACK callback)
 void ssp0_slave_send(uint8_t const * buf, uint32_t length)
 {
   ssp0_slaveTransfer(NULL, (uint8_t*)buf, length);
+}
+
+void ssp0_slave_enable_RXIRQ(void)
+{
+	LPC_SSP0->IMSC |= SSP0_RX_INTERRUPT_MASK;
+}
+
+void ssp0_slave_disable_RXIRQ(void)
+{
+	LPC_SSP0->IMSC &= ~SSP0_RX_INTERRUPT_MASK;
 }
