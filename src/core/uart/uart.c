@@ -189,8 +189,8 @@ void uartInit(uint32_t baudrate)
   LPC_IOCON->PIO0_7 &= ~0x07;   /* Flow control CTS UART I/O Config  Type Input */
   LPC_IOCON->PIO0_7 |= 0x01;
 
-  LPC_IOCON->PIO1_17 &= ~0x07;  /* Flow control RTS UART I/O Config  Type Output */
-  LPC_IOCON->PIO1_17 |= 0x01;
+  LPC_IOCON->PIO0_17 &= ~0x07;  /* Flow control RTS UART I/O Config  Type Output */
+  LPC_IOCON->PIO0_17 |= 0x01;
   /* end of RTS/CTS flow control setup */
 #endif
 
