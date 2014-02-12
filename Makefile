@@ -109,6 +109,9 @@ OBJS  += $(OBJ_PATH)/string.o
 VPATH += src/core/pmu
 OBJS  += $(OBJ_PATH)/pmu.o
 
+VPATH += src/core/spi_datalayer
+OBJS += $(OBJ_PATH)/spi_datalayer.o
+
 VPATH += src/core/ssp0
 OBJS  += $(OBJ_PATH)/ssp0.o
 
