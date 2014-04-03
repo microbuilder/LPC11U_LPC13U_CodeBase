@@ -33,7 +33,7 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef __JT16K33_H__
+#ifndef __HT16K33_H__
 #define __HT16K33_H__
 
 #ifdef __cplusplus
