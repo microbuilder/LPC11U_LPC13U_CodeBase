@@ -1,13 +1,14 @@
 /**************************************************************************/
 /*!
-    @file     ht16k33.h
-    @author   K. Townsend (microBuilder.eu)
+    @file     sensorfusion.h
+    @author   Nguyen Quang Huy
+    @ingroup  Sensors
 
     @section LICENSE
 
     Software License Agreement (BSD License)
 
-    Copyright (c) 2012 K. Townsend
+    Copyright (c) 2014, K. Townsend
     All rights reserved.
 
     Redistribution and use in source and binary forms, with or without
@@ -33,73 +34,21 @@
     SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 */
 /**************************************************************************/
-#ifndef __HT16K33_H__
-#define __HT16K33_H__
+#ifndef _SENSORFUSION_H_
+#define _SENSORFUSION_H_
 
 #ifdef __cplusplus
 extern "C" {
 #endif
 
 #include "projectconfig.h"
+#include "drivers/sensors/sensors.h"
 
-/*=========================================================================
-    I2C Address
-    ---------------------------------------------------------------------*/
-    #define HT16K33_I2C_ADDRESS             (0xE0)    // = 0111 000x
-    #define HT16K33_I2C_READWRITE           (0x01)
-/*=========================================================================*/
+error_t lsm303GetOrientation    ( sensors_event_t *accel_event, sensors_event_t *mag_event, sensors_vec_t *orientation );
 
-// Registers
-enum
-{
-  HT16K33_REGISTER_DISPLAY_SETUP        = 0x80,
-  HT16K33_REGISTER_SYSTEM_SETUP         = 0x20,
-  HT16K33_REGISTER_DIMMING              = 0xE0
-};
-
-// Blink Rate
-typedef enum
-{
-  HT16K33_BLINKRATE_OFF       = 0x00,
-  HT16K33_BLINKRATE_2HZ       = 0x01,
-  HT16K33_BLINKRATE_1HZ       = 0x02,
-  HT16K33_BLINKRATE_HALFHZ    = 0x03
-} ht16k33BlinkRate_t;
-
-// Hexadecimal number table for 7-segment displays
-static const uint8_t _ht16k33_numbertable[] =
-{
-  0x3F, /* 0 */
-  0x06, /* 1 */
-  0x5B, /* 2 */
-  0x4F, /* 3 */
-  0x66, /* 4 */
-  0x6D, /* 5 */
-  0x7D, /* 6 */
-  0x07, /* 7 */
-  0x7F, /* 8 */
-  0x6F, /* 9 */
-  0x77, /* A */
-  0x7C, /* B */
-  0x39, /* C */
-  0x5E, /* D */
-  0x79, /* E */
-  0x71, /* F */
-  0x40, /* - */
-  0x80, /* . */
-  0x06, /* : */
-};
-
-// Function prototypes
-error_t ht16k33Init ( void );
-error_t ht16k33SetBrightness ( uint8_t brightness );
-error_t ht16k33SetBlinkRate ( ht16k33BlinkRate_t blinkRate );
-error_t ht16k33WriteDisplay ( void );
-void    ht16k33Clear ( void );
-void ht16k33LoadString7Seg4Digit(char *s, uint8_t justification);
 
 #ifdef __cplusplus
 }
-#endif 
-
 #endif
+
+#endif // _SENSORFUSION_H_

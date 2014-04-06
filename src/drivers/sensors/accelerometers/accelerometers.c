@@ -125,7 +125,7 @@ error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
   /* pitch is positive and increasing when moving upwards                                     */
   /*                                                                                          */
   /*                                 x                                                        */
-  /*             roll = atan(-----------------)                                               */
+  /*             pitch = atan(-----------------)                                              */
   /*                          sqrt(y^2 + z^2)                                                 */
   /* where:  x, y, z are returned value from accelerometer sensor                             */
 
