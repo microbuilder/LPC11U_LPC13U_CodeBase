@@ -5,14 +5,15 @@
 FILENAME=firmware
 
 # See projectconfig.h for a list of valid BOARD options!
-BOARD=CFG_BRD_LPCXPRESSO_LPC1347
+BOARD=CFG_BRD_LPCXPRESSO_LPC11U68
 
 # Set TARGET to 'lpc11u' or 'lpc13u' depending on the target MCU
-TARGET = lpc13u
+TARGET = lpc11u
 ifeq (lpc11u,$(TARGET))
   CORE = cortex-m0
+	LDSCRIPT = cmsis/lpc11u68.ld
   # LDSCRIPT = cmsis/lpc11u24.ld
-  LDSCRIPT = cmsis/lpc11u37.ld
+  # LDSCRIPT = cmsis/lpc11u37.ld
 else
   CORE = cortex-m3
   LDSCRIPT = cmsis/lpc1347.ld
@@ -45,6 +46,9 @@ OBJS  += $(OBJ_PATH)/RTX_hook.o
 
 VPATH += src
 OBJS  += $(OBJ_PATH)/printf-retarget.o
+
+VPATH += src/boards/lpcxpresso11u68
+OBJS  += $(OBJ_PATH)/board_lpcxpresso11u68.o
 
 VPATH += src/boards/lpcxpresso1347
 OBJS  += $(OBJ_PATH)/board_lpcxpresso1347.o
