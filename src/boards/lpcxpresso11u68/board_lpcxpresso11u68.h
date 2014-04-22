@@ -75,18 +75,23 @@ extern "C" {
     #endif
 
     /* Set flag to indicate which CMSIS library to use */
-    #if (defined CFG_MCU_LPC1347FBD64 || defined CFG_MCU_LPC1347FBD48 || defined CFG_MCU_LPC1347FHN33)
+    #if (defined CFG_MCU_LPC11U68JBD100)
+      #define CFG_MCU_FAMILY_LPC11U6X
+    #elif (defined CFG_MCU_LPC1347FBD64 || defined CFG_MCU_LPC1347FBD48 || defined CFG_MCU_LPC1347FHN33)
       #define CFG_MCU_FAMILY_LPC13UXX
     #elif (defined CFG_MCU_LPC11U24FBD48_401 || defined CFG_MCU_LPC11U37FBD48_401 || defined CFG_MCU_LPC11U68JBD100)
       #define CFG_MCU_FAMILY_LPC11UXX
     #endif
 
     /* Include the correct MCU header file */
-    #if defined CFG_MCU_FAMILY_LPC13UXX
+    #if (defined CFG_MCU_FAMILY_LPC13UXX)
       #include "LPC13Uxx.h"
-    #endif
-    #if defined CFG_MCU_FAMILY_LPC11UXX
+    #elif (defined CFG_MCU_FAMILY_LPC11UXX)
       #include "LPC11Uxx.h"
+    #elif (defined CFG_MCU_FAMILY_LPC11U6X)
+      #include "LPC11U6x.h"
+    #else
+      #error "No MCU family defined"
     #endif
 /*=========================================================================*/
 
@@ -463,12 +468,12 @@ extern "C" {
     CFG_PROTOCOL            If this field is defined the binary command
                             parser will be included
 
-	CFG_PROTOCOL_VIA_HID	Use USB HID for the binary protocol
-							(requires CFG_USB_HID_GENERIC)
-	CFG_PROTOCOL_VIA_BULK	Use USB Bulk for the binary protocol
-							(requires CFG_USB_CUSTOM_CLASS)
-	CFG_PROTOCO_VIA_SSP0	Uses SSP0 Slave for the binary protocol
-	CFG_PROTOCO_VIA_SSP1	Uses SSP1 Slave for the binary protocol
+    CFG_PROTOCOL_VIA_HID    Use USB HID for the binary protocol
+                            (requires CFG_USB_HID_GENERIC)
+    CFG_PROTOCOL_VIA_BULK   Use USB Bulk for the binary protocol
+                            (requires CFG_USB_CUSTOM_CLASS)
+    CFG_PROTOCO_VIA_SSP0    Uses SSP0 Slave for the binary protocol
+    CFG_PROTOCO_VIA_SSP1    Uses SSP1 Slave for the binary protocol
     -----------------------------------------------------------------------*/
     #define CFG_PROTOCOL
 
@@ -478,7 +483,7 @@ extern "C" {
     // #define CFG_PROTOCOL_VIA_SSP1
 
     #if defined(CFG_PROTOCOL) && !defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_PROTOCOL_VIA_BULK) \
-				&& !defined(CFG_PROTOCOL_VIA_SSP0) && !defined(CFG_PROTOCOL_VIA_SSP1)
+        && !defined(CFG_PROTOCOL_VIA_SSP0) && !defined(CFG_PROTOCOL_VIA_SSP1)
         #error CFG_PROTOCOL must be enabled with either CFG_PROTOCOL_VIA_HID or CFG_PROTOCOL_VIA_BULK
     #endif
 /*=========================================================================*/

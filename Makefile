@@ -5,16 +5,16 @@
 FILENAME=firmware
 
 # See projectconfig.h for a list of valid BOARD options!
-BOARD=CFG_BRD_LPCXPRESSO_LPC11U68
+BOARD=CFG_BRD_LPCXPRESSO_LPC1347
 
 # Set TARGET to 'lpc11u' or 'lpc13u' depending on the target MCU
-TARGET = lpc11u
+TARGET = lpc13u
 ifeq (lpc11u,$(TARGET))
   CORE = cortex-m0
-	LDSCRIPT = cmsis/lpc11u68.ld
   # LDSCRIPT = cmsis/lpc11u24.ld
-  # LDSCRIPT = cmsis/lpc11u37.ld
-else
+  LDSCRIPT = cmsis/lpc11u37.ld
+endif
+ifeq (lpc13u,$(TARGET))
   CORE = cortex-m3
   LDSCRIPT = cmsis/lpc1347.ld
 endif
@@ -37,7 +37,8 @@ VPATH = cmsis
 ifeq (lpc11u,$(TARGET))
   OBJS   = $(OBJ_PATH)/startup_lpc11u_gnumake.o 
   OBJS  += $(OBJ_PATH)/system_LPC11Uxx.o
-else
+endif
+ifeq (lpc13u,$(TARGET))
   OBJS   = $(OBJ_PATH)/startup_lpc13u_gnumake.o 
   OBJS  += $(OBJ_PATH)/system_LPC13Uxx.o
 endif
@@ -365,7 +366,8 @@ GCFLAGS += -D$(BOARD)
 # CMSIS DSP Flags
 ifeq (lpc11u,$(TARGET))
   GCFLAGS += -DARM_MATH_CM0
-else
+endif
+ifeq (lpc13u,$(TARGET))
   GCFLAGS += -DARM_MATH_CM3
 endif
 # For use with the GCC ARM Embedded toolchain
@@ -399,7 +401,8 @@ LDFLAGS += -Xlinker -Map=bin/firmware.map
 LDFLAGS += -L./cmsis/libs
 ifeq (lpc11u,$(TARGET))
   LDLIBS   = -larm_cortexM0l_math -lRTX_CM0
-else
+endif
+ifeq (lpc13u,$(TARGET))
   LDLIBS   = -larm_cortexM3l_math -lRTX_CM3
 endif
 # External Libraries

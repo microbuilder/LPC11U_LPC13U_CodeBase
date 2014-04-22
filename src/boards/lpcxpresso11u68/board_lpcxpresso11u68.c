@@ -125,7 +125,7 @@ void boardInit(void)
   #endif
 
   /* Set user LED pin to output and disable it */
-  LPC_GPIO->DIR[CFG_LED_PORT] |= (1 << CFG_LED_PIN);
+  LPC_GPIO_PORT->DIR[CFG_LED_PORT] |= (1 << CFG_LED_PIN);
   boardLED(CFG_LED_OFF);
 
   /* Start Chibi */
@@ -160,11 +160,11 @@ void boardInit(void)
   /* Initialise the CC3000 WiFi module and connect to an AP */
   #ifdef CFG_CC3000
     /* Setup the CC3000 pins */
-    LPC_IOCON ->TRST_PIO0_14  &= ~0x07;
-    LPC_IOCON ->TRST_PIO0_14  |= 0x01;
-    LPC_IOCON ->PIO0_17       &= ~0x07;
-    LPC_IOCON ->PIO0_16       &= ~0x1F;
-    LPC_IOCON ->PIO0_16       |= (1<<4);
+    LPC_IOCON->TRST_PIO0_14  &= ~0x07;
+    LPC_IOCON->TRST_PIO0_14  |= 0x01;
+    LPC_IOCON->PIO0_17       &= ~0x07;
+    LPC_IOCON->PIO0_16       &= ~0x1F;
+    LPC_IOCON->PIO0_16       |= (1<<4);
   #endif
 
   /* Initialise the SD Card? */
@@ -173,9 +173,9 @@ void boardInit(void)
   #endif
 
   /* Initialise ADC channel 1 (pin 0.12) */
-  LPC_IOCON->TMS_PIO0_12   &= ~0x9F;
-  LPC_IOCON->TMS_PIO0_12   |= 0x02;
-  adcInit();
+  //LPC_IOCON->TMS_PIO0_12   &= ~0x9F;
+  //LPC_IOCON->TMS_PIO0_12   |= 0x02;
+  //adcInit();
 
   /* Turn the user LED on after init to indicate that everything is OK */
   boardLED(CFG_LED_ON);
@@ -224,11 +224,11 @@ void boardLED(uint8_t state)
 {
   if (state)
   {
-    LPC_GPIO->SET[CFG_LED_PORT] = (1 << CFG_LED_PIN);
+    LPC_GPIO_PORT->SET[CFG_LED_PORT] = (1 << CFG_LED_PIN);
   }
   else
   {
-    LPC_GPIO->CLR[CFG_LED_PORT] = (1 << CFG_LED_PIN);
+    LPC_GPIO_PORT->CLR[CFG_LED_PORT] = (1 << CFG_LED_PIN);
   }
 }
 
