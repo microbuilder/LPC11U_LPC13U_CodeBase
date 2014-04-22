@@ -284,8 +284,8 @@ extern "C" {
     CFG_LED_OFF               The pin state to turn the LED off (0 = low, 1 = high)
 
     -----------------------------------------------------------------------*/
-    #define CFG_LED_PORT                  (0)
-    #define CFG_LED_PIN                   (7)
+    #define CFG_LED_PORT                  (2)
+    #define CFG_LED_PIN                   (16)
     #define CFG_LED_ON                    (1)
     #define CFG_LED_OFF                   (0)
 /*=========================================================================*/
