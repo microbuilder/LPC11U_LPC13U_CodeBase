@@ -342,7 +342,7 @@ extern ErrorCode_t mwCDC_SendNotification (USBD_HANDLE_T hCdc, uint8_t bNotifica
 
 
 #ifdef __cplusplus
-extern "C" {
+}
 #endif
 
 #endif  /* __CDCUSER_H__ */ 
