@@ -36,13 +36,13 @@
 									<listOptionValue builtIn="false" value="__USE_CMSIS=CMSISv2p00_LPC11Uxx"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.220640580" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
-								<option id="com.crt.advproject.gcc.hdrlib.701733772" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
+								<option id="com.crt.advproject.gcc.hdrlib.701733772" name="Library headers" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1158021021" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
-								<option id="com.crt.advproject.c.misc.dialect.607931325" name="C Dialect" superClass="com.crt.advproject.c.misc.dialect" value="com.crt.advproject.misc.dialect.gnu99" valueType="enumerated"/>
+								<option id="com.crt.advproject.c.misc.dialect.607931325" name="Language standard" superClass="com.crt.advproject.c.misc.dialect" value="com.crt.advproject.misc.dialect.gnu99" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.warnings.pedantic.1694593321" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<inputType id="com.crt.advproject.compiler.input.1531632236" superClass="com.crt.advproject.compiler.input"/>
 							</tool>
@@ -50,7 +50,7 @@
 								<option id="com.crt.advproject.gas.arch.1482050908" name="Architecture" superClass="com.crt.advproject.gas.arch" value="com.crt.advproject.gas.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.gas.thumb.1985823242" name="Thumb mode" superClass="com.crt.advproject.gas.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.both.asm.option.flags.crt.907328865" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" value="-c -x assembler-with-cpp -D__REDLIB__ -DDEBUG -D__CODE_RED" valueType="string"/>
-								<option id="com.crt.advproject.gas.hdrlib.1232253139" name="Use headers for C library" superClass="com.crt.advproject.gas.hdrlib" value="com.crt.advproject.gas.hdrlib.codered" valueType="enumerated"/>
+								<option id="com.crt.advproject.gas.hdrlib.1232253139" name="Library headers" superClass="com.crt.advproject.gas.hdrlib" value="com.crt.advproject.gas.hdrlib.codered" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.assembler.input.492793352" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1506086469" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -66,7 +66,7 @@
 									<listOptionValue builtIn="false" value="--allow-multiple-definition"/>
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
-								<option id="com.crt.advproject.link.gcc.hdrlib.874162722" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
+								<option id="com.crt.advproject.link.gcc.hdrlib.874162722" name="Library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.918751438" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM0l_math"/>
 									<listOptionValue builtIn="false" value="RTX_CM0"/>
@@ -74,7 +74,8 @@
 								<option id="gnu.c.link.option.paths.1326749668" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
-								<option id="com.crt.advproject.link.gcc.multicore.slave.611061657" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
+								<option id="com.crt.advproject.link.gcc.multicore.slave.611061657" name="Multicore configuration" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
+								<option id="com.crt.advproject.link.gcc.multicore.master.userobjs.759872035" name="Slave Objects (not visible)" superClass="com.crt.advproject.link.gcc.multicore.master.userobjs" valueType="userObjs"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.2105041727" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -84,7 +85,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.1683240460.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|system_LPC13Uxx.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
+						<entry excluding="system_LPC11U6x.c|startup_lpc11u6x_gnumake.c|startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|system_LPC13Uxx.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -186,13 +187,13 @@
 									<listOptionValue builtIn="false" value="__USE_CMSIS=CMSISv2p10_LPC13Uxx"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.1929918352" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
-								<option id="com.crt.advproject.gcc.hdrlib.1563562537" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
+								<option id="com.crt.advproject.gcc.hdrlib.1563562537" name="Library headers" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.923082958" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
-								<option id="com.crt.advproject.c.misc.dialect.1058054445" name="C Dialect" superClass="com.crt.advproject.c.misc.dialect" value="com.crt.advproject.misc.dialect.gnu99" valueType="enumerated"/>
+								<option id="com.crt.advproject.c.misc.dialect.1058054445" name="Language standard" superClass="com.crt.advproject.c.misc.dialect" value="com.crt.advproject.misc.dialect.gnu99" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.warnings.pedantic.746780479" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<inputType id="com.crt.advproject.compiler.input.692695703" superClass="com.crt.advproject.compiler.input"/>
 							</tool>
@@ -200,7 +201,7 @@
 								<option id="com.crt.advproject.gas.arch.218501735" name="Architecture" superClass="com.crt.advproject.gas.arch" value="com.crt.advproject.gas.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.gas.thumb.1784611683" name="Thumb mode" superClass="com.crt.advproject.gas.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.both.asm.option.flags.crt.2029696743" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" value="-c -x assembler-with-cpp -D__REDLIB__ -DDEBUG -D__CODE_RED" valueType="string"/>
-								<option id="com.crt.advproject.gas.hdrlib.97812233" name="Use headers for C library" superClass="com.crt.advproject.gas.hdrlib" value="com.crt.advproject.gas.hdrlib.codered" valueType="enumerated"/>
+								<option id="com.crt.advproject.gas.hdrlib.97812233" name="Library headers" superClass="com.crt.advproject.gas.hdrlib" value="com.crt.advproject.gas.hdrlib.codered" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.assembler.input.1772704232" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.1113863701" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -216,7 +217,7 @@
 									<listOptionValue builtIn="false" value="--allow-multiple-definition"/>
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
-								<option id="com.crt.advproject.link.gcc.hdrlib.1660270697" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
+								<option id="com.crt.advproject.link.gcc.hdrlib.1660270697" name="Library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.1263477426" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM3l_math"/>
 									<listOptionValue builtIn="false" value="RTX_CM3"/>
@@ -224,7 +225,8 @@
 								<option id="gnu.c.link.option.paths.1276160123" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
-								<option id="com.crt.advproject.link.gcc.multicore.slave.892745171" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
+								<option id="com.crt.advproject.link.gcc.multicore.slave.892745171" name="Multicore configuration" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
+								<option id="com.crt.advproject.link.gcc.multicore.master.userobjs.648515429" name="Slave Objects (not visible)" superClass="com.crt.advproject.link.gcc.multicore.master.userobjs" valueType="userObjs"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.181391152" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -234,7 +236,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.2088192637.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|system_LPC11Uxx.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
+						<entry excluding="system_LPC11U6x.c|startup_lpc11u6x_gnumake.c|startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|system_LPC11Uxx.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -336,13 +338,13 @@
 									<listOptionValue builtIn="false" value="__USE_CMSIS=CMSISv2p10_LPC13Uxx"/>
 								</option>
 								<option id="gnu.c.compiler.option.misc.other.244627948" name="Other flags" superClass="gnu.c.compiler.option.misc.other" value="-c -fmessage-length=0 -fno-builtin -ffunction-sections -fdata-sections" valueType="string"/>
-								<option id="com.crt.advproject.gcc.hdrlib.1843567114" name="Use headers for C library" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
+								<option id="com.crt.advproject.gcc.hdrlib.1843567114" name="Library headers" superClass="com.crt.advproject.gcc.hdrlib" value="com.crt.advproject.gcc.hdrlib.codered" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.include.paths.1896358864" name="Include paths (-I)" superClass="gnu.c.compiler.option.include.paths" valueType="includePath">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src}&quot;"/>
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/src/cli}&quot;"/>
 								</option>
-								<option id="com.crt.advproject.c.misc.dialect.59094747" name="C Dialect" superClass="com.crt.advproject.c.misc.dialect" value="com.crt.advproject.misc.dialect.gnu99" valueType="enumerated"/>
+								<option id="com.crt.advproject.c.misc.dialect.59094747" name="Language standard" superClass="com.crt.advproject.c.misc.dialect" value="com.crt.advproject.misc.dialect.gnu99" valueType="enumerated"/>
 								<option id="gnu.c.compiler.option.warnings.pedantic.390923332" name="Pedantic (-pedantic)" superClass="gnu.c.compiler.option.warnings.pedantic" value="false" valueType="boolean"/>
 								<inputType id="com.crt.advproject.compiler.input.908086299" superClass="com.crt.advproject.compiler.input"/>
 							</tool>
@@ -350,7 +352,7 @@
 								<option id="com.crt.advproject.gas.arch.456291473" name="Architecture" superClass="com.crt.advproject.gas.arch" value="com.crt.advproject.gas.target.cm3" valueType="enumerated"/>
 								<option id="com.crt.advproject.gas.thumb.528382375" name="Thumb mode" superClass="com.crt.advproject.gas.thumb" value="true" valueType="boolean"/>
 								<option id="gnu.both.asm.option.flags.crt.2135136227" name="Assembler flags" superClass="gnu.both.asm.option.flags.crt" value="-c -x assembler-with-cpp -D__REDLIB__ -DDEBUG -D__CODE_RED" valueType="string"/>
-								<option id="com.crt.advproject.gas.hdrlib.1307819853" name="Use headers for C library" superClass="com.crt.advproject.gas.hdrlib" value="com.crt.advproject.gas.hdrlib.codered" valueType="enumerated"/>
+								<option id="com.crt.advproject.gas.hdrlib.1307819853" name="Library headers" superClass="com.crt.advproject.gas.hdrlib" value="com.crt.advproject.gas.hdrlib.codered" valueType="enumerated"/>
 								<inputType id="com.crt.advproject.assembler.input.161749592" name="Additional Assembly Source Files" superClass="com.crt.advproject.assembler.input"/>
 								<inputType id="cdt.managedbuild.tool.gnu.assembler.input.411573238" superClass="cdt.managedbuild.tool.gnu.assembler.input"/>
 							</tool>
@@ -366,7 +368,7 @@
 									<listOptionValue builtIn="false" value="--allow-multiple-definition"/>
 									<listOptionValue builtIn="false" value="--gc-sections"/>
 								</option>
-								<option id="com.crt.advproject.link.gcc.hdrlib.2128421580" name="Use C library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
+								<option id="com.crt.advproject.link.gcc.hdrlib.2128421580" name="Library" superClass="com.crt.advproject.link.gcc.hdrlib" value="com.crt.advproject.gcc.link.hdrlib.codered.semihost" valueType="enumerated"/>
 								<option id="gnu.c.link.option.libs.1160871876" name="Libraries (-l)" superClass="gnu.c.link.option.libs" valueType="libs">
 									<listOptionValue builtIn="false" value="arm_cortexM3l_math"/>
 									<listOptionValue builtIn="false" value="RTX_CM3"/>
@@ -374,7 +376,8 @@
 								<option id="gnu.c.link.option.paths.1129666474" name="Library search path (-L)" superClass="gnu.c.link.option.paths" valueType="libPaths">
 									<listOptionValue builtIn="false" value="&quot;${workspace_loc:/${ProjName}/cmsis/libs}&quot;"/>
 								</option>
-								<option id="com.crt.advproject.link.gcc.multicore.slave.1388193091" name="Multicore slave" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
+								<option id="com.crt.advproject.link.gcc.multicore.slave.1388193091" name="Multicore configuration" superClass="com.crt.advproject.link.gcc.multicore.slave"/>
+								<option id="com.crt.advproject.link.gcc.multicore.master.userobjs.982140856" name="Slave Objects (not visible)" superClass="com.crt.advproject.link.gcc.multicore.master.userobjs" valueType="userObjs"/>
 								<inputType id="cdt.managedbuild.tool.gnu.c.linker.input.1401162176" superClass="cdt.managedbuild.tool.gnu.c.linker.input">
 									<additionalInput kind="additionalinputdependency" paths="$(USER_OBJS)"/>
 									<additionalInput kind="additionalinput" paths="$(LIBS)"/>
@@ -384,8 +387,8 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.2088192637.925022945.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
+						<entry excluding="system_LPC11U6x.c|startup_lpc11u6x_gnumake.c|startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|system_LPC11Uxx.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
-						<entry excluding="startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|system_LPC11Uxx.c|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 					</sourceEntries>
 				</configuration>
 			</storageModule>
@@ -512,7 +515,7 @@
 					</folderInfo>
 					<fileInfo id="com.crt.advproject.config.exe.debug.31686071.813738243.189727752.src/cr_startup_lpc13u.cpp" name="cr_startup_lpc13u.cpp" rcbsApplicability="disable" resourcePath="src/cr_startup_lpc13u.cpp" toolsToInvoke=""/>
 					<sourceEntries>
-						<entry excluding="startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
+						<entry excluding="system_LPC11U6x.c|startup_lpc11u6x_gnumake.c|startup_LPC13Uxx_keil.s|startup_lpc13u_gnumake.c|startup_lpc11u_gnumake.c|startup_LPC11Uxx_keil.s|startup_LPC13Uxx_arm.s|startup_lpc13u.c|startup_LPC11Uxx_arm.s|startup_lpc11u.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="cmsis"/>
 						<entry excluding="main.c|drivers/rf/bluetooth|drivers/displays/graphic/hw/hx8347g.h|drivers/displays/graphic/hw/hx8347g.c|core/usb/usb_cdc_old.c|core/usb/hid_desc.c|core/usb_cdc.c|drivers/displays/graphic/aafonts/aa2/source|drivers/displays/graphic/aafonts/aa4/source|drivers/storage/fatfs/ccsbcs.c" flags="VALUE_WORKSPACE_PATH|RESOLVED" kind="sourcePath" name="src"/>
 					</sourceEntries>
 				</configuration>
@@ -586,57 +589,57 @@
 		<project id="LPC11U_LPC13U_Codebase.com.crt.advproject.projecttype.exe.1731523490" name="Executable" projectType="com.crt.advproject.projecttype.exe"/>
 	</storageModule>
 	<storageModule moduleId="com.crt.config">
-		<projectStorage>&lt;?xml version="1.0" encoding="UTF-8"?&gt;&#13;
-&lt;TargetConfig&gt;&#13;
-&lt;Properties property_0="" property_2="LPC11_12_13_64K_8K.cfx" property_3="NXP" property_4="LPC1347" property_count="5" version="60000"/&gt;&#13;
-&lt;infoList vendor="NXP"&gt;&#13;
-&lt;info chip="LPC1347" flash_driver="LPC11_12_13_64K_8K.cfx" match_id="0x08020543" name="LPC1347" stub="crt_emu_lpc11_13_nxp"&gt;&#13;
-&lt;chip&gt;&#13;
-&lt;name&gt;LPC1347&lt;/name&gt;&#13;
-&lt;family&gt;LPC13xx (12bit ADC)&lt;/family&gt;&#13;
-&lt;vendor&gt;NXP (formerly Philips)&lt;/vendor&gt;&#13;
-&lt;reset board="None" core="Real" sys="Real"/&gt;&#13;
-&lt;clock changeable="TRUE" freq="12MHz" is_accurate="TRUE"/&gt;&#13;
-&lt;memory can_program="true" id="Flash" is_ro="true" type="Flash"/&gt;&#13;
-&lt;memory id="RAM" type="RAM"/&gt;&#13;
-&lt;memory id="Periph" is_volatile="true" type="Peripheral"/&gt;&#13;
-&lt;memoryInstance derived_from="Flash" id="MFlash64" location="0x0" size="0x10000"/&gt;&#13;
-&lt;memoryInstance derived_from="RAM" id="RamLoc8" location="0x10000000" size="0x2000"/&gt;&#13;
-&lt;memoryInstance derived_from="RAM" id="RamUsb2" location="0x20004000" size="0x800"/&gt;&#13;
-&lt;memoryInstance derived_from="RAM" id="RamPeriph2" location="0x20000000" size="0x800"/&gt;&#13;
-&lt;prog_flash blocksz="0x1000" location="0x0" maxprgbuff="0x1000" progwithcode="TRUE" size="0x10000"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_MPU" determined="infoFile" id="MPU" location="0xe000ed90"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_NVIC" determined="infoFile" id="NVIC" location="0xe000e000"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_DCR" determined="infoFile" id="DCR" location="0xe000edf0"/&gt;&#13;
-&lt;peripheralInstance derived_from="V7M_ITM" determined="infoFile" id="ITM" location="0xe0000000"/&gt;&#13;
-&lt;peripheralInstance derived_from="I2C" determined="infoFile" id="I2C" location="0x40000000"/&gt;&#13;
-&lt;peripheralInstance derived_from="WWDT" determined="infoFile" id="WWDT" location="0x40004000"/&gt;&#13;
-&lt;peripheralInstance derived_from="USART" determined="infoFile" id="USART" location="0x40008000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT16B0" determined="infoFile" id="CT16B0" location="0x4000c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT16B1" determined="infoFile" id="CT16B1" location="0x40010000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT32B0" determined="infoFile" id="CT32B0" location="0x40014000"/&gt;&#13;
-&lt;peripheralInstance derived_from="CT32B1" determined="infoFile" id="CT32B1" location="0x40018000"/&gt;&#13;
-&lt;peripheralInstance derived_from="ADC" determined="infoFile" id="ADC" location="0x4001c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="PMU" determined="infoFile" id="PMU" location="0x40038000"/&gt;&#13;
-&lt;peripheralInstance derived_from="FLASHCTRL" determined="infoFile" id="FLASHCTRL" location="0x4003c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="SSP0" determined="infoFile" id="SSP0" location="0x40040000"/&gt;&#13;
-&lt;peripheralInstance derived_from="IOCON" determined="infoFile" id="IOCON" location="0x40044000"/&gt;&#13;
-&lt;peripheralInstance derived_from="SYSCON" determined="infoFile" id="SYSCON" location="0x40048000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-PIN-INT" determined="infoFile" id="GPIO-PIN-INT" location="0x4004c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="SSP1" determined="infoFile" id="SSP1" location="0x40058000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-GROUP-INT0" determined="infoFile" id="GPIO-GROUP-INT0" location="0x4005c000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-GROUP-INT1" determined="infoFile" id="GPIO-GROUP-INT1" location="0x40060000"/&gt;&#13;
-&lt;peripheralInstance derived_from="RITIMER" determined="infoFile" id="RITIMER" location="0x40064000"/&gt;&#13;
-&lt;peripheralInstance derived_from="USB" determined="infoFile" id="USB" location="0x40080000"/&gt;&#13;
-&lt;peripheralInstance derived_from="GPIO-PORT" determined="infoFile" id="GPIO-PORT" location="0x50000000"/&gt;&#13;
-&lt;/chip&gt;&#13;
-&lt;processor&gt;&#13;
-&lt;name gcc_name="cortex-m3"&gt;Cortex-M3&lt;/name&gt;&#13;
-&lt;family&gt;Cortex-M&lt;/family&gt;&#13;
-&lt;/processor&gt;&#13;
-&lt;link href="nxp_lpc13Uxx_peripheral.xme" show="embed" type="simple"/&gt;&#13;
-&lt;/info&gt;&#13;
-&lt;/infoList&gt;&#13;
+		<projectStorage>&lt;?xml version="1.0" encoding="UTF-8"?&gt;
+&lt;TargetConfig&gt;
+&lt;Properties property_0="" property_2="LPC11_12_13_64K_8K.cfx" property_3="NXP" property_4="LPC1347" property_count="5" version="70200"/&gt;
+&lt;infoList vendor="NXP"&gt;
+&lt;info chip="LPC1347" flash_driver="LPC11_12_13_64K_8K.cfx" match_id="0x08020543" name="LPC1347" stub="crt_emu_lpc11_13_nxp"&gt;
+&lt;chip&gt;
+&lt;name&gt;LPC1347&lt;/name&gt;
+&lt;family&gt;LPC13xx (12bit ADC)&lt;/family&gt;
+&lt;vendor&gt;NXP (formerly Philips)&lt;/vendor&gt;
+&lt;reset board="None" core="Real" sys="Real"/&gt;
+&lt;clock changeable="TRUE" freq="12MHz" is_accurate="TRUE"/&gt;
+&lt;memory can_program="true" id="Flash" is_ro="true" type="Flash"/&gt;
+&lt;memory id="RAM" type="RAM"/&gt;
+&lt;memory id="Periph" is_volatile="true" type="Peripheral"/&gt;
+&lt;memoryInstance derived_from="Flash" id="MFlash64" location="0x0" size="0x10000"/&gt;
+&lt;memoryInstance derived_from="RAM" id="RamLoc8" location="0x10000000" size="0x2000"/&gt;
+&lt;memoryInstance derived_from="RAM" id="RamUsb2" location="0x20004000" size="0x800"/&gt;
+&lt;memoryInstance derived_from="RAM" id="RamPeriph2" location="0x20000000" size="0x800"/&gt;
+&lt;prog_flash blocksz="0x1000" location="0x0" maxprgbuff="0x1000" progwithcode="TRUE" size="0x10000"/&gt;
+&lt;peripheralInstance derived_from="V7M_MPU" determined="infoFile" id="MPU" location="0xe000ed90"/&gt;
+&lt;peripheralInstance derived_from="V7M_NVIC" determined="infoFile" id="NVIC" location="0xe000e000"/&gt;
+&lt;peripheralInstance derived_from="V7M_DCR" determined="infoFile" id="DCR" location="0xe000edf0"/&gt;
+&lt;peripheralInstance derived_from="V7M_ITM" determined="infoFile" id="ITM" location="0xe0000000"/&gt;
+&lt;peripheralInstance derived_from="I2C" determined="infoFile" id="I2C" location="0x40000000"/&gt;
+&lt;peripheralInstance derived_from="WWDT" determined="infoFile" id="WWDT" location="0x40004000"/&gt;
+&lt;peripheralInstance derived_from="CT16B0" determined="infoFile" id="CT16B0" location="0x4000c000"/&gt;
+&lt;peripheralInstance derived_from="CT16B1" determined="infoFile" id="CT16B1" location="0x40010000"/&gt;
+&lt;peripheralInstance derived_from="CT32B0" determined="infoFile" id="CT32B0" location="0x40014000"/&gt;
+&lt;peripheralInstance derived_from="CT32B1" determined="infoFile" id="CT32B1" location="0x40018000"/&gt;
+&lt;peripheralInstance derived_from="USART" determined="infoFile" id="USART" location="0x40008000"/&gt;
+&lt;peripheralInstance derived_from="ADC" determined="infoFile" id="ADC" location="0x4001c000"/&gt;
+&lt;peripheralInstance derived_from="PMU" determined="infoFile" id="PMU" location="0x40038000"/&gt;
+&lt;peripheralInstance derived_from="FLASHCTRL" determined="infoFile" id="FLASHCTRL" location="0x4003c000"/&gt;
+&lt;peripheralInstance derived_from="SSP0" determined="infoFile" id="SSP0" location="0x40040000"/&gt;
+&lt;peripheralInstance derived_from="IOCON" determined="infoFile" id="IOCON" location="0x40044000"/&gt;
+&lt;peripheralInstance derived_from="SYSCON" determined="infoFile" id="SYSCON" location="0x40048000"/&gt;
+&lt;peripheralInstance derived_from="GPIO-PIN-INT" determined="infoFile" id="GPIO-PIN-INT" location="0x4004c000"/&gt;
+&lt;peripheralInstance derived_from="SSP1" determined="infoFile" id="SSP1" location="0x40058000"/&gt;
+&lt;peripheralInstance derived_from="GPIO-GROUP-INT0" determined="infoFile" id="GPIO-GROUP-INT0" location="0x4005c000"/&gt;
+&lt;peripheralInstance derived_from="GPIO-GROUP-INT1" determined="infoFile" id="GPIO-GROUP-INT1" location="0x40060000"/&gt;
+&lt;peripheralInstance derived_from="RITIMER" determined="infoFile" id="RITIMER" location="0x40064000"/&gt;
+&lt;peripheralInstance derived_from="USB" determined="infoFile" id="USB" location="0x40080000"/&gt;
+&lt;peripheralInstance derived_from="GPIO-PORT" determined="infoFile" id="GPIO-PORT" location="0x50000000"/&gt;
+&lt;/chip&gt;
+&lt;processor&gt;
+&lt;name gcc_name="cortex-m3"&gt;Cortex-M3&lt;/name&gt;
+&lt;family&gt;Cortex-M&lt;/family&gt;
+&lt;/processor&gt;
+&lt;link href="nxp_lpc13Uxx_peripheral.xme" show="embed" type="simple"/&gt;
+&lt;/info&gt;
+&lt;/infoList&gt;
 &lt;/TargetConfig&gt;</projectStorage>
 	</storageModule>
 	<storageModule moduleId="org.eclipse.cdt.core.LanguageSettingsProviders"/>
