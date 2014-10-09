@@ -188,7 +188,7 @@ error_t lsm303magSetGain(lsm303MagGain_t gain)
       break;
     case LSM303_MAGGAIN_4_7:
       _lsm303mag_Gauss_LSB_XY = 400;
-      _lsm303mag_Gauss_LSB_Z = 255;
+      _lsm303mag_Gauss_LSB_Z = 355;
       break;
     case LSM303_MAGGAIN_5_6:
       _lsm303mag_Gauss_LSB_XY = 330;
