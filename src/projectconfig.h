@@ -107,6 +107,8 @@ extern "C" {
       #include "boards/lpcxpresso1347/board_lpcxpresso1347.h"
     #elif defined(CFG_BRD_LPCXPRESSO_LPC11U68)
       #include "boards/lpcxpresso11u68/board_lpcxpresso11u68.h"
+    #elif defined(CFG_BRD_LPCXPRESSO_LPC11U37H)
+      #include "boards/lpcxpresso11u37h/board_lpcxpresso11u37h.h"
     #elif defined(CFG_BRD_RF1GHZNODE)
        #include "boards/rf1ghznode/board_rf1ghznode.h"
     #elif defined(CFG_BRD_RF1GHZUSB)
