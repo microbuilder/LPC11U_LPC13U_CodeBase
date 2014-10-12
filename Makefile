@@ -48,6 +48,9 @@ OBJS  += $(OBJ_PATH)/RTX_hook.o
 VPATH += src
 OBJS  += $(OBJ_PATH)/printf-retarget.o
 
+VPATH += src/boards/lpcxpresso11u37h
+OBJS  += $(OBJ_PATH)/board_lpcxpresso11u37h.o
+
 VPATH += src/boards/lpcxpresso11u68
 OBJS  += $(OBJ_PATH)/board_lpcxpresso11u68.o
 
