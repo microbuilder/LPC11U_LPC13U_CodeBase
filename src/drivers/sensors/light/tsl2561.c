@@ -454,7 +454,7 @@ uint32_t tsl2561CalculateLux(uint16_t ch0, uint16_t ch1)
   ratio = (ratio1 + 1) >> 1;
 
 #ifdef TSL2561_PACKAGE_CS
-  if ((ratio >= 0) && (ratio <= TSL2561_LUX_K1C))
+  if (ratio <= TSL2561_LUX_K1C)
     {b=TSL2561_LUX_B1C; m=TSL2561_LUX_M1C;}
   else if (ratio <= TSL2561_LUX_K2C)
     {b=TSL2561_LUX_B2C; m=TSL2561_LUX_M2C;}

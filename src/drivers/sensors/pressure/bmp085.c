@@ -230,7 +230,7 @@ error_t bmp085ReadRawPressure(int32_t *pressure)
 error_t bmp085Init(bmp085_mode_t mode)
 {
   /* Mode boundary check */
-  if ((mode > BMP085_MODE_ULTRAHIGHRES) || (mode < 0))
+  if (mode > BMP085_MODE_ULTRAHIGHRES)
   {
     mode = BMP085_MODE_ULTRAHIGHRES;
   }
