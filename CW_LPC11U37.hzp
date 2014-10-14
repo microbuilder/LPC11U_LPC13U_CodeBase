@@ -3,7 +3,7 @@
   <project Name="LPC11U37_CodeBase">
     <configuration
       Name="Common"
-      Target="LPC11U37/401"
+      Target="LPC11U37/501"
       arm_architecture="v6M"
       arm_core_type="Cortex-M0"
       arm_gcc_target="arm-unknown-eabi"
@@ -11,7 +11,7 @@
       arm_linker_heap_size="0"
       arm_linker_stack_size="1024"
       arm_simulator_memory_simulation_filename="$(TargetsDir)/LPC1000/LPC1000SimulatorMemory.dll"
-      arm_simulator_memory_simulation_parameter="LPC11Uxx;0x20000;0x2000;0x0"
+      arm_simulator_memory_simulation_parameter="LPC11Uxx;0x20000;0x2000;0x800"
       arm_target_debug_interface_type="ADIv5"
       arm_target_interface_type="SWD"
       arm_target_loader_parameter="12000000"
@@ -20,8 +20,9 @@
       c_user_include_directories="$(TargetsDir)/LPC1000/include"
       link_include_startup_code="No"
       linker_additional_files="$(TargetsDir)/LPC1000/lib/liblpc1000$(LibExt)$(LIB);$(ProjectDir)/cmsis/libs/libarm_cortexM0l_math$(LIB);$(ProjectDir)/cmsis/libs/libRTX_CM0$(LIB)"
-      linker_memory_map_file="$(TargetsDir)/LPC1000/LPC11U37_401_MemoryMap.xml"
+      linker_memory_map_file="$(TargetsDir)/LPC1000/LPC11U37_501_MemoryMap.xml"
       linker_output_format="bin"
+      macros="LPC1000_Series=LPC11Uxx"
       oscillator_frequency="12MHz"
       project_directory=""
       project_type="Executable"
@@ -375,6 +376,10 @@
           <file file_name="src/boards/simulator/board_simulator.c" />
           <file file_name="src/boards/simulator/board_simulator.h" />
         </folder>
+        <folder Name="lpcxpresso11u37h">
+          <file file_name="src/boards/lpcxpresso11u37h/board_lpcxpresso11u37h.c" />
+          <file file_name="src/boards/lpcxpresso11u37h/board_lpcxpresso11u37h.h" />
+        </folder>
       </folder>
       <file file_name="src/printf-retarget.c" />
       <file file_name="src/asserts.h" />
@@ -441,7 +446,7 @@
     Name="Common"
     arm_gcc_target="arm-unknown-eabi"
     arm_linker_allow_multiple_definition="Yes"
-    c_preprocessor_definitions="CFG_BRD_RF1GHZNODE;ARM_MATH_CM0"
+    c_preprocessor_definitions="CFG_BRD_LPCXPRESSO_LPC11U37H;ARM_MATH_CM0"
     c_user_include_directories="$(ProjectDir)/cmsis/;$(ProjectDir)/src/;$(ProjectDir)/src/cli/"
     linker_printf_fp_enabled="Yes" />
 </solution>

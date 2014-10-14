@@ -556,7 +556,7 @@ extern "C" {
     #define CFG_SDCARD_SPIPORT          (0)
     #define CFG_SDCARD_SSELPORT         (1)
     #define CFG_SDCARD_SSELPIN          (12)
-    #define CFG_SDCARD_CDENABLED        (1)   // Must be 0 or 1
+    #define CFG_SDCARD_CDENABLED        (0)   // Must be 0 or 1
     #define CFG_SDCARD_CDPORT           (1)
     #define CFG_SDCARD_CDPIN            (9)
     #define CFG_SDCARD_ENBLENABLED      (0)   // Must be 0 or 1
@@ -738,7 +738,7 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #ifdef CFG_ENABLE_USB
       #define CFG_USB_STRING_MANUFACTURER       "microBuilder.eu"
-      #define CFG_USB_STRING_PRODUCT            "LPC11U68 LPCXpresso"
+      #define CFG_USB_STRING_PRODUCT            "LPC11U37H LPCXpresso"
       #define CFG_USB_VENDORID                  (0x1FC9)
 
       #define CFG_USB_CDC
