@@ -43,8 +43,6 @@
 #include "mock_usb_hid.h"
 #include "mock_usb_custom_class.h"
 #include "mock_protocol_callback.h"
-#include "mock_ssp0_slave.h"
-#include "mock_ssp1_slave.h"
 
 uint32_t SystemCoreClock = 12000000; // overshadow the variable used to determine core lock
 
