@@ -117,20 +117,11 @@ OBJS  += $(OBJ_PATH)/string.o
 VPATH += src/core/pmu
 OBJS  += $(OBJ_PATH)/pmu.o
 
-VPATH += src/core/spi_datalayer
-OBJS += $(OBJ_PATH)/spi_datalayer.o
-
 VPATH += src/core/ssp0
 OBJS  += $(OBJ_PATH)/ssp0.o
 
-VPATH += src/core/ssp0_slave
-OBJS  += $(OBJ_PATH)/ssp0_slave.o
-
 VPATH += src/core/ssp1
 OBJS  += $(OBJ_PATH)/ssp1.o
-
-VPATH += src/core/ssp1_slave
-OBJS  += $(OBJ_PATH)/ssp1_slave.o
 
 VPATH += src/core/timer16
 OBJS  += $(OBJ_PATH)/timer16.o

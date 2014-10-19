@@ -222,18 +222,6 @@
 #include "protocol.h"
 #include "core/fifo/fifo.h"
 
-#if defined(CFG_PROTOCOL_VIA_SSP0)
-  #include "core/ssp0_slave/ssp0_slave.h"
-  static uint8_t ssp_buffer[sizeof(protMsgCommand_t)];
-  static uint8_t is_ssp_busy = 0;
-#endif
-
-#if defined(CFG_PROTOCOL_VIA_SSP1)
-  #include "core/ssp1_slave/ssp1_slave.h"
-  static uint8_t ssp_buffer[sizeof(protMsgCommand_t)];
-  static uint8_t is_ssp_busy = 0;
-#endif
-
 /* Callback functions to let us know when new data arrives via USB, SPI, etc. */
 #if defined(CFG_PROTOCOL_VIA_HID)
   #define command_received_isr  usb_hid_generic_recv_isr
@@ -241,12 +229,6 @@
 #elif defined(CFG_PROTOCOL_VIA_BULK)
   #define command_received_isr  usb_custom_received_isr
   #define command_send          usb_custom_send
-#elif defined(CFG_PROTOCOL_VIA_SSP0)
-  #define command_received_isr  ssp0_received_isr
-  #define command_send          ssp0_slave_send
-#elif defined(CFG_PROTOCOL_VIA_SSP1)
-  #define command_received_isr  ssp1_received_isr
-  #define command_send          ssp1_slave_send
 #endif
 
 #define U16_HIGH_U8(u16)  ((uint8_t) (((u16) >> 8) & 0x00FF))
@@ -348,35 +330,7 @@ void command_received_isr(uint8_t * p_data, uint32_t length)
 void prot_init(void)
 {
   fifo_clear(&ff_prot_cmd);
-
-  /* ToDo: Double check these pins and use board config settings */
-  #if defined CFG_PROTOCOL_VIA_SSP0
-    /* Use pin P0_2 for SSEL. */
-    LPC_IOCON->PIO0_2 &= ~0x07;
-    LPC_IOCON->PIO0_2 |= 0x01;
-    ssp0_slaveInit();
-  #elif defined CFG_PROTOCOL_VIA_SSP1
-    /* Use pin P0_2 for SSEL. */
-    LPC_IOCON->PIO0_2 &= ~0x07;
-    LPC_IOCON->PIO0_2 |= 0x01;
-    ssp1_slaveInit();
-  #endif
 }
-
-/**************************************************************************/
-/*!
-        This callback will fired once the specified number of bytes have
-        been received over SSP slave (see: ssp0_slaveInterruptRecv)
-*/
-/**************************************************************************/
-#if defined(CFG_PROTOCOL_VIA_SSP0) || defined(CFG_PROTOCOL_VIA_SSP1)
-void ssp_recv_done(void)
-{
-  /* Call command received isr here to process SPI data */
-  command_received_isr(ssp_buffer, sizeof(protMsgCommand_t));
-  is_ssp_busy = 0;
-}
-#endif
 
 /**************************************************************************/
 /*!
@@ -405,23 +359,6 @@ void ssp_recv_done(void)
 /**************************************************************************/
 void prot_exec(void * p_para)
 {
-  /* ToDo: This should be handled in SSP drivers! */
-  #if defined CFG_PROTOCOL_VIA_SSP0
-        /* Check if any SPI data is available. */
-        if(is_ssp_busy == 0)
-        {
-      ssp0_slaveInterruptRecv(ssp_buffer, sizeof(protMsgCommand_t), ssp_recv_done);
-      is_ssp_busy = 1;
-        }
-  #elif defined CFG_PROTOCOL_VIA_SSP1
-        /* Check if any SPI data is available. */
-        if(is_ssp_busy == 0)
-        {
-      ssp1_slaveInterruptRecv(ssp_buffer, sizeof(protMsgCommand_t), ssp_recv_done);
-      is_ssp_busy = 1;
-        }
-  #endif
-
   if ( !fifo_isEmpty(&ff_prot_cmd) )
   {
     /* If we get here, it means a command was received */
@@ -468,36 +405,36 @@ void prot_exec(void * p_para)
     }
 
     /* RESPONSE PHASE */
-        // TODO:  Make sure the usb command is ready to send
-        // in case there are a bunch of cmds queued in FIFO
-        if (error == ERROR_NONE)
-        {
-          /* Invoke the 'cmd_executed' callback */
-          if (prot_cmd_executed_cb)
-          {
-                prot_cmd_executed_cb(&message_reponse);
-          }
-          /* Send the response message (cmd successfully executed) */
-          command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
-        }
-        else
-        {
-          /* Something went wrong ... parse the error ID */
-          protMsgError_t message_error =
-          {
-                .msg_type      = PROT_MSGTYPE_ERROR,
-          };
-          message_error.error_id_high = U16_HIGH_U8(error);
-          message_error.error_id_low  = U16_LOW_U8 (error);
+    // TODO:  Make sure the usb command is ready to send
+    // in case there are a bunch of cmds queued in FIFO
+    if (error == ERROR_NONE)
+    {
+      /* Invoke the 'cmd_executed' callback */
+      if (prot_cmd_executed_cb)
+      {
+            prot_cmd_executed_cb(&message_reponse);
+      }
+      /* Send the response message (cmd successfully executed) */
+      command_send( (uint8_t*) &message_reponse, sizeof(protMsgResponse_t));
+    }
+    else
+    {
+      /* Something went wrong ... parse the error ID */
+      protMsgError_t message_error =
+      {
+            .msg_type      = PROT_MSGTYPE_ERROR,
+      };
+      message_error.error_id_high = U16_HIGH_U8(error);
+      message_error.error_id_low  = U16_LOW_U8 (error);
 
-          /* Invoke the 'cmd_error' callback */
-          if (prot_cmd_error_cb)
-          {
-                prot_cmd_error_cb(&message_error);
-          }
-          /* Send back a mandatory error message */
-          command_send( (uint8_t*)  &message_error, sizeof(protMsgError_t));
-        }
+      /* Invoke the 'cmd_error' callback */
+      if (prot_cmd_error_cb)
+      {
+            prot_cmd_error_cb(&message_error);
+      }
+      /* Send back a mandatory error message */
+      command_send( (uint8_t*)  &message_error, sizeof(protMsgError_t));
+    }
   }
 }
 

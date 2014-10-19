@@ -461,22 +461,17 @@ extern "C" {
     CFG_PROTOCOL            If this field is defined the binary command
                             parser will be included
 
-	CFG_PROTOCOL_VIA_HID	Use USB HID for the binary protocol
-							(requires CFG_USB_HID_GENERIC)
-	CFG_PROTOCOL_VIA_BULK	Use USB Bulk for the binary protocol
-							(requires CFG_USB_CUSTOM_CLASS)
-	CFG_PROTOCO_VIA_SSP0	Uses SSP0 Slave for the binary protocol
-	CFG_PROTOCO_VIA_SSP1	Uses SSP1 Slave for the binary protocol
+    CFG_PROTOCOL_VIA_HID    Use USB HID for the binary protocol
+                            (requires CFG_USB_HID_GENERIC)
+    CFG_PROTOCOL_VIA_BULK   Use USB Bulk for the binary protocol
+                            (requires CFG_USB_CUSTOM_CLASS)
     -----------------------------------------------------------------------*/
     #define CFG_PROTOCOL
 
     #define CFG_PROTOCOL_VIA_HID
     // #define CFG_PROTOCOL_VIA_BULK
-    // #define CFG_PROTOCOL_VIA_SSP0
-    // #define CFG_PROTOCOL_VIA_SSP1
 
-    #if defined(CFG_PROTOCOL) && !defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_PROTOCOL_VIA_BULK) \
-				&& !defined(CFG_PROTOCOL_VIA_SSP0) && !defined(CFG_PROTOCOL_VIA_SSP1)
+    #if defined(CFG_PROTOCOL) && !defined(CFG_PROTOCOL_VIA_HID) && !defined(CFG_PROTOCOL_VIA_BULK)
         #error CFG_PROTOCOL must be enabled with either CFG_PROTOCOL_VIA_HID or CFG_PROTOCOL_VIA_BULK
     #endif
 /*=========================================================================*/
