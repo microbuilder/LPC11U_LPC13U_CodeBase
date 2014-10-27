@@ -184,6 +184,87 @@ void boardInit(void)
 }
 
 #ifndef _TEST_
+
+#define SPI_CS_ENABLE  GPIOSetBitValue(0, 2, 0)
+#define SPI_CS_DISABLE GPIOSetBitValue(0, 2, 1)
+
+#define CFG_ATPARSER_BUFSIZE     256
+static char cmd_buffer[CFG_ATPARSER_BUFSIZE];
+static char *ptr_cmd_buffer;
+
+typedef enum
+{
+  SDEP_MSGTYPE_COMMAND          = 0x10,
+  SDEP_MSGTYPE_RESPONSE         = 0x20,
+  SDEP_MSGTYPE_ALERT            = 0x40,
+  SDEP_MSGTYPE_ERROR            = 0x80
+} sdepMsgType_t;
+
+typedef struct __attribute__ ((packed)) {
+  uint8_t msg_type;
+  union
+  {
+    uint16_t cmd_id;
+    struct
+    {
+      uint8_t cmd_id_low;
+      uint8_t cmd_id_high;
+    };
+  };
+  uint8_t length;
+} sdepMsgCommandHeader_t;
+
+
+error_t atparser_task(void)
+{
+  while( uartRxBufferDataPending() )
+  {
+    uint8_t ch = uartRxBufferRead();
+
+    switch(ch)
+    {
+      case '\r':
+      case '\n':
+        // Execute command when getting either \r or \n. Ignoring the next \n or \r
+        if ( ptr_cmd_buffer > cmd_buffer )
+        {
+          uartSendByte('\n');
+          *ptr_cmd_buffer = 0; // Null char
+
+          sdepMsgCommandHeader_t cmdHeader =
+          {
+              .msg_type = SDEP_MSGTYPE_COMMAND,
+              .cmd_id = 0,
+              .length = strlen(cmd_buffer)
+          };
+
+          SPI_CS_ENABLE;
+          ssp0Send(&cmdHeader, 4);
+          ssp0Send(cmd_buffer, strlen(cmd_buffer));
+          SPI_CS_DISABLE;
+
+          ptr_cmd_buffer = cmd_buffer;
+        }
+      break;
+
+      case '\b':
+        if ( ptr_cmd_buffer > cmd_buffer )
+        {
+          uartSend("\b \b", 3);
+          ptr_cmd_buffer--;
+        }
+      break;
+
+      default:
+        uartSendByte(ch);
+        *ptr_cmd_buffer++ = ch;
+      break;
+    }
+  }
+
+  return ERROR_NONE;
+}
+
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
@@ -193,17 +274,18 @@ int main(void)
   boardInit();
 
   // set P0_2 to SSEL0 (function 1)
-  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 0, 2, 1);
-  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 3, 4, GPIO_MODE_PULLUP);
+//  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 0, 2, 1);
+//  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 3, 4, GPIO_MODE_PULLUP);
+  GPIOSetDir(0, 2, 1);
+  GPIOSetBitValue(0, 2, 1);
 
   ssp0Init();
   delay(500);
 
   printf("hello world\n");
 
-  char txt[] = "hello world";
-//  uint8_t buffer[16];
-//  for(uint8_t i =0; i< sizeof(buffer); i++) buffer[i] = 'A' + i;
+  memset(cmd_buffer, 0, sizeof(cmd_buffer));
+  ptr_cmd_buffer = cmd_buffer;
 
   while (1)
   {
@@ -213,8 +295,9 @@ int main(void)
     {
       lastSecond = currentSecond;
       boardLED(lastSecond % 2);
-      ssp0Send(txt, strlen(txt));
     }
+
+    atparser_task();
 
     /* Check for binary protocol input if CFG_PROTOCOL is enabled */
     #ifdef CFG_PROTOCOL

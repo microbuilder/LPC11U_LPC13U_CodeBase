@@ -46,7 +46,7 @@
 void ssp0ClockSlow()
 {
   /* Divide by 15 for SSPCLKDIV */
-  LPC_SYSCON->SSP0CLKDIV = SCB_CLKDIV_DIV15;
+  LPC_SYSCON->SSP0CLKDIV = 255; //SCB_CLKDIV_DIV15;
 
   /* (PCLK / (CPSDVSR * [SCR+1])) = (4,800,000 / (2 x [5 + 1])) = 400 KHz */
   LPC_SSP0->CR0 = ( (7u << 0)     // Data size = 8-bit  (bits 3:0)
