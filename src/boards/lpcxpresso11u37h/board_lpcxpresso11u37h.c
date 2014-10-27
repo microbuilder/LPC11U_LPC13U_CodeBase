@@ -87,6 +87,8 @@
   #include "drivers/rf/wifi/cc3000/wifi.h"
 #endif
 
+#include "core/ssp0/ssp0.h"
+
 #ifdef CFG_SDCARD
 /**************************************************************************/
 /*!
@@ -190,6 +192,19 @@ int main(void)
   /* Configure the HW */
   boardInit();
 
+  // set P0_2 to SSEL0 (function 1)
+  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 0, 2, 1);
+  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 3, 4, GPIO_MODE_PULLUP);
+
+  ssp0Init();
+  delay(500);
+
+  printf("hello world\n");
+
+  char txt[] = "hello world";
+//  uint8_t buffer[16];
+//  for(uint8_t i =0; i< sizeof(buffer); i++) buffer[i] = 'A' + i;
+
   while (1)
   {
     /* Blinky (1Hz) */
@@ -198,6 +213,7 @@ int main(void)
     {
       lastSecond = currentSecond;
       boardLED(lastSecond % 2);
+      ssp0Send(txt, strlen(txt));
     }
 
     /* Check for binary protocol input if CFG_PROTOCOL is enabled */

@@ -56,6 +56,18 @@ extern "C" {
 #define GROUP0          (0)
 #define GROUP1          (1)
 
+enum {
+  GPIO_DIR_INPUT  = 0,
+  GPIO_DIR_OUTPUT = 1
+};
+
+enum {
+  GPIO_MODE_INACTIVE,
+  GPIO_MODE_PULLDOWN,
+  GPIO_MODE_PULLUP,
+  GPIO_MODE_REPEATER
+};
+
 void     GPIOInit ( void );
 void     GPIOSetPinInterrupt ( uint32_t channelNum, uint32_t portNum, uint32_t bitPosi, uint32_t sense, uint32_t event );
 void     GPIOPinIntEnable ( uint32_t channelNum, uint32_t event );
