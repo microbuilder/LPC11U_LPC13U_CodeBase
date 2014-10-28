@@ -185,13 +185,8 @@ void boardInit(void)
 
 #ifndef _TEST_
 
-#if 0
-#define SPI_CS_ENABLE  GPIOSetBitValue(0, 2, 0)
-#define SPI_CS_DISABLE GPIOSetBitValue(0, 2, 1)
-#else
-#define SPI_CS_ENABLE
-#define SPI_CS_DISABLE
-#endif
+#define SPI_CS_ENABLE  do { GPIOSetBitValue(0, 2, 0); delay(1); } while(0)
+#define SPI_CS_DISABLE do { GPIOSetBitValue(0, 2, 1); delay(1); } while(0)
 
 #define CFG_ATPARSER_BUFSIZE     256
 static char cmd_buffer[CFG_ATPARSER_BUFSIZE];
@@ -223,6 +218,59 @@ typedef struct __attribute__ ((packed)) {
 #define DEF_CHARACTER   0xFEu /**< SPI default character. Character clocked out in case of an ignored transaction. */
 #define ORC_CHARACTER   0xFFu /**< SPI over-read character. Character clocked out after an over-read of the transmit buffer. */
 
+uint8_t ssp0TrasnferOne(uint8_t data)
+{
+  uint8_t recv;
+  ssp0Transfer(&recv, &data, 1);
+
+  return recv;
+}
+
+void nrf_ssp0Send (uint8_t *buf, uint32_t length)
+{
+
+  while (length--)
+  {
+    // keep resending if Ignored Character is received
+    while(1)
+    {
+      uint8_t fb;
+
+      SPI_CS_ENABLE;
+      fb = ssp0TrasnferOne(*buf);
+      SPI_CS_DISABLE;
+
+      if (fb != DEF_CHARACTER) break;
+      delay(1); // wait a bit before retry
+    }
+
+    buf++;
+  }
+}
+
+uint32_t nrf_ssp0Receive(uint8_t *buf, uint32_t length)
+{
+  for(uint32_t count=0; count<length; count++)
+  {
+    uint8_t ch;
+
+    while(1)
+    {
+      SPI_CS_ENABLE;
+      ssp0Receive(&ch, 1);
+      SPI_CS_DISABLE;
+
+      if (ch != DEF_CHARACTER) break;
+      delay(1);
+    }
+
+    if (ch == ORC_CHARACTER) return count;
+    *buf++ = ch;
+  }
+
+  return length;
+}
+
 error_t atparser_task(void)
 {
   while( uartRxBufferDataPending() )
@@ -240,6 +288,8 @@ error_t atparser_task(void)
           *ptr_cmd_buffer = 0; // Null char
           ptr_cmd_buffer = cmd_buffer;
 
+          if( 0 == strcmp("atz", cmd_buffer) ) NVIC_SystemReset();
+
           sdepMsgCommand_t cmdHeader =
           {
               .msg_type = SDEP_MSGTYPE_COMMAND,
@@ -248,10 +298,8 @@ error_t atparser_task(void)
           };
 
           // send command
-          SPI_CS_ENABLE;
-          ssp0Send(&cmdHeader, 4);
-          ssp0Send(cmd_buffer, strlen(cmd_buffer));
-          SPI_CS_DISABLE;
+          nrf_ssp0Send( (uint8_t*)&cmdHeader, 4);
+          nrf_ssp0Send( (uint8_t*)cmd_buffer, strlen(cmd_buffer));
 
           // receive response
           sdepMsgCommand_t cmdResponse = { 0 };
@@ -259,28 +307,16 @@ error_t atparser_task(void)
           uint8_t sync =0;
           do{
             delay(10);
-            SPI_CS_ENABLE;
-            ssp0Receive(&sync, 1);
-            SPI_CS_DISABLE;
+            nrf_ssp0Receive(&sync, 1);
           }while(sync != SDEP_MSGTYPE_RESPONSE);
 
-          SPI_CS_ENABLE;
           // response header
           cmdResponse.msg_type = sync;
-          ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
-          SPI_CS_DISABLE;
+          nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
 
-          uint8_t *p_data = cmdResponse.payload;
-          while(1)
-          {
-            SPI_CS_ENABLE;
-            ssp0Receive(&sync, 1);
-            SPI_CS_DISABLE;
+          uint16_t len = nrf_ssp0Receive(cmdResponse.payload, 255);
 
-            if (sync == DEF_CHARACTER || sync == ORC_CHARACTER) break;
-
-            *p_data++ = sync;
-          };
+          cmdResponse.payload[len] = 0;
 
           printf("MType: 0x%02x - CMD: 0x%04x - Len: %d\n",
                  cmdResponse.msg_type,

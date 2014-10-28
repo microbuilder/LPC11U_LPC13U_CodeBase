@@ -38,14 +38,6 @@
 #include "core/gpio/gpio.h"
 #include "core/ssp0/ssp0.h"
 
-#if 1
-#define SPI_CS_ENABLE  GPIOSetBitValue(0, 2, 0); delay(1)
-#define SPI_CS_DISABLE GPIOSetBitValue(0, 2, 1); delay(1)
-#else
-#define SPI_CS_ENABLE
-#define SPI_CS_DISABLE
-#endif
-
 /**************************************************************************/
 /*!
     Set SSP clock to slow (400 KHz)
@@ -170,8 +162,6 @@ void ssp0Send (uint8_t *buf, uint32_t length)
   uint32_t i;
   uint8_t Dummy = Dummy;
 
-  SPI_CS_ENABLE;
-
   for (i = 0; i < length; i++)
   {
     /* Move on only if NOT busy and TX FIFO not full. */
@@ -185,8 +175,6 @@ void ssp0Send (uint8_t *buf, uint32_t length)
     is left in the FIFO. */
     Dummy = LPC_SSP0->DR;
   }
-
-  SPI_CS_DISABLE;
 
   return;
 }
@@ -205,8 +193,6 @@ void ssp0Receive(uint8_t *buf, uint32_t length)
 {
   uint32_t i;
 
-  SPI_CS_ENABLE;
-
   for ( i = 0; i < length; i++ )
   {
     /* As long as the receive FIFO is not empty, data can be received. */
@@ -219,8 +205,6 @@ void ssp0Receive(uint8_t *buf, uint32_t length)
     buf++;
   }
 
-  SPI_CS_DISABLE;
-
   return;
 }
 
@@ -228,8 +212,6 @@ void ssp0Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 {
   uint32_t i;
   uint32_t Dummy;
-
-  SPI_CS_ENABLE;
 
   while ( (LPC_SSP0->SR & (SSP0_SR_RNE_NOTEMPTY)) == SSP0_SR_RNE_NOTEMPTY )
 	{
@@ -265,5 +247,4 @@ void ssp0Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
     }
   }
 
-  SPI_CS_DISABLE;
 }
