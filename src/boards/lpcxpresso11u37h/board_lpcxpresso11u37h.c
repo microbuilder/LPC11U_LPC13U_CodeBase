@@ -185,8 +185,13 @@ void boardInit(void)
 
 #ifndef _TEST_
 
+#if 0
 #define SPI_CS_ENABLE  GPIOSetBitValue(0, 2, 0)
 #define SPI_CS_DISABLE GPIOSetBitValue(0, 2, 1)
+#else
+#define SPI_CS_ENABLE
+#define SPI_CS_DISABLE
+#endif
 
 #define CFG_ATPARSER_BUFSIZE     256
 static char cmd_buffer[CFG_ATPARSER_BUFSIZE];
@@ -212,8 +217,11 @@ typedef struct __attribute__ ((packed)) {
     };
   };
   uint8_t length;
-} sdepMsgCommandHeader_t;
+  uint8_t payload[255];
+} sdepMsgCommand_t;
 
+#define DEF_CHARACTER   0xFEu /**< SPI default character. Character clocked out in case of an ignored transaction. */
+#define ORC_CHARACTER   0xFFu /**< SPI over-read character. Character clocked out after an over-read of the transmit buffer. */
 
 error_t atparser_task(void)
 {
@@ -230,27 +238,63 @@ error_t atparser_task(void)
         {
           uartSendByte('\n');
           *ptr_cmd_buffer = 0; // Null char
+          ptr_cmd_buffer = cmd_buffer;
 
-          sdepMsgCommandHeader_t cmdHeader =
+          sdepMsgCommand_t cmdHeader =
           {
               .msg_type = SDEP_MSGTYPE_COMMAND,
               .cmd_id = 0,
               .length = strlen(cmd_buffer)
           };
 
+          // send command
           SPI_CS_ENABLE;
           ssp0Send(&cmdHeader, 4);
           ssp0Send(cmd_buffer, strlen(cmd_buffer));
           SPI_CS_DISABLE;
 
-          ptr_cmd_buffer = cmd_buffer;
+          // receive response
+          sdepMsgCommand_t cmdResponse = { 0 };
+
+          uint8_t sync =0;
+          do{
+            delay(10);
+            SPI_CS_ENABLE;
+            ssp0Receive(&sync, 1);
+            SPI_CS_DISABLE;
+          }while(sync != SDEP_MSGTYPE_RESPONSE);
+
+          SPI_CS_ENABLE;
+          // response header
+          cmdResponse.msg_type = sync;
+          ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
+          SPI_CS_DISABLE;
+
+          uint8_t *p_data = cmdResponse.payload;
+          while(1)
+          {
+            SPI_CS_ENABLE;
+            ssp0Receive(&sync, 1);
+            SPI_CS_DISABLE;
+
+            if (sync == DEF_CHARACTER || sync == ORC_CHARACTER) break;
+
+            *p_data++ = sync;
+          };
+
+          printf("MType: 0x%02x - CMD: 0x%04x - Len: %d\n",
+                 cmdResponse.msg_type,
+                 (cmdResponse.cmd_id_high << 8) + cmdResponse.cmd_id_low,
+                 cmdResponse.length);
+
+          printf("%s\n", cmdResponse.payload);
         }
       break;
 
       case '\b':
         if ( ptr_cmd_buffer > cmd_buffer )
         {
-          uartSend("\b \b", 3);
+          printf("\b \b");
           ptr_cmd_buffer--;
         }
       break;
