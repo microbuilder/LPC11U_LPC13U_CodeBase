@@ -185,6 +185,9 @@ void boardInit(void)
 
 #ifndef _TEST_
 
+#define U16_HIGH_U8(u16)            ((uint8_t) (((u16) >> 8) & 0x00ff))
+#define U16_LOW_U8(u16)             ((uint8_t) ((u16)       & 0x00ff))
+
 #define SPI_CS_ENABLE  do { GPIOSetBitValue(0, 2, 0); delay(1); } while(0)
 #define SPI_CS_DISABLE do { GPIOSetBitValue(0, 2, 1); delay(1); } while(0)
 
@@ -199,6 +202,14 @@ typedef enum
   SDEP_MSGTYPE_ALERT            = 0x40,
   SDEP_MSGTYPE_ERROR            = 0x80
 } sdepMsgType_t;
+
+typedef enum
+{
+  SDEP_CMDTYPE_LED            = 0x0001,   /**< Controls the on board LED(s) */
+  SDEP_CMDTYPE_SYSINFO        = 0x0002,   /**< Gets system properties */
+//  SDEP_CMDTYPE_COUNT                      /**< Total number of commands */
+  SDEP_CMDTYPE_AT_WRAPPER     = 0x0A00
+} sdepCmdType_t;
 
 typedef struct __attribute__ ((packed)) {
   uint8_t msg_type;
@@ -271,6 +282,53 @@ uint32_t nrf_ssp0Receive(uint8_t *buf, uint32_t length)
   return length;
 }
 
+void send_sdep_ATcommand(char* ATcmd)
+{
+  sdepMsgCommand_t cmdMsg =
+  {
+      .msg_type    = SDEP_MSGTYPE_COMMAND,
+      .cmd_id_high = U16_HIGH_U8(SDEP_CMDTYPE_AT_WRAPPER),
+      .cmd_id_low  = U16_LOW_U8 (SDEP_CMDTYPE_AT_WRAPPER),
+      .length      = strlen(ATcmd)
+  };
+
+  // send command
+  nrf_ssp0Send( (uint8_t*)&cmdMsg, 4);
+  nrf_ssp0Send( (uint8_t*)ATcmd, strlen(ATcmd));
+
+  // receive response
+  sdepMsgCommand_t cmdResponse = { 0 };
+
+  uint8_t sync =0;
+  do{
+    delay(10);
+    nrf_ssp0Receive(&sync, 1);
+  }while(sync != SDEP_MSGTYPE_RESPONSE && sync != SDEP_MSGTYPE_ERROR);
+
+  // response header
+  cmdResponse.msg_type = sync;
+
+  if (cmdResponse.msg_type == SDEP_MSGTYPE_ERROR)
+  {
+    nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 2);
+  }
+  else
+  {
+    nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
+
+    uint16_t len = nrf_ssp0Receive(cmdResponse.payload, cmdResponse.length);
+
+    cmdResponse.payload[len] = 0;
+  }
+
+  printf("MType: 0x%02x - CMD/Err: 0x%04x - Len: %d\n",
+         cmdResponse.msg_type,
+         (cmdResponse.cmd_id_high << 8) + cmdResponse.cmd_id_low,
+         cmdResponse.length);
+
+  if ( cmdResponse.length ) printf(cmdResponse.payload);
+}
+
 error_t atparser_task(void)
 {
   while( uartRxBufferDataPending() )
@@ -288,42 +346,9 @@ error_t atparser_task(void)
           *ptr_cmd_buffer = 0; // Null char
           ptr_cmd_buffer = cmd_buffer;
 
-          if( 0 == strcmp("atz", cmd_buffer) ) NVIC_SystemReset();
+          if( 0 == strcmp("reset", cmd_buffer) ) NVIC_SystemReset();
 
-          sdepMsgCommand_t cmdHeader =
-          {
-              .msg_type = SDEP_MSGTYPE_COMMAND,
-              .cmd_id = 0,
-              .length = strlen(cmd_buffer)
-          };
-
-          // send command
-          nrf_ssp0Send( (uint8_t*)&cmdHeader, 4);
-          nrf_ssp0Send( (uint8_t*)cmd_buffer, strlen(cmd_buffer));
-
-          // receive response
-          sdepMsgCommand_t cmdResponse = { 0 };
-
-          uint8_t sync =0;
-          do{
-            delay(10);
-            nrf_ssp0Receive(&sync, 1);
-          }while(sync != SDEP_MSGTYPE_RESPONSE);
-
-          // response header
-          cmdResponse.msg_type = sync;
-          nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
-
-          uint16_t len = nrf_ssp0Receive(cmdResponse.payload, 255);
-
-          cmdResponse.payload[len] = 0;
-
-          printf("MType: 0x%02x - CMD: 0x%04x - Len: %d\n",
-                 cmdResponse.msg_type,
-                 (cmdResponse.cmd_id_high << 8) + cmdResponse.cmd_id_low,
-                 cmdResponse.length);
-
-          printf("%s\n", cmdResponse.payload);
+          send_sdep_ATcommand(cmd_buffer);
         }
       break;
 
