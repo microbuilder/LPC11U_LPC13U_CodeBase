@@ -87,6 +87,8 @@
   #include "drivers/rf/wifi/cc3000/wifi.h"
 #endif
 
+#include "core/ssp0/ssp0.h"
+
 #ifdef CFG_SDCARD
 /**************************************************************************/
 /*!
@@ -182,6 +184,192 @@ void boardInit(void)
 }
 
 #ifndef _TEST_
+
+#define U16_HIGH_U8(u16)            ((uint8_t) (((u16) >> 8) & 0x00ff))
+#define U16_LOW_U8(u16)             ((uint8_t) ((u16)       & 0x00ff))
+
+#define SPI_CS_ENABLE  do { GPIOSetBitValue(0, 2, 0); delay(1); } while(0)
+#define SPI_CS_DISABLE do { GPIOSetBitValue(0, 2, 1); delay(1); } while(0)
+
+#define CFG_ATPARSER_BUFSIZE     256
+static char cmd_buffer[CFG_ATPARSER_BUFSIZE];
+static char *ptr_cmd_buffer;
+
+typedef enum
+{
+  SDEP_MSGTYPE_COMMAND          = 0x10,
+  SDEP_MSGTYPE_RESPONSE         = 0x20,
+  SDEP_MSGTYPE_ALERT            = 0x40,
+  SDEP_MSGTYPE_ERROR            = 0x80
+} sdepMsgType_t;
+
+typedef enum
+{
+  SDEP_CMDTYPE_LED            = 0x0001,   /**< Controls the on board LED(s) */
+  SDEP_CMDTYPE_SYSINFO        = 0x0002,   /**< Gets system properties */
+//  SDEP_CMDTYPE_COUNT                      /**< Total number of commands */
+  SDEP_CMDTYPE_AT_WRAPPER     = 0x0A00
+} sdepCmdType_t;
+
+typedef struct __attribute__ ((packed)) {
+  uint8_t msg_type;
+  union
+  {
+    uint16_t cmd_id;
+    struct
+    {
+      uint8_t cmd_id_low;
+      uint8_t cmd_id_high;
+    };
+  };
+  uint8_t length;
+  uint8_t payload[255];
+} sdepMsgCommand_t;
+
+#define DEF_CHARACTER   0xFEu /**< SPI default character. Character clocked out in case of an ignored transaction. */
+#define ORC_CHARACTER   0xFFu /**< SPI over-read character. Character clocked out after an over-read of the transmit buffer. */
+
+uint8_t ssp0TrasnferOne(uint8_t data)
+{
+  uint8_t recv;
+  ssp0Transfer(&recv, &data, 1);
+
+  return recv;
+}
+
+void nrf_ssp0Send (uint8_t *buf, uint32_t length)
+{
+
+  while (length--)
+  {
+    // keep resending if Ignored Character is received
+    while(1)
+    {
+      uint8_t fb;
+
+      SPI_CS_ENABLE;
+      fb = ssp0TrasnferOne(*buf);
+      SPI_CS_DISABLE;
+
+      if (fb != DEF_CHARACTER) break;
+      delay(1); // wait a bit before retry
+    }
+
+    buf++;
+  }
+}
+
+uint32_t nrf_ssp0Receive(uint8_t *buf, uint32_t length)
+{
+  for(uint32_t count=0; count<length; count++)
+  {
+    uint8_t ch;
+
+    while(1)
+    {
+      SPI_CS_ENABLE;
+      ssp0Receive(&ch, 1);
+      SPI_CS_DISABLE;
+
+      if (ch != DEF_CHARACTER) break;
+      delay(1);
+    }
+
+    if (ch == ORC_CHARACTER) return count;
+    *buf++ = ch;
+  }
+
+  return length;
+}
+
+void send_sdep_ATcommand(char* ATcmd)
+{
+  sdepMsgCommand_t cmdMsg =
+  {
+      .msg_type    = SDEP_MSGTYPE_COMMAND,
+      .cmd_id_high = U16_HIGH_U8(SDEP_CMDTYPE_AT_WRAPPER),
+      .cmd_id_low  = U16_LOW_U8 (SDEP_CMDTYPE_AT_WRAPPER),
+      .length      = strlen(ATcmd)
+  };
+
+  // send command
+  nrf_ssp0Send( (uint8_t*)&cmdMsg, 4);
+  nrf_ssp0Send( (uint8_t*)ATcmd, strlen(ATcmd));
+
+  // receive response
+  sdepMsgCommand_t cmdResponse = { 0 };
+
+  uint8_t sync =0;
+  do{
+    delay(10);
+    nrf_ssp0Receive(&sync, 1);
+  }while(sync != SDEP_MSGTYPE_RESPONSE && sync != SDEP_MSGTYPE_ERROR);
+
+  // response header
+  cmdResponse.msg_type = sync;
+
+  if (cmdResponse.msg_type == SDEP_MSGTYPE_ERROR)
+  {
+    nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 2);
+  }
+  else
+  {
+    nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
+
+    uint16_t len = nrf_ssp0Receive(cmdResponse.payload, cmdResponse.length);
+
+    cmdResponse.payload[len] = 0;
+  }
+
+  printf("MType: 0x%02x - CMD/Err: 0x%04x - Len: %d\n",
+         cmdResponse.msg_type,
+         (cmdResponse.cmd_id_high << 8) + cmdResponse.cmd_id_low,
+         cmdResponse.length);
+
+  if ( cmdResponse.length ) printf(cmdResponse.payload);
+}
+
+error_t atparser_task(void)
+{
+  while( uartRxBufferDataPending() )
+  {
+    uint8_t ch = uartRxBufferRead();
+
+    switch(ch)
+    {
+      case '\r':
+      case '\n':
+        // Execute command when getting either \r or \n. Ignoring the next \n or \r
+        if ( ptr_cmd_buffer > cmd_buffer )
+        {
+          uartSendByte('\n');
+          *ptr_cmd_buffer = 0; // Null char
+          ptr_cmd_buffer = cmd_buffer;
+
+          if( 0 == strcmp("reset", cmd_buffer) ) NVIC_SystemReset();
+
+          send_sdep_ATcommand(cmd_buffer);
+        }
+      break;
+
+      case '\b':
+        if ( ptr_cmd_buffer > cmd_buffer )
+        {
+          printf("\b \b");
+          ptr_cmd_buffer--;
+        }
+      break;
+
+      default:
+        uartSendByte(ch);
+        *ptr_cmd_buffer++ = ch;
+      break;
+    }
+  }
+
+  return ERROR_NONE;
+}
+
 int main(void)
 {
   uint32_t currentSecond, lastSecond;
@@ -189,6 +377,20 @@ int main(void)
 
   /* Configure the HW */
   boardInit();
+
+  // set P0_2 to SSEL0 (function 1)
+//  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 0, 2, 1);
+//  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 3, 4, GPIO_MODE_PULLUP);
+  GPIOSetDir(0, 2, 1);
+  GPIOSetBitValue(0, 2, 1);
+
+  ssp0Init();
+  delay(500);
+
+  printf("hello world\n");
+
+  memset(cmd_buffer, 0, sizeof(cmd_buffer));
+  ptr_cmd_buffer = cmd_buffer;
 
   while (1)
   {
@@ -199,6 +401,8 @@ int main(void)
       lastSecond = currentSecond;
       boardLED(lastSecond % 2);
     }
+
+    atparser_task();
 
     /* Check for binary protocol input if CFG_PROTOCOL is enabled */
     #ifdef CFG_PROTOCOL

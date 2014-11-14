@@ -196,7 +196,7 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_ENABLE_I2C
     #define CFG_ENABLE_UART
-    #define CFG_ENABLE_USB
+//    #define CFG_ENABLE_USB
     #define CFG_ENABLE_TIMER32
 /*=========================================================================*/
 
@@ -384,8 +384,8 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_PRINTF_MAXSTRINGSIZE    (255)
 
-    // #define CFG_PRINTF_UART
-    #define CFG_PRINTF_USBCDC
+     #define CFG_PRINTF_UART
+//    #define CFG_PRINTF_USBCDC
     // #define CFG_PRINTF_DEBUG
 
     #ifdef CFG_PRINTF_DEBUG
@@ -449,7 +449,7 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-    #define CFG_INTERFACE
+//    #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE    (256)
     #define CFG_INTERFACE_PROMPT        "LPC11U37H >> "
     #define CFG_INTERFACE_SILENTMODE    (0)
@@ -475,7 +475,7 @@ extern "C" {
     CFG_PROTOCOL_VIA_BULK   Use USB Bulk for the binary protocol
                             (requires CFG_USB_CUSTOM_CLASS)
     -----------------------------------------------------------------------*/
-    #define CFG_PROTOCOL
+//    #define CFG_PROTOCOL
 
     #define CFG_PROTOCOL_VIA_HID
     // #define CFG_PROTOCOL_VIA_BULK
@@ -546,7 +546,7 @@ extern "C" {
     NOTE:                     All config settings for FAT32 are defined
                               in ffconf.h
     -----------------------------------------------------------------------*/
-    #define CFG_SDCARD
+//    #define CFG_SDCARD
     #define CFG_SDCARD_READONLY         (0)   // Must be 0 or 1
     #define CFG_SDCARD_SPIPORT          (0)
     #define CFG_SDCARD_SSELPORT         (1)
