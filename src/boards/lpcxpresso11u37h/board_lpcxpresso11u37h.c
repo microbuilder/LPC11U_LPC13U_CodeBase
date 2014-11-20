@@ -327,7 +327,7 @@ void send_sdep_ATcommand(char* ATcmd)
     // mark end of command
     cmdMsg.more_data = (*ATcmd != 0) ? 1 : 0;
 
-    PRINT_BUFFER(&cmdMsg, 4);
+//    PRINT_BUFFER(&cmdMsg, 4);
 
     // send command
     nrf_ssp0Send( (uint8_t*)&cmdMsg, 4);
