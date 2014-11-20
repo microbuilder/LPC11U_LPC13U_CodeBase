@@ -185,6 +185,16 @@ void boardInit(void)
 
 #ifndef _TEST_
 
+#define PRINT_INT(x)          printf(#x " = %ld\n", x)
+#define PRINT_HEX(x)          printf(#x " = %08lx\n", x)
+#define PRINT_BUFFER(buf, n) \
+  do {\
+    uint8_t* p8 = (uint8_t*) (buf);\
+    printf(#buf ": ");\
+    for(uint32_t i=0; i<(n); i++) printf("%02x ", p8[i]);\
+    printf("\n");\
+  }while(0)
+
 #define U16_HIGH_U8(u16)            ((uint8_t) (((u16) >> 8) & 0x00ff))
 #define U16_LOW_U8(u16)             ((uint8_t) ((u16)       & 0x00ff))
 
@@ -211,8 +221,12 @@ typedef enum
   SDEP_CMDTYPE_AT_WRAPPER     = 0x0A00
 } sdepCmdType_t;
 
-typedef struct __attribute__ ((packed)) {
+// Maximum payload per packet
+#define SDEP_MAX_PACKETSIZE   16
+
+typedef struct __attribute__ ((packed)){
   uint8_t msg_type;
+
   union
   {
     uint16_t cmd_id;
@@ -222,8 +236,14 @@ typedef struct __attribute__ ((packed)) {
       uint8_t cmd_id_high;
     };
   };
-  uint8_t length;
-  uint8_t payload[255];
+
+  struct __attribute__ ((packed))
+  {
+    uint8_t length    : 7;
+    uint8_t more_data : 1;
+  };
+
+  uint8_t payload[SDEP_MAX_PACKETSIZE];
 } sdepMsgCommand_t;
 
 #define DEF_CHARACTER   0xFEu /**< SPI default character. Character clocked out in case of an ignored transaction. */
@@ -282,51 +302,74 @@ uint32_t nrf_ssp0Receive(uint8_t *buf, uint32_t length)
   return length;
 }
 
+static inline uint8_t min8_of(uint8_t x, uint8_t y) ATTR_ALWAYS_INLINE ATTR_CONST;
+static inline uint8_t min8_of(uint8_t x, uint8_t y)
+{
+  return (x < y) ? x : y;
+}
+
 void send_sdep_ATcommand(char* ATcmd)
 {
-  sdepMsgCommand_t cmdMsg =
+  while(*ATcmd)
   {
-      .msg_type    = SDEP_MSGTYPE_COMMAND,
-      .cmd_id_high = U16_HIGH_U8(SDEP_CMDTYPE_AT_WRAPPER),
-      .cmd_id_low  = U16_LOW_U8 (SDEP_CMDTYPE_AT_WRAPPER),
-      .length      = strlen(ATcmd)
-  };
+    char* p_payload = ATcmd;
 
-  // send command
-  nrf_ssp0Send( (uint8_t*)&cmdMsg, 4);
-  nrf_ssp0Send( (uint8_t*)ATcmd, strlen(ATcmd));
+    sdepMsgCommand_t cmdMsg =
+    {
+        .msg_type    = SDEP_MSGTYPE_COMMAND,
+        .cmd_id_high = U16_HIGH_U8(SDEP_CMDTYPE_AT_WRAPPER),
+        .cmd_id_low  = U16_LOW_U8 (SDEP_CMDTYPE_AT_WRAPPER),
+        .length      = min8_of(16, strlen(ATcmd))
+    };
+
+    ATcmd += cmdMsg.length;
+
+    // mark end of command
+    cmdMsg.more_data = (*ATcmd != 0) ? 1 : 0;
+
+    PRINT_BUFFER(&cmdMsg, 4);
+
+    // send command
+    nrf_ssp0Send( (uint8_t*)&cmdMsg, 4);
+    nrf_ssp0Send( (uint8_t*)p_payload, cmdMsg.length);
+  }
 
   // receive response
-  sdepMsgCommand_t cmdResponse = { 0 };
+  sdepMsgCommand_t cmdResponse;
 
-  uint8_t sync =0;
-  do{
-    delay(10);
-    nrf_ssp0Receive(&sync, 1);
-  }while(sync != SDEP_MSGTYPE_RESPONSE && sync != SDEP_MSGTYPE_ERROR);
+  do {
+    memset(&cmdResponse, 0, sizeof(cmdResponse));
 
-  // response header
-  cmdResponse.msg_type = sync;
+    uint8_t sync =0;
+    do{
+      delay(10);
+      nrf_ssp0Receive(&sync, 1);
+    }while(sync != SDEP_MSGTYPE_RESPONSE && sync != SDEP_MSGTYPE_ERROR);
 
-  if (cmdResponse.msg_type == SDEP_MSGTYPE_ERROR)
-  {
-    nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 2);
-  }
-  else
-  {
-    nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
+    // response header
+    cmdResponse.msg_type = sync;
 
-    uint16_t len = nrf_ssp0Receive(cmdResponse.payload, cmdResponse.length);
+    if (cmdResponse.msg_type == SDEP_MSGTYPE_ERROR)
+    {
+      nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 2);
+    }
+    else
+    {
+      nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
 
-    cmdResponse.payload[len] = 0;
-  }
+      uint16_t len = nrf_ssp0Receive(cmdResponse.payload, cmdResponse.length);
 
-  printf("MType: 0x%02x - CMD/Err: 0x%04x - Len: %d\n",
-         cmdResponse.msg_type,
-         (cmdResponse.cmd_id_high << 8) + cmdResponse.cmd_id_low,
-         cmdResponse.length);
+      if ( len != cmdResponse.length ) printf("SDEP packet length error\n");
+    }
 
-  if ( cmdResponse.length ) printf(cmdResponse.payload);
+//    printf("MType: 0x%02x | CMD/Err: 0x%04x | Len: %d\n",
+//           cmdResponse.msg_type,
+//           (cmdResponse.cmd_id_high << 8) + cmdResponse.cmd_id_low,
+//           cmdResponse.length);
+
+    for(uint8_t i=0; i<cmdResponse.length; i++) printf("%c", cmdResponse.payload[i]);
+
+  }while(cmdResponse.more_data);
 }
 
 error_t atparser_task(void)
