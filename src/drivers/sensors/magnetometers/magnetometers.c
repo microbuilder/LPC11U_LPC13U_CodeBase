@@ -206,8 +206,8 @@ error_t magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sen
 
   float32_t cosRoll = (float32_t)cos(rollRadians);
   float32_t sinRoll = (float32_t)sin(rollRadians);
-  float32_t cosPitch = (float32_t)cos(pitchRadians);
-  float32_t sinPitch = (float32_t)sin(pitchRadians);
+  float32_t cosPitch = (float32_t)cos(-1*pitchRadians);
+  float32_t sinPitch = (float32_t)sin(-1*pitchRadians);
 
   /* The tilt compensation algorithm                            */
   /* Xh = X.cosPitch + Z.sinPitch                               */
