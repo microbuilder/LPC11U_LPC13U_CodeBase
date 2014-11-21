@@ -216,3 +216,57 @@ void ssp1Receive(uint8_t *buf, uint32_t length)
 
   return;
 }
+
+/**************************************************************************/
+/*!
+    @brief Performs a write, tracking the response bytes from the slave
+
+    @param[in]  recvbuf
+                Pointer to the data buffer where incoming bytes are stored
+    @param[in]  sendbuf
+                Pointer to the buffer of data that should be sent out
+    @param[in]  length
+                The number of bytes to transmit
+*/
+/**************************************************************************/
+void ssp1Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
+{
+  uint32_t i;
+  uint32_t Dummy;
+
+  while ( (LPC_SSP1->SR & (SSP1_SR_RNE_NOTEMPTY)) == SSP1_SR_RNE_NOTEMPTY )
+  {
+    Dummy = LPC_SSP1->DR;
+  }
+
+  for ( i = 0; i < length; i++ )
+  {
+    /* Move on only if NOT busy and TX FIFO not full. */
+    while ((LPC_SSP1->SR & (SSP1_SR_TNF_NOTFULL | SSP1_SR_BSY_BUSY)) != SSP1_SR_TNF_NOTFULL);
+    if(sendbuf != NULL)
+    {
+      LPC_SSP1->DR = *sendbuf;
+      sendbuf++;
+    }
+    else
+    {
+      LPC_SSP1->DR = 0xFF;
+    }
+
+    while ( (LPC_SSP1->SR & (/*SSP1_SR_BSY_BUSY|*/SSP1_SR_RNE_NOTEMPTY)) != SSP1_SR_RNE_NOTEMPTY );
+
+    /* Whenever a byte is written, MISO FIFO counter increments, Clear FIFO
+    on MISO. Otherwise, when this function is called, previous data byte
+    is left in the FIFO. */
+    if(recvbuf != NULL)
+    {
+      *recvbuf = LPC_SSP1->DR;
+      recvbuf++;
+    }
+    else
+    {
+      Dummy = LPC_SSP1->DR;
+      (void)Dummy;
+    }
+  }
+}

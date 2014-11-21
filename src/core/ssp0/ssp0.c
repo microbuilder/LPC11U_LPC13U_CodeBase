@@ -141,8 +141,8 @@ void ssp0Init(void)
   for ( i = 0; i < SSP0_FIFOSIZE; i++ )
   {
     Dummy = LPC_SSP0->DR;
-  }  
-  
+  }
+
   /* Enable device and set it to master mode, no loopback */
   LPC_SSP0->CR1 = SSP0_CR1_SSE_ENABLED | SSP0_CR1_MS_MASTER | SSP0_CR1_LBM_NORMAL;
 }
@@ -208,15 +208,28 @@ void ssp0Receive(uint8_t *buf, uint32_t length)
   return;
 }
 
+/**************************************************************************/
+/*!
+    @brief Performs a write, tracking the response bytes from the slave
+
+    @param[in]  recvbuf
+                Pointer to the data buffer where incoming bytes are stored
+    @param[in]  sendbuf
+                Pointer to the buffer of data that should be sent out
+    @param[in]  length
+                The number of bytes to transmit
+*/
+/**************************************************************************/
 void ssp0Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
 {
   uint32_t i;
   uint32_t Dummy;
 
   while ( (LPC_SSP0->SR & (SSP0_SR_RNE_NOTEMPTY)) == SSP0_SR_RNE_NOTEMPTY )
-	{
-	  Dummy = LPC_SSP0->DR;
-	}
+  {
+    Dummy = LPC_SSP0->DR;
+  }
+
   for ( i = 0; i < length; i++ )
   {
     /* Move on only if NOT busy and TX FIFO not full. */
@@ -232,6 +245,7 @@ void ssp0Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
     }
 
     while ( (LPC_SSP0->SR & (/*SSP0_SR_BSY_BUSY|*/SSP0_SR_RNE_NOTEMPTY)) != SSP0_SR_RNE_NOTEMPTY );
+
     /* Whenever a byte is written, MISO FIFO counter increments, Clear FIFO
     on MISO. Otherwise, when this function is called, previous data byte
     is left in the FIFO. */
@@ -246,5 +260,4 @@ void ssp0Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length)
       (void)Dummy;
     }
   }
-
 }

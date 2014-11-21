@@ -108,9 +108,10 @@ void ssp1ClockFast(void);
 void ssp1Init(void);
 void ssp1Send(uint8_t *buf, uint32_t length);
 void ssp1Receive(uint8_t *buf, uint32_t length);
+void ssp1Transfer(uint8_t *recvbuf, uint8_t *sendbuf, uint32_t length);
 
 #ifdef __cplusplus
 }
-#endif 
+#endif
 
 #endif
