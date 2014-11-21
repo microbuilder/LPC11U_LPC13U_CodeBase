@@ -87,7 +87,7 @@
   #include "drivers/rf/wifi/cc3000/wifi.h"
 #endif
 
-#include "core/ssp0/ssp0.h"
+#include "core/ssp1/ssp1.h"
 
 #ifdef CFG_SDCARD
 /**************************************************************************/
@@ -249,15 +249,15 @@ typedef struct __attribute__ ((packed)){
 #define DEF_CHARACTER   0xFEu /**< SPI default character. Character clocked out in case of an ignored transaction. */
 #define ORC_CHARACTER   0xFFu /**< SPI over-read character. Character clocked out after an over-read of the transmit buffer. */
 
-uint8_t ssp0TrasnferOne(uint8_t data)
+uint8_t ssp1TransferByte(uint8_t data)
 {
   uint8_t recv;
-  ssp0Transfer(&recv, &data, 1);
+  ssp1Transfer(&recv, &data, 1);
 
   return recv;
 }
 
-void nrf_ssp0Send (uint8_t *buf, uint32_t length)
+void nrf_ssp1Send (uint8_t *buf, uint32_t length)
 {
 
   while (length--)
@@ -268,7 +268,7 @@ void nrf_ssp0Send (uint8_t *buf, uint32_t length)
       uint8_t fb;
 
       SPI_CS_ENABLE;
-      fb = ssp0TrasnferOne(*buf);
+      fb = ssp1TransferByte(*buf);
       SPI_CS_DISABLE;
 
       if (fb != DEF_CHARACTER) break;
@@ -279,7 +279,7 @@ void nrf_ssp0Send (uint8_t *buf, uint32_t length)
   }
 }
 
-uint32_t nrf_ssp0Receive(uint8_t *buf, uint32_t length)
+uint32_t nrf_ssp1Receive(uint8_t *buf, uint32_t length)
 {
   for(uint32_t count=0; count<length; count++)
   {
@@ -288,7 +288,7 @@ uint32_t nrf_ssp0Receive(uint8_t *buf, uint32_t length)
     while(1)
     {
       SPI_CS_ENABLE;
-      ssp0Receive(&ch, 1);
+      ssp1Receive(&ch, 1);
       SPI_CS_DISABLE;
 
       if (ch != DEF_CHARACTER) break;
@@ -330,8 +330,8 @@ void send_sdep_ATcommand(char* ATcmd)
 //    PRINT_BUFFER(&cmdMsg, 4);
 
     // send command
-    nrf_ssp0Send( (uint8_t*)&cmdMsg, 4);
-    nrf_ssp0Send( (uint8_t*)p_payload, cmdMsg.length);
+    nrf_ssp1Send( (uint8_t*)&cmdMsg, 4);
+    nrf_ssp1Send( (uint8_t*)p_payload, cmdMsg.length);
   }
 
   // receive response
@@ -343,7 +343,7 @@ void send_sdep_ATcommand(char* ATcmd)
     uint8_t sync =0;
     do{
       delay(10);
-      nrf_ssp0Receive(&sync, 1);
+      nrf_ssp1Receive(&sync, 1);
     }while(sync != SDEP_MSGTYPE_RESPONSE && sync != SDEP_MSGTYPE_ERROR);
 
     // response header
@@ -351,13 +351,13 @@ void send_sdep_ATcommand(char* ATcmd)
 
     if (cmdResponse.msg_type == SDEP_MSGTYPE_ERROR)
     {
-      nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 2);
+      nrf_ssp1Receive((uint8_t*)&cmdResponse.cmd_id, 2);
     }
     else
     {
-      nrf_ssp0Receive((uint8_t*)&cmdResponse.cmd_id, 3);
+      nrf_ssp1Receive((uint8_t*)&cmdResponse.cmd_id, 3);
 
-      uint16_t len = nrf_ssp0Receive(cmdResponse.payload, cmdResponse.length);
+      uint16_t len = nrf_ssp1Receive(cmdResponse.payload, cmdResponse.length);
 
       if ( len != cmdResponse.length ) printf("SDEP packet length error\n");
     }
@@ -427,7 +427,7 @@ int main(void)
   GPIOSetDir(0, 2, 1);
   GPIOSetBitValue(0, 2, 1);
 
-  ssp0Init();
+  ssp1Init();
   delay(500);
 
   printf("hello world\n");
