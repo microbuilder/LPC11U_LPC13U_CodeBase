@@ -327,7 +327,7 @@ extern "C" {
                               characters to store in memory.
 
     -----------------------------------------------------------------------*/
-    #define CFG_UART_BAUDRATE           (115200)
+    #define CFG_UART_BAUDRATE           9600 //(115200)
     #define CFG_UART_BUFSIZE            (256)
 /*=========================================================================*/
 

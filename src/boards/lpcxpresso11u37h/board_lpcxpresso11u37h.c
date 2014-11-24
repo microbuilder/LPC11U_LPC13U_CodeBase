@@ -198,8 +198,11 @@ void boardInit(void)
 #define U16_HIGH_U8(u16)            ((uint8_t) (((u16) >> 8) & 0x00ff))
 #define U16_LOW_U8(u16)             ((uint8_t) ((u16)       & 0x00ff))
 
-#define SPI_CS_ENABLE  do { GPIOSetBitValue(0, 2, 0); delay(1); } while(0)
-#define SPI_CS_DISABLE do { GPIOSetBitValue(0, 2, 1); delay(1); } while(0)
+#define SPI_CS_PORTNUM   1
+#define SPI_CS_PINNUM    23
+
+#define SPI_CS_ENABLE     do { GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 0); delay(1); } while(0)
+#define SPI_CS_DISABLE    do { GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1); delay(1); } while(0)
 
 #define CFG_ATPARSER_BUFSIZE     256
 static char cmd_buffer[CFG_ATPARSER_BUFSIZE];
@@ -385,7 +388,7 @@ error_t atparser_task(void)
         // Execute command when getting either \r or \n. Ignoring the next \n or \r
         if ( ptr_cmd_buffer > cmd_buffer )
         {
-          uartSendByte('\n');
+          printf("\n");
           *ptr_cmd_buffer = 0; // Null char
           ptr_cmd_buffer = cmd_buffer;
 
@@ -404,7 +407,7 @@ error_t atparser_task(void)
       break;
 
       default:
-        uartSendByte(ch);
+        printf("%c", ch);
         *ptr_cmd_buffer++ = ch;
       break;
     }
@@ -421,11 +424,9 @@ int main(void)
   /* Configure the HW */
   boardInit();
 
-  // set P0_2 to SSEL0 (function 1)
-//  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 0, 2, 1);
-//  LPC_IOCON->PIO0_2 = bit_set_range(LPC_IOCON->PIO0_2, 3, 4, GPIO_MODE_PULLUP);
-  GPIOSetDir(0, 2, 1);
-  GPIOSetBitValue(0, 2, 1);
+  // set CS as output
+  GPIOSetDir(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1);
+  GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1);
 
   ssp1Init();
   delay(500);

@@ -45,7 +45,7 @@ extern "C" {
 #include "projectconfig.h"
 
 /* Uncomment this line to enable HW flow control */
-// #define UART_RTS_CTS_FLOWCONTROL
+ #define UART_RTS_CTS_FLOWCONTROL
 
 #define USART_RBR_MASK                           ((unsigned int) 0x000000FF)
 
