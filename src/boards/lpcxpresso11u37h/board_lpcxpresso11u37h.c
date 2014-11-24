@@ -201,8 +201,11 @@ void boardInit(void)
 #define SPI_CS_PORTNUM   1
 #define SPI_CS_PINNUM    23
 
-#define SPI_CS_ENABLE     do { GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 0); delay(1); } while(0)
-#define SPI_CS_DISABLE    do { GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1); delay(1); } while(0)
+#define SPI_IRQ_PORTNUM  1
+#define SPI_IRQ_PINNUM   24
+
+#define SPI_CS_ENABLE    GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 0)
+#define SPI_CS_DISABLE   GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1)
 
 #define CFG_ATPARSER_BUFSIZE     256
 static char cmd_buffer[CFG_ATPARSER_BUFSIZE];
@@ -343,9 +346,12 @@ void send_sdep_ATcommand(char* ATcmd)
   do {
     memset(&cmdResponse, 0, sizeof(cmdResponse));
 
+    // wait until IRQ is asserted
+    while( !GPIOGetPinValue(SPI_IRQ_PORTNUM, SPI_IRQ_PINNUM) ) {}
+
     uint8_t sync =0;
     do{
-      delay(10);
+//      delay(10);
       nrf_ssp1Receive(&sync, 1);
     }while(sync != SDEP_MSGTYPE_RESPONSE && sync != SDEP_MSGTYPE_ERROR);
 
@@ -427,6 +433,10 @@ int main(void)
   // set CS as output
   GPIOSetDir(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1);
   GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1);
+
+  // set IRQ as input, pull down
+  LPC_IOCON->PIO1_24 = bit_set_range(LPC_IOCON->PIO1_24, 3, 4, GPIO_MODE_PULLDOWN);
+  GPIOSetDir(SPI_IRQ_PORTNUM, SPI_IRQ_PINNUM, 0);
 
   ssp1Init();
   delay(500);
