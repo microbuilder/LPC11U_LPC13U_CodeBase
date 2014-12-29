@@ -366,6 +366,8 @@ ifeq (lpc13u,$(TARGET))
 endif
 # For use with the GCC ARM Embedded toolchain
 # GCFLAGS += --specs=nano.specs
+GCFLAGS += --specs=nano.specs --specs=nosys.specs
+
 # For use with the LPCXpresso toolchain
 # GCFLAGS += -D__REDLIB__ -D__CODE_RED
 
@@ -403,6 +405,7 @@ endif
 LDLIBS   += -lm
 # The following libraries are required with the LPCXpresso toolchain
 # LDLIBS  += -lcr_c -lcr_eabihelpers
+LDFLAGS += --specs=nano.specs --specs=nosys.specs
 
 OCFLAGS = --strip-unneeded
 

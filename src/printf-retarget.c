@@ -93,6 +93,24 @@ void __putchar(const char c)
   #endif
 }
 
+/******************************************************************************/
+/*!
+    @brief  Syscall to write data to an FILE target
+
+    @param  file fileno for the target
+    @param  buf buffer that stores data
+    @param  len number of byte we want to write
+
+    @return number of byte actually written
+*/
+/******************************************************************************/
+int _write(int file, char *ptr, int len)
+{
+  for(int i=0; i<len; i++)  __putchar(*ptr++);
+
+  return len;
+}
+
 /**************************************************************************/
 /*!
     @brief  Sends a string to a pre-determined peripheral (UART, etc.).
@@ -102,12 +120,12 @@ void __putchar(const char c)
             Byte value to send
 */
 /**************************************************************************/
-int puts(const char * str)
-{
-  while(*str) __putchar(*str++);
-
-  return 0;
-}
+//int puts(const char * str)
+//{
+//  while(*str) __putchar(*str++);
+//
+//  return 0;
+//}
 
 #ifdef __CC_ARM // keil
 
