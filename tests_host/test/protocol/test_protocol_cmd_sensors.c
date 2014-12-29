@@ -80,7 +80,7 @@ void tearDown(void)
     @brief  Simulates the HW call in 'lsm303accelGetSensorEvent'
 */
 /**************************************************************************/
-error_t stub_lsm303accel_get(sensors_event_t *event, int num_call)
+err_t stub_lsm303accel_get(sensors_event_t *event, int num_call)
 {
   static float32_t _lsm303accel_MG_LSB = 0.001F;
 

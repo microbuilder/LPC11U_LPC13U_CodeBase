@@ -67,7 +67,7 @@ extern volatile uint32_t  I2CReadLength, I2CWriteLength;
                 The byte to send
 */
 /**************************************************************************/
-error_t ssd1306SendCommand(uint8_t byte)
+err_t ssd1306SendCommand(uint8_t byte)
 {
   uint8_t control = 0x00;   /* Co = 0, D/C = 0 */
 
@@ -91,7 +91,7 @@ error_t ssd1306SendCommand(uint8_t byte)
             The byte to send
 */
 /**************************************************************************/
-error_t ssd1306SendData(uint8_t data)
+err_t ssd1306SendData(uint8_t data)
 {
   uint8_t control = 0x40;   /* Co = 0, D/C = 1 */
 
@@ -167,7 +167,7 @@ void ssd1306DrawChar(uint16_t x, uint16_t y, uint8_t c, struct FONT_DEF font)
     @brief Initialises the SSD1306 LCD display
 */
 /**************************************************************************/
-error_t ssd1306Init(uint8_t vccstate)
+err_t ssd1306Init(uint8_t vccstate)
 {
   /* Make sure I2C is initialised */
   i2cInit(I2CMASTER);

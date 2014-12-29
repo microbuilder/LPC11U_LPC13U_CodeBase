@@ -440,7 +440,7 @@ extern "C" {
                               CFG_PRINTF_UART or CFG_PRINTF_USBCDC are
                               selected.
     -----------------------------------------------------------------------*/
-    // #define CFG_INTERFACE
+     #define CFG_INTERFACE
     #define CFG_INTERFACE_MAXMSGSIZE    (256)
     #define CFG_INTERFACE_PROMPT        "LPC1347 >> "
     #define CFG_INTERFACE_SILENTMODE    (0)
@@ -620,7 +620,7 @@ extern "C" {
                                    included during build.  Requires
                                    external HW
     -----------------------------------------------------------------------*/
-    // #define CFG_CC3000
+     #define CFG_CC3000
     #define CFG_CC3000_SPI_PORT         (0)
     #define CFG_CC3000_EN_PORT          (0)
     #define CFG_CC3000_EN_PIN           (14)

@@ -8,7 +8,7 @@
 
     @code
 
-    error_t accel_error, mag_error;
+    err_t accel_error, mag_error;
     sensors_event_t accel_event, mag_event;
     sensors_vec_t orientation;
 
@@ -99,7 +99,7 @@
                           .roll, .pitch and .heading fields populated
 */
 /**************************************************************************/
-error_t lsm303GetOrientation(sensors_event_t *accel_event, sensors_event_t *mag_event, sensors_vec_t *orientation)
+err_t lsm303GetOrientation(sensors_event_t *accel_event, sensors_event_t *mag_event, sensors_vec_t *orientation)
 {
   /* Make sure the input is valid, not null, etc. */
   ASSERT(accel_event != NULL, ERROR_INVALIDPARAMETER);

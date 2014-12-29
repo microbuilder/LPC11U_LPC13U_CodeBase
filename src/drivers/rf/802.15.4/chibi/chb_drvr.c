@@ -95,7 +95,7 @@ static void chb_delay_us(U16 usec)
 
 */
 /**************************************************************************/
-error_t chb_reset()
+err_t chb_reset()
 {
     CHB_RST_DISABLE();
     CHB_SLPTR_DISABLE();
@@ -670,12 +670,12 @@ U8 chb_tx(U8 *hdr, U8 *data, U8 len)
 
 */
 /**************************************************************************/
-static error_t chb_radio_init()
+static err_t chb_radio_init()
 {
     U8 ieee_addr[8];
 
     // reset chip (this can fail if there is a HW or config problem)
-    error_t error = chb_reset();
+    err_t error = chb_reset();
     if (error)
     {
       return error;
@@ -767,7 +767,7 @@ static error_t chb_radio_init()
 
 */
 /**************************************************************************/
-error_t chb_drvr_init()
+err_t chb_drvr_init()
 {
     // config SPI for at86rf230 access
     chb_spi_init();

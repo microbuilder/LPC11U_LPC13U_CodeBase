@@ -53,7 +53,7 @@ extern volatile uint32_t  I2CReadLength, I2CWriteLength;
     @brief  Calls the underlying I2C driver (private function)
 */
 /**************************************************************************/
-error_t cmd_i2cReadWrapper(uint8_t addr, uint8_t len, uint8_t* values)
+err_t cmd_i2cReadWrapper(uint8_t addr, uint8_t len, uint8_t* values)
 {
   uint8_t i;
 
@@ -80,7 +80,7 @@ error_t cmd_i2cReadWrapper(uint8_t addr, uint8_t len, uint8_t* values)
 /**************************************************************************/
 void cmd_i2c_read(uint8_t argc, char **argv)
 {
-  error_t error;
+  err_t error;
   int32_t addr32;
   uint8_t addr;
   int32_t len32;

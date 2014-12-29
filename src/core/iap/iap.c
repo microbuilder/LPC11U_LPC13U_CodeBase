@@ -50,7 +50,7 @@ static const IAP iap_entry = (IAP) 0x1FFF1FF1;
                 4-word buffer to hold the 128-bit ID
 */
 /**************************************************************************/
-error_t iapReadUID(uint32_t uid[])
+err_t iapReadUID(uint32_t uid[])
 {
   unsigned int command[5] = {58};
   unsigned int response[5] = { 0 };

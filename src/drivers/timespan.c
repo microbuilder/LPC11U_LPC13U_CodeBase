@@ -47,11 +47,11 @@
     @param   ticks [in]  Number of nanosecond 'ticks' in the timespan_t
     @param   timespan    Pointer to the timespan_t object to manipulate
 
-    @return  An error_t if an error occurred, or ERROR_NONE if everything
+    @return  An err_t if an error occurred, or ERROR_NONE if everything
              executed properly and the timespan was created
  */
 /**************************************************************************/
-error_t timespanCreate(int64_t ticks, timespan_t *timespan)
+err_t timespanCreate(int64_t ticks, timespan_t *timespan)
 {
   if (timespan == NULL)
   {
@@ -79,11 +79,11 @@ error_t timespanCreate(int64_t ticks, timespan_t *timespan)
 
     @param   timespan    Pointer to the timespan_t object to manipulate
 
-    @return  An error_t if an error occurred, or ERROR_NONE if everything
+    @return  An err_t if an error occurred, or ERROR_NONE if everything
              executed properly and the timespan was created
  */
 /**************************************************************************/
-error_t timespanCreateExplicit(int32_t days, int32_t hours, int32_t minutes,
+err_t timespanCreateExplicit(int32_t days, int32_t hours, int32_t minutes,
   int32_t seconds, int32_t milliseconds, int32_t microseconds,
   int32_t nanoseconds, timespan_t *timespan)
 {
@@ -138,11 +138,11 @@ error_t timespanCreateExplicit(int32_t days, int32_t hours, int32_t minutes,
     @param   timespan    Pointer to the timespan_t object to store the
                          resulting difference in
 
-    @return  An error_t if an error occurred, or ERROR_NONE if everything
+    @return  An err_t if an error occurred, or ERROR_NONE if everything
              executed properly and the timespan was created
  */
 /**************************************************************************/
-error_t timespanDifference(timespan_t *t1, timespan_t *t2, timespan_t *timespan)
+err_t timespanDifference(timespan_t *t1, timespan_t *t2, timespan_t *timespan)
 {
   if ((t1 == NULL) || (t2 == NULL) || (timespan == NULL))
   {
@@ -160,11 +160,11 @@ error_t timespanDifference(timespan_t *t1, timespan_t *t2, timespan_t *timespan)
     @param   timespan    Pointer to the timespan_t object that 'val' will
                          be added to
 
-    @return  An error_t if an error occurred, or ERROR_NONE if everything
+    @return  An err_t if an error occurred, or ERROR_NONE if everything
              executed properly and the timespan was updated
  */
 /**************************************************************************/
-error_t timespanAdd(timespan_t *val, timespan_t *timespan)
+err_t timespanAdd(timespan_t *val, timespan_t *timespan)
 {
   int64_t ticks;
 
@@ -216,14 +216,14 @@ error_t timespanAdd(timespan_t *val, timespan_t *timespan)
     @param   timespan    Pointer to the timespan_t object that 'val' will
                          be subtracted from
 
-    @return  An error_t if an error occurred, or ERROR_NONE if everything
+    @return  An err_t if an error occurred, or ERROR_NONE if everything
              executed properly and the timespan was updated
  */
 /**************************************************************************/
-error_t timespanSubtract(timespan_t *val, timespan_t *timespan)
+err_t timespanSubtract(timespan_t *val, timespan_t *timespan)
 {
   timespan_t inv;
-  error_t error;
+  err_t error;
 
   /* Create a new timespan with an inverted val->__ticks */
   error = timespanCreate(val->__ticks * -1, &inv);

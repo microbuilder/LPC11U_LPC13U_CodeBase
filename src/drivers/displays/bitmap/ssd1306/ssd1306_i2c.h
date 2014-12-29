@@ -117,7 +117,7 @@ extern "C" {
     #define SSD1306_SWITCHCAPVCC          0x02
 /*=========================================================================*/
 
-error_t ssd1306Init ( uint8_t vccstate );
+err_t ssd1306Init ( uint8_t vccstate );
 void    ssd1306DrawPixel ( uint8_t x, uint8_t y );
 void    ssd1306ClearPixel ( uint8_t x, uint8_t y );
 uint8_t ssd1306GetPixel ( uint8_t x, uint8_t y );

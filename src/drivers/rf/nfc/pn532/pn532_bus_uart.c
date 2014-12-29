@@ -99,7 +99,7 @@ pn532_error_t pn532_bus_BuildFrame(byte_t * pbtFrame, size_t * pszFrame, const b
     @brief  Initialises UART and configures the PN532
 */
 /**************************************************************************/
-error_t pn532_bus_HWInit(void)
+err_t pn532_bus_HWInit(void)
 {
   #ifdef PN532_DEBUGMODE
   PN532_DEBUG("Initialising UART (%d)%s", PN532_UART_BAUDRATE, CFG_PRINTF_NEWLINE);

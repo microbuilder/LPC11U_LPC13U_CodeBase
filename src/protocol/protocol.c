@@ -248,7 +248,7 @@
     @returns    Error code if there is an error, otherwise ERROR_NONE
 */
 /**************************************************************************/
-typedef error_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
+typedef err_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgResponse_t*);
 
 /**************************************************************************/
 /*
@@ -262,7 +262,7 @@ typedef error_t (* const protCmdFunc_t)(uint8_t, uint8_t const [], protMsgRespon
 #endif
 
 #define CMD_PROTOTYPE_EXPAND(command, function) \
-  error_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response) ATTR_TEST_WEAK;\
+  err_t function(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response) ATTR_TEST_WEAK;\
 
 PROTOCOL_COMMAND_TABLE(CMD_PROTOTYPE_EXPAND);
 
@@ -365,7 +365,7 @@ void prot_exec(void * p_para)
     protMsgCommand_t  message_cmd     = { 0 };
     protMsgResponse_t message_reponse = { 0 };
     uint16_t          command_id;
-    error_t           error;
+    err_t           error;
 
     /* COMMAND PHASE */
     fifo_read(&ff_prot_cmd, &message_cmd);

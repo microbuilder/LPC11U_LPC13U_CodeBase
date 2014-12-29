@@ -57,7 +57,7 @@
               payload[1] : ADC result (upper byte)
 */
 /**************************************************************************/
-error_t protcmd_adc(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+err_t protcmd_adc(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   uint8_t channel = payload[0];
 

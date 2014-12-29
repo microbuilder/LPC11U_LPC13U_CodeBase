@@ -91,10 +91,10 @@ static const uint8_t _ht16k33_numbertable[] =
 };
 
 // Function prototypes
-error_t ht16k33Init ( void );
-error_t ht16k33SetBrightness ( uint8_t brightness );
-error_t ht16k33SetBlinkRate ( ht16k33BlinkRate_t blinkRate );
-error_t ht16k33WriteDisplay ( void );
+err_t ht16k33Init ( void );
+err_t ht16k33SetBrightness ( uint8_t brightness );
+err_t ht16k33SetBlinkRate ( ht16k33BlinkRate_t blinkRate );
+err_t ht16k33WriteDisplay ( void );
 void    ht16k33Clear ( void );
 void ht16k33LoadString7Seg4Digit(char *s, uint8_t justification);
 

@@ -60,7 +60,7 @@ static int32_t _adxl345SensorID = 0;
     @brief  Sends a single command byte over I2C
 */
 /**************************************************************************/
-static error_t adxl345Write8 (uint8_t reg, uint8_t value)
+static err_t adxl345Write8 (uint8_t reg, uint8_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -78,7 +78,7 @@ static error_t adxl345Write8 (uint8_t reg, uint8_t value)
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
-static error_t adxl345Read8(uint8_t reg, uint8_t *value)
+static err_t adxl345Read8(uint8_t reg, uint8_t *value)
 {
   I2CWriteLength = 2;
   I2CReadLength = 1;
@@ -100,7 +100,7 @@ static error_t adxl345Read8(uint8_t reg, uint8_t *value)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t adxl345Init(void)
+err_t adxl345Init(void)
 {
   uint8_t devid = 0x00;
 
@@ -130,7 +130,7 @@ error_t adxl345Init(void)
     @brief  Gets the latest X/Y/Z values
 */
 /**************************************************************************/
-error_t adxl345GetXYZ(int16_t *x, int16_t *y, int16_t *z)
+err_t adxl345GetXYZ(int16_t *x, int16_t *y, int16_t *z)
 {
   int32_t i2cState;
 
@@ -162,7 +162,7 @@ error_t adxl345GetXYZ(int16_t *x, int16_t *y, int16_t *z)
     @brief  Sets the g range for the accelerometer
 */
 /**************************************************************************/
-error_t adxl345SetRange(adxl345_range_t range)
+err_t adxl345SetRange(adxl345_range_t range)
 {
   uint8_t format;
 
@@ -187,7 +187,7 @@ error_t adxl345SetRange(adxl345_range_t range)
     @brief  Sets the g range for the accelerometer
 */
 /**************************************************************************/
-error_t adxl345GetRange(adxl345_range_t *range)
+err_t adxl345GetRange(adxl345_range_t *range)
 {
   uint8_t results;
   ASSERT_STATUS(adxl345Read8(ADXL345_REG_DATA_FORMAT, &results));
@@ -201,7 +201,7 @@ error_t adxl345GetRange(adxl345_range_t *range)
     @brief  Sets the data rate for the ADXL345 (controls power consumption)
 */
 /**************************************************************************/
-error_t adxl345SetDataRate(adxl345_dataRate_t dataRate)
+err_t adxl345SetDataRate(adxl345_dataRate_t dataRate)
 {
   /* Note: The LOW_POWER bits are currently ignored and we always keep
      the device in 'normal' mode */
@@ -215,7 +215,7 @@ error_t adxl345SetDataRate(adxl345_dataRate_t dataRate)
     @brief  Sets the g range for the accelerometer
 */
 /**************************************************************************/
-error_t adxl345GetDataRate(adxl345_dataRate_t *dataRate)
+err_t adxl345GetDataRate(adxl345_dataRate_t *dataRate)
 {
   uint8_t results;
   ASSERT_STATUS(adxl345Read8(ADXL345_REG_BW_RATE, &results));
@@ -251,7 +251,7 @@ void adxl345GetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t adxl345GetSensorEvent(sensors_event_t *event)
+err_t adxl345GetSensorEvent(sensors_event_t *event)
 {
   int16_t x, y, z;
 

@@ -84,7 +84,7 @@
                  the current average (the output value), etc.
 */
 /**************************************************************************/
-error_t wma_i_init ( wma_i_t *wma )
+err_t wma_i_init ( wma_i_t *wma )
 {
   /* Check if the window size is valid (!= 0 and is a power of 2) */
   if (0 == wma->size) return ERROR_UNEXPECTEDVALUE;

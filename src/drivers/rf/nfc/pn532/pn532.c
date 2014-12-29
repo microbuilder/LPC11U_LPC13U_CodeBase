@@ -106,9 +106,9 @@ pn532_pcb_t * pn532GetPCB()
                 sets up any buffers or peripherals required by the PN532.
 */
 /**************************************************************************/
-error_t pn532Init(void)
+err_t pn532Init(void)
 {
-  error_t error;
+  err_t error;
 
   // Clear protocol control blocks
   memset(&_pn532_pcb, 0, sizeof(pn532_pcb_t));
@@ -144,7 +144,7 @@ pn532_error_t pn532Read(byte_t * pbtResponse, size_t * pszLen)
   if (!_pn532_pcb.initialised)
   {
     /* Warning: pn532Init uses a different error type! */
-    error_t error;
+    err_t error;
     error = pn532Init();
     if (error) return PN532_ERROR_UNABLETOINIT;
   }
@@ -190,7 +190,7 @@ pn532_error_t pn532Write(byte_t * abtCommand, size_t szLen)
   if (!_pn532_pcb.initialised)
   {
     /* Warning: pn532Init uses a different error type! */
-    error_t error;
+    err_t error;
     error = pn532Init();
     if (error) return PN532_ERROR_UNABLETOINIT;
   }

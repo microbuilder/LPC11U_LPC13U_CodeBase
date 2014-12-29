@@ -97,11 +97,11 @@ enum
   PCF2129_REG_AGINGOFFSET         = 0x19
 };
 
-error_t pcf2129Init(void);
+err_t pcf2129Init(void);
 void    pcf2129SetCallback (void (*pFunc)(void));
-error_t pcf2129ReadTime(rtcTime_t *time);
-error_t pcf2129SetTime(rtcTime_t time);
-error_t pcf2129SetInterrupt(pcf2129_INTEvent_t eventFlags);
+err_t pcf2129ReadTime(rtcTime_t *time);
+err_t pcf2129SetTime(rtcTime_t time);
+err_t pcf2129SetInterrupt(pcf2129_INTEvent_t eventFlags);
 
 #ifdef __cplusplus
 }

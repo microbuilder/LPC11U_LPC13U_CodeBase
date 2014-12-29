@@ -52,7 +52,7 @@ typedef struct sma_i_s
   int64_t         total;        /**< Total value of current window (use int64 for overflow prevention)  */
 } sma_i_t;
 
-error_t sma_i_init ( sma_i_t *sma );
+err_t sma_i_init ( sma_i_t *sma );
 void    sma_i_add  ( sma_i_t *sma, int32_t x );
 
 #ifdef __cplusplus

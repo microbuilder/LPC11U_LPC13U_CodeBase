@@ -50,7 +50,7 @@
  @retval ERROR_INVALIDPARAMETER the date is invalid
  */
 /**************************************************************************/
-static error_t rtcCheckValidDate(uint32_t year, uint8_t month, uint32_t day)
+static err_t rtcCheckValidDate(uint32_t year, uint8_t month, uint32_t day)
 {
     /* Basic validation of values */
     if (year >= 1900)
@@ -135,10 +135,10 @@ uint8_t rtcBCDToDec(uint8_t val)
  @return errorCode
  */
 /**************************************************************************/
-error_t rtcCreateTime(uint32_t year, rtcMonths_t month, uint8_t day,
+err_t rtcCreateTime(uint32_t year, rtcMonths_t month, uint8_t day,
     uint8_t hour, uint8_t minute, uint8_t second, int8_t timezone, rtcTime_t *t)
 {
-    error_t errorCode;
+    err_t errorCode;
     rtcTime_t newTime;
 
     /* Year is 8-bit value from 1900 */
@@ -193,7 +193,7 @@ error_t rtcCreateTime(uint32_t year, rtcMonths_t month, uint8_t day,
  @return errorCode
  */
 /**************************************************************************/
-error_t rtcCreateTimeFromEpoch(uint32_t epochTime, rtcTime_t *time)
+err_t rtcCreateTimeFromEpoch(uint32_t epochTime, rtcTime_t *time)
 {
     int32_t j, g, dg, c, dc, b, db, a, da, y, m, d;
 
@@ -235,7 +235,7 @@ error_t rtcCreateTimeFromEpoch(uint32_t epochTime, rtcTime_t *time)
  @return errorCode
  */
 /**************************************************************************/
-error_t rtcCreateTimeFromSecondsSince1980(uint32_t seconds, rtcTime_t *time)
+err_t rtcCreateTimeFromSecondsSince1980(uint32_t seconds, rtcTime_t *time)
 {
     return rtcCreateTimeFromEpoch(seconds + 315532800 /*epochTime of 1980 */,
         time);
@@ -251,7 +251,7 @@ error_t rtcCreateTimeFromSecondsSince1980(uint32_t seconds, rtcTime_t *time)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcAssignWeekday(rtcTime_t *t)
+err_t rtcAssignWeekday(rtcTime_t *t)
 {
     uint32_t NrOfDay;
     NrOfDay = rtcGetEpochDate(t->years, t->months, t->days);
@@ -267,7 +267,7 @@ error_t rtcAssignWeekday(rtcTime_t *t)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcAddSeconds(rtcTime_t *t, int32_t s)
+err_t rtcAddSeconds(rtcTime_t *t, int32_t s)
 {
     /* mls: We assume that t is a valid time in EPOCH range*/
     int32_t epochTime = rtcToEpochTime(t);
@@ -288,7 +288,7 @@ error_t rtcAddSeconds(rtcTime_t *t, int32_t s)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcAddMinutes(rtcTime_t *t, int32_t m)
+err_t rtcAddMinutes(rtcTime_t *t, int32_t m)
 {
     if ((35791394 < m) || (-35791394 > m))
     {
@@ -305,7 +305,7 @@ error_t rtcAddMinutes(rtcTime_t *t, int32_t m)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcAddHours(rtcTime_t *t, int32_t h)
+err_t rtcAddHours(rtcTime_t *t, int32_t h)
 {
     if ((596523 < h) || (-596523 > h))
     {
@@ -322,7 +322,7 @@ error_t rtcAddHours(rtcTime_t *t, int32_t h)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcAddDays(rtcTime_t *t, int32_t d)
+err_t rtcAddDays(rtcTime_t *t, int32_t d)
 {
     if ((24855 < d) || (-24855 > d))
     {
@@ -339,7 +339,7 @@ error_t rtcAddDays(rtcTime_t *t, int32_t d)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcAddMonths(rtcTime_t *t, int32_t m)
+err_t rtcAddMonths(rtcTime_t *t, int32_t m)
 {
     rtcTime_t newTime;
     int32_t monthCount = (int32_t) t->years * 12 + t->months;
@@ -371,7 +371,7 @@ error_t rtcAddMonths(rtcTime_t *t, int32_t m)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcAddYears(rtcTime_t *t, int32_t y)
+err_t rtcAddYears(rtcTime_t *t, int32_t y)
 {
     rtcTime_t newTime;
     /* Check if new time is in EPOCH range */
@@ -396,7 +396,7 @@ error_t rtcAddYears(rtcTime_t *t, int32_t y)
           seconds[out]: result (t1 - t2) in seconds
  */
 /**************************************************************************/
-error_t rtcGetDifference(rtcTime_t *t1, rtcTime_t *t2, int32_t *seconds)
+err_t rtcGetDifference(rtcTime_t *t1, rtcTime_t *t2, int32_t *seconds)
 {
     /* If t1 and t2 are valid time in EPOCH range, overflow won't occur */
     *seconds = rtcToEpochTime(t1) - rtcToEpochTime(t2);
@@ -415,11 +415,11 @@ error_t rtcGetDifference(rtcTime_t *t1, rtcTime_t *t2, int32_t *seconds)
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcGetWeekday(uint32_t year, rtcMonths_t month, uint8_t day,
+err_t rtcGetWeekday(uint32_t year, rtcMonths_t month, uint8_t day,
     rtcWeekdays_t *weekDay)
 {
     /* ToDo: validate the supplied parameters */
-    error_t errorCode = ERROR_NONE;
+    err_t errorCode = ERROR_NONE;
     uint32_t NrOfDay;
     if (year >= 1900)
     {
@@ -444,7 +444,7 @@ error_t rtcGetWeekday(uint32_t year, rtcMonths_t month, uint8_t day,
  @return  errorCode
  */
 /**************************************************************************/
-error_t rtcGetWeekNumber(rtcTime_t *t, uint8_t *weekNumber)
+err_t rtcGetWeekNumber(rtcTime_t *t, uint8_t *weekNumber)
 {
     uint32_t NrOfDay = rtcGetEpochDate(t->years, 1, 1);
     uint8_t nextMondayDay = 8 - NrOfDay;

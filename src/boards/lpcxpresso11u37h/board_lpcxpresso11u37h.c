@@ -381,7 +381,7 @@ void send_sdep_ATcommand(char* ATcmd)
   }while(cmdResponse.more_data);
 }
 
-error_t atparser_task(void)
+err_t atparser_task(void)
 {
   while( uartRxBufferDataPending() )
   {

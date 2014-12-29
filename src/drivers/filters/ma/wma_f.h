@@ -52,7 +52,7 @@ typedef struct wma_f_s
   float          *buffer;       /**< Pointer to the input data buffer (size=window)                     */
 } wma_f_t;
 
-error_t wma_f_init ( wma_f_t *wma );
+err_t wma_f_init ( wma_f_t *wma );
 void    wma_f_add  ( wma_f_t *wma, float x );
 
 #ifdef __cplusplus

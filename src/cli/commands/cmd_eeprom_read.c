@@ -62,7 +62,7 @@ void cmd_eeprom_read(uint8_t argc, char **argv)
 
   // Address seems to be OK
   uint8_t value[1] = { 0x00 };
-  error_t error = readEEPROM((uint8_t*) addr32, value, 1);
+  err_t error = readEEPROM((uint8_t*) addr32, value, 1);
   if (!error)
   {
     printf("0x%02X%s", value[0], CFG_PRINTF_NEWLINE);

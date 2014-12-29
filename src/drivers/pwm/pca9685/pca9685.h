@@ -63,9 +63,9 @@ enum
   PCA9685_REG_ALLLED_OFF_H       = 0xFD
 };
 
-error_t pca9685Init (uint8_t address);
-error_t pca9685SetFrequency (uint16_t freqHz);
-error_t pca9685SetPWM (uint16_t channel, uint16_t on, uint16_t off);
+err_t pca9685Init (uint8_t address);
+err_t pca9685SetFrequency (uint16_t freqHz);
+err_t pca9685SetPWM (uint16_t channel, uint16_t on, uint16_t off);
 
 #ifdef __cplusplus
 }

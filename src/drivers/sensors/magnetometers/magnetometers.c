@@ -8,7 +8,7 @@
 
     @code
 
-    error_t error;
+    err_t error;
     sensors_event_t mag_event;
     sensors_vec_t orientation;
 
@@ -99,7 +99,7 @@
     @endcode
 */
 /**************************************************************************/
-error_t magLoadCalData(mag_calib_data_t *calib_data)
+err_t magLoadCalData(mag_calib_data_t *calib_data)
 {
   /* Try to read the mag config data from the EEPROM memory */
   uint16_t magConfig;
@@ -153,7 +153,7 @@ error_t magLoadCalData(mag_calib_data_t *calib_data)
     @endcode
 */
 /**************************************************************************/
-error_t magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event)
+err_t magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sensors_event_t *accel_event)
 {
   /* Make sure the input is valid, not null, etc. */
   ASSERT(mag_event != NULL, ERROR_INVALIDPARAMETER);
@@ -240,7 +240,7 @@ error_t magTiltCompensation(sensors_axis_t axis, sensors_event_t *mag_event, sen
     @endcode
 */
 /**************************************************************************/
-error_t magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *orientation)
+err_t magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_vec_t *orientation)
 {
   /* Make sure the input is valid, not null, etc. */
   ASSERT(event != NULL, ERROR_INVALIDPARAMETER);
@@ -306,7 +306,7 @@ error_t magGetOrientation(sensors_axis_t axis, sensors_event_t *event, sensors_v
     @endcode
 */
 /**************************************************************************/
-error_t magCalibrateEventData(sensors_axis_t axis, sensors_event_t *event, mag_calib_data_t *calib_data)
+err_t magCalibrateEventData(sensors_axis_t axis, sensors_event_t *event, mag_calib_data_t *calib_data)
 {
   /* Make sure event and calib_data are valid, not NULL, etc.!*/
   ASSERT(event != NULL, ERROR_INVALIDPARAMETER);

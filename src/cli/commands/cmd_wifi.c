@@ -53,7 +53,7 @@
     Helper function that displays an error message
 */
 /**************************************************************************/
-void cmd_wifi_helper_error(error_t error)
+void cmd_wifi_helper_error(err_t error)
 {
   if(error)
   {
@@ -77,7 +77,7 @@ void cmd_wifi_helper_error(error_t error)
 /**************************************************************************/
 void cmd_wifi_helper_connectionDetails(void)
 {
-  error_t error;
+  err_t error;
   uint8_t ip[4];
   uint8_t netmask[4];
   uint8_t gateway[4];
@@ -110,7 +110,7 @@ void cmd_wifi_helper_connectionDetails(void)
 /**************************************************************************/
 void cmd_wifi_ssidscan(uint8_t argc, char **argv)
 {
-  error_t error;
+  err_t error;
 
   printf("Performing SSID scan (please wait a bit) ...%s%s",
     CFG_PRINTF_NEWLINE, CFG_PRINTF_NEWLINE);
@@ -129,7 +129,7 @@ void cmd_wifi_ssidscan(uint8_t argc, char **argv)
 /**************************************************************************/
 void cmd_wifi_connect(uint8_t argc, char **argv)
 {
-  error_t error;
+  err_t error;
   int32_t sec;
 
   /* Retrieve the security mode */
@@ -187,7 +187,7 @@ void cmd_wifi_connect(uint8_t argc, char **argv)
 /**************************************************************************/
 void cmd_wifi_smartConfig(uint8_t argc, char **argv)
 {
-  error_t error;
+  err_t error;
   uint32_t enableAES = 0;
 
   if (argc == 1)
@@ -233,7 +233,7 @@ void cmd_wifi_disconnect(uint8_t argc, char **argv)
 /**************************************************************************/
 void cmd_wifi_ping(uint8_t argc, char **argv)
 {
-  error_t  error;
+  err_t  error;
   uint8_t  pingAttempts = 3;
   uint16_t pingTimeout  = 1000;
   uint8_t  ip8[4] = { 0, 0, 0, 0 };
@@ -275,7 +275,7 @@ void cmd_wifi_ping(uint8_t argc, char **argv)
 /**************************************************************************/
 void cmd_wifi_gethostnameip(uint8_t argc, char **argv)
 {
-  error_t error;
+  err_t error;
   uint8_t lookupIP[4] = { 0, 0, 0, 0 };
 
   error = wifi_getHostByName(argv[0], lookupIP);

@@ -53,18 +53,18 @@ typedef struct Result_Struct
   uint8_t   bssid[6];
 } ResultStruct_t;
 
-error_t  wifi_init(unsigned short cRequestPatch);
-error_t  wifi_getFirmwareVersion(uint8_t *major, uint8_t *minor);
-error_t  wifi_getMacAddress(uint8_t macAddress[6]);
-error_t  wifi_setMacAddress(uint8_t macAddress[6]);
-error_t  wifi_ssidScan(uint32_t time);
-error_t  wifi_displaySSIDResults(void);
-error_t  wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen, int8_t *key, int32_t keylen);
-error_t  wifi_startSmartConfig(bool enableAES);
-error_t  wifi_disconnect(void);
-error_t  wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4], uint8_t gateway[4], uint8_t dhcpServer[4], uint8_t dnsServer[4]);
-error_t  wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout);
-error_t  wifi_getHostByName(uint8_t *hostName, uint8_t ip[4]);
+err_t  wifi_init(unsigned short cRequestPatch);
+err_t  wifi_getFirmwareVersion(uint8_t *major, uint8_t *minor);
+err_t  wifi_getMacAddress(uint8_t macAddress[6]);
+err_t  wifi_setMacAddress(uint8_t macAddress[6]);
+err_t  wifi_ssidScan(uint32_t time);
+err_t  wifi_displaySSIDResults(void);
+err_t  wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen, int8_t *key, int32_t keylen);
+err_t  wifi_startSmartConfig(bool enableAES);
+err_t  wifi_disconnect(void);
+err_t  wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4], uint8_t gateway[4], uint8_t dhcpServer[4], uint8_t dnsServer[4]);
+err_t  wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout);
+err_t  wifi_getHostByName(uint8_t *hostName, uint8_t ip[4]);
 bool     wifi_isConnected(void);
 bool     wifi_isDHCPComplete(void);
 

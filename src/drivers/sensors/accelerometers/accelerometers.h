@@ -61,9 +61,9 @@ typedef struct
   accel_calib_params_t z;
 } accel_calib_data_t;
 
-error_t accelGetOrientation     ( sensors_event_t *event, sensors_vec_t *orientation );
-error_t accelLoadCalData        ( accel_calib_data_t *calib_data );
-error_t accelCalibrateEventData ( sensors_event_t *event, accel_calib_data_t *calib_data );
+err_t accelGetOrientation     ( sensors_event_t *event, sensors_vec_t *orientation );
+err_t accelLoadCalData        ( accel_calib_data_t *calib_data );
+err_t accelCalibrateEventData ( sensors_event_t *event, accel_calib_data_t *calib_data );
 
 #ifdef __cplusplus
 }

@@ -64,7 +64,7 @@ static int32_t _mpl115a2SensorID = 0;
     @brief  Reads an 8 bit value over I2C
 */
 /**************************************************************************/
-error_t mpl115a2ReadPressureTemp(uint16_t *pressure, uint16_t *temp)
+err_t mpl115a2ReadPressureTemp(uint16_t *pressure, uint16_t *temp)
 {
   I2CWriteLength = 3;
   I2CReadLength = 1;
@@ -96,7 +96,7 @@ error_t mpl115a2ReadPressureTemp(uint16_t *pressure, uint16_t *temp)
     @brief  Reads the factory-set coefficients
 */
 /**************************************************************************/
-error_t mpl115a2ReadCoefficients(void)
+err_t mpl115a2ReadCoefficients(void)
 {
   int16_t a0coeff;
   int16_t b1coeff;
@@ -129,7 +129,7 @@ error_t mpl115a2ReadCoefficients(void)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t mpl115a2Init(void)
+err_t mpl115a2Init(void)
 {
   /* Initialise I2C */
   i2cInit(I2CMASTER);
@@ -150,7 +150,7 @@ error_t mpl115a2Init(void)
     @brief  Gets the compensated pressure level in kPa
 */
 /**************************************************************************/
-error_t mpl115a2GetPressure(float32_t *pressure)
+err_t mpl115a2GetPressure(float32_t *pressure)
 {
   uint16_t  Padc, Tadc;
   float32_t Pcomp;
@@ -200,7 +200,7 @@ void mpl115a2GetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t mpl115a2GetSensorEvent(sensors_event_t *event)
+err_t mpl115a2GetSensorEvent(sensors_event_t *event)
 {
   float32_t pressure_kPa;
 

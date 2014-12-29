@@ -61,7 +61,7 @@ static const IAP iap_entry = (IAP) 0x1FFF1FF1;
     @endcode
 */
 /**************************************************************************/
-error_t writeEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount )
+err_t writeEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount )
 {
   unsigned int command[5], result[4];
 
@@ -103,7 +103,7 @@ error_t writeEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCoun
     @endcode
 */
 /**************************************************************************/
-error_t readEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount )
+err_t readEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount )
 {
   unsigned int command[5], result[4];
 

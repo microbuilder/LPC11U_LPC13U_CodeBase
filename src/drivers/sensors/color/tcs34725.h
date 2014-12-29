@@ -88,14 +88,14 @@ typedef enum
 }
 tcs34725Gain_t;
 
-error_t tcs34725Init(void);
-error_t tcs34725Enable(void);
-error_t tcs34725Disable(void);
-error_t tcs34725GetRawData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c);
-error_t tcs34725SetIntegrationTime(tcs34725IntegrationTime_t it);
-error_t tcs34725SetGain(tcs34725Gain_t gain);
+err_t tcs34725Init(void);
+err_t tcs34725Enable(void);
+err_t tcs34725Disable(void);
+err_t tcs34725GetRawData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c);
+err_t tcs34725SetIntegrationTime(tcs34725IntegrationTime_t it);
+err_t tcs34725SetGain(tcs34725Gain_t gain);
 void    tcs34725GetSensor(sensor_t *sensor);
-error_t tcs34725GetSensorEvent(sensors_event_t *event);
+err_t tcs34725GetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }

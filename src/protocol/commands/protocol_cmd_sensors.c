@@ -77,7 +77,7 @@
               'sensors_event_t' object
 */
 /**************************************************************************/
-error_t protcmd_sensors_getevent(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+err_t protcmd_sensors_getevent(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   sensors_event_t event;
 

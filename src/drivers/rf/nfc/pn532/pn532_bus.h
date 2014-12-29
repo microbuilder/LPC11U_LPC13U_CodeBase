@@ -67,7 +67,7 @@ extern "C" {
 #define PN532_I2C_READYTIMEOUT                (20)    // Max number of attempts to read Ready bit (see UM 5-Nov-2007 Section 6.2.4)
 
 // Generic interface for the different serial buses available on the PN532
-error_t       pn532_bus_HWInit(void);
+err_t       pn532_bus_HWInit(void);
 pn532_error_t pn532_bus_SendCommand(const byte_t * pbtData, const size_t szData);
 pn532_error_t pn532_bus_ReadResponse(byte_t * pbtResponse, size_t * pszRxLen);
 pn532_error_t pn532_bus_Wakeup(void);

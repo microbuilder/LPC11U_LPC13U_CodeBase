@@ -60,7 +60,7 @@
               [10 04 00 03] 00 01 04
 */
 /**************************************************************************/
-error_t protcmd_eeprom_read(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+err_t protcmd_eeprom_read(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   uint32_t address = (payload[0] << 8) | payload[1];
   uint32_t rdlen = payload[2];
@@ -94,7 +94,7 @@ error_t protcmd_eeprom_read(uint8_t length, uint8_t const payload[], protMsgResp
               [10 05 00 05] 00 01 02 12 34
 */
 /**************************************************************************/
-error_t protcmd_eeprom_write(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+err_t protcmd_eeprom_write(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   uint32_t address = (payload[0] << 8) | payload[1];
   uint32_t wrlen = payload[2];

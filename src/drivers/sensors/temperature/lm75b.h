@@ -55,11 +55,11 @@ extern "C" {
 #define LM75B_CONFIG_SHUTDOWN_POWERON   (0x00)
 #define LM75B_CONFIG_SHUTDOWN_SHUTDOWN  (0x01)
 
-error_t lm75bInit(void);
-error_t lm75bGetTemperature (int32_t *temp);
-error_t lm75bConfigWrite (uint8_t configValue);
+err_t lm75bInit(void);
+err_t lm75bGetTemperature (int32_t *temp);
+err_t lm75bConfigWrite (uint8_t configValue);
 void    lm75bGetSensor(sensor_t *sensor);
-error_t lm75bGetSensorEvent(sensors_event_t *event);
+err_t lm75bGetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }

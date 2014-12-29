@@ -65,10 +65,10 @@ enum
   MPL115A2_REGISTER_STARTCONVERSION  = 0x12
 };
 
-error_t mpl115a2Init(void);
-error_t mpl115a2GetPressure(float32_t *pressure);
+err_t mpl115a2Init(void);
+err_t mpl115a2GetPressure(float32_t *pressure);
 void    mpl115a2GetSensor(sensor_t *sensor);
-error_t mpl115a2GetSensorEvent(sensors_event_t *event);
+err_t mpl115a2GetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }

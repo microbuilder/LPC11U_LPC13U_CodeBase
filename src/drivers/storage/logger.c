@@ -84,7 +84,7 @@ static bool loggerInitialised = FALSE;
 
     @code
 
-    error_t error;
+    err_t error;
     error = loggerInit("/folder/datalog.csv", LOGGER_FILEACTION_APPEND);
 
     if (!error)
@@ -98,7 +98,7 @@ static bool loggerInitialised = FALSE;
     @endcode
 */
 /**************************************************************************/
-error_t loggerInit(char *filename, logger_fileaction_t action)
+err_t loggerInit(char *filename, logger_fileaction_t action)
 {
   loggerFName = filename;
 
@@ -182,7 +182,7 @@ error_t loggerInit(char *filename, logger_fileaction_t action)
            loggerInit()
 */
 /**************************************************************************/
-error_t loggerWrite(const uint8_t * buffer, uint32_t len)
+err_t loggerWrite(const uint8_t * buffer, uint32_t len)
 {
   if (!loggerInitialised)
   {
@@ -228,7 +228,7 @@ error_t loggerWrite(const uint8_t * buffer, uint32_t len)
     @brief Writes an uncommitted data and closes the file
 */
 /**************************************************************************/
-error_t loggerClose(void)
+err_t loggerClose(void)
 {
   #if LOGGER_LOCALFILE
     #ifdef __CROSSWORKS_ARM

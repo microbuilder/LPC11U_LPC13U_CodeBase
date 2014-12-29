@@ -96,7 +96,7 @@ static int32_t _lm75bSensorID = 0;
     @brief  Writes an 8 bit values over I2C
 */
 /**************************************************************************/
-error_t lm75bWrite8 (uint8_t reg, uint32_t value)
+err_t lm75bWrite8 (uint8_t reg, uint32_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -114,7 +114,7 @@ error_t lm75bWrite8 (uint8_t reg, uint32_t value)
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
-error_t lm75bRead16(uint8_t reg, int32_t *value)
+err_t lm75bRead16(uint8_t reg, int32_t *value)
 {
   I2CWriteLength = 2;
   I2CReadLength = 2;
@@ -142,7 +142,7 @@ error_t lm75bRead16(uint8_t reg, int32_t *value)
     @brief  Writes the supplied 8-bit value to the LM75B config register
 */
 /**************************************************************************/
-error_t lm75bConfigWrite (uint8_t configValue)
+err_t lm75bConfigWrite (uint8_t configValue)
 {
   if (!_lm75bInitialised)
   {
@@ -159,7 +159,7 @@ error_t lm75bConfigWrite (uint8_t configValue)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t lm75bInit(void)
+err_t lm75bInit(void)
 {
   /* Initialise I2C */
   i2cInit(I2CMASTER);
@@ -186,7 +186,7 @@ error_t lm75bInit(void)
             or may not want to use floating point math for the calculations.
 */
 /**************************************************************************/
-error_t lm75bGetTemperature (int32_t *temp)
+err_t lm75bGetTemperature (int32_t *temp)
 {
   if (!_lm75bInitialised)
   {
@@ -232,7 +232,7 @@ void lm75bGetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t lm75bGetSensorEvent(sensors_event_t *event)
+err_t lm75bGetSensorEvent(sensors_event_t *event)
 {
   int32_t temp;
 

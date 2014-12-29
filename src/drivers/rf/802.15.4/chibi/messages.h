@@ -93,7 +93,7 @@ typedef struct
   uint8_t     payload[64];        // Up to 64 bytes of data
 } msg_FileData_t;
 
-error_t msgSend ( uint16_t targetAddr, msg_MessageType_t msgType, uint8_t *payload, uint8_t payloadLength );
+err_t msgSend ( uint16_t targetAddr, msg_MessageType_t msgType, uint8_t *payload, uint8_t payloadLength );
 void    msgCreateAlert ( msg_Alert_t *msg );
 
 #ifdef __cplusplus

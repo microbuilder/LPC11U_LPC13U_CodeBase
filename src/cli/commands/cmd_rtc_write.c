@@ -53,7 +53,7 @@
 /**************************************************************************/
 void cmd_rtc_write(uint8_t argc, char **argv)
 {
-  error_t error;
+  err_t error;
   rtcTime_t time;
   int32_t year, month, day, hour, minute, second;
 

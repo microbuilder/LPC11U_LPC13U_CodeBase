@@ -144,7 +144,7 @@
     #define WIFI_CHECK_INIT() \
       do \
       { \
-        error_t _err; \
+        err_t _err; \
         if (!_wifi_initialised) \
         { \
           _err = wifi_init(0); \
@@ -352,7 +352,7 @@ void wifi_UsynchCallback(long lEventType, char * data, unsigned char length)
             - ERROR_NONE
 */
 /**************************************************************************/
-error_t wifi_init(unsigned short cRequestPatch)
+err_t wifi_init(unsigned short cRequestPatch)
 {
   /* Make sure the CC3000 SPI block is initialised (see spi.c) */
   init_spi();
@@ -416,7 +416,7 @@ error_t wifi_init(unsigned short cRequestPatch)
     @endcode
 */
 /**************************************************************************/
-error_t wifi_getFirmwareVersion(uint8_t *major, uint8_t *minor)
+err_t wifi_getFirmwareVersion(uint8_t *major, uint8_t *minor)
 {
   uint8_t version[2];
 
@@ -456,7 +456,7 @@ error_t wifi_getFirmwareVersion(uint8_t *major, uint8_t *minor)
     @endcode
 */
 /**************************************************************************/
-error_t wifi_getMacAddress(uint8_t macAddress[6])
+err_t wifi_getMacAddress(uint8_t macAddress[6])
 {
   WIFI_CHECK_INIT();
   WIFI_CHECK_SUCCESS(nvmem_read(NVMEM_MAC_FILEID, 6, 0, macAddress),
@@ -476,7 +476,7 @@ error_t wifi_getMacAddress(uint8_t macAddress[6])
             - ERROR_NONE
 */
 /**************************************************************************/
-error_t wifi_setMacAddress(uint8_t macAddress[6])
+err_t wifi_setMacAddress(uint8_t macAddress[6])
 {
   WIFI_CHECK_INIT();
 
@@ -501,7 +501,7 @@ error_t wifi_setMacAddress(uint8_t macAddress[6])
              - ERROR_NONE
 */
 /**************************************************************************/
-error_t wifi_ssidScan(uint32_t time)
+err_t wifi_ssidScan(uint32_t time)
 {
   const unsigned long intervalTime[16] = { 2000, 2000, 2000, 2000,
                                            2000, 2000, 2000, 2000,
@@ -538,7 +538,7 @@ error_t wifi_ssidScan(uint32_t time)
     @endcode
 */
 /**************************************************************************/
-error_t wifi_displaySSIDResults(void)
+err_t wifi_displaySSIDResults(void)
 {
   uint16_t i, x;
   ResultStruct_t resultBuff;
@@ -641,7 +641,7 @@ error_t wifi_displaySSIDResults(void)
     @endcode
 */
 /**************************************************************************/
-error_t wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen,
+err_t wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen,
                            int8_t *key, int32_t keylen)
 {
   WIFI_CHECK_INIT();
@@ -699,7 +699,7 @@ error_t wifi_connectSecure(int32_t sec, int8_t *ssid, int32_t ssidlen,
              - ERROR_NONE
 */
 /**************************************************************************/
-error_t wifi_startSmartConfig(bool enableAES)
+err_t wifi_startSmartConfig(bool enableAES)
 {
   uint8_t  loop    = 0;
   uint32_t timeout = 0;
@@ -839,7 +839,7 @@ error_t wifi_startSmartConfig(bool enableAES)
             - ERROR_NONE
 */
 /**************************************************************************/
-error_t wifi_disconnect(void)
+err_t wifi_disconnect(void)
 {
   uint32_t timeout;
 
@@ -906,7 +906,7 @@ error_t wifi_disconnect(void)
     @endcode
 */
 /**************************************************************************/
-error_t wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4],
+err_t wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4],
                                   uint8_t gateway[4], uint8_t dhcpServer[4],
                                   uint8_t dnsServer[4])
 {
@@ -966,7 +966,7 @@ error_t wifi_getConnectionDetails(uint8_t ipAddress[4], uint8_t netmask[4],
     @endcode
 */
 /**************************************************************************/
-error_t wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout)
+err_t wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout)
 {
   WIFI_CHECK_INIT();
 
@@ -1032,7 +1032,7 @@ error_t wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout)
     @endcode
 */
 /**************************************************************************/
-error_t wifi_getHostByName(uint8_t *hostName, uint8_t ip[4])
+err_t wifi_getHostByName(uint8_t *hostName, uint8_t ip[4])
 {
   uint32_t revIP;
 

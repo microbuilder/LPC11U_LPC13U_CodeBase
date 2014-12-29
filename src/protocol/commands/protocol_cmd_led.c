@@ -47,7 +47,7 @@
     Enables or disables the on board LEDs via boardLED()
 */
 /**************************************************************************/
-error_t protcmd_led(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+err_t protcmd_led(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   ASSERT( 1 == length, ERROR_INVALIDPARAMETER);
 

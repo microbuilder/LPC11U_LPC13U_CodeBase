@@ -84,7 +84,7 @@ void cmd_eeprom_write(uint8_t argc, char **argv)
   val = (uint8_t)val32;
 
   // Write data at supplied address
-  error_t error = writeEEPROM((uint8_t*)addr32, (uint8_t *)&val, 1);
+  err_t error = writeEEPROM((uint8_t*)addr32, (uint8_t *)&val, 1);
   if (error)
   {
     printf("Error reading EEPROM: %d%s", error, CFG_PRINTF_NEWLINE);

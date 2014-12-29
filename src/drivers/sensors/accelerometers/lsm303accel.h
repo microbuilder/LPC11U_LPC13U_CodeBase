@@ -88,9 +88,9 @@ typedef struct lsm303AccelData_s
   float32_t z;
 } lsm303AccelData_t;
 
-error_t  lsm303accelInit(void);
-error_t  lsm303accelReadRaw(int16_t *x, int16_t *y, int16_t *z);
-error_t  lsm303accelGetSensorEvent(sensors_event_t *event);
+err_t  lsm303accelInit(void);
+err_t  lsm303accelReadRaw(int16_t *x, int16_t *y, int16_t *z);
+err_t  lsm303accelGetSensorEvent(sensors_event_t *event);
 void     lsm303accelGetSensor(sensor_t *sensor);
 
 #ifdef __cplusplus

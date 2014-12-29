@@ -8,7 +8,7 @@
 
     @code
 
-    error_t error;
+    err_t error;
     sensors_event_t event;
     sensors_vec_t orientation;
 
@@ -90,7 +90,7 @@
 
     @code
 
-    error_t error;
+    err_t error;
     sensors_event_t event;
     sensors_vec_t orientation;
     ...
@@ -100,7 +100,7 @@
     @endcode
 */
 /**************************************************************************/
-error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
+err_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
 {
   /* Make sure the input is valid, not null, etc. */
   ASSERT(event != NULL, ERROR_INVALIDPARAMETER);
@@ -158,7 +158,7 @@ error_t accelGetOrientation(sensors_event_t *event, sensors_vec_t *orientation)
     @endcode
 */
 /**************************************************************************/
-error_t accelLoadCalData(accel_calib_data_t *calib_data)
+err_t accelLoadCalData(accel_calib_data_t *calib_data)
 {
   /* Try to read the accel config data from the EEPROM memory */
   uint16_t accelConfig;
@@ -205,7 +205,7 @@ error_t accelLoadCalData(accel_calib_data_t *calib_data)
     @endcode
 */
 /**************************************************************************/
-error_t accelCalibrateEventData(sensors_event_t *event, accel_calib_data_t *calib_data)
+err_t accelCalibrateEventData(sensors_event_t *event, accel_calib_data_t *calib_data)
 {
   /* Make sure event and calib_data are valid, not NULL, etc.!*/
   ASSERT(event != NULL, ERROR_INVALIDPARAMETER);

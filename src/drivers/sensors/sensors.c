@@ -90,7 +90,7 @@ size_t sensorsSerializeSensor(uint8_t *buffer, const sensor_t *sensor)
 
     @code
 
-    error_t error;
+    err_t error;
     sensors_event_t event;
 
     error = mpl115a2GetSensorEvent(&event);
@@ -165,7 +165,7 @@ size_t sensorsLogSensor(char *buffer, const size_t len, const sensor_t *sensor)
     // Read 1000 samples from an accelerometer and log them to an SD card
     // using 'drivers/storage/logger.c' (CFG_SDCARD must be enabled)
 
-    error_t error;
+    err_t error;
     sensors_event_t event;
     char buffer[128];
     size_t len;
