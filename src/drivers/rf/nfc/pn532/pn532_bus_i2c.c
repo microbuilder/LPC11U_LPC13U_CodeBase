@@ -207,7 +207,7 @@ pn532_error_t pn532_bus_i2c_BuildFrame(byte_t * pbtFrame, size_t * pszFrame, con
     @brief  Initialises I2C and configures the PN532 HW
 */
 /**************************************************************************/
-error_t pn532_bus_HWInit(void)
+err_t pn532_bus_HWInit(void)
 {
   #ifdef PN532_DEBUGMODE
   PN532_DEBUG("Initialising I2C%s", CFG_PRINTF_NEWLINE);

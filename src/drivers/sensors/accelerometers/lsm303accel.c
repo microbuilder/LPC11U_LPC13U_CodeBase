@@ -55,7 +55,7 @@ static float              _lsm303accel_MG_LSB = 0.001F;      // 1, 2, 4 or 12 mg
     @brief  Writes an unsigned 8 bit values over I2C
 */
 /**************************************************************************/
-error_t lsm303accelWrite8(uint8_t addr, uint8_t reg, uint8_t value)
+err_t lsm303accelWrite8(uint8_t addr, uint8_t reg, uint8_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -73,7 +73,7 @@ error_t lsm303accelWrite8(uint8_t addr, uint8_t reg, uint8_t value)
     @brief  Reads an unsigned 8 bit value over I2C
 */
 /**************************************************************************/
-error_t lsm303accelRead8(uint8_t addr, uint8_t reg, uint8_t *value)
+err_t lsm303accelRead8(uint8_t addr, uint8_t reg, uint8_t *value)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -100,7 +100,7 @@ error_t lsm303accelRead8(uint8_t addr, uint8_t reg, uint8_t *value)
     @brief  Reads three signed 16 bit values over I2C
 */
 /**************************************************************************/
-error_t lsm303accelRead48(uint8_t addr, uint8_t reg, uint8_t buffer[6])
+err_t lsm303accelRead48(uint8_t addr, uint8_t reg, uint8_t buffer[6])
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -130,7 +130,7 @@ error_t lsm303accelRead48(uint8_t addr, uint8_t reg, uint8_t buffer[6])
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t lsm303accelInit(void)
+err_t lsm303accelInit(void)
 {
   // Initialise I2C
   i2cInit(I2CMASTER);
@@ -154,7 +154,7 @@ error_t lsm303accelInit(void)
             the sensor system abstraction layer and the float overhead
 */
 /**************************************************************************/
-error_t lsm303accelReadRaw(int16_t *x, int16_t *y, int16_t *z)
+err_t lsm303accelReadRaw(int16_t *x, int16_t *y, int16_t *z)
 {
   uint8_t buffer[6] = { 0, 0, 0, 0, 0, 0 };
 
@@ -180,7 +180,7 @@ error_t lsm303accelReadRaw(int16_t *x, int16_t *y, int16_t *z)
     @brief  Reads the current accelerometer values
 */
 /**************************************************************************/
-error_t lsm303accelRead(void)
+err_t lsm303accelRead(void)
 {
   uint8_t buffer[6] = { 0, 0, 0, 0, 0, 0 };
 
@@ -228,7 +228,7 @@ void lsm303accelGetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t lsm303accelGetSensorEvent(sensors_event_t *event)
+err_t lsm303accelGetSensorEvent(sensors_event_t *event)
 {
   /* Clear the event */
   memset(event, 0, sizeof(sensors_event_t));

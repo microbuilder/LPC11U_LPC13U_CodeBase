@@ -97,7 +97,7 @@ typedef struct
     U8 data[CHB_MAX_PAYLOAD];
 } chb_rx_data_t;
 
-error_t chb_init(void);
+err_t chb_init(void);
 chb_pcb_t *chb_get_pcb(void);
 U8 chb_write(U16 addr, U8 *data, U8 len);
 U8 chb_read(chb_rx_data_t *rx);

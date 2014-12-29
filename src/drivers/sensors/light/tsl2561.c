@@ -89,7 +89,7 @@ static int32_t                  _tsl2561SensorID = 0;
     @brief  Sends a single command byte over I2C
 */
 /**************************************************************************/
-error_t tsl2561WriteCmd (uint8_t cmd)
+err_t tsl2561WriteCmd (uint8_t cmd)
 {
   I2CWriteLength = 2;
   I2CReadLength = 0;
@@ -106,7 +106,7 @@ error_t tsl2561WriteCmd (uint8_t cmd)
     @brief  Writes an 8 bit values over I2C
 */
 /**************************************************************************/
-error_t tsl2561Write8 (uint8_t reg, uint32_t value)
+err_t tsl2561Write8 (uint8_t reg, uint32_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -124,7 +124,7 @@ error_t tsl2561Write8 (uint8_t reg, uint32_t value)
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
-error_t tsl2561Read16(uint8_t reg, uint16_t *value)
+err_t tsl2561Read16(uint8_t reg, uint16_t *value)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -151,7 +151,7 @@ error_t tsl2561Read16(uint8_t reg, uint16_t *value)
     @brief  Enables the device
 */
 /**************************************************************************/
-error_t tsl2561Enable(void)
+err_t tsl2561Enable(void)
 {
   /* Enable the device by setting the control bit to 0x03 */
   return tsl2561Write8(TSL2561_COMMAND_BIT | TSL2561_REGISTER_CONTROL, TSL2561_CONTROL_POWERON);
@@ -162,7 +162,7 @@ error_t tsl2561Enable(void)
     @brief  Disables the device (putting it in lower power sleep mode)
 */
 /**************************************************************************/
-error_t tsl2561Disable(void)
+err_t tsl2561Disable(void)
 {
   /* Turn the device off to save power */
   return tsl2561Write8(TSL2561_COMMAND_BIT | TSL2561_REGISTER_CONTROL, TSL2561_CONTROL_POWEROFF);
@@ -173,7 +173,7 @@ error_t tsl2561Disable(void)
     @brief  Private function to read luminosity on both channels
 */
 /**************************************************************************/
-error_t tsl2561GetData (uint16_t *broadband, uint16_t *ir)
+err_t tsl2561GetData (uint16_t *broadband, uint16_t *ir)
 {
   /* Enable the device by setting the control bit to 0x03 */
   ASSERT_STATUS(tsl2561Enable());
@@ -209,7 +209,7 @@ error_t tsl2561GetData (uint16_t *broadband, uint16_t *ir)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t tsl2561Init(void)
+err_t tsl2561Init(void)
 {
   /* Initialise I2C */
   i2cInit(I2CMASTER);
@@ -243,7 +243,7 @@ void tsl2561EnableAutoGain(bool enable)
     @brief  Sets the integration time for the sensor.
 */
 /**************************************************************************/
-error_t tsl2561SetIntegrationTime(tsl2561IntegrationTime_t time)
+err_t tsl2561SetIntegrationTime(tsl2561IntegrationTime_t time)
 {
   if (!_tsl2561Initialised)
   {
@@ -270,7 +270,7 @@ error_t tsl2561SetIntegrationTime(tsl2561IntegrationTime_t time)
     @brief  Sets the integration time for the sensor.
 */
 /**************************************************************************/
-error_t tsl2561SetGain(tsl2561Gain_t gain)
+err_t tsl2561SetGain(tsl2561Gain_t gain)
 {
   if (!_tsl2561Initialised)
   {
@@ -298,7 +298,7 @@ error_t tsl2561SetGain(tsl2561Gain_t gain)
             the TSL2561, adjusting gain if auto-gain is enabled
 */
 /**************************************************************************/
-error_t tsl2561GetLuminosity (uint16_t *broadband, uint16_t *ir)
+err_t tsl2561GetLuminosity (uint16_t *broadband, uint16_t *ir)
 {
   bool valid = false;
 
@@ -532,7 +532,7 @@ void tsl2561GetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t tsl2561GetSensorEvent(sensors_event_t *event)
+err_t tsl2561GetSensorEvent(sensors_event_t *event)
 {
   uint16_t broadband, ir;
 

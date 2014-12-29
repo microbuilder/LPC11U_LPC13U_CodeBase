@@ -314,7 +314,7 @@ enum
     #define RX_STATE RX_AACK_ON
 #endif
 // init
-error_t chb_drvr_init(void);
+err_t chb_drvr_init(void);
 
 // data access
 U8 chb_reg_read(U8 addr);

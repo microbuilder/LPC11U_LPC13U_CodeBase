@@ -28,7 +28,7 @@ static tcs34725IntegrationTime_t  _tcs34725IntegrationTime = TCS34725_INTEGRATIO
     @brief  Writes an 8 bit values over I2C
 */
 /**************************************************************************/
-error_t tcs34725Write8 (uint8_t reg, uint8_t value)
+err_t tcs34725Write8 (uint8_t reg, uint8_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -46,7 +46,7 @@ error_t tcs34725Write8 (uint8_t reg, uint8_t value)
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
-error_t tcs34725Read8(uint8_t reg, uint8_t *value)
+err_t tcs34725Read8(uint8_t reg, uint8_t *value)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -72,7 +72,7 @@ error_t tcs34725Read8(uint8_t reg, uint8_t *value)
     @brief  Reads a 16 bit values over I2C
 */
 /**************************************************************************/
-error_t tcs34725Read16(uint8_t reg, uint16_t *value)
+err_t tcs34725Read16(uint8_t reg, uint16_t *value)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -99,7 +99,7 @@ error_t tcs34725Read16(uint8_t reg, uint16_t *value)
     @brief  Enables the device
 */
 /**************************************************************************/
-error_t tcs34725Enable(void)
+err_t tcs34725Enable(void)
 {
   ASSERT_STATUS(tcs34725Write8(TCS34725_ENABLE, TCS34725_ENABLE_PON));
   delay(3);
@@ -113,7 +113,7 @@ error_t tcs34725Enable(void)
     @brief  Disables the device (putting it in lower power sleep mode)
 */
 /**************************************************************************/
-error_t tcs34725Disable(void)
+err_t tcs34725Disable(void)
 {
   /* Turn the device off to save power */
   uint8_t reg = 0;
@@ -128,7 +128,7 @@ error_t tcs34725Disable(void)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t tcs34725Init(void)
+err_t tcs34725Init(void)
 {
   uint8_t id = 0;
 
@@ -160,7 +160,7 @@ error_t tcs34725Init(void)
     @brief  Sets the integration time to the specified value
 */
 /**************************************************************************/
-error_t tcs34725SetIntegrationTime(tcs34725IntegrationTime_t it)
+err_t tcs34725SetIntegrationTime(tcs34725IntegrationTime_t it)
 {
   if (!_tcs34725Initialised)
   {
@@ -178,7 +178,7 @@ error_t tcs34725SetIntegrationTime(tcs34725IntegrationTime_t it)
     @brief  Sets gain to the specified value
 */
 /**************************************************************************/
-error_t tcs34725SetGain(tcs34725Gain_t gain)
+err_t tcs34725SetGain(tcs34725Gain_t gain)
 {
   if (!_tcs34725Initialised)
   {
@@ -196,7 +196,7 @@ error_t tcs34725SetGain(tcs34725Gain_t gain)
     @brief  Reads the raw red, green, blue and clear channel values
 */
 /**************************************************************************/
-error_t tcs34725GetRawData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c)
+err_t tcs34725GetRawData(uint16_t *r, uint16_t *g, uint16_t *b, uint16_t *c)
 {
   if (!_tcs34725Initialised)
   {
@@ -291,7 +291,7 @@ void tcs34725GetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t tcs34725GetSensorEvent(sensors_event_t *event)
+err_t tcs34725GetSensorEvent(sensors_event_t *event)
 {
   float maxCount;
   uint16_t r, g, b, c;

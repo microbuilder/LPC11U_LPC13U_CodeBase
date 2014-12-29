@@ -126,10 +126,10 @@ enum
 };
 
 // Function prototypes
-error_t lis3dhInit(void);
-error_t lis3dhPoll(lis3dhData_t* data);
+err_t lis3dhInit(void);
+err_t lis3dhPoll(lis3dhData_t* data);
 void    lis3dhGetSensor(sensor_t *sensor);
-error_t lis3dhGetSensorEvent(sensors_event_t *event);
+err_t lis3dhGetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }

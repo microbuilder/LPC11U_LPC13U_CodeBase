@@ -44,8 +44,8 @@ typedef enum
   LOGGER_FILEACTION_ALWAYSCREATE = 1  /**< Always creates a new file, overwriting any older existing file        */
 } logger_fileaction_t;
 
-error_t loggerInit(char *filename, logger_fileaction_t action);
-error_t loggerWrite(const uint8_t * buffer, uint32_t len);
-error_t loggerClose(void);
+err_t loggerInit(char *filename, logger_fileaction_t action);
+err_t loggerWrite(const uint8_t * buffer, uint32_t len);
+err_t loggerClose(void);
 
 #endif

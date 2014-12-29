@@ -59,7 +59,7 @@ static int32_t _lis3dhSensorID = 0;
     @brief  Writes an unsigned 8 bit values over I2C
 */
 /**************************************************************************/
-error_t lis3dhWrite8 (uint8_t reg, uint8_t value)
+err_t lis3dhWrite8 (uint8_t reg, uint8_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -77,7 +77,7 @@ error_t lis3dhWrite8 (uint8_t reg, uint8_t value)
     @brief  Reads an unsigned 8 bit values over I2C
 */
 /**************************************************************************/
-error_t lis3dhRead8(uint8_t reg, uint8_t *value)
+err_t lis3dhRead8(uint8_t reg, uint8_t *value)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -104,7 +104,7 @@ error_t lis3dhRead8(uint8_t reg, uint8_t *value)
     @brief  Reads three signed 16 bit values over I2C
 */
 /**************************************************************************/
-error_t lis3dhRead48(uint8_t reg, int16_t *x, int16_t *y, int16_t *z)
+err_t lis3dhRead48(uint8_t reg, int16_t *x, int16_t *y, int16_t *z)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -133,7 +133,7 @@ error_t lis3dhRead48(uint8_t reg, int16_t *x, int16_t *y, int16_t *z)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t lis3dhInit(void)
+err_t lis3dhInit(void)
 {
   /* Initialise I2C */
   i2cInit(I2CMASTER);
@@ -164,7 +164,7 @@ error_t lis3dhInit(void)
     @brief  Polls the device for a new X/Y/Z reading
 */
 /**************************************************************************/
-error_t lis3dhPoll(lis3dhData_t* data)
+err_t lis3dhPoll(lis3dhData_t* data)
 {
   uint8_t timeout = 0;
   uint8_t buffer = 0x00;
@@ -237,7 +237,7 @@ void lis3dhGetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t lis3dhGetSensorEvent(sensors_event_t *event)
+err_t lis3dhGetSensorEvent(sensors_event_t *event)
 {
   lis3dhData_t data;
 

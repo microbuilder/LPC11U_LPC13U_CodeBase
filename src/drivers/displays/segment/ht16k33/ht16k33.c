@@ -64,7 +64,7 @@ volatile uint16_t _ht16k33_Buffer[8];
     @brief  Writes to a register over I2C
 */
 /**************************************************************************/
-error_t ht16k33WriteRegister (uint8_t reg)
+err_t ht16k33WriteRegister (uint8_t reg)
 {
   I2CWriteLength = 2;
   I2CReadLength = 0;
@@ -81,7 +81,7 @@ error_t ht16k33WriteRegister (uint8_t reg)
     @brief  Writes an unsigned 8 bit values over I2C
 */
 /**************************************************************************/
-error_t ht16k33Write8 (uint8_t reg, uint8_t value)
+err_t ht16k33Write8 (uint8_t reg, uint8_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -103,7 +103,7 @@ error_t ht16k33Write8 (uint8_t reg, uint8_t value)
     @brief Initialises the HT16K33 LED driver
 */
 /**************************************************************************/
-error_t ht16k33Init(void)
+err_t ht16k33Init(void)
 {
   // Make sure I2C is initialised
   i2cInit(I2CMASTER);
@@ -128,7 +128,7 @@ error_t ht16k33Init(void)
     @brief Sets the display brightness/dimming (0..15)
 */
 /**************************************************************************/
-error_t ht16k33SetBrightness(uint8_t brightness)
+err_t ht16k33SetBrightness(uint8_t brightness)
 {
   if (brightness > 15) brightness = 15;
   return ht16k33WriteRegister(HT16K33_REGISTER_DIMMING | brightness);
@@ -139,7 +139,7 @@ error_t ht16k33SetBrightness(uint8_t brightness)
     @brief Sets the display blink rate
 */
 /**************************************************************************/
-error_t ht16k33SetBlinkRate(ht16k33BlinkRate_t blinkRate)
+err_t ht16k33SetBlinkRate(ht16k33BlinkRate_t blinkRate)
 {
   if (blinkRate > HT16K33_BLINKRATE_HALFHZ) blinkRate = HT16K33_BLINKRATE_OFF;
   return ht16k33WriteRegister(HT16K33_REGISTER_DISPLAY_SETUP | 0x01 | (blinkRate << 1));
@@ -150,7 +150,7 @@ error_t ht16k33SetBlinkRate(ht16k33BlinkRate_t blinkRate)
     @brief Updates the display memory
 */
 /**************************************************************************/
-error_t ht16k33WriteDisplay(void)
+err_t ht16k33WriteDisplay(void)
 {
   int32_t i;
 

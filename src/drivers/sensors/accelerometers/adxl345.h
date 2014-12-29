@@ -117,14 +117,14 @@ typedef enum
   ADXL345_RANGE_2_G           = 0x00    // +/- 2g  (Default)
 } adxl345_range_t;
 
-error_t adxl345Init(void);
-error_t adxl345GetXYZ(int16_t *x, int16_t *y, int16_t *z);
-error_t adxl345SetRange(adxl345_range_t range);
-error_t adxl345GetRange(adxl345_range_t *range);
-error_t adxl345SetDataRate(adxl345_dataRate_t dataRate);
-error_t adxl345GetDataRate(adxl345_dataRate_t *dataRate);
+err_t adxl345Init(void);
+err_t adxl345GetXYZ(int16_t *x, int16_t *y, int16_t *z);
+err_t adxl345SetRange(adxl345_range_t range);
+err_t adxl345GetRange(adxl345_range_t *range);
+err_t adxl345SetDataRate(adxl345_dataRate_t dataRate);
+err_t adxl345GetDataRate(adxl345_dataRate_t *dataRate);
 void    adxl345GetSensor(sensor_t *sensor);
-error_t adxl345GetSensorEvent(sensors_event_t *event);
+err_t adxl345GetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }

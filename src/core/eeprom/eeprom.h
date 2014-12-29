@@ -43,8 +43,8 @@ extern "C" {
 #include "projectconfig.h"
 
 /* IAP functions need to be placed in SRAM */
-RAMFUNC error_t writeEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount );
-RAMFUNC error_t readEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount );
+RAMFUNC err_t writeEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount );
+RAMFUNC err_t readEEPROM( uint8_t* eeAddress, uint8_t* buffAddress, uint32_t byteCount );
 
 void eepromDump(void);
 

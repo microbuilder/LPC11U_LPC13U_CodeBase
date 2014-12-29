@@ -58,7 +58,7 @@ static int32_t  _l3gd20SensorID = 0;
     @brief  Writes an unsigned 8 bit value over I2C
 */
 /**************************************************************************/
-error_t l3gd20Write8 (uint8_t reg, uint8_t value)
+err_t l3gd20Write8 (uint8_t reg, uint8_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -76,7 +76,7 @@ error_t l3gd20Write8 (uint8_t reg, uint8_t value)
     @brief  Reads an unsigned 8 bit value over I2C
 */
 /**************************************************************************/
-error_t l3gd20Read8(uint8_t reg, uint8_t *value)
+err_t l3gd20Read8(uint8_t reg, uint8_t *value)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -103,7 +103,7 @@ error_t l3gd20Read8(uint8_t reg, uint8_t *value)
     @brief  Reads three signed 16 bit values over I2C
 */
 /**************************************************************************/
-error_t l3gd20Read48(uint8_t reg, int16_t *x, int16_t *y, int16_t *z)
+err_t l3gd20Read48(uint8_t reg, int16_t *x, int16_t *y, int16_t *z)
 {
   /* Write transaction */
   I2CWriteLength = 2;
@@ -150,7 +150,7 @@ error_t l3gd20Read48(uint8_t reg, int16_t *x, int16_t *y, int16_t *z)
     @endcode
 */
 /**************************************************************************/
-error_t l3gd20Init(void)
+err_t l3gd20Init(void)
 {
   uint8_t id;
 
@@ -239,7 +239,7 @@ error_t l3gd20Init(void)
     @brief  Polls the device for a new X/Y/Z reading
 */
 /**************************************************************************/
-error_t l3gd20Poll(l3gd20Data_t* data)
+err_t l3gd20Poll(l3gd20Data_t* data)
 {
   uint8_t timeout = 0;
   uint8_t buffer;
@@ -303,7 +303,7 @@ void l3gd20GetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t l3gd20GetSensorEvent(sensors_event_t *event)
+err_t l3gd20GetSensorEvent(sensors_event_t *event)
 {
   l3gd20Data_t data;
 

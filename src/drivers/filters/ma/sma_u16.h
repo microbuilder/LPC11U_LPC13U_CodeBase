@@ -52,7 +52,7 @@ typedef struct sma_u16_s
   uint32_t        total;        /**< Total value of current window (use uint32 for overflow prevention) */
 } sma_u16_t;
 
-error_t sma_u16_init ( sma_u16_t *sma );
+err_t sma_u16_init ( sma_u16_t *sma );
 void    sma_u16_add  ( sma_u16_t *sma, uint16_t x );
 
 #ifdef __cplusplus

@@ -215,7 +215,7 @@ void test_sysinfo_codebase_version(void)
 */
 /**************************************************************************/
 static uint32_t expected_uid[4] = {0x12345678, 0x87654321, 0xCAFEBABE, 0xBABECAFE };
-error_t fake_iapReadUID(uint32_t uid[], int num_call)
+err_t fake_iapReadUID(uint32_t uid[], int num_call)
 {
   memcpy(uid, expected_uid, 16);
 

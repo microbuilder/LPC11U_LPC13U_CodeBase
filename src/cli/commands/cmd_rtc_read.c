@@ -53,7 +53,7 @@
 /**************************************************************************/
 void cmd_rtc_read(uint8_t argc, char **argv)
 {
-  error_t error;
+  err_t error;
   rtcTime_t time;
 
   error = pcf2129ReadTime(&time);

@@ -52,7 +52,7 @@ typedef struct wma_u16_s
   uint16_t       *buffer;       /**< Pointer to the input data buffer (size=window)                     */
 } wma_u16_t;
 
-error_t wma_u16_init ( wma_u16_t *wma );
+err_t wma_u16_init ( wma_u16_t *wma );
 void    wma_u16_add  ( wma_u16_t *wma, uint16_t x );
 
 #ifdef __cplusplus

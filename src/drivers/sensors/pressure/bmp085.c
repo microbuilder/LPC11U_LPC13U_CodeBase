@@ -58,7 +58,7 @@ static bmp085_calib_data  _bmp085_coeffs;
     @brief  Writes an 8 bit value over I2C
 */
 /**************************************************************************/
-error_t bmp085WriteCommand(uint8_t reg, uint8_t value)
+err_t bmp085WriteCommand(uint8_t reg, uint8_t value)
 {
   I2CWriteLength = 3;
   I2CReadLength = 0;
@@ -74,7 +74,7 @@ error_t bmp085WriteCommand(uint8_t reg, uint8_t value)
     @brief  Reads an 8 bit value over I2C
 */
 /**************************************************************************/
-error_t bmp085Read8(uint8_t reg, uint8_t *value)
+err_t bmp085Read8(uint8_t reg, uint8_t *value)
 {
   I2CWriteLength = 2;
   I2CReadLength = 1;
@@ -93,7 +93,7 @@ error_t bmp085Read8(uint8_t reg, uint8_t *value)
     @brief  Reads a 16 bit value over I2C
 */
 /**************************************************************************/
-error_t bmp085Read16(uint8_t reg, uint16_t *value)
+err_t bmp085Read16(uint8_t reg, uint16_t *value)
 {
   I2CWriteLength = 2;
   I2CReadLength = 2;
@@ -112,7 +112,7 @@ error_t bmp085Read16(uint8_t reg, uint16_t *value)
     @brief  Reads a signed 16 bit value over I2C
 */
 /**************************************************************************/
-error_t bmp085ReadS16(uint16_t reg, int16_t *value)
+err_t bmp085ReadS16(uint16_t reg, int16_t *value)
 {
   uint16_t i;
   ASSERT_STATUS(bmp085Read16(reg, &i));
@@ -126,7 +126,7 @@ error_t bmp085ReadS16(uint16_t reg, int16_t *value)
     @brief  Reads the factory-set coefficients
 */
 /**************************************************************************/
-error_t bmp085ReadCoefficients(void)
+err_t bmp085ReadCoefficients(void)
 {
   #if BMP085_USE_DATASHEET_VALS
     _bmp085_coeffs.ac1 = 408;
@@ -163,7 +163,7 @@ error_t bmp085ReadCoefficients(void)
 
 */
 /**************************************************************************/
-error_t bmp085ReadRawTemperature(int32_t *temperature)
+err_t bmp085ReadRawTemperature(int32_t *temperature)
 {
   #if BMP085_USE_DATASHEET_VALS
     *temperature = 27898;
@@ -183,7 +183,7 @@ error_t bmp085ReadRawTemperature(int32_t *temperature)
 
 */
 /**************************************************************************/
-error_t bmp085ReadRawPressure(int32_t *pressure)
+err_t bmp085ReadRawPressure(int32_t *pressure)
 {
   #if BMP085_USE_DATASHEET_VALS
     *pressure = 23843;
@@ -227,7 +227,7 @@ error_t bmp085ReadRawPressure(int32_t *pressure)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t bmp085Init(bmp085_mode_t mode)
+err_t bmp085Init(bmp085_mode_t mode)
 {
   /* Mode boundary check */
   if ((mode > BMP085_MODE_ULTRAHIGHRES) || (mode < 0))
@@ -262,7 +262,7 @@ error_t bmp085Init(bmp085_mode_t mode)
     @brief  Gets the compensated pressure level in kPa
 */
 /**************************************************************************/
-error_t bmp085GetPressure(float *pressure)
+err_t bmp085GetPressure(float *pressure)
 {
   int32_t  ut = 0, up = 0, compp = 0;
   int32_t  x1, x2, b5, b6, x3, b3, p;
@@ -320,7 +320,7 @@ error_t bmp085GetPressure(float *pressure)
     @brief  Reads the temperatures in degrees Celsius
 */
 /**************************************************************************/
-error_t bmp085GetTemperature(float *temp)
+err_t bmp085GetTemperature(float *temp)
 {
   int32_t ut, x1, x2, b5;
   float t;
@@ -370,7 +370,7 @@ void bmp085GetSensor(sensor_t *sensor)
     @brief  Reads the sensor and returns the data as a sensors_event_t
 */
 /**************************************************************************/
-error_t bmp085GetSensorEvent(sensors_event_t *event)
+err_t bmp085GetSensorEvent(sensors_event_t *event)
 {
   float pressure_kPa;
 

@@ -83,10 +83,10 @@ typedef struct lsm303MagData_s
   float z;
 } lsm303MagData_t;
 
-error_t  lsm303magInit(void);
-error_t  lsm303magReadRaw(int16_t *x, int16_t *y, int16_t *z);
-error_t  lsm303magSetGain(lsm303MagGain_t gain);
-error_t  lsm303magGetSensorEvent(sensors_event_t *event);
+err_t  lsm303magInit(void);
+err_t  lsm303magReadRaw(int16_t *x, int16_t *y, int16_t *z);
+err_t  lsm303magSetGain(lsm303MagGain_t gain);
+err_t  lsm303magGetSensorEvent(sensors_event_t *event);
 void     lsm303magGetSensor(sensor_t *sensor);
 
 #ifdef __cplusplus

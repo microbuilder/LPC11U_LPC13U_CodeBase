@@ -190,7 +190,7 @@ typedef struct
 void          pn532PrintHex(const byte_t * pbtData, const size_t szBytes);
 void          pn532PrintHexChar(const byte_t * pbtData, const size_t szBytes);
 pn532_pcb_t * pn532GetPCB(void);
-error_t       pn532Init(void);
+err_t       pn532Init(void);
 pn532_error_t pn532Read(byte_t *pbtResponse, size_t * pszLen);
 pn532_error_t pn532Write(byte_t *abtCommand, size_t szLen);
 

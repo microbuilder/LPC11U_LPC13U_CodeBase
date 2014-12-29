@@ -189,7 +189,7 @@ typedef enum
     ERROR_CC3000_SOCKET_SEND_LENMISMATCH        = 0x457,  /**< Length mismatch during 'send' for socket (data len != send len) */
     ERROR_CC3000_SOCKET_GETHOSTBYNAME           = 0x458,  /**< Failed calling 'gethostbyname' */
   /*=======================================================================*/
-} error_t;
+} err_t;
 
 #ifdef __cplusplus
 }

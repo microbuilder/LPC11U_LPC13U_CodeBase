@@ -62,7 +62,7 @@ static void (*_pcf2129Callback)(void) = NULL;
     @brief  Writes the specified number of bytes over I2C
 */
 /**************************************************************************/
-error_t pcf2129WriteBytes(uint8_t reg, uint8_t *buffer, size_t length)
+err_t pcf2129WriteBytes(uint8_t reg, uint8_t *buffer, size_t length)
 {
   uint32_t i;
 
@@ -91,7 +91,7 @@ error_t pcf2129WriteBytes(uint8_t reg, uint8_t *buffer, size_t length)
     @brief  Reads the specified number of bytes over I2C
 */
 /**************************************************************************/
-error_t pcf2129ReadBytes(uint8_t reg, uint8_t *buffer, size_t length)
+err_t pcf2129ReadBytes(uint8_t reg, uint8_t *buffer, size_t length)
 {
   uint32_t i;
 
@@ -130,7 +130,7 @@ error_t pcf2129ReadBytes(uint8_t reg, uint8_t *buffer, size_t length)
     @brief  Writes an 8 bit value over I2C
 */
 /**************************************************************************/
-error_t pcf2129Write8 (uint8_t reg, uint8_t value)
+err_t pcf2129Write8 (uint8_t reg, uint8_t value)
 {
   uint8_t buffer = value;
   return pcf2129WriteBytes(reg, &buffer, 1);
@@ -141,7 +141,7 @@ error_t pcf2129Write8 (uint8_t reg, uint8_t value)
     @brief  Reads a single byte over I2C
 */
 /**************************************************************************/
-error_t pcf2129Read8(uint8_t reg, uint8_t *result)
+err_t pcf2129Read8(uint8_t reg, uint8_t *result)
 {
   return pcf2129ReadBytes(reg, result, 1);
 }
@@ -151,7 +151,7 @@ error_t pcf2129Read8(uint8_t reg, uint8_t *result)
     @brief  Initialises the I2C block
 */
 /**************************************************************************/
-error_t pcf2129Init(void)
+err_t pcf2129Init(void)
 {
   uint8_t result;
 
@@ -360,7 +360,7 @@ void pcf2129SetCallback (void (*pFunc)(void))
     @endcode
 */
 /**************************************************************************/
-error_t pcf2129ReadTime(rtcTime_t *time)
+err_t pcf2129ReadTime(rtcTime_t *time)
 {
   if (!_pcf2129Initialised )
   {
@@ -408,7 +408,7 @@ error_t pcf2129ReadTime(rtcTime_t *time)
     @endcode
 */
 /**************************************************************************/
-error_t pcf2129SetTime(rtcTime_t time)
+err_t pcf2129SetTime(rtcTime_t time)
 {
   if (!_pcf2129Initialised )
   {
@@ -453,7 +453,7 @@ error_t pcf2129SetTime(rtcTime_t time)
     @endcode
 */
 /**************************************************************************/
-error_t pcf2129SetInterrupt(pcf2129_INTEvent_t eventFlags)
+err_t pcf2129SetInterrupt(pcf2129_INTEvent_t eventFlags)
 {
   uint8_t config[3];
 

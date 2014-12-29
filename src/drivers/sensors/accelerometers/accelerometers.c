@@ -8,7 +8,7 @@
 
     @code
 
-    error_t error;
+    err_t error;
     sensors_event_t event;
     sensors_vec_t orientation;
 
@@ -90,7 +90,7 @@
 
     @code
 
-    error_t error;
+    err_t error;
     sensors_event_t event;
     sensors_vec_t orientation;
 

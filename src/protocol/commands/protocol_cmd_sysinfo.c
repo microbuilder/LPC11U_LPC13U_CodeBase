@@ -54,7 +54,7 @@
     Returns system information for this board based on a 16-bit key
 */
 /**************************************************************************/
-error_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
+err_t protcmd_sysinfo(uint8_t length, uint8_t const payload[], protMsgResponse_t* mess_response)
 {
   uint16_t key = payload[1] << 8 | payload[0];
 

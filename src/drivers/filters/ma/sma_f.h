@@ -52,7 +52,7 @@ typedef struct sma_f_s
   double          total;        /**< Total value of current window (use double for overflow prevention) */
 } sma_f_t;
 
-error_t sma_f_init ( sma_f_t *sma );
+err_t sma_f_init ( sma_f_t *sma );
 void    sma_f_add  ( sma_f_t *sma, float x );
 
 #ifdef __cplusplus

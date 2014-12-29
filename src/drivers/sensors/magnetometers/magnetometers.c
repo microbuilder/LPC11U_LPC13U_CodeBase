@@ -8,7 +8,7 @@
 
     @code
 
-    error_t error;
+    err_t error;
     sensors_event_t mag_event;
     sensors_vec_t orientation;
 

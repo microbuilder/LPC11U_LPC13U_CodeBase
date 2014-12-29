@@ -51,7 +51,7 @@ static U16 prev_src_addr = 0xFFFE;
 
 */
 /**************************************************************************/
-error_t chb_init()
+err_t chb_init()
 {
     memset(&chibi_pcb, 0, sizeof(chb_pcb_t));
     chibi_pcb.src_addr = chb_get_short_addr();

@@ -67,7 +67,7 @@ static uint32_t _msg_alert_uniqueID;       // Auto-incrementing ID for alert mes
     @code
 
     // Read some sensor data
-    error_t error;
+    err_t error;
     sensors_event_t event;
     error = mpl115a2GetSensorEvent(&event);
 
@@ -87,7 +87,7 @@ static uint32_t _msg_alert_uniqueID;       // Auto-incrementing ID for alert mes
     @endcode
 */
 /**************************************************************************/
-error_t msgSend(uint16_t targetAddr, msg_MessageType_t msgType, uint8_t *payload, uint8_t payloadLength)
+err_t msgSend(uint16_t targetAddr, msg_MessageType_t msgType, uint8_t *payload, uint8_t payloadLength)
 {
   uint8_t msgLength = payloadLength + 9;
   uint8_t results;

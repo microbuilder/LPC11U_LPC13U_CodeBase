@@ -63,7 +63,7 @@ static uint8_t _pca9685Address = PCA9685_ADDRESS;
     @brief  Writes the specified number of bytes over I2C
 */
 /**************************************************************************/
-error_t pca9685WriteBytes(uint8_t reg, uint8_t *buffer, size_t length)
+err_t pca9685WriteBytes(uint8_t reg, uint8_t *buffer, size_t length)
 {
   uint32_t i;
 
@@ -92,7 +92,7 @@ error_t pca9685WriteBytes(uint8_t reg, uint8_t *buffer, size_t length)
     @brief  Reads the specified number of bytes over I2C
 */
 /**************************************************************************/
-error_t pca9685ReadBytes(uint8_t reg, uint8_t *buffer, size_t length)
+err_t pca9685ReadBytes(uint8_t reg, uint8_t *buffer, size_t length)
 {
   uint32_t i;
 
@@ -131,7 +131,7 @@ error_t pca9685ReadBytes(uint8_t reg, uint8_t *buffer, size_t length)
     @brief  Writes an 8 bit value over I2C
 */
 /**************************************************************************/
-error_t pca9685Write8 (uint8_t reg, uint8_t value)
+err_t pca9685Write8 (uint8_t reg, uint8_t value)
 {
   uint8_t buffer = value;
   return pca9685WriteBytes(reg, &buffer, 1);
@@ -142,7 +142,7 @@ error_t pca9685Write8 (uint8_t reg, uint8_t value)
     @brief  Reads a single byte over I2C
 */
 /**************************************************************************/
-error_t pca9685Read8(uint8_t reg, uint8_t *result)
+err_t pca9685Read8(uint8_t reg, uint8_t *result)
 {
   return pca9685ReadBytes(reg, result, 1);
 }
@@ -154,7 +154,7 @@ error_t pca9685Read8(uint8_t reg, uint8_t *result)
     @param address  The device I2C address (left-shifted 1 bit)
 */
 /**************************************************************************/
-error_t pca9685Init(uint8_t address)
+err_t pca9685Init(uint8_t address)
 {
   // Initialise I2C
   i2cInit(I2CMASTER);
@@ -176,7 +176,7 @@ error_t pca9685Init(uint8_t address)
     @param freqHz  Approximate frequency in Hz (40-1000)
 */
 /**************************************************************************/
-error_t pca9685SetFrequency(uint16_t freqHz)
+err_t pca9685SetFrequency(uint16_t freqHz)
 {
   uint32_t prescaleValue;
   uint8_t oldMode, newMode;
@@ -225,7 +225,7 @@ error_t pca9685SetFrequency(uint16_t freqHz)
     @param off      The 12-bit stop point (high to low transition)
 */
 /**************************************************************************/
-error_t pca9685SetPWM(uint16_t channel, uint16_t on, uint16_t off)
+err_t pca9685SetPWM(uint16_t channel, uint16_t on, uint16_t off)
 {
   ASSERT(_pca9685Initialised, ERROR_DEVICENOTINITIALISED);
 

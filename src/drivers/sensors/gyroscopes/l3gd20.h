@@ -90,10 +90,10 @@ enum
 };
 
 // Function prototypes
-error_t l3gd20Init(void);
-error_t l3gd20Poll(l3gd20Data_t* data);
+err_t l3gd20Init(void);
+err_t l3gd20Poll(l3gd20Data_t* data);
 void    l3gd20GetSensor(sensor_t *sensor);
-error_t l3gd20GetSensorEvent(sensors_event_t *event);
+err_t l3gd20GetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }

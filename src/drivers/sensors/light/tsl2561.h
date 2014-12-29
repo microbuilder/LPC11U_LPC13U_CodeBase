@@ -162,14 +162,14 @@ typedef enum
 }
 tsl2561Gain_t;
 
-error_t  tsl2561Init(void);
+err_t  tsl2561Init(void);
 void     tsl2561EnableAutoGain(bool enable);
-error_t  tsl2561SetIntegrationTime(tsl2561IntegrationTime_t time);
-error_t  tsl2561SetGain(tsl2561Gain_t gain);
-error_t  tsl2561GetLuminosity (uint16_t *broadband, uint16_t *ir);
+err_t  tsl2561SetIntegrationTime(tsl2561IntegrationTime_t time);
+err_t  tsl2561SetGain(tsl2561Gain_t gain);
+err_t  tsl2561GetLuminosity (uint16_t *broadband, uint16_t *ir);
 uint32_t tsl2561CalculateLux(uint16_t ch0, uint16_t ch1);
 void     tsl2561GetSensor(sensor_t *sensor);
-error_t  tsl2561GetSensorEvent(sensors_event_t *event);
+err_t  tsl2561GetSensorEvent(sensors_event_t *event);
 
 #ifdef __cplusplus
 }

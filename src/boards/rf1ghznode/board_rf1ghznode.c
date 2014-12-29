@@ -171,7 +171,7 @@ void sendMessage(void)
 /**************************************************************************/
 void sendSensorEvent(void)
 {
-  error_t error;
+  err_t error;
   sensors_event_t event;
 
   // Change this to whatever sensor you want/have!

@@ -82,7 +82,7 @@
                  the current average (the output value), etc.
 */
 /**************************************************************************/
-error_t sma_u16_init ( sma_u16_t *sma )
+err_t sma_u16_init ( sma_u16_t *sma )
 {
   // check if the window size is valid (!= 0 and is a power of 2)
   if ((0 == sma->size) || ( sma->size & (sma->size - 1) )) return ERROR_UNEXPECTEDVALUE;

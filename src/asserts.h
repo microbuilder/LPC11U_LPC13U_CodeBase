@@ -95,7 +95,7 @@ extern "C" {
 
 /**************************************************************************/
 /*!
-    @brief  Checks the supplied \ref error_t value (sts), and if it is
+    @brief  Checks the supplied \ref err_t value (sts), and if it is
             not equal to \ref ERROR_NONE the sts value will be returned
             and the supplied error message will be sent via _PRINTF.
 
@@ -107,14 +107,14 @@ extern "C" {
     @code
     // If anything other than ERROR_NONE is returned by tsl2561Init()
     // this macro will log the error as well as the optional message,
-    // and exit the function returning the error_t value.
+    // and exit the function returning the err_t value.
     ASSERT_STATUS(tsl2561Init(), "Initialisation failed!");
     @endcode
 */
 /**************************************************************************/
 #define ASSERT_STATUS_MESSAGE(sts, message) \
         do{\
-          error_t status = (sts);\
+          err_t status = (sts);\
           if (ERROR_NONE != status) {\
             _PRINTF("Assert: %s at line %d: 0x%X %s%s", ASSERT_FUNC, ASSERT_LINE, (uint32_t) status, message, CFG_PRINTF_NEWLINE);\
             return status;\
@@ -123,7 +123,7 @@ extern "C" {
 
 /**************************************************************************/
 /*!
-    @brief  Checks the supplied \ref error_t value (sts), and if it is
+    @brief  Checks the supplied \ref err_t value (sts), and if it is
             not equal to \ref ERROR_NONE the sts value will be returned.
 
     @details
@@ -133,7 +133,7 @@ extern "C" {
     @code
     // If anything other than ERROR_NONE is returned by tsl2561Enable()
     // this macro will log the error and exit the function returning the
-    // error_t value.
+    // err_t value.
     ASSERT_STATUS(tsl2561Enable());
     @endcode
 */
