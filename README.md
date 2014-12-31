@@ -63,6 +63,14 @@ The current code has a good overall structure, but there are still many parts th
 
 Quite a bit of time, effort and money has gone into producing this open source code base in the sole hope that it will make things easier for other people to get started with this well-rounded MCU family.  If you find the code base useful as is, the best thanks you can give is to contribute something useful back to it, and improve the current code base so that other people can learn from your efforts as well.
 
+## Contributing
+
+1. Fork it ( http://github.com/microbuilder/LPC11U_LPC13U_CodeBase/fork )
+2. Create your feature branch (`git checkout -b my-new-feature`)
+3. Commit your changes (`git commit -am 'Add some feature'`)
+4. Push to the branch (`git push origin my-new-feature`)
+5. Create new Pull Request
+
 ## License ##
 
 Where possible, all code is provided under a BSD style license, but each file is individually licensed and you should ensure that you fully understand the license terms and limitations of any files you use in your project.
