@@ -46,7 +46,8 @@ OBJS  += $(OBJ_PATH)/math_helper.o
 OBJS  += $(OBJ_PATH)/RTX_hook.o
 
 VPATH += src
-OBJS  += $(OBJ_PATH)/printf-retarget.o
+OBJS  += $(OBJ_PATH)/retarget.o
+#OBJS  += $(OBJ_PATH)/retarget_crossworks.o
 
 VPATH += src/boards/lpcxpresso11u37h
 OBJS  += $(OBJ_PATH)/board_lpcxpresso11u37h.o

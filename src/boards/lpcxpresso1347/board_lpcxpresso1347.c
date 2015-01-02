@@ -198,6 +198,8 @@ int main(void)
     {
       lastSecond = currentSecond;
       boardLED(lastSecond % 2);
+
+//    printf("hello wolrd\r\n");
     }
 
     /* Check for binary protocol input if CFG_PROTOCOL is enabled */
