@@ -454,9 +454,11 @@ int main(void)
     {
       lastSecond = currentSecond;
       boardLED(lastSecond % 2);
+
+      printf("hello world\n");
     }
 
-    atparser_task();
+    //    atparser_task();
 
     /* Check for binary protocol input if CFG_PROTOCOL is enabled */
     #ifdef CFG_PROTOCOL

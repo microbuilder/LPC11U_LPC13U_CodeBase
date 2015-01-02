@@ -994,10 +994,10 @@ err_t wifi_ping(uint8_t ip[4], uint8_t attempts, uint16_t timeout)
 
   /* Display the results */
   // WIFI_PRINTF("Packets Sent     : %u\r\n", _wifi_pingReport.packets_sent);
-  WIFI_PRINTF("Packets Received : %u\r\n", _wifi_pingReport.packets_received);
-  WIFI_PRINTF("Minimum Time     : %u\r\n", _wifi_pingReport.min_round_time);
-  WIFI_PRINTF("Maximum Time     : %u\r\n", _wifi_pingReport.max_round_time);
-  WIFI_PRINTF("Average Time     : %u\r\n", _wifi_pingReport.avg_round_time);
+  WIFI_PRINTF("Packets Received : %lu\r\n", _wifi_pingReport.packets_received);
+  WIFI_PRINTF("Minimum Time     : %lu\r\n", _wifi_pingReport.min_round_time);
+  WIFI_PRINTF("Maximum Time     : %lu\r\n", _wifi_pingReport.max_round_time);
+  WIFI_PRINTF("Average Time     : %lu\r\n", _wifi_pingReport.avg_round_time);
 
   return ERROR_NONE;
 }

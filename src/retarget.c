@@ -140,10 +140,10 @@ int _open(const char *name, int flags, int mode)
     @param  index relative offset to the head of the received buffer.
 */
 /******************************************************************************/
-int fpeekAt(FILE *stream, uint16_t index)
-{
-  int file = stream->_file;
-  if ( !(file < RETARGET_FILECOUNT && retarget_func_tbl[file].peekAt) ) return EOF;
-
-  return retarget_func_tbl[file].peekAt(index);
-}
+//int fpeekAt(FILE *stream, uint16_t index)
+//{
+//  int file = stream->_file;
+//  if ( !(file < RETARGET_FILECOUNT && retarget_func_tbl[file].peekAt) ) return EOF;
+//
+//  return retarget_func_tbl[file].peekAt(index);
+//}
