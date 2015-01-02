@@ -35,6 +35,7 @@
 /**************************************************************************/
 #include <stdarg.h>
 
+#if 0
 #include "projectconfig.h"
 
 #ifdef __CROSSWORKS_ARM
@@ -143,5 +144,7 @@ void _ttywrch(int ch)
 {
   __putchar(ch);
 }
+
+#endif
 
 #endif

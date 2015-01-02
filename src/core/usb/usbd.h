@@ -68,16 +68,14 @@ bool usb_isConfigured(void);
 
 extern USBD_HANDLE_T g_hUsb;
 
-#define ASSERT_USB_STATUS_MESSAGE(sts, message) \
+#define ASSERT_USB_STATUS(sts) \
         do{\
           ErrorCode_t status = (sts);\
           if (LPC_OK != status) {\
-            _PRINTF("Assert: '%s' at line %d: 0x%X %s%s", __func__, __LINE__, (uint32_t) status, message, CFG_PRINTF_NEWLINE);\
+            _PRINTF("Assert: '%s' at line %d: 0x%lX%s", __func__, __LINE__, (uint32_t) status, CFG_PRINTF_NEWLINE);\
             return status;\
           }\
         }while(0)
-
-#define ASSERT_USB_STATUS(sts)                ASSERT_USB_STATUS_MESSAGE(sts, NULL)
 
 #ifdef __cplusplus
 }

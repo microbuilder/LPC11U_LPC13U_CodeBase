@@ -466,7 +466,7 @@ extern "C" {
     CFG_PROTOCOL_VIA_BULK   Use USB Bulk for the binary protocol
                             (requires CFG_USB_CUSTOM_CLASS)
     -----------------------------------------------------------------------*/
-    #define CFG_PROTOCOL
+//    #define CFG_PROTOCOL
 
     #define CFG_PROTOCOL_VIA_HID
     // #define CFG_PROTOCOL_VIA_BULK
