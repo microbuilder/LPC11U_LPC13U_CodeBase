@@ -372,7 +372,6 @@
           <file file_name="src/boards/simulator/board_simulator.h" />
         </folder>
       </folder>
-      <file file_name="src/printf-retarget.c" />
       <file file_name="src/asserts.h" />
       <file file_name="src/log.h" />
       <file file_name="src/binary.h" />
@@ -388,6 +387,8 @@
         <file file_name="src/protocol/prot_cmdtable.h" />
       </folder>
       <file file_name="src/fixed.h" />
+      <file file_name="src/retarget.c" />
+      <file file_name="src/retarget_crossworks.c" />
     </folder>
     <folder Name="System Files">
       <file file_name="$(StudioDir)/source/thumb_crt0.s" />

@@ -54,6 +54,13 @@ extern "C" {
     includes in any file via 'projectconfig.h'.
    ========================================================================*/
 
+#ifdef __CROSSWORKS_ARM
+struct __RAL_FILE
+{
+  int _file;
+};
+#endif
+
 #include "sysdefs.h"
 #include "errors.h"
 #include "asserts.h"
