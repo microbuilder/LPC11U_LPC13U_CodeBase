@@ -196,7 +196,7 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_ENABLE_I2C
     #define CFG_ENABLE_UART
-     #define CFG_ENABLE_USB
+//     #define CFG_ENABLE_USB
     #define CFG_ENABLE_TIMER32
 /*=========================================================================*/
 
@@ -384,8 +384,8 @@ extern "C" {
     -----------------------------------------------------------------------*/
     #define CFG_PRINTF_MAXSTRINGSIZE    (255)
 
-//    #define CFG_PRINTF_UART
-     #define CFG_PRINTF_USBCDC
+    #define CFG_PRINTF_UART
+//     #define CFG_PRINTF_USBCDC
     // #define CFG_PRINTF_DEBUG
 
     #ifdef CFG_PRINTF_DEBUG

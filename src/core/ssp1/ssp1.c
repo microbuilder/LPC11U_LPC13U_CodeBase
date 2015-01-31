@@ -46,7 +46,7 @@
 void ssp1ClockSlow()
 {
   /* Divide by 15 for SSPCLKDIV */
-  LPC_SYSCON->SSP1CLKDIV = SCB_CLKDIV_DIV20; // 255; //SCB_CLKDIV_DIV15;
+  LPC_SYSCON->SSP1CLKDIV = SCB_CLKDIV_DIV15;
 
   /* (PCLK / (CPSDVSR * [SCR+1])) = (4,800,000 / (2 x [5 + 1])) = 400 KHz */
   LPC_SSP1->CR0 = ( (7u << 0)     // Data size = 8-bit  (bits 3:0)
@@ -144,8 +144,8 @@ void ssp1Init(void)
   #endif
 
   /* Set SPI clock to high-speed by default */
-//  ssp1ClockFast();
-    ssp1ClockSlow();
+  ssp1ClockFast();
+//    ssp1ClockSlow();
 
   /* Clear the Rx FIFO */
   for ( i = 0; i < SSP1_FIFOSIZE; i++ )

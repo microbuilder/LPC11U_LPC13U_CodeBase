@@ -126,6 +126,8 @@ void boardInit(void)
     uartInit(CFG_UART_BAUDRATE);
   #endif
 
+  setbuf(stdout, NULL);
+
   /* Set user LED pin to output and disable it */
   LPC_GPIO->DIR[CFG_LED_PORT] |= (1 << CFG_LED_PIN);
   boardLED(CFG_LED_OFF);
@@ -198,14 +200,18 @@ void boardInit(void)
 #define U16_HIGH_U8(u16)            ((uint8_t) (((u16) >> 8) & 0x00ff))
 #define U16_LOW_U8(u16)             ((uint8_t) ((u16)       & 0x00ff))
 
+#define SPI_IGNORED_BYTE    0xFEu /**< SPI default character. Character clocked out in case of an ignored transaction. */
+#define SPI_OVERREAD_BYTE   0xFFu /**< SPI over-read character. Character clocked out after an over-read of the transmit buffer. */
+
 #define SPI_CS_PORTNUM   1
 #define SPI_CS_PINNUM    23
 
 #define SPI_IRQ_PORTNUM  1
 #define SPI_IRQ_PINNUM   24
 
-#define SPI_CS_ENABLE    GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 0)
-#define SPI_CS_DISABLE   GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1)
+#define SPI_CS_ENABLE()     GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 0)
+#define SPI_CS_DISABLE()    GPIOSetBitValue(SPI_CS_PORTNUM, SPI_CS_PINNUM, 1)
+#define SPI_IRQ_AVAILABLE() GPIOGetPinValue(SPI_IRQ_PORTNUM, SPI_IRQ_PINNUM)
 
 #define CFG_ATPARSER_BUFSIZE     256
 static char cmd_buffer[CFG_ATPARSER_BUFSIZE];
@@ -252,9 +258,6 @@ typedef struct __attribute__ ((packed)){
   uint8_t payload[SDEP_MAX_PACKETSIZE];
 } sdepMsgCommand_t;
 
-#define DEF_CHARACTER   0xFEu /**< SPI default character. Character clocked out in case of an ignored transaction. */
-#define ORC_CHARACTER   0xFFu /**< SPI over-read character. Character clocked out after an over-read of the transmit buffer. */
-
 uint8_t ssp1TransferByte(uint8_t data)
 {
   uint8_t recv;
@@ -265,45 +268,49 @@ uint8_t ssp1TransferByte(uint8_t data)
 
 void nrf_ssp1Send (uint8_t *buf, uint32_t length)
 {
-
+  SPI_CS_ENABLE();
   while (length--)
   {
     // keep resending if Ignored Character is received
     while(1)
     {
-      uint8_t fb;
+      uint8_t rd = ssp1TransferByte(*buf);
+      if (rd != SPI_IGNORED_BYTE) break;
 
-      SPI_CS_ENABLE;
-      fb = ssp1TransferByte(*buf);
-      SPI_CS_DISABLE;
-
-      if (fb != DEF_CHARACTER) break;
-      delay(1); // wait a bit before retry
+      // blemodule is busy processing, wait a bit before retry
+      SPI_CS_DISABLE();
+      rd |= rd; rd |= rd; rd |= rd;
+      SPI_CS_ENABLE();
     }
 
     buf++;
   }
+  SPI_CS_DISABLE();
 }
 
 uint32_t nrf_ssp1Receive(uint8_t *buf, uint32_t length)
 {
+  SPI_CS_ENABLE();
   for(uint32_t count=0; count<length; count++)
   {
-    uint8_t ch;
+    uint8_t rd;
 
     while(1)
     {
-      SPI_CS_ENABLE;
-      ssp1Receive(&ch, 1);
-      SPI_CS_DISABLE;
+      ssp1Receive(&rd, 1);
 
-      if (ch != DEF_CHARACTER) break;
-      delay(1);
+      if (rd != SPI_IGNORED_BYTE && rd != SPI_OVERREAD_BYTE) break;
+
+      // blemodule is busy processing, wait a bit before retry
+      SPI_CS_DISABLE();
+      rd |= rd; rd |= rd; rd |= rd;
+      SPI_CS_ENABLE();
     }
 
-    if (ch == ORC_CHARACTER) return count;
-    *buf++ = ch;
+    if (rd == SPI_OVERREAD_BYTE) return count;
+    *buf++ = rd;
   }
+  SPI_CS_DISABLE();
 
   return length;
 }
@@ -314,32 +321,8 @@ static inline uint8_t min8_of(uint8_t x, uint8_t y)
   return (x < y) ? x : y;
 }
 
-void send_sdep_ATcommand(char* ATcmd)
+void retrieve_ATresponse(void)
 {
-  while(*ATcmd)
-  {
-    char* p_payload = ATcmd;
-
-    sdepMsgCommand_t cmdMsg =
-    {
-        .msg_type    = SDEP_MSGTYPE_COMMAND,
-        .cmd_id_high = U16_HIGH_U8(SDEP_CMDTYPE_AT_WRAPPER),
-        .cmd_id_low  = U16_LOW_U8 (SDEP_CMDTYPE_AT_WRAPPER),
-        .length      = min8_of(16, strlen(ATcmd))
-    };
-
-    ATcmd += cmdMsg.length;
-
-    // mark end of command
-    cmdMsg.more_data = (*ATcmd != 0) ? 1 : 0;
-
-//    PRINT_BUFFER(&cmdMsg, 4);
-
-    // send command
-    nrf_ssp1Send( (uint8_t*)&cmdMsg, 4);
-    nrf_ssp1Send( (uint8_t*)p_payload, cmdMsg.length);
-  }
-
   // receive response
   sdepMsgCommand_t cmdResponse;
 
@@ -347,11 +330,10 @@ void send_sdep_ATcommand(char* ATcmd)
     memset(&cmdResponse, 0, sizeof(cmdResponse));
 
     // wait until IRQ is asserted
-    while( !GPIOGetPinValue(SPI_IRQ_PORTNUM, SPI_IRQ_PINNUM) ) {}
+    while( !SPI_IRQ_AVAILABLE() ) {}
 
     uint8_t sync =0;
     do{
-//      delay(10);
       nrf_ssp1Receive(&sync, 1);
     }while(sync != SDEP_MSGTYPE_RESPONSE && sync != SDEP_MSGTYPE_ERROR);
 
@@ -381,6 +363,33 @@ void send_sdep_ATcommand(char* ATcmd)
   }while(cmdResponse.more_data);
 }
 
+void send_sdep_ATcommand(char* ATcmd)
+{
+  while(*ATcmd)
+  {
+    char* p_payload = ATcmd;
+
+    sdepMsgCommand_t cmdMsg =
+    {
+        .msg_type    = SDEP_MSGTYPE_COMMAND,
+        .cmd_id_high = U16_HIGH_U8(SDEP_CMDTYPE_AT_WRAPPER),
+        .cmd_id_low  = U16_LOW_U8 (SDEP_CMDTYPE_AT_WRAPPER),
+        .length      = min8_of(SDEP_MAX_PACKETSIZE, strlen(ATcmd))
+    };
+
+    ATcmd += cmdMsg.length;
+
+    // mark end of command
+    cmdMsg.more_data = (*ATcmd != 0) ? 1 : 0;
+
+//    PRINT_BUFFER(&cmdMsg, 4);
+
+    // send header & payload
+    nrf_ssp1Send( (uint8_t*)&cmdMsg, 4);
+    nrf_ssp1Send( (uint8_t*)p_payload, cmdMsg.length);
+  }
+}
+
 err_t atparser_task(void)
 {
   while( uartRxBufferDataPending() )
@@ -401,6 +410,7 @@ err_t atparser_task(void)
           if( 0 == strcmp("reset", cmd_buffer) ) NVIC_SystemReset();
 
           send_sdep_ATcommand(cmd_buffer);
+          retrieve_ATresponse();
         }
       break;
 
@@ -455,10 +465,10 @@ int main(void)
       lastSecond = currentSecond;
       boardLED(lastSecond % 2);
 
-      printf("hello world\n");
+//      printf("hello world\n");
     }
 
-    //    atparser_task();
+    atparser_task();
 
     /* Check for binary protocol input if CFG_PROTOCOL is enabled */
     #ifdef CFG_PROTOCOL
