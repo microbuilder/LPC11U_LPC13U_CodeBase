@@ -192,10 +192,19 @@ void cliRx(uint8_t c)
         break;
 
     default:
-        #if CFG_INTERFACE_SILENTMODE == 0
-        printf("%c",c);
-        #endif
-        *cli_buffer_ptr++ = c;
+        /* Check that there is room for it (but reserve one byte for \0) */
+        if (cli_buffer_ptr < (cli_buffer + (sizeof(cli_buffer)-1)))
+        {
+            #if CFG_INTERFACE_SILENTMODE == 0
+            printf("%c",c);
+            #endif
+            *cli_buffer_ptr++ = c;
+        }
+        else
+        {
+            // cli_buffer is full. Send bell alert.
+            printf("\a");
+        }
         break;
   }
 }
