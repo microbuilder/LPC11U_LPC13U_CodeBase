@@ -21,7 +21,7 @@ This code base is designed to work transparently with the following MCUs, allowi
 
 - **LPC1347** - ARM Cortex M3, 72MHz, 64KB Flash, 8+2+2KB SRAM, 4KB EEPROM
 - **LPC11U37** - ARM Cortex M0, 50MHz, 128KB Flash, 8+2KB SRAM, 4KB EEPROM
-- **LPC11U24** - ARM Cortex M0, 50MHa, 32KB Flash, 8+2KB SRAM, 4KB EEPROM
+- **LPC11U24** - ARM Cortex M0, 50MHz, 32KB Flash, 8+2KB SRAM, 4KB EEPROM
 
 ## Multiple Board Support ##
 
